@@ -1,0 +1,71 @@
+---
+title: Backup LAMP Stacks with LVM Snapshots
+permalink: /content/2008/11/29/backup-lamp-stacks-lvm-snapshots
+layout: post
+categories:
+- Apache
+- Linux
+- MySQL
+- sysadmin
+comments: true
+sharing: true
+footer: true
+---
+<p>I've done a lot with <a href="http://en.wikipedia.org/wiki/Logical_Volume_Manager_(Linux)">LVM</a> in the past, but up until now had never really played around with <a href="http://tldp.org/HOWTO/LVM-HOWTO/snapshotintro.html">LVM snapshots</a>. I recently used LVM snapshots to implement a "hot backup" of my LAMP stack running this blog. I quote "hot backup" because, while mysql is indeed running, I do have to place a read lock on all tables for a second or two. You don't need to do this if you're using Innodb, but you do if you use the MyISAM engine (which Drupal does by default). <!--break--> The key to doing LVM snapshots is that you save some unassigned space in your volume group when you setup LVM in the first place. If you don't you can shrink existing logical volumes to make space, but that's beyond the scope of this article. For this article, the following assumptions are made:</p><ul><li>The LVM logical volume we want to back up is /dev/VolGroup00/apps</li><li>The LVM snapshot is named appsnap (clever, huh)</li><li>My personal use of snapshots is to replicate my current production LAMP stack to my development machine. You can use snapshots for just about anything - backup with Amanda or Bacula, or hand-rolled rsync/tar backups like mine. Implementation is the same, it's just the rsync command that you might choose to tweak</li></ul><br><h3>How much space does my snapshot logical volume need?</h3><p>That's a good question, and unfortunately it's one that is answered with another question: "How long will your backup take, and how much writing to your source logical volume will occur during that time?". I would have to assume that 500MB would be good for most setups, but YMMV. In the scripts I present later, our snapshot partition will take whatever is available to the volume group.</p><h3>Step One: Create the snapshot</h3><p>Assuming that your MySQL data files reside on the LVM partition that you're snapshotting, and that you're using the MyISAM table engine, we need to temporarily lock the tables. In my particular setup, creating the snapshot takes less than 2 seconds, so it's no big deal to lock my tables for that long. Thanks to commenter Jay on how to fix my bug! Here's the steps:</p>
+<pre>TMP_FILE="/tmp/msqlbackup-$$.sql"
+/bin/cat &gt; $TMP_FILE &gt;&gt;EOD
+FLUSH TABLES WITH READ LOCK;
+\! /usr/sbin/lvcreate -l100%FREE --snapshot --name appsnap /dev/VolGroup00/apps
+UNLOCK TABLES;
+EOD
+/usr/bin/mysql -u root -pmypassword &lt; $TMP_FILE
+/bin/rm $TMP_FILE
+</pre>
+<p>At this point, we have a logical volume at /dev/VolGroup00/appsnap that contains our data exactly as it existed at the time of the lvcreate command above.</p><h3>Step Two: Mount the snapshot</h3><p>Pretty straightforward here:</p>
+<pre>/bin/mkdir /backups
+/bin/mount /dev/VolGroup00/appsnap /backups
+</pre>
+<p>Now, we have our snapshot mounted at /backups. Next, let's back it up.</p><h3>Step Three: Backup the mountpoint</h3><p>This step is really up to you. You can tar up the contents, rsync it off somewhere, whatever you feel like doing. If you want to see my rsync command, keep reading.</p><h3>Step Four: Remove the snapshot</h3><p>Since the space required by the snapshot gets larger as more writes are made to our apps logical volume, you don't want this thing sitting around long. Let's unmount it, and remove it altogether since we have our data:</p>
+<pre>/bin/umount /backups
+/usr/sbin/lvremove -f /dev/VolGroup00/appsnap
+/bin/rmdir /backups
+</pre>
+<p>Tada, all done! Pretty painless, really. Now, we're sysadmins, and man, all that typing is for the birds. We need a script!</p><h3>Tying it all together: Moving prod to dev</h3><p>First, to make this work well, setup key-based authentication between your dev and prod servers (<a href="http://www.google.com/search?q=passwordless+ssh">Google is your friend</a>). On your production server, we need to create two scripts -- one to create the snapshot, one to remove it. I called mine makelvmsnapshot.sh and removelvmsnapshot.sh. <b>Security Note: I placed my root mysql password in makelvmsnapshot.sh! I'm okay with this, make sure that you are before you do this. We'll set permissions on this file so that only root can see it.</b> Here's the contents of makelvmsnapshot.sh:</p>
+<pre>#!/bin/bash
+/bin/mkdir /backups
+echo "FLUSH TABLES WITH READ LOCK;" | /usr/bin/mysql -u root -pmypassword 
+/usr/sbin/lvcreate -l100%FREE --snapshot --name appsnap /dev/VolGroup00/apps
+echo "UNLOCK TABLES;" | /usr/bin/mysql -u root -pmypassword 
+/bin/mount /dev/VolGroup00/appsnap /backups
+</pre>
+<p>Since our password is in that file, do a 'chown root makelvmsnapshot.sh &amp;&amp; chmod 700 makelvmsnapshot.sh' for some very basic security. Here is my removelvmsnapshot.sh:</p>
+<pre>#!/bin/bash
+
+/bin/umount /backups
+/usr/sbin/lvremove -f /dev/VolGroup00/appsnap
+/bin/rmdir /backups
+</pre>
+<p>Now, on your dev server, create a script named prod2dev.sh, and place it in /usr/local/bin/. Here's what I have in it:</p>
+<pre>#!/bin/bash
+
+#Stop Services
+for s in httpd mysqld; do
+	/etc/init.d/$s stop
+done
+
+#Create snapshot lv on prod
+/usr/bin/ssh root@myprodserver.com /apps/scripts/makelvmsnap.sh
+
+#Rsync w/delete
+/usr/bin/rsync -aHvz --delete --exclude=httpd/log/* root@myprodserver.com:/backups/* /apps/
+
+#Remove snapshot on prod
+/usr/bin/ssh root@myprodserver.com /apps/scripts/removelvmsnap.sh
+
+#Start services
+for s in httpd mysqld; do
+	/etc/init.d/$s start
+done
+</pre>
+<p>Let's go over that a bit.</p><ul><li>First, I stop mysqld and httpd on my dev server.</li><li>Next, I ssh to the prod server, and call the script that creates the snapshot.</li><li>With the snapshot mounted at /backups in prod, I rsync the contents of prod back to dev (skipping apache access logs).</li><li>Once the rsync is done, I remove the snapshot on production, and start mysqld and httpd on dev.</li></ul><br><h3>Conclusion</h3><p>LVM snapshots are easy, fast, and effective ways to take a slice in time. The hardest part of using LVM snapshots is planning ahead and leaving some free space in your volume group for the snapshot logical volume. By utilizing LVM snapshots you can efficiently replicate setups between machines, or get backups of your LAMP stack. Even more important, you can test the restoration process on a daily basis. Your backups are only as good as your restoration procedure!</p>
+

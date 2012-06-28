@@ -1,0 +1,14 @@
+---
+title: RHCE!!!
+permalink: /content/2009/08/25/rhce
+layout: post
+categories:
+- RedHat
+- sysadmin
+comments: true
+sharing: true
+footer: true
+---
+![](/assets/images/red_hat_cert_eng_logo-clr.jpg)Just got my test results back
+-- I got 100% on my exam, so now I'm a RHCE!
+
