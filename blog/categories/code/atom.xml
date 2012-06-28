@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Code | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/code/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/code/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Case Study in Migrating XML to Drupal using Migrate]]></title>
-    <link href="http://justintime.github.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
+    <link href="http://sysadminsjourney.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
     <updated>2010-07-14T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
+    <id>http://sysadminsjourney.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
     <content type="html"><![CDATA[<p>Sorry for the lack of posts as of late -- a massive upgrade operation at
 $DAYJOB has had me out of commission for a few weeks. Also, I've had the great
 fortune to be able to be part of a migration to Drupal which exposed me to
@@ -813,9 +813,9 @@ food :)</p>
   
   <entry>
     <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
-    <link href="http://justintime.github.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
     <updated>2010-02-24T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
 build their own installation script by "stacking" previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
@@ -858,9 +858,9 @@ you did without one!</li>
   
   <entry>
     <title type="html"><![CDATA[Assign Different Values to Different Nodes via One Action in Views Bulk Operations]]></title>
-    <link href="http://justintime.github.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations"/>
     <updated>2010-02-04T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/04/assign-different-values-to-different-nodes-via-one-action-in-views-bulk-operations</id>
+    <id>http://sysadminsjourney.com/content/2010/02/04/assign-different-values-to-different-nodes-via-one-action-in-views-bulk-operations</id>
     <content type="html"><![CDATA[<p>The <a href="http://drupal.org/project/views_bulk_operations">Views Bulk
 Operations</a> module
 (a.k.a. VBO), is a godsend for busy <a href="http://drupal.org">Drupal</a> site
@@ -1067,9 +1067,9 @@ module that is also easily integrated with!</p>
   
   <entry>
     <title type="html"><![CDATA[HipHop PHP and Drupal]]></title>
-    <link href="http://justintime.github.com/content/2010/02/03/hiphop-php-and-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/03/hiphop-php-and-drupal"/>
     <updated>2010-02-03T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/03/hiphop-php-and-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/03/hiphop-php-and-drupal</id>
     <content type="html"><![CDATA[<p>So, <a href="http://www.facebook.com">Facebook</a> has <a href="http://developers.facebook.com/news.php?blog=1&amp;story=358">released HipHop
 PHP</a> - a PHP-to-C++
 converter. While the name is stupid, the idea is not. 100% of their developers
@@ -1088,9 +1088,9 @@ HipHop-friendly. Exciting times!</p>
   
   <entry>
     <title type="html"><![CDATA[QuickTip: Fix Eclipse Galileo buttons on Ubuntu 9.10]]></title>
-    <link href="http://justintime.github.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-ubuntu-910"/>
+    <link href="http://sysadminsjourney.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-ubuntu-910"/>
     <updated>2009-12-21T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-on-ubuntu-9-10</id>
+    <id>http://sysadminsjourney.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-on-ubuntu-9-10</id>
     <content type="html"><![CDATA[<p>There's a nasty upstream bug in GTK present in Ubuntu 9.10 that makes Eclipse
 Galileo all but unusable -- specifically it makes clicking many buttons with
 the mouse just stop working. You can use tab and spacebar to make it work, but

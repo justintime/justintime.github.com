@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Sun | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/sun/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/sun/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[ZFS in the Trenches presentation at LISA 09]]></title>
-    <link href="http://justintime.github.com/content/2009/12/29/zfs-trenches-presentation-lisa-09"/>
+    <link href="http://sysadminsjourney.com/content/2009/12/29/zfs-trenches-presentation-lisa-09"/>
     <updated>2009-12-29T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/12/29/zfs-in-the-trenches-presentation-at-lisa-09</id>
+    <id>http://sysadminsjourney.com/content/2009/12/29/zfs-in-the-trenches-presentation-at-lisa-09</id>
     <content type="html"><![CDATA[<p>Just got the chance to finally sit down and watch <a href="http://www.cuddletech.com">Ben
 Rockwood's</a> presentation at LISA 09: <a href="http://slx.sun.com/1179275886">ZFS in the
 Trenches</a>. If you are even thinking about ZFS
@@ -32,9 +32,9 @@ served up from ARC.</p>
   
   <entry>
     <title type="html"><![CDATA[New in Solaris 10 Update 8 - ZFS Support in Flash Archives]]></title>
-    <link href="http://justintime.github.com/content/2009/10/14/new-solaris-10-update-8-zfs-support-flash-archives"/>
+    <link href="http://sysadminsjourney.com/content/2009/10/14/new-solaris-10-update-8-zfs-support-flash-archives"/>
     <updated>2009-10-14T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/10/14/new-in-solaris-10-update-8-zfs-support-in-flash-archives</id>
+    <id>http://sysadminsjourney.com/content/2009/10/14/new-in-solaris-10-update-8-zfs-support-in-flash-archives</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/solaris.gif" alt="" />The<a href="http://www.sun.com/aboutsun/pr/2009-10/sunflash.20091008.3.xml"> release of Solaris 10 10/09 (Update
 8)</a> has come
 and gone, and without too much fanfare from my point of view. In my opinion,
@@ -77,10 +77,10 @@ I'll post about it!</p>
   
   <entry>
     <title type="html"><![CDATA[Not So Typical Jumpstart: Part Three - The Scripts]]></title>
-    <link href="http://justintime.github.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts"/>
+    <link href="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts"/>
     <updated>2009-09-23T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/09/23/not-so-typical-jumpstart-part-three-the-scripts</id>
-    <content type="html"><![CDATA[<p><img align="left" alt="" height="101" hspace="15" src="http://justintime.github.com/assets/images/solaris.gif" width="190"/>
+    <id>http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-the-scripts</id>
+    <content type="html"><![CDATA[<p><img align="left" alt="" height="101" hspace="15" src="http://sysadminsjourney.com/assets/images/solaris.gif" width="190"/>
 In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup.  By creating our Jumpstart profile file and a sysidcfg file, we'll have a basic, but working Custom Jumpstart.  The profile contains settings specific to the installation, where the sysidcfg file contains settings specific to the machine during and after installation.</p>
 
 <h2>Step One: Create the sysidcfg file</h2>
@@ -238,9 +238,9 @@ The custom JumpStart configuration is ok.
   
   <entry>
     <title type="html"><![CDATA[Not So Typical Jumpstart: Part Three - The Jumpstart Profile]]></title>
-    <link href="http://justintime.github.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile"/>
+    <link href="http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile"/>
     <updated>2009-09-22T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/09/22/not-so-typical-jumpstart-part-three-the-jumpstart-profile</id>
+    <id>http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-the-jumpstart-profile</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/solaris.gif" alt="" />In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup. By
 creating our Jumpstart profile file and a sysidcfg file, we'll have a basic,
 but working Custom Jumpstart. The profile contains settings specific to the
@@ -440,9 +440,9 @@ vanilla installation which we'll remedy in part four of the series.</p>
   
   <entry>
     <title type="html"><![CDATA[Not So Typical Jumpstart: Part Two]]></title>
-    <link href="http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two"/>
+    <link href="http://sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two"/>
     <updated>2009-09-21T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two</id>
+    <id>http://sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/solaris.gif" alt="" />In <a href="/content/2009/09/18%0A/not-so-typical-jumpstart-part-one">part one of the series</a>, we setup the ISC DHCP server. Now it's
 time to set up our install and config servers -- both of which will reside on
 the same box in this case. Solaris Jumpstart uses standard protocols, namely

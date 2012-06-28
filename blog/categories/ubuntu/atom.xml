@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ubuntu | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/ubuntu/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/ubuntu/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[WTF are you doing to your keyboard?]]></title>
-    <link href="http://justintime.github.com/content/2009/05/19/wtf-are-you-doing-your-keyboard"/>
+    <link href="http://sysadminsjourney.com/content/2009/05/19/wtf-are-you-doing-your-keyboard"/>
     <updated>2009-05-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/05/19/wtf-are-you-doing-to-your-keyboard</id>
+    <id>http://sysadminsjourney.com/content/2009/05/19/wtf-are-you-doing-to-your-keyboard</id>
     <content type="html"><![CDATA[<p>So, I have yet to upgrade my laptop to Ubuntu Jaunty, but I saw <a href="http://lifehacker.com/5259425/re+enable-ctrl%252Balt%252Bbackspace-%0Afor-ubuntu-904">this article
 on how to re-enable Ctrl+Alt+Backspace in
 Jaunty</a> come through my feed reader. A little more research dug up
@@ -35,9 +35,9 @@ it. What are your thoughts?</p>
   
   <entry>
     <title type="html"><![CDATA[List installed packages in Ubuntu]]></title>
-    <link href="http://justintime.github.com/content/2009/01/06/list-installed-packages-ubuntu"/>
+    <link href="http://sysadminsjourney.com/content/2009/01/06/list-installed-packages-ubuntu"/>
     <updated>2009-01-06T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/01/06/list-installed-packages-in-ubuntu</id>
+    <id>http://sysadminsjourney.com/content/2009/01/06/list-installed-packages-in-ubuntu</id>
     <content type="html"><![CDATA[<p>I found this over at the <a href="http://ubuntuforums.org/showthread.php?t=261366">Ubuntu Forums</a>, but since it took me
 forever to find, I'm dropping notes here. In RPM-based distros, you can do
 'rpm -qa > somefile.txt'. In Debian/Ubuntu, do this:
@@ -59,9 +59,9 @@ then want to have machine B have all the software machine A has, do this:
   
   <entry>
     <title type="html"><![CDATA[Use NetworkManager to launch scripts based on Network Location]]></title>
-    <link href="http://justintime.github.com/content/2008/12/18/use-networkmanager-launch-scripts-based-network-location"/>
+    <link href="http://sysadminsjourney.com/content/2008/12/18/use-networkmanager-launch-scripts-based-network-location"/>
     <updated>2008-12-18T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2008/12/18/use-networkmanager-to-launch-scripts-based-on-network-location.html</id>
+    <id>http://sysadminsjourney.com/content/2008/12/18/use-networkmanager-to-launch-scripts-based-on-network-location.html</id>
     <content type="html"><![CDATA[<p><a href="http://projects.gnome.org/NetworkManager/">NetworkManager</a> is fast becoming the de facto network provider in desktop Linux distributions. The reason it's so popular is that it "does the right thing" 99% of the time. However, there's not many examples out there that extend that functionality. NetworkManager provides hooks in which you can have scripts launch when network settings change. In today's post, I will show you how to launch the <a href="http://synergy2.sourceforge.net/">Synergy</a> client whenever you plug into your corporate network. <!--break--> I'm lazy. I hate having to fire up my Synergy client on my laptop to connect to my desktop at work when I get to work everyday. Now, I could just fire up the Synergy client at boot, but when I'm at home if I have the VPN connected, Synergy will hook up and I don't want it to. I needed a way to fire a script that says "if I'm on this network, then fire up synergyc, otherwise do nothing". Writing the script was pretty easy, but I was stumped on how to get to run not only at bootup, but whenever I change networks -- I very often suspend my laptop at night at home and resume it at work the next morning. It turns out that NetworkManager has a piece called NetworkManagerDispatcher that does all of this for us. Any script in /etc/NetworkManager/dispatcher.d will be called with two arguments, the name of the interface, and the status of the interface (up/down). If a picture is worth a thousand words, scripts are worth a million, so let's get to it. First, a little background is needed. I know that I am on my corporate network if my eth0 interface has obtained an IP in the 10.0.0.0/8 subnet. Without further ado, I present to you /etc/NetworkManager/dispatcher.d/99smartsynergy.sh: <code type="bash"> #!/bin/sh IF=$1 STATUS=$2 USER=justintime wait_for_process() { PNAME=$1 PID=`/usr/bin/pgrep $PNAME` while [ -z "$PID" ]; do sleep 3; PID=`/usr/bin/pgrep $PNAME` done } start_synergy() { wait_for_process nm-applet /bin/su $USER -c "/usr/bin/synergyc $1" } if [ "$IF" = "eth0" ] &amp;&amp; [ "$STATUS" = "up" ]; then #LAN Subnet at work NETMASK="10.0.0.0/8" if [ -n "`/sbin/ip addr show $IF to $NETMASK`" ]; then ARGS="jentoo.bucklehq.com" start_synergy $ARGS exit $? fi fi </code> The <b>IF</b> and <b>STATUS</b> variables are those fed in from NetworkManager. The <b>USER</b> variable is the user that I run synergyc as. You could add some intelligence here, but it was overkill for my situation. The <b>if</b> at the bottom states that we are only concerned if the interface eth0 has changed it's status to "up". I then use the <b>/sbin/ip</b> command to determine if eth0 is within the 10.0.0.0/8 subnet. If so, then I call start_synergy, passing it my desktop's hostname. Within the <b>start_synergy()</b> function we call the <b>wait_for_process</b> function, passing it <b>nm-applet</b>. We need this function because if we try to run synergyc before I've logged in via GDM, it will exit (this happens on bootup). By calling <b>wait_for_process</b>, we create a way to make synergyc wait until after the nm-applet (NetworkManager Applet) has started. Finally, once nm-applet has been detected as running, the script executes synergyc, and exits.</p>
 
 
@@ -84,9 +84,9 @@ then want to have machine B have all the software machine A has, do this:
   
   <entry>
     <title type="html"><![CDATA[Use LVM on an installation of Ubuntu]]></title>
-    <link href="http://justintime.github.com/content/2008/12/16/use-lvm-installation-ubuntu"/>
+    <link href="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu"/>
     <updated>2008-12-16T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2008/12/16/use-lvm-on-an-installation-of-ubuntu</id>
+    <id>http://sysadminsjourney.com/content/2008/12/16/use-lvm-on-an-installation-of-ubuntu</id>
     <content type="html"><![CDATA[<p>RHEL/CentOS has had support for LVM in setup for quite some time now, but for
 whatever reason, Ubuntu has been slow at adopting support for LVM at
 installation. Usually, I just grumble and move on with ext3 -- not today.
@@ -203,9 +203,9 @@ too!</p>
   
   <entry>
     <title type="html"><![CDATA[Disable SNMP Printer Scanning in Ubuntu Intrepid]]></title>
-    <link href="http://justintime.github.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid"/>
+    <link href="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid"/>
     <updated>2008-11-05T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2008/11/05/disable-snmp-printer-scanning-in-ubuntu-intrepid</id>
+    <id>http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-in-ubuntu-intrepid</id>
     <content type="html"><![CDATA[<p>After installing Ubuntu Intrepid on my laptop, I got a nastygram
 from IT saying that my laptop was tripping alerts from their NIDS. 
 They could tell me that it was an outbound SNMP request, but they

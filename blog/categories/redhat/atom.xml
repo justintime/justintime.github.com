@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: RedHat | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/redhat/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/redhat/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
-    <link href="http://justintime.github.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
     <updated>2010-02-24T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
 build their own installation script by "stacking" previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
@@ -60,9 +60,9 @@ you did without one!</li>
   
   <entry>
     <title type="html"><![CDATA[Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features]]></title>
-    <link href="http://justintime.github.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
     <updated>2010-02-22T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
+    <id>http://sysadminsjourney.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
 review</a>. I was
@@ -239,9 +239,9 @@ tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stack
   
   <entry>
     <title type="html"><![CDATA[SCSA vs RHCE]]></title>
-    <link href="http://justintime.github.com/content/2009/08/26/scsa-vs-rhce"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/26/scsa-vs-rhce"/>
     <updated>2009-08-26T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/26/scsa-vs-rhce</id>
+    <id>http://sysadminsjourney.com/content/2009/08/26/scsa-vs-rhce</id>
     <content type="html"><![CDATA[<p>After taking and passing both my SCSA and my RHCE exams this year, it's time
 to reflect.  Read on for the pros and cons of each from a student's point of
 view.</p>
@@ -360,9 +360,9 @@ real-world testing method.</p>
   
   <entry>
     <title type="html"><![CDATA[RHCE!!!]]></title>
-    <link href="http://justintime.github.com/content/2009/08/25/rhce"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/25/rhce"/>
     <updated>2009-08-25T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/25/rhce</id>
+    <id>http://sysadminsjourney.com/content/2009/08/25/rhce</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/red_hat_cert_eng_logo-clr.jpg" alt="" />Just got my test results back
 -- I got 100% on my exam, so now I'm a RHCE!</p>
 ]]></content>
@@ -370,9 +370,9 @@ real-world testing method.</p>
   
   <entry>
     <title type="html"><![CDATA[iptables Options in RHEL/CentOS]]></title>
-    <link href="http://justintime.github.com/content/2009/08/19/iptables-options-rhelcentos"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos"/>
     <updated>2009-08-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/19/iptables-options-in-rhel-centos</id>
+    <id>http://sysadminsjourney.com/content/2009/08/19/iptables-options-in-rhel-centos</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/logo_rh_home.png" alt="" />Today in class we were talking about how
 you needed to save your iptables changes using <strong>service iptables save</strong>
 before rebooting at the end of the test, or else you'll fail that section of

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Drupal Planet | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/drupal-planet/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/drupal-planet/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[It's not you, it's me: Call for Node Gallery co-maintainers]]></title>
-    <link href="http://justintime.github.com/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers"/>
+    <link href="http://sysadminsjourney.com/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers"/>
     <updated>2011-10-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/10/19/its-not-you-its-me-call-for-node-gallery-co-maintainers</id>
+    <id>http://sysadminsjourney.com/content/2011/10/19/its-not-you-its-me-call-for-node-gallery-co-maintainers</id>
     <content type="html"><![CDATA[<p>There's only a certain amount of bandwidth in a person's day. As you get
 older, that bandwidth seems to become more and more constrained. Kids are
 extreme bandwidth hogs :) Over the years I've found that I have enough
@@ -68,9 +68,9 @@ queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Drupal on Heroku]]></title>
-    <link href="http://justintime.github.com/content/2011/09/20/drupal-heroku"/>
+    <link href="http://sysadminsjourney.com/content/2011/09/20/drupal-heroku"/>
     <updated>2011-09-21T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/09/20/drupal-on-heroku</id>
+    <id>http://sysadminsjourney.com/content/2011/09/20/drupal-on-heroku</id>
     <content type="html"><![CDATA[<p><a href="http://www.heroku.com">Heroku</a> has been around for awhile now, but has been primarily a rails host. Well, <a href="http://blog.heroku.com/archives/2011/9/15/facebook/">until recently</a> anway. With the announcement of their Facebook integration, many others have noted that *any* PHP app can at least parse on Heroku's cedar stack. I'll be honest, it took me longer to get ruby+rails setup on my Macbook than it did to get a proof-of-concept installation of Drupal up and running. Here's what I did:</p>
 
 <ol>
@@ -138,9 +138,9 @@ queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Selecting the right CDN for YOUR website]]></title>
-    <link href="http://justintime.github.com/content/2011/04/19/selecting-right-cdn-your-website"/>
+    <link href="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website"/>
     <updated>2011-04-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/04/19/selecting-the-right-cdn-for-your-website</id>
+    <id>http://sysadminsjourney.com/content/2011/04/19/selecting-the-right-cdn-for-your-website</id>
     <content type="html"><![CDATA[<p>At one of my jobs, we recently went through the process of
 selecting a <a href="http://en.wikipedia.org/wiki/Content_delivery_network">CDN (Content Delivery
 Network)</a>
@@ -390,9 +390,9 @@ employers.</p>
   
   <entry>
     <title type="html"><![CDATA[Case Study in Migrating XML to Drupal using Migrate]]></title>
-    <link href="http://justintime.github.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
+    <link href="http://sysadminsjourney.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
     <updated>2010-07-14T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
+    <id>http://sysadminsjourney.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
     <content type="html"><![CDATA[<p>Sorry for the lack of posts as of late -- a massive upgrade operation at
 $DAYJOB has had me out of commission for a few weeks. Also, I've had the great
 fortune to be able to be part of a migration to Drupal which exposed me to
@@ -1188,9 +1188,9 @@ food :)</p>
   
   <entry>
     <title type="html"><![CDATA[My Thoughts and Ramblings on DrupalConSF 2010]]></title>
-    <link href="http://justintime.github.com/content/2010/04/23/my-thoughts-and-ramblings-drupalconsf-2010"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/23/my-thoughts-and-ramblings-drupalconsf-2010"/>
     <updated>2010-04-23T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/23/my-thoughts-and-ramblings-on-drupalconsf-2010</id>
+    <id>http://sysadminsjourney.com/content/2010/04/23/my-thoughts-and-ramblings-on-drupalconsf-2010</id>
     <content type="html"><![CDATA[<p>I had the great pleasure of attending my first
 <a href="http://sf2010.drupal.org">DrupalCon</a> this week. Held in downtown San
 Francisco at the Moscone Center, it was my opinion that this was Drupal's

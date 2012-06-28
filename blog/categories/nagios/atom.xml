@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Nagios | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/nagios/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/nagios/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[New and Improved check_mem.pl Nagios Plugin]]></title>
-    <link href="http://justintime.github.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin"/>
+    <link href="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin"/>
     <updated>2009-06-05T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/06/04/new-and-improved-check_mem-pl-nagios-plugin</id>
+    <id>http://sysadminsjourney.com/content/2009/06/04/new-and-improved-check_mem-pl-nagios-plugin</id>
     <content type="html"><![CDATA[<p><strong>UPDATE 9/19/2011</strong>: I've moved this plugin over to github: <a href="https://github.com/justintime/nagios-plugins">https://github.com/justintime/nagios-plugins</a>.  It now has a PNP template, and support for AIX as well.</p>
 
 <p>We have always monitored RAM usage on all of boxes. Sure, there's the argument
@@ -90,9 +90,9 @@ OS for me to add, I'd love to code it up!</p>
   
   <entry>
     <title type="html"><![CDATA[Nagios check_dell_warranty Plugin Updated]]></title>
-    <link href="http://justintime.github.com/content/2009/05/28/nagios-checkdellwarranty-plugin-updated"/>
+    <link href="http://sysadminsjourney.com/content/2009/05/28/nagios-checkdellwarranty-plugin-updated"/>
     <updated>2009-05-28T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/05/28/nagios-check_dell_warranty-plugin-updated</id>
+    <id>http://sysadminsjourney.com/content/2009/05/28/nagios-check_dell_warranty-plugin-updated</id>
     <content type="html"><![CDATA[<p>It's been blogged about recently how cool the <a href="http://www.monitoringexchange.org/cgi-%0Abin/page.cgi?g=Detailed%2F3094.html;d=1">check_dell_warranty
 plugin</a> by Erinn Looney-Triggs is. It solves
 a very real problem for us - sometimes servers run so well you forget to make
@@ -121,9 +121,9 @@ download it</a>!</li>
   
   <entry>
     <title type="html"><![CDATA[The Nagios Fork: Did Two Wrongs Make a Right???]]></title>
-    <link href="http://justintime.github.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right"/>
+    <link href="http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right"/>
     <updated>2009-05-12T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/05/12/the-nagios-fork-did-two-wrongs-make-a-right</id>
+    <id>http://sysadminsjourney.com/content/2009/05/12/the-nagios-fork-did-two-wrongs-make-a-right</id>
     <content type="html"><![CDATA[<p>It's an item that I feel hasn't got much press, at least in the limited RSS
 entries I've had time to scan lately: <a href="http://www.icinga.org/">Nagios has been
 forked</a>. I've been using Nagios long enough that I
@@ -184,9 +184,9 @@ opinions on this topic - please do share them!</li>
   
   <entry>
     <title type="html"><![CDATA[Installing NRPE 2.12 from source as a SMF managed service in Solaris 10]]></title>
-    <link href="http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10"/>
+    <link href="http://sysadminsjourney.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10"/>
     <updated>2009-05-07T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/05/07/installing-nrpe-2-12-from-source-as-a-smf-managed-service-in-solaris-10.html</id>
+    <id>http://sysadminsjourney.com/content/2009/05/07/installing-nrpe-2-12-from-source-as-a-smf-managed-service-in-solaris-10.html</id>
     <content type="html"><![CDATA[<p>Installing NRPE on Solaris 10 involves just a bit more than your normal './configure &amp;&amp; make &amp;&amp; make install' routine. However, all the dependencies are likely present on a freshly installed system, you just have to tell NRPE where to find it. There's one file you need to patch, and then it will install. From there it's easy to plug into SMF! <!--break--> First, let's make sure some directories are present, and create our Nagios user:</p>
 
 
@@ -275,9 +275,9 @@ echo "nrpe: ALL" &gt;&gt; /etc/hosts.deny
   
   <entry>
     <title type="html"><![CDATA[Compiling Nagios Plugins and NRPE on Solaris 10 with Sun Studio]]></title>
-    <link href="http://justintime.github.com/content/compiling-nagios-plugins-and-nrpe-solaris-10-sun-studio"/>
+    <link href="http://sysadminsjourney.com/content/compiling-nagios-plugins-and-nrpe-solaris-10-sun-studio"/>
     <updated>2007-07-06T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/compiling-nagios-plugins-and-nrpe-on-solaris-10-with-sun-studio</id>
+    <id>http://sysadminsjourney.com/content/compiling-nagios-plugins-and-nrpe-on-solaris-10-with-sun-studio</id>
     <content type="html"><![CDATA[<p>We have some Sun T1000's running Solaris 10 that we are going to deploy as web
 servers. By compiling Apache from source using the Sun Studio compilers, you
 get a huge boost in performance because of the compiler's built-in

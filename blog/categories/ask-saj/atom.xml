@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ask SAJ | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/ask-saj/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/ask-saj/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Ask SAJ: Any SA's at DrupalConSF?]]></title>
-    <link href="http://justintime.github.com/content/2010/04/18/ask-saj-any-sas-drupalconsf"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-drupalconsf"/>
     <updated>2010-04-18T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/18/ask-saj-any-sas-at-drupalconsf</id>
+    <id>http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-at-drupalconsf</id>
     <content type="html"><![CDATA[<p>It snuck up on me so fast, I forgot to ask - are any of my SysAdmin's Journey
 readers going to San Franciso for DrupalCon? If so, <a href="http://sysadminsjourney.com/contact">contact
 me</a>, and we'll see if we can meet up for
@@ -28,9 +28,9 @@ grab a bite to eat, ping me. I'm flying out to SF at about 12:30pm MDT.</p>
   
   <entry>
     <title type="html"><![CDATA[Ask SAJ: What to do with Apache logs > 50GB?]]></title>
-    <link href="http://justintime.github.com/content/2009/11/30/ask-saj-what-do-apache-logs-50gb"/>
+    <link href="http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-do-apache-logs-50gb"/>
     <updated>2009-11-30T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
+    <id>http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
     <content type="html"><![CDATA[<p>Our site at $work is generating Apache logs that, when combined sequentially
 into one file, are larger than 50GB in size for one day's worth of traffic.
 AWStats' perl script pretty much chokes when working on this much data. Last I
@@ -42,9 +42,9 @@ commercial solution for Apache log analysis that can scale up like that?</p>
   
   <entry>
     <title type="html"><![CDATA[Call for Comments: Help Advise an Aspiring SysAdmin]]></title>
-    <link href="http://justintime.github.com/content/2009/05/29/call-comments-help-advise-aspiring-sysadmin"/>
+    <link href="http://sysadminsjourney.com/content/2009/05/29/call-comments-help-advise-aspiring-sysadmin"/>
     <updated>2009-05-29T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/05/29/call-for-comments-help-advise-an-aspiring-sysadmin</id>
+    <id>http://sysadminsjourney.com/content/2009/05/29/call-for-comments-help-advise-an-aspiring-sysadmin</id>
     <content type="html"><![CDATA[<p>One of the things I love about blogging, and about the Internet in general, is
 that it makes the world much smaller. I've met so many people via my blog, it
 makes all the work pay off. A good example of a blog introducing two people

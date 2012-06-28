@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Git Submodules with Dynamic Puppet Environments]]></title>
-    <link href="http://justintime.github.com/content/using-git-submodules-dynamic-puppet-environments"/>
+    <link href="http://sysadminsjourney.com/content/using-git-submodules-dynamic-puppet-environments"/>
     <updated>2012-02-06T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/using-git-submodules-with-dynamic-puppet-environments</id>
+    <id>http://sysadminsjourney.com/content/using-git-submodules-with-dynamic-puppet-environments</id>
     <content type="html"><![CDATA[<p>There comes a point in the lifecycle of every Puppet setup where you realize
 that you&#8217;re going to be much better off utilizing other peoples&#8217; Puppet
 modules whenever possible.  It&#8217;s what makes OSS great &#8211; why should I reinvent
@@ -157,9 +157,9 @@ Please share below.</p>
   
   <entry>
     <title type="html"><![CDATA[VPS.net review]]></title>
-    <link href="http://justintime.github.com/content/2011/11/14/vpsnet-review"/>
+    <link href="http://sysadminsjourney.com/content/2011/11/14/vpsnet-review"/>
     <updated>2011-11-14T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2011/11/14/vps-net-review</id>
+    <id>http://sysadminsjourney.com/content/2011/11/14/vps-net-review</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been running a single node from <a href="http://vps.net">VPS.net</a> for about a
 year now.  Please note that my specific experience has been in their &#8220;Chicago
 Zone D data center&#8221;, but if you check out their <a href="http://status.vps.net">status
@@ -173,7 +173,7 @@ backup, etc that you can enable &#8211; I&#8217;ve not investigated them myself.
 the one of the nicest features is the ability to add server resources or
 &#8220;nodes&#8221; on the fly with minimal downtime. However, it seems that VPS.net has
 made a horrible choice in selecting what SAN they use to back their VM&#8217;s.
-Examine the graphic below: <img src="http://justintime.github.com/assets/images/vps-net-availabiltiy.png" alt="" /> As you
+Examine the graphic below: <img src="http://sysadminsjourney.com/assets/images/vps-net-availabiltiy.png" alt="" /> As you
 can see, I&#8217;m getting less than 2 nines worth of uptime from my node.  Each and
 everytime there&#8217;s been an issue, support has been quick to point out that
 they&#8217;ve had some sort of SAN issue, and that the SAN is &#8216;resyncing&#8217;.  The
@@ -192,9 +192,9 @@ been fixed, there&#8217;s just no way I can recommend their services to anyone.<
   
   <entry>
     <title type="html"><![CDATA[It's not you, it's me: Call for Node Gallery co-maintainers]]></title>
-    <link href="http://justintime.github.com/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers"/>
+    <link href="http://sysadminsjourney.com/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers"/>
     <updated>2011-10-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/10/19/its-not-you-its-me-call-for-node-gallery-co-maintainers</id>
+    <id>http://sysadminsjourney.com/content/2011/10/19/its-not-you-its-me-call-for-node-gallery-co-maintainers</id>
     <content type="html"><![CDATA[<p>There&#8217;s only a certain amount of bandwidth in a person&#8217;s day. As you get
 older, that bandwidth seems to become more and more constrained. Kids are
 extreme bandwidth hogs :) Over the years I&#8217;ve found that I have enough
@@ -245,9 +245,9 @@ queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Drupal on Heroku]]></title>
-    <link href="http://justintime.github.com/content/2011/09/20/drupal-heroku"/>
+    <link href="http://sysadminsjourney.com/content/2011/09/20/drupal-heroku"/>
     <updated>2011-09-21T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/09/20/drupal-on-heroku</id>
+    <id>http://sysadminsjourney.com/content/2011/09/20/drupal-on-heroku</id>
     <content type="html"><![CDATA[<p><a href="http://www.heroku.com">Heroku</a> has been around for awhile now, but has been primarily a rails host. Well, <a href="http://blog.heroku.com/archives/2011/9/15/facebook/">until recently</a> anway. With the announcement of their Facebook integration, many others have noted that *any* PHP app can at least parse on Heroku&#8217;s cedar stack. I&#8217;ll be honest, it took me longer to get ruby+rails setup on my Macbook than it did to get a proof-of-concept installation of Drupal up and running. Here&#8217;s what I did:</p>
 
 <ol>
@@ -308,9 +308,9 @@ queue.</li>
   
   <entry>
     <title type="html"><![CDATA[Selecting the right CDN for YOUR website]]></title>
-    <link href="http://justintime.github.com/content/2011/04/19/selecting-right-cdn-your-website"/>
+    <link href="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website"/>
     <updated>2011-04-19T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/04/19/selecting-the-right-cdn-for-your-website</id>
+    <id>http://sysadminsjourney.com/content/2011/04/19/selecting-the-right-cdn-for-your-website</id>
     <content type="html"><![CDATA[<p>At one of my jobs, we recently went through the process of
 selecting a <a href="http://en.wikipedia.org/wiki/Content_delivery_network">CDN (Content Delivery
 Network)</a>
@@ -494,7 +494,7 @@ the world.  The executive summary here is that while EdgeCast
 &#8220;edged&#8221; out CacheFly, the real message is that any CDN is so much
 better than none at all. To really drive the point home for the
 PHB&#8217;s, we consolidate the data and give a very telling graph:
-<img src="http://justintime.github.com/assets/images/cdn.png" alt="image" /> ### Third elimination: CacheFly
+<img src="http://sysadminsjourney.com/assets/images/cdn.png" alt="image" /> ### Third elimination: CacheFly
 CacheFly is an up-and-comer in the CDN arena.  They have
 **very** aggressive pricing, and have very good performance as
 well.  If the site in question was a popular blog or community
@@ -560,9 +560,9 @@ employers.</p>
   
   <entry>
     <title type="html"><![CDATA[Lead SysAdmin position available]]></title>
-    <link href="http://justintime.github.com/content/2011/04/06/lead-sysadmin-position-available"/>
+    <link href="http://sysadminsjourney.com/content/2011/04/06/lead-sysadmin-position-available"/>
     <updated>2011-04-06T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/04/06/lead-sysadmin-position-available</id>
+    <id>http://sysadminsjourney.com/content/2011/04/06/lead-sysadmin-position-available</id>
     <content type="html"><![CDATA[<p>There&#8217;s a blog post to follow with when/why, etc., but without
 further ado: I&#8217;m moving to a new position at Buckle, and that means
 we need a new Lead SysAdmin.  It&#8217;s a great job at a great company,
@@ -617,9 +617,9 @@ possibility for the right candidate.</p>
   
   <entry>
     <title type="html"><![CDATA[Case Study in Migrating XML to Drupal using Migrate]]></title>
-    <link href="http://justintime.github.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
+    <link href="http://sysadminsjourney.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
     <updated>2010-07-14T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
+    <id>http://sysadminsjourney.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
     <content type="html"><![CDATA[<p>Sorry for the lack of posts as of late &#8211; a massive upgrade operation at
 $DAYJOB has had me out of commission for a few weeks. Also, I&#8217;ve had the great
 fortune to be able to be part of a migration to Drupal which exposed me to
@@ -1339,9 +1339,9 @@ food :)</p>
   
   <entry>
     <title type="html"><![CDATA[My Thoughts and Ramblings on DrupalConSF 2010]]></title>
-    <link href="http://justintime.github.com/content/2010/04/23/my-thoughts-and-ramblings-drupalconsf-2010"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/23/my-thoughts-and-ramblings-drupalconsf-2010"/>
     <updated>2010-04-23T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/23/my-thoughts-and-ramblings-on-drupalconsf-2010</id>
+    <id>http://sysadminsjourney.com/content/2010/04/23/my-thoughts-and-ramblings-on-drupalconsf-2010</id>
     <content type="html"><![CDATA[<p>I had the great pleasure of attending my first
 <a href="http://sf2010.drupal.org">DrupalCon</a> this week. Held in downtown San
 Francisco at the Moscone Center, it was my opinion that this was Drupal&#8217;s
@@ -1474,9 +1474,9 @@ recommend that you attend.</p>
   
   <entry>
     <title type="html"><![CDATA[2010: What a Year!]]></title>
-    <link href="http://justintime.github.com/content/2010/04/20/2010-what-year"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/20/2010-what-year"/>
     <updated>2010-04-20T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/20/2010-what-a-year</id>
+    <id>http://sysadminsjourney.com/content/2010/04/20/2010-what-a-year</id>
     <content type="html"><![CDATA[<p>If you would have told me 5 years ago that:</p>
 
 <ol>
@@ -1495,9 +1495,9 @@ DCSF2010!</li>
   
   <entry>
     <title type="html"><![CDATA[Ask SAJ: Any SA's at DrupalConSF?]]></title>
-    <link href="http://justintime.github.com/content/2010/04/18/ask-saj-any-sas-drupalconsf"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-drupalconsf"/>
     <updated>2010-04-18T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/18/ask-saj-any-sas-at-drupalconsf</id>
+    <id>http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-at-drupalconsf</id>
     <content type="html"><![CDATA[<p>It snuck up on me so fast, I forgot to ask - are any of my SysAdmin&#8217;s Journey
 readers going to San Franciso for DrupalCon? If so, <a href="http://sysadminsjourney.com/contact">contact
 me</a>, and we&#8217;ll see if we can meet up for
@@ -1508,9 +1508,9 @@ grab a bite to eat, ping me. I&#8217;m flying out to SF at about 12:30pm MDT.</p
   
   <entry>
     <title type="html"><![CDATA[New Linode StackScript: Pantheon Mercury (High Performance Drupal in 10 Minutes or Less)]]></title>
-    <link href="http://justintime.github.com/content/2010/04/12/new-linode-stackscript-pantheon-mercury-high-performance-drupal-10-minutes-or-less"/>
+    <link href="http://sysadminsjourney.com/content/2010/04/12/new-linode-stackscript-pantheon-mercury-high-performance-drupal-10-minutes-or-less"/>
     <updated>2010-04-12T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2010/04/12/new-linode-stackscript-pantheon-mercury-high-performance-drupal-in-10-minutes-or-less</id>
+    <id>http://sysadminsjourney.com/content/2010/04/12/new-linode-stackscript-pantheon-mercury-high-performance-drupal-in-10-minutes-or-less</id>
     <content type="html"><![CDATA[<p>For those who might not know, <a href="http://www.getpantheon.com/mercury/what-is-mercury">Pantheon
 Mercury</a> is:</p>
 
@@ -1564,9 +1564,9 @@ the StackScript and let me know about any issues you might find.</p>
   
   <entry>
     <title type="html"><![CDATA[Tracking Drupal's Outbound HTTP Requests using tcpdump]]></title>
-    <link href="http://justintime.github.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump"/>
+    <link href="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump"/>
     <updated>2010-03-11T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump</id>
+    <id>http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump</id>
     <content type="html"><![CDATA[<p>While working on tweaking performance for a client, I was able to
 shave 7 seconds of PHP execution time time off the homepage load.
 The cause was eventually tracked down to calls out to TinyURL for
@@ -1616,9 +1616,9 @@ page load time by 7 seconds!</p>
   
   <entry>
     <title type="html"><![CDATA[Register for free DrupalCon tickets from DrupalModules.com!]]></title>
-    <link href="http://justintime.github.com/content/2010/02/25/register-free-drupalcon-tickets-drupalmodulescom"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/25/register-free-drupalcon-tickets-drupalmodulescom"/>
     <updated>2010-02-25T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/25/register-for-free-drupalcon-tickets-from-drupalmodules-com</id>
+    <id>http://sysadminsjourney.com/content/2010/02/25/register-for-free-drupalcon-tickets-from-drupalmodules-com</id>
     <content type="html"><![CDATA[<p>Make sure you sign to <a href="http://drupalmodules.com/articles/drupalcon-2010-ticket-contest">win free tickets to DrupalCon SF
 2010</a> over at
 <a href="http://www.drupalmodules.com">DrupalModules.com</a>.</p>
@@ -1627,9 +1627,9 @@ page load time by 7 seconds!</p>
   
   <entry>
     <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
-    <link href="http://justintime.github.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
     <updated>2010-02-24T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
 build their own installation script by &#8220;stacking&#8221; previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
@@ -1637,7 +1637,7 @@ yourself, or publish it for the world to use. Deploying a distribution with a
 StackScript takes only about 5 minutes, afterwards you have a fully configured
 system with applications up and running. Here&#8217;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
 StackScript for RH Derivatives</a> deployment just
-before launch: <img src="http://justintime.github.com/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
+before launch: <img src="http://sysadminsjourney.com/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 appear to prefer Ubuntu, and there&#8217;s good reason &#8211; it&#8217;s a great distribution.
 I run it on all my laptops and most of my desktops. However, I personally find
@@ -1672,9 +1672,9 @@ you did without one!</li>
   
   <entry>
     <title type="html"><![CDATA[Sysadmin Humor]]></title>
-    <link href="http://justintime.github.com/content/2010/02/22/sysadmin-humor"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/sysadmin-humor"/>
     <updated>2010-02-22T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/22/sysadmin-humor</id>
+    <id>http://sysadminsjourney.com/content/2010/02/22/sysadmin-humor</id>
     <content type="html"><![CDATA[<p>I laughed out loud when I saw this <a href="http://xkcd.com">XKCD</a> comic this morning:
 <img src="http://imgs.xkcd.com/comics/devotion_to_duty.png" alt="" /></p>
 ]]></content>
@@ -1682,9 +1682,9 @@ you did without one!</li>
   
   <entry>
     <title type="html"><![CDATA[Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features]]></title>
-    <link href="http://justintime.github.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
     <updated>2010-02-22T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
+    <id>http://sysadminsjourney.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
 review</a>. I was
@@ -1732,13 +1732,13 @@ kernel and initrd. Set up another ext3 disk of 100MB to be mounted at /boot
 for PV-GRUB. Finally, setup your raw disk that will be used for the OS
 installation. Since we&#8217;ll be using LVM, you can easily add to and resize your
 disk later, so don&#8217;t overdo it. I went with 5GB for my root disk. If you&#8217;re
-following along, here&#8217;s what you should have: <img src="http://justintime.github.com/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &#8220;Create a new
+following along, here&#8217;s what you should have: <img src="http://sysadminsjourney.com/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &#8220;Create a new
 configuration profile&#8221;, and type &#8220;Finnix Rescue&#8221; for the label. For the
 kernel, select &#8220;Recovery - Finnix (kernel)&#8221;. For /dev/xvda, select the
 &#8220;Recovery - Finnix (iso)&#8221;. For /dev/xvdb, select the &#8220;Centos 5.4 Install
 Disk&#8221;. For uncompressed initrd image, select &#8220;Recovery - Finnix (initrd).
 Leave the other settings at defaults, and save the profile. Here&#8217;s what it
-should look like: <img src="http://justintime.github.com/assets/images/linode-finnix.png" alt="" /></p>
+should look like: <img src="http://sysadminsjourney.com/assets/images/linode-finnix.png" alt="" /></p>
 
 <h3>Step 2: Upload the Xen-enabled Kernel and Initrd from the DVD</h3>
 
@@ -1768,7 +1768,7 @@ control panel.</p>
 x86_32&#8221;. For /dev/xvda, select &#8220;CentOS 5.4 PV-GRUB Boot&#8221;. For /dev/xvdb choose
 &#8220;CentOS 5.4 OS Disk&#8221;. For /dev/xvdh, select our &#8220;CentOS 5.4 Install Disk&#8221;.
 Point the root device to a custom location: &#8220;/dev/mapper/VolGroup00-LogVol00&#8221;.
-Leave the rest as defaults, here&#8217;s a screenshot: <img src="http://justintime.github.com/assets/images/linode-%0Acentos.png" alt="" /></p>
+Leave the rest as defaults, here&#8217;s a screenshot: <img src="http://sysadminsjourney.com/assets/images/linode-%0Acentos.png" alt="" /></p>
 
 <h3>Step 4: Boot the CentOS configuration profile and start the installation</h3>
 
@@ -1861,9 +1861,9 @@ tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stack
   
   <entry>
     <title type="html"><![CDATA[Assign Different Values to Different Nodes via One Action in Views Bulk Operations]]></title>
-    <link href="http://justintime.github.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations"/>
     <updated>2010-02-04T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/04/assign-different-values-to-different-nodes-via-one-action-in-views-bulk-operations</id>
+    <id>http://sysadminsjourney.com/content/2010/02/04/assign-different-values-to-different-nodes-via-one-action-in-views-bulk-operations</id>
     <content type="html"><![CDATA[<p>The <a href="http://drupal.org/project/views_bulk_operations">Views Bulk
 Operations</a> module
 (a.k.a. VBO), is a godsend for busy <a href="http://drupal.org">Drupal</a> site
@@ -2056,9 +2056,9 @@ module that is also easily integrated with!</p>
   
   <entry>
     <title type="html"><![CDATA[HipHop PHP and Drupal]]></title>
-    <link href="http://justintime.github.com/content/2010/02/03/hiphop-php-and-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/03/hiphop-php-and-drupal"/>
     <updated>2010-02-03T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/03/hiphop-php-and-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/03/hiphop-php-and-drupal</id>
     <content type="html"><![CDATA[<p>So, <a href="http://www.facebook.com">Facebook</a> has <a href="http://developers.facebook.com/news.php?blog=1&amp;story=358">released HipHop
 PHP</a> - a PHP-to-C++
 converter. While the name is stupid, the idea is not. 100% of their developers
@@ -2077,9 +2077,9 @@ HipHop-friendly. Exciting times!</p>
   
   <entry>
     <title type="html"><![CDATA[Apache mod_proxy '[error] (13)Permission denied' error on RHEL]]></title>
-    <link href="http://justintime.github.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
     <updated>2010-02-01T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
+    <id>http://sysadminsjourney.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
     <content type="html"><![CDATA[<p>Had an interesting issue today working on a mod_proxy setup of Apache
 forwarding requests in a reverse proxy setup to a backend Tomcat server. No
 matter what I did, I kept getting this in Apache&#8217;s error log:</p>
@@ -2116,9 +2116,9 @@ setting will persist across reboots:</p>
   
   <entry>
     <title type="html"><![CDATA[Teaching Java How to Commit Suicide]]></title>
-    <link href="http://justintime.github.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
+    <link href="http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
     <updated>2010-01-29T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
+    <id>http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
     <content type="html"><![CDATA[<p>At $work, we have a lot of java processes that are ran via cron and other
 wrappers that do some pretty critical tasks. The apps have been written so
 that the whole thing is wrapped in a try/catch that will call system.exit(1)

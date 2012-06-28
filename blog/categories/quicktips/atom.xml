@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: QuickTips | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/quicktips/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/quicktips/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[QuickTip: Make life easier with ssh-copy-id]]></title>
-    <link href="http://justintime.github.com/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id"/>
+    <link href="http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id"/>
     <updated>2009-11-12T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/11/12/quicktip-make-life-easier-with-ssh-copy-id</id>
+    <id>http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-with-ssh-copy-id</id>
     <content type="html"><![CDATA[<p>How many times have you ran through this series of events?
 <div>
   <pre><code class='console'>$ cat ~/.ssh/id_dsa.pub
@@ -42,9 +42,9 @@ You're done!</p>
   
   <entry>
     <title type="html"><![CDATA[Set it and forget it: Tether your Windows Mobile 6 Phone to Linux]]></title>
-    <link href="http://justintime.github.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux"/>
+    <link href="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux"/>
     <updated>2008-09-06T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-to-linux</id>
+    <id>http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-to-linux</id>
     <content type="html"><![CDATA[<p>I have a love/hate relationship with my phone - an HTC PPC6800. I can't live
 without it - I can check my work email from anywhere, and surf the web. While
 I've tried many PDA's through the years, none of them have stuck, because I
@@ -145,9 +145,9 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
   
   <entry>
     <title type="html"><![CDATA[Use GMail as an SMTP relay using SSMTP]]></title>
-    <link href="http://justintime.github.com/content/2008/09/01/use-gmail-smtp-relay-using-ssmtp"/>
+    <link href="http://sysadminsjourney.com/content/2008/09/01/use-gmail-smtp-relay-using-ssmtp"/>
     <updated>2008-09-01T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/09/01/use-gmail-as-an-smtp-relay-using-ssmtp</id>
+    <id>http://sysadminsjourney.com/content/2008/09/01/use-gmail-as-an-smtp-relay-using-ssmtp</id>
     <content type="html"><![CDATA[<p>On some of your home workstations, and especially on a laptop,
 setting up a full-blown SMTP server such as Postfix, Sendmail, or
 Exim might be overkill.  Follow the jump to learn how to setup the
@@ -190,9 +190,9 @@ and ready to go!</p>
   
   <entry>
     <title type="html"><![CDATA[User-level configuration of CPU speed in Gnome under Ubuntu]]></title>
-    <link href="http://justintime.github.com/content/2008/08/09/user-level-configuration-cpu-speed-gnome-under-ubuntu"/>
+    <link href="http://sysadminsjourney.com/content/2008/08/09/user-level-configuration-cpu-speed-gnome-under-ubuntu"/>
     <updated>2008-08-09T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/08/09/user-level-configuration-of-cpu-speed-in-gnome-under-ubuntu</id>
+    <id>http://sysadminsjourney.com/content/2008/08/09/user-level-configuration-of-cpu-speed-in-gnome-under-ubuntu</id>
     <content type="html"><![CDATA[<p>When I ran Fedora on my laptop, I loved how I could manually set
 the CPU speed in Gnome using the "CPU Frequency Scaling Monitor"
 applet.  I noticed that I could not do this under Ubuntu (you can

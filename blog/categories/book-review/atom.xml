@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Book Review | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/book-review/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/book-review/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Book Review: Learning NAGIOS 3.0 by Wojciech Kocjan]]></title>
-    <link href="http://justintime.github.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan"/>
+    <link href="http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan"/>
     <updated>2009-07-22T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/07/22/book-review-learning-nagios-3-0-by-wojciech-kocjan</id>
+    <id>http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-3-0-by-wojciech-kocjan</id>
     <content type="html"><![CDATA[<p>I was recently asked by <a href="http://www.packtpub.com">PACKT Publishing</a> to review
 the book <em><a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">Learning NAGIOS 3.0</a></em> by Wojciech Kocjan. I agreed to do so so long
 as I could state whatever I felt about the book, and PACKT was fine with that.

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Apache | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/apache/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/apache/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Apache mod_proxy '[error] (13)Permission denied' error on RHEL]]></title>
-    <link href="http://justintime.github.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
     <updated>2010-02-01T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
+    <id>http://sysadminsjourney.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
     <content type="html"><![CDATA[<p>Had an interesting issue today working on a mod_proxy setup of Apache
 forwarding requests in a reverse proxy setup to a backend Tomcat server. No
 matter what I did, I kept getting this in Apache's error log:</p>
@@ -54,9 +54,9 @@ setting will persist across reboots:</p>
   
   <entry>
     <title type="html"><![CDATA[Ask SAJ: What to do with Apache logs > 50GB?]]></title>
-    <link href="http://justintime.github.com/content/2009/11/30/ask-saj-what-do-apache-logs-50gb"/>
+    <link href="http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-do-apache-logs-50gb"/>
     <updated>2009-11-30T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
+    <id>http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
     <content type="html"><![CDATA[<p>Our site at $work is generating Apache logs that, when combined sequentially
 into one file, are larger than 50GB in size for one day's worth of traffic.
 AWStats' perl script pretty much chokes when working on this much data. Last I
@@ -68,9 +68,9 @@ commercial solution for Apache log analysis that can scale up like that?</p>
   
   <entry>
     <title type="html"><![CDATA[Tip for "Split Components Across Domains" Performance Goal from Yahoo!]]></title>
-    <link href="http://justintime.github.com/content/2009/11/16/tip-split-components-across-domains-performance-goal-yahoo"/>
+    <link href="http://sysadminsjourney.com/content/2009/11/16/tip-split-components-across-domains-performance-goal-yahoo"/>
     <updated>2009-11-16T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/11/16/tip-for-split-components-across-domains-performance-goal-from-yahoo</id>
+    <id>http://sysadminsjourney.com/content/2009/11/16/tip-for-split-components-across-domains-performance-goal-from-yahoo</id>
     <content type="html"><![CDATA[<p>Just thought I'd pass this little tidbit out there - we fixed it by pure luck
 on the first try. Yahoo unselfishly provides a document titled <a href="http://developer.yahoo.com/performance/rules.html">Best Practices
 for Speeding Up Your
@@ -112,9 +112,9 @@ separate hostname for splitting components. I hope this helps someone else!</p>
   
   <entry>
     <title type="html"><![CDATA[Apache 2.2.12 - 2.2.13 and Solaris 10 Bug Nastiness]]></title>
-    <link href="http://justintime.github.com/content/2009/09/01/apache-2212-2213-and-solaris-10-bug-nastiness"/>
+    <link href="http://sysadminsjourney.com/content/2009/09/01/apache-2212-2213-and-solaris-10-bug-nastiness"/>
     <updated>2009-09-01T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/09/01/apache-2-2-12-2-2-13-and-solaris-10-bug-nastiness</id>
+    <id>http://sysadminsjourney.com/content/2009/09/01/apache-2-2-12-2-2-13-and-solaris-10-bug-nastiness</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/feather.gif" alt="" />At work, I've been working on an upgrade from a
 custom-compiled version of Apache 2.0.x to the Sun-provided <a href="http://www.sun.com/software/webstack/index.xml">Glassfish
 Webstack</a> 1.5. I spent about a
@@ -201,9 +201,9 @@ confirm existence of the bug using the steps listed above.</p>
   
   <entry>
     <title type="html"><![CDATA[Forcing Apache's mod_deflate module to compress JSP's from Weblogic]]></title>
-    <link href="http://justintime.github.com/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic"/>
     <updated>2009-08-06T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/06/forcing-apaches-mod_deflate-module-to-compress-jsps-from-weblogic</id>
+    <id>http://sysadminsjourney.com/content/2009/08/06/forcing-apaches-mod_deflate-module-to-compress-jsps-from-weblogic</id>
     <content type="html"><![CDATA[<p>This is one of those "note for myself, and maybe it will help someone else"
 posts. When you use Apache and mod_weblogic as a frontend to a WebLogic
 application server, you will likely want to compress your output. It makes

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Linux | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/linux/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/linux/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Lead SysAdmin position available]]></title>
-    <link href="http://justintime.github.com/content/2011/04/06/lead-sysadmin-position-available"/>
+    <link href="http://sysadminsjourney.com/content/2011/04/06/lead-sysadmin-position-available"/>
     <updated>2011-04-06T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2011/04/06/lead-sysadmin-position-available</id>
+    <id>http://sysadminsjourney.com/content/2011/04/06/lead-sysadmin-position-available</id>
     <content type="html"><![CDATA[<p>There's a blog post to follow with when/why, etc., but without
 further ado: I'm moving to a new position at Buckle, and that means
 we need a new Lead SysAdmin.  It's a great job at a great company,
@@ -72,9 +72,9 @@ possibility for the right candidate.</p>
   
   <entry>
     <title type="html"><![CDATA[Apache mod_proxy '[error] (13)Permission denied' error on RHEL]]></title>
-    <link href="http://justintime.github.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
     <updated>2010-02-01T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
+    <id>http://sysadminsjourney.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
     <content type="html"><![CDATA[<p>Had an interesting issue today working on a mod_proxy setup of Apache
 forwarding requests in a reverse proxy setup to a backend Tomcat server. No
 matter what I did, I kept getting this in Apache's error log:</p>
@@ -111,9 +111,9 @@ setting will persist across reboots:</p>
   
   <entry>
     <title type="html"><![CDATA[QuickTip: Make life easier with ssh-copy-id]]></title>
-    <link href="http://justintime.github.com/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id"/>
+    <link href="http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id"/>
     <updated>2009-11-12T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2009/11/12/quicktip-make-life-easier-with-ssh-copy-id</id>
+    <id>http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-with-ssh-copy-id</id>
     <content type="html"><![CDATA[<p>How many times have you ran through this series of events?
 <div>
   <pre><code class='console'>$ cat ~/.ssh/id_dsa.pub
@@ -138,9 +138,9 @@ You're done!</p>
   
   <entry>
     <title type="html"><![CDATA[Don't Reboot After Adding Partitions - partprobe!]]></title>
-    <link href="http://justintime.github.com/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe"/>
     <updated>2009-08-20T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe</id>
+    <id>http://sysadminsjourney.com/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/gnu-head.png" alt="" />Another one of those topics where about 50% of
 the class bustled in excitement over learning something new and simple came up
 today. After running fdisk, you will almost always get an error about the
@@ -154,9 +154,9 @@ distros.</p>
   
   <entry>
     <title type="html"><![CDATA[RedHat 6 Tidbits]]></title>
-    <link href="http://justintime.github.com/content/2009/08/18/redhat-6-tidbits"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/18/redhat-6-tidbits"/>
     <updated>2009-08-18T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/18/redhat-6-tidbits</id>
+    <id>http://sysadminsjourney.com/content/2009/08/18/redhat-6-tidbits</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/logo_rh_home.png" alt="RedHat" />During my <a href="https://www.redhat%0A.com/courses/rh300_rhce_rapid_track_course_and_rhce_exam/">RH300</a> course, my
 instructor mentioned that RHEL 6 is likely to come out sometime Q1 2010. I
 wanted to know more about it, so I hit Google, and came up with some

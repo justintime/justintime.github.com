@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Hosting | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/hosting/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/hosting/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
-    <link href="http://justintime.github.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
     <updated>2010-02-24T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
 build their own installation script by "stacking" previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
@@ -60,9 +60,9 @@ you did without one!</li>
   
   <entry>
     <title type="html"><![CDATA[Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features]]></title>
-    <link href="http://justintime.github.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
     <updated>2010-02-22T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
+    <id>http://sysadminsjourney.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
 review</a>. I was
@@ -239,9 +239,9 @@ tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stack
   
   <entry>
     <title type="html"><![CDATA[Bringing your linode home with you]]></title>
-    <link href="http://justintime.github.com/content/bringing-your-linode-home-you"/>
+    <link href="http://sysadminsjourney.com/content/bringing-your-linode-home-you"/>
     <updated>2008-11-26T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/bringing-your-linode-home-with-you.html</id>
+    <id>http://sysadminsjourney.com/content/bringing-your-linode-home-with-you.html</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> is, in my opinion, the best webhost out there. I recently switched this site from Wordpress to Drupal. In preparation for this switch, I wanted to be able to start with a clean slate - wipe the O/S and all, and install Drupal on top of that. Since I'm a sysadmin, I hate downtime! Read on to learn how I made my <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> portable. <!--break--> <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> is a provider of Xen-based vm's. The intelligent way that they have provisioned their machines gives you a way to clone your VM. Using this idea, I was able to take an image of a Linode-ized CentOS installation, and run it as a VM under Xen on a spare workstation at home. I configured this Xen VM at home, but with every change I made to the image I updated a shell script to do the same. When I had my VM at home ready to go, I sufferred only 5 minutes of downtime while my Linode was being reconfigured! Here's the specifics on how to do this yourself.</p>
 
 
@@ -254,7 +254,7 @@ tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stack
 <h3>Setup the base OS</h3>
 
 
-<p>In your Linode dashboard, click "Deploy a Linux Distribution", and select settings like the ones in this screenshot: <a href="http://justintime.github.com/sites/sysadminsjourney.com/files/images/Linode-Centos-Creation.jpg"><img src="http://justintime.github.com/sites/sysadminsjourney.com/files/images/large_Linode-Centos-Creation.jpg"></a> Now, after creating the partition, rename it to something like "Virgin CentOS Image", and resize it as small as it can go - I used 600M for mine. After resizing the partition, create a new raw partition of 10GB or so - I use this as an LVM partition and it's where I install all of my custom applications. Now, we need to make these new partitions available to your existing VM (or Finnix if this is your first). From the dashboard, click on the Finnix profile (or your custom profile) to edit it. Under the drive setup area, set /dev/xvdg to be the "Virgin CentOS Image" from above, and set /dev/xvdh to be the raw partition from above. If you changed settings to a profile that was already running, you need to reboot for the settings to take effect.</p>
+<p>In your Linode dashboard, click "Deploy a Linux Distribution", and select settings like the ones in this screenshot: <a href="http://sysadminsjourney.com/sites/sysadminsjourney.com/files/images/Linode-Centos-Creation.jpg"><img src="http://sysadminsjourney.com/sites/sysadminsjourney.com/files/images/large_Linode-Centos-Creation.jpg"></a> Now, after creating the partition, rename it to something like "Virgin CentOS Image", and resize it as small as it can go - I used 600M for mine. After resizing the partition, create a new raw partition of 10GB or so - I use this as an LVM partition and it's where I install all of my custom applications. Now, we need to make these new partitions available to your existing VM (or Finnix if this is your first). From the dashboard, click on the Finnix profile (or your custom profile) to edit it. Under the drive setup area, set /dev/xvdg to be the "Virgin CentOS Image" from above, and set /dev/xvdh to be the raw partition from above. If you changed settings to a profile that was already running, you need to reboot for the settings to take effect.</p>
 
 
 <h3>Setup your Xen server at home</h3>
@@ -320,9 +320,9 @@ extra = "xencons=tty"
   
   <entry>
     <title type="html"><![CDATA[(re)First Post]]></title>
-    <link href="http://justintime.github.com/content/2008/11/23/refirst-post"/>
+    <link href="http://sysadminsjourney.com/content/2008/11/23/refirst-post"/>
     <updated>2008-11-23T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2008/11/23/refirst-post</id>
+    <id>http://sysadminsjourney.com/content/2008/11/23/refirst-post</id>
     <content type="html"><![CDATA[<p>Last night, I completed the transition from Wordpress to Drupal. Why? Well
 just try and look at the code. Drupal is the cleanest PHP implementation I've
 ever seen, and Wordpress is like most of the other PHP apps I've seen.  Yet
@@ -339,9 +339,9 @@ linode image home with you".</p>
   
   <entry>
     <title type="html"><![CDATA[Mozilla Weave Setup on CentOS 5.2]]></title>
-    <link href="http://justintime.github.com/content/2008/08/15/mozilla-weave-setup-centos-52"/>
+    <link href="http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52"/>
     <updated>2008-08-15T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/08/15/mozilla-weave-setup-on-centos-5-2</id>
+    <id>http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-on-centos-5-2</id>
     <content type="html"><![CDATA[<p><a href="http://labs.mozilla.com/projects/weave/">Mozilla Weave</a> is a
 project from Mozilla Labs that aims to keep all of your browser
 data synced between all of your PC's.  The now defunct Google

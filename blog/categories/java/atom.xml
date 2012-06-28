@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Java | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/java/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Teaching Java How to Commit Suicide]]></title>
-    <link href="http://justintime.github.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
+    <link href="http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
     <updated>2010-01-29T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
+    <id>http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
     <content type="html"><![CDATA[<p>At $work, we have a lot of java processes that are ran via cron and other
 wrappers that do some pretty critical tasks. The apps have been written so
 that the whole thing is wrapped in a try/catch that will call system.exit(1)
@@ -44,9 +44,9 @@ to Java5 - sorry!</p>
   
   <entry>
     <title type="html"><![CDATA[Hudson > (CruiseControl * 2)]]></title>
-    <link href="http://justintime.github.com/content/2009/08/13/hudson-cruisecontrol-2"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2"/>
     <updated>2009-08-13T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/13/hudson-cruisecontrol-2</id>
+    <id>http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2</id>
     <content type="html"><![CDATA[<p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you're a Java shop,
 you have to use continuous integration. In fact, if you're a code shop, you
 need CI. For the longest time, CruiseControl was the only kid on the block.
@@ -86,9 +86,9 @@ probably should be.</p>
   
   <entry>
     <title type="html"><![CDATA[Profile your Java GC Performance with GChisto]]></title>
-    <link href="http://justintime.github.com/2008/09/15/profile-gc-with-gchisto"/>
+    <link href="http://sysadminsjourney.com/2008/09/15/profile-gc-with-gchisto"/>
     <updated>2008-09-15T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/2008/09/15/profile-your-java-gc-performance-with-gchisto</id>
+    <id>http://sysadminsjourney.com/2008/09/15/profile-your-java-gc-performance-with-gchisto</id>
     <content type="html"><![CDATA[<p>I stumbled across <a href="http://gchisto.dev.java.net/">GChisto</a> the other day when
 looking for some garbage collection analysis tools for Java. Anyone who's
 tried tuning Java GC (especially on older JVM's) knows that it's about as much
@@ -226,9 +226,9 @@ historical reporting tool, taking the place of <a href="http://java.sun.%0Acom/d
   
   <entry>
     <title type="html"><![CDATA[Profiling your Java 1.4.2 memory heap]]></title>
-    <link href="http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap"/>
+    <link href="http://sysadminsjourney.com/content/2008/09/05/profiling-your-java-142-memory-heap"/>
     <updated>2008-09-05T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/09/05/profiling-your-java-1-4-2-memory-heap.html</id>
+    <id>http://sysadminsjourney.com/content/2008/09/05/profiling-your-java-1-4-2-memory-heap.html</id>
     <content type="html"><![CDATA[<p>New Java 6 devs and admins get all the fun.  New toys, better performance, more auto-tuning -- yet you get stuck supporting a legacy java app that you can't upgrade past 1.4.2.  Well, provided you have a more recent 1.4.2 JDK, you can use <a href="http://java.sun.com/javase/6/docs/technotes/tools/share/jhat.html">jhat</a> too!</p>
 
 <!--break-->

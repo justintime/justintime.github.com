@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: devops | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/devops/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/devops/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Using Git Submodules with Dynamic Puppet Environments]]></title>
-    <link href="http://justintime.github.com/content/using-git-submodules-dynamic-puppet-environments"/>
+    <link href="http://sysadminsjourney.com/content/using-git-submodules-dynamic-puppet-environments"/>
     <updated>2012-02-06T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/using-git-submodules-with-dynamic-puppet-environments</id>
+    <id>http://sysadminsjourney.com/content/using-git-submodules-with-dynamic-puppet-environments</id>
     <content type="html"><![CDATA[<p>There comes a point in the lifecycle of every Puppet setup where you realize
 that you're going to be much better off utilizing other peoples' Puppet
 modules whenever possible.  It's what makes OSS great -- why should I reinvent

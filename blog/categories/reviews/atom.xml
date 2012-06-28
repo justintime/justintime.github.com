@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Reviews | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/reviews/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/reviews/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[VPS.net review]]></title>
-    <link href="http://justintime.github.com/content/2011/11/14/vpsnet-review"/>
+    <link href="http://sysadminsjourney.com/content/2011/11/14/vpsnet-review"/>
     <updated>2011-11-14T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2011/11/14/vps-net-review</id>
+    <id>http://sysadminsjourney.com/content/2011/11/14/vps-net-review</id>
     <content type="html"><![CDATA[<p>I've been running a single node from <a href="http://vps.net">VPS.net</a> for about a
 year now.  Please note that my specific experience has been in their "Chicago
 Zone D data center", but if you check out their <a href="http://status.vps.net">status
@@ -50,9 +50,9 @@ been fixed, there's just no way I can recommend their services to anyone.</p>
   
   <entry>
     <title type="html"><![CDATA[Product Review: FileRun PHP File Management System]]></title>
-    <link href="http://justintime.github.com/content/2009/08/03/product-review-filerun-php-file-management-system"/>
+    <link href="http://sysadminsjourney.com/content/2009/08/03/product-review-filerun-php-file-management-system"/>
     <updated>2009-08-03T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2009/08/03/product-review-filerun-php-file-management-system</id>
+    <id>http://sysadminsjourney.com/content/2009/08/03/product-review-filerun-php-file-management-system</id>
     <content type="html"><![CDATA[<p><a href="/assets/images/fileru%0An.jpg"><img src="/assets/images/large_filerun.jpg" alt="large_filerun.jpg" /></a></p>
 
 <p>At work, we had a need for software that addresses a specific problem. We have
@@ -141,9 +141,9 @@ it's issues, the pros far outweigh the cons.</li>
   
   <entry>
     <title type="html"><![CDATA[VirtualBox 2.0 Quick Impressions]]></title>
-    <link href="http://justintime.github.com/content/2008/09/10/virtualbox-20-quick-impressions"/>
+    <link href="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions"/>
     <updated>2008-09-10T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/09/10/virtualbox-2-0-quick-impressions</id>
+    <id>http://sysadminsjourney.com/content/2008/09/10/virtualbox-2-0-quick-impressions</id>
     <content type="html"><![CDATA[<p>I'm not new to the virtualization scene, but I'm no expert either -- I've been
 using <a href="http://www.vmware.com">VMWare</a> Workstation since 1.0,
 <a href="http://www.vmware.com">VMWare</a> Server since 1.0, and
@@ -214,9 +214,9 @@ zero is something VMWare Workstation can't begin to compete with!</p>
   
   <entry>
     <title type="html"><![CDATA[The Power and Simplicity of ELOG]]></title>
-    <link href="http://justintime.github.com/content/2008/08/07/power-and-simplicity-elog"/>
+    <link href="http://sysadminsjourney.com/content/2008/08/07/power-and-simplicity-elog"/>
     <updated>2008-08-07T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/08/07/the-power-and-simplicity-of-elog</id>
+    <id>http://sysadminsjourney.com/content/2008/08/07/the-power-and-simplicity-of-elog</id>
     <content type="html"><![CDATA[<p>Follow the jump to read more about <a href="https://midas.psi.ch/elog/">ELOG</a>, the
 best little logbook available!  When I read <a href="http://lifehacker.com/399919%0A/simplify-troubleshooting-with-a-change-log">the LifeHacker article about how
 to simplify troubleshooting with a ChangeLog</a>, I immediately thought about one
@@ -236,9 +236,9 @@ log entries of data over time, look no further than
   
   <entry>
     <title type="html"><![CDATA[Linode Review]]></title>
-    <link href="http://justintime.github.com/content/2008/08/01/linode-review"/>
+    <link href="http://sysadminsjourney.com/content/2008/08/01/linode-review"/>
     <updated>2008-08-01T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/08/01/linode-review</id>
+    <id>http://sysadminsjourney.com/content/2008/08/01/linode-review</id>
     <content type="html"><![CDATA[<p>I recently switched from
 <a href="http://www.aplus.net" title="Aplus.net">Aplus.net</a> shared Unix hosting
 to

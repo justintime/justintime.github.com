@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: MySQL | SysAdmin's Journey]]></title>
-  <link href="http://justintime.github.com/blog/categories/mysql/atom.xml" rel="self"/>
-  <link href="http://justintime.github.com/"/>
-  <updated>2012-06-28T00:39:07-05:00</updated>
-  <id>http://justintime.github.com/</id>
+  <link href="http://sysadminsjourney.com/blog/categories/mysql/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-06-28T00:53:17-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Backup LAMP Stacks with LVM Snapshots]]></title>
-    <link href="http://justintime.github.com/content/2008/11/29/backup-lamp-stacks-lvm-snapshots"/>
+    <link href="http://sysadminsjourney.com/content/2008/11/29/backup-lamp-stacks-lvm-snapshots"/>
     <updated>2008-11-29T00:00:00-06:00</updated>
-    <id>http://justintime.github.com/content/2008/11/29/backup-lamp-stacks-with-lvm-snapshots.html</id>
+    <id>http://sysadminsjourney.com/content/2008/11/29/backup-lamp-stacks-with-lvm-snapshots.html</id>
     <content type="html"><![CDATA[<p>I've done a lot with <a href="http://en.wikipedia.org/wiki/Logical_Volume_Manager_(Linux)">LVM</a> in the past, but up until now had never really played around with <a href="http://tldp.org/HOWTO/LVM-HOWTO/snapshotintro.html">LVM snapshots</a>. I recently used LVM snapshots to implement a "hot backup" of my LAMP stack running this blog. I quote "hot backup" because, while mysql is indeed running, I do have to place a read lock on all tables for a second or two. You don't need to do this if you're using Innodb, but you do if you use the MyISAM engine (which Drupal does by default). <!--break--> The key to doing LVM snapshots is that you save some unassigned space in your volume group when you setup LVM in the first place. If you don't you can shrink existing logical volumes to make space, but that's beyond the scope of this article. For this article, the following assumptions are made:</p>
 
 
@@ -143,9 +143,9 @@ done
   
   <entry>
     <title type="html"><![CDATA[Simple and Effective Apache+MySQL Backups for your Blog/CMS]]></title>
-    <link href="http://justintime.github.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms"/>
+    <link href="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms"/>
     <updated>2008-08-02T00:00:00-05:00</updated>
-    <id>http://justintime.github.com/content/2008/08/02/simple-and-effective-apachemysql-backups-for-your-blog-cms.html</id>
+    <id>http://sysadminsjourney.com/content/2008/08/02/simple-and-effective-apachemysql-backups-for-your-blog-cms.html</id>
     <content type="html"><![CDATA[<p>As part of setting up my new <a title="Linode" href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> host, I needed a quick, easy, and maintanable way to create backups of my LAMP webapps.  Follow the jump to see how I set up my backup strategy.</p>
 
 <!--break-->
