@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: VPN | SysAdmin's Journey]]></title>
+  <link href="http://justintime.github.com/blog/categories/vpn/atom.xml" rel="self"/>
+  <link href="http://justintime.github.com/"/>
+  <updated>2012-06-28T00:10:45-05:00</updated>
+  <id>http://justintime.github.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[dnsmasq + dhclient]]></title>
+    <link href="http://justintime.github.com/content/2008/07/07/dnsmasq-dhclient"/>
+    <updated>2008-07-07T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2008/07/07/dnsmasq-dhclient</id>
+    <content type="html"><![CDATA[<p>I needed to be able to use dnsmasq on my laptop so that I could
+forward corporate hostname requests to our corporate DNS servers,
+but send all other requests to OpenDNS' servers.  Sometimes at a
+hotel, you can't use OpenDNS, so I also wanted to fail back to
+whatever DNS servers were being sent via DHCP. The trick here is to
+get dhclient to update a file other than /etc/resolv.conf.  You
+tell dhclient to update a file named /etc/resolv.conf.dhclient,
+then point /etc/resolv.conf to use localhost.  Finally, tell
+dnsmasq to use /etc/resolv.conf.dhclient as its source.  Here's how
+I did that on Ubuntu 8.04: First, install dnsmasq:
+<div>
+  <pre><code class='console'>sudo apt-get install dnsmasq resolvconf</code></pre>
+</div>
+</p>
+
+<p>Next, set the following in /etc/dnsmasq.conf:</p>
+
+<pre><code>...
+resolv-file=/etc/resolv.conf.dhclient
+server=/mycorp.com/10.253.10.83
+...
+</code></pre>
+
+<p>Then restart dnsmasq:</p>
+
+<pre><code>sudo /etc/init.d/dnsmasq restart
+</code></pre>
+
+<p>Now, configure your local machine to use a hardcoded  DNS server of
+127.0.0.1.  I use NetworkManager, so I left click on the NM icon,
+and select "Manual configuration...".  Click the DNS tab, then
+click the unlock button.  Remove any existing servers in "DNS
+Servers", then add 127.0.0.1.  Optionally, add any search domains
+you might want to use. Now, we need to tell dhclient to a) prepend
+OpenDNS' servers to the nameserver list, and b) write the DNS
+config to /etc/resolv.conf.dhclient instead of /etc/resolv.conf. 
+First, edit /etc/dhcp3/dhclient.conf, and add the line:</p>
+
+<pre><code>prepend domain-name-servers 208.67.222.222, 208.67.220.220;
+</code></pre>
+
+<p>Now, for the part that I couldn't find using Google.  Let's tell
+dhclient to update a different file:
+<div>
+  <pre><code class='console'>sudo cat   &gt; /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq &amp;lt;&amp;lt;EOD&lt;/p&gt;
+
+&lt;h1&gt;!/bin/sh&lt;/h1&gt;
+
+&lt;p&gt;CUSTOM_RESOLV_CONF=/etc/resolv.conf.dhclient&lt;/p&gt;
+
+&lt;p&gt;make_resolv_conf() {
+  if [ -n &quot;$new_domain_name_servers&quot; ]; then&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;/bin/rm $CUSTOM_RESOLV_CONF
+[ -n &quot;$new_domain_name&quot; ] &amp;amp;&amp;amp; echo search $new_domain_name &amp;gt;$CUSTOM_RESOLV_CONF
+for nameserver in $new_domain_name_servers; do
+  echo nameserver $nameserver &amp;gt;&amp;gt; $CUSTOM_RESOLV_CONF
+done
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;  fi
+}
+EOD</code></pre>
+</div>
+
+Now, set it to be executable:</p>
+
+<pre><code>sudo chmod 755 /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq
+</code></pre>
+
+<p>Now, reboot.  When you reboot, you should have the following setup:
+1.  When you get a DHCP lease, the new DNS config will be written</p>
+
+<pre><code>to /etc/resolv.conf.dhclient
+</code></pre>
+
+<ol>
+<li>This file will first contain the two OpenDNS servers, then
+whatever the ISP/Router sends as nameservers</li>
+<li>/etc/resolv.conf will point to localhost and should never
+change.</li>
+<li>Any requests for mycorp.com will go to the 10.x nameservers
+above</li>
+<li>Any requests for any other domains will first be tried through
+OpenDNS, then through the ISP's/Router's nameservers.</li>
+</ol>
+
+
+<p>Hope this helps you as much as it helped me!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Combining IPSEC, Dynamic NAT, and Static NAT behind a Cisco IOS Router]]></title>
+    <link href="http://justintime.github.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router"/>
+    <updated>2007-11-09T00:00:00-06:00</updated>
+    <id>http://justintime.github.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-a-cisco-ios-router</id>
+    <content type="html"><![CDATA[<p>Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
+out <a href="http://www.cisco.com/en/US/tech/tk583/tk%0A372/technologies_configuration_example09186a0080094634.shtml">Cisco's article on how to do it</a> first. If that
+doesn't work and you're ready to drop kick the router out of the datacenter
+like I was, put away your black belt for a few minutes, and read about how I
+worked around a couple of bugs. Let's define our problem first.</p>
+
+<ul>
+<li>You have two subnets connected via IPSEC VPN - for the purposes of this article, 192.168.10.0/24 and 192.168.11.0/24. We assume the VPN is already up and functional.</li>
+<li>You want any host with an IP in the 192.168.11.0/24 subnet to have access to the Internet as well as access to the hosts on the other side of the IPSEC tunnel.</li>
+<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT'd IP address when accessing the Internet - in this case, 1.1.1.1.
+It took me a couple days, and I still think there's a bug in there somewhere,
+but I did finally get it to work. The IOS I was using was 12.4(17). Now,
+here's my personal take on what I think happens that causes things to break.
+Again, I worked on this for 2 days straight, so I'm a little blurry on
+everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_exa%0Ample09186a0080094634.shtml"> Cisco's artic
+le</a>, you can get these results by simply using route-
+maps on your static NAT commands. Almost, but not really. I found two other
+requirements had to be in place before the NAT's would work as they were
+supposed to:</p></li>
+<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT's with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
+<li><p>Once you use a route-map in your static NAT's, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT'd could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
+Step One: Configure Dynamic NAT We first need to setup an access list that
+will:</p></li>
+<li><p><strong>NOT NAT</strong> packets from our host that needs static NAT applied.</p></li>
+<li><strong>NOT NAT</strong> packets that traverse the VPN.</li>
+<li><p><strong>NAT</strong> packets from our 192.168.11.0/24 subnet to everywhere else.</p>
+
+<p>ip access-list extended NoNat
+ deny   ip host 192.168.11.5 any
+ deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
+ permit ip 192.168.11.0 0.0.0.255 any</p></li>
+</ul>
+
+
+<p>Then, we use this command to setup dynamic NAT:</p>
+
+<pre><code>ip nat inside source list NoNat interface GigabitEthernet0/0 overload
+</code></pre>
+
+<p>At this point, you should be able to access the Internet from any host with a
+192.168.11.x address but not 192.168.11.5, as well as be able to access hosts
+on the 192.168.10.0 subnet. Step Two: Setup Static NAT So, right now,
+192.168.11.5 can access hosts across the tunnel, but not access anyplace on
+the Internet. All other hosts on the 192.168.11.0/24 subnet can access both.
+Again, according to the Cisco article above, we shouldn't have to do this, but
+I did. Since we have excluded our 192.168.11.5 host from being NAT'd at all,
+we need to craft a route-map for him to be static NAT'd, but not NAT'd when
+accessing the remote VPN hosts. This boils down to creating an ACL identical
+to the one above minus one line:</p>
+
+<pre><code>ip access-list extended NoNatStatic
+ deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
+ permit ip 192.168.11.0 0.0.0.255 any
+</code></pre>
+
+<p>Now, create a route-map that points to this ACL:</p>
+
+<pre><code>route-map nonat-static permit 10
+ match ip address NoNatStatic
+</code></pre>
+
+<p>Finally, setup your static NAT rule:</p>
+
+<pre><code>ip nat inside source static 192.168.11.5 1.1.1.1 route-map nonat-static
+</code></pre>
+
+<p>Finally, all your NAT rules should be working perfectly now. In order to add
+new static NAT's, you simply need to add the local IP address to the top of
+the NoNat ACL, and then create a new static NAT rule the points to the same
+route-map. Do not use a different route-map, or you will run into the bug
+above. Let me re-iterate that Cisco's article above is cleaner, and that I
+tried other cleaner ways of implementing this setup. If you have the time, try
+to get your setup working using the article above. However, if you can't get
+it to work, try my way and see if you get the results you're looking for.</p>
+]]></content>
+  </entry>
+  
+</feed>

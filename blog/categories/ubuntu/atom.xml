@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ubuntu | SysAdmin's Journey]]></title>
+  <link href="http://justintime.github.com/blog/categories/ubuntu/atom.xml" rel="self"/>
+  <link href="http://justintime.github.com/"/>
+  <updated>2012-06-28T00:10:45-05:00</updated>
+  <id>http://justintime.github.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[WTF are you doing to your keyboard?]]></title>
+    <link href="http://justintime.github.com/content/2009/05/19/wtf-are-you-doing-your-keyboard"/>
+    <updated>2009-05-19T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2009/05/19/wtf-are-you-doing-to-your-keyboard</id>
+    <content type="html"><![CDATA[<p>So, I have yet to upgrade my laptop to Ubuntu Jaunty, but I saw <a href="http://lifehacker.com/5259425/re+enable-ctrl%252Balt%252Bbackspace-%0Afor-ubuntu-904">this article
+on how to re-enable Ctrl+Alt+Backspace in
+Jaunty</a> come through my feed reader. A little more research dug up
+this <a href="https://wiki.ubuntu.com/X/Config/DontZap">Ubuntu Wiki entry</a>
+proclaiming: a number of users have complained about accidentally restarting
+their X-Server Now, maybe I'm getting old, but I can't tell you how many times
+I've been saved a reboot by that handy Ctrl+Alt+Backspace shortcut. My rant?
+What in the hell are you trying to do that you "accidentally kill X" by
+happening upon hitting that key combination? Was it really <strong>so</strong> many people
+that you had to kill the shortcut for <strong>everyone</strong>? There is a line that can
+be crossed when listening to your users, and I think Ubuntu has just crossed
+it. What are your thoughts?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[List installed packages in Ubuntu]]></title>
+    <link href="http://justintime.github.com/content/2009/01/06/list-installed-packages-ubuntu"/>
+    <updated>2009-01-06T00:00:00-06:00</updated>
+    <id>http://justintime.github.com/content/2009/01/06/list-installed-packages-in-ubuntu</id>
+    <content type="html"><![CDATA[<p>I found this over at the <a href="http://ubuntuforums.org/showthread.php?t=261366">Ubuntu Forums</a>, but since it took me
+forever to find, I'm dropping notes here. In RPM-based distros, you can do
+'rpm -qa > somefile.txt'. In Debian/Ubuntu, do this:
+<div>
+  <pre><code class='bash'>dpkg --get-selections &gt; machineA.txt</code></pre>
+</div>
+</p>
+
+<p>In true apt fashion, if you
+then want to have machine B have all the software machine A has, do this:
+<div>
+  <pre><code class='bash'>dpkg --set-selections &amp;lt; machineA.txt &amp;amp;&amp;amp; dselect</code></pre>
+</div>
+</p>
+
+<p>Enjoy!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Use NetworkManager to launch scripts based on Network Location]]></title>
+    <link href="http://justintime.github.com/content/2008/12/18/use-networkmanager-launch-scripts-based-network-location"/>
+    <updated>2008-12-18T00:00:00-06:00</updated>
+    <id>http://justintime.github.com/content/2008/12/18/use-networkmanager-to-launch-scripts-based-on-network-location.html</id>
+    <content type="html"><![CDATA[<p><a href="http://projects.gnome.org/NetworkManager/">NetworkManager</a> is fast becoming the de facto network provider in desktop Linux distributions. The reason it's so popular is that it "does the right thing" 99% of the time. However, there's not many examples out there that extend that functionality. NetworkManager provides hooks in which you can have scripts launch when network settings change. In today's post, I will show you how to launch the <a href="http://synergy2.sourceforge.net/">Synergy</a> client whenever you plug into your corporate network. <!--break--> I'm lazy. I hate having to fire up my Synergy client on my laptop to connect to my desktop at work when I get to work everyday. Now, I could just fire up the Synergy client at boot, but when I'm at home if I have the VPN connected, Synergy will hook up and I don't want it to. I needed a way to fire a script that says "if I'm on this network, then fire up synergyc, otherwise do nothing". Writing the script was pretty easy, but I was stumped on how to get to run not only at bootup, but whenever I change networks -- I very often suspend my laptop at night at home and resume it at work the next morning. It turns out that NetworkManager has a piece called NetworkManagerDispatcher that does all of this for us. Any script in /etc/NetworkManager/dispatcher.d will be called with two arguments, the name of the interface, and the status of the interface (up/down). If a picture is worth a thousand words, scripts are worth a million, so let's get to it. First, a little background is needed. I know that I am on my corporate network if my eth0 interface has obtained an IP in the 10.0.0.0/8 subnet. Without further ado, I present to you /etc/NetworkManager/dispatcher.d/99smartsynergy.sh: <code type="bash"> #!/bin/sh IF=$1 STATUS=$2 USER=justintime wait_for_process() { PNAME=$1 PID=`/usr/bin/pgrep $PNAME` while [ -z "$PID" ]; do sleep 3; PID=`/usr/bin/pgrep $PNAME` done } start_synergy() { wait_for_process nm-applet /bin/su $USER -c "/usr/bin/synergyc $1" } if [ "$IF" = "eth0" ] &amp;&amp; [ "$STATUS" = "up" ]; then #LAN Subnet at work NETMASK="10.0.0.0/8" if [ -n "`/sbin/ip addr show $IF to $NETMASK`" ]; then ARGS="jentoo.bucklehq.com" start_synergy $ARGS exit $? fi fi </code> The <b>IF</b> and <b>STATUS</b> variables are those fed in from NetworkManager. The <b>USER</b> variable is the user that I run synergyc as. You could add some intelligence here, but it was overkill for my situation. The <b>if</b> at the bottom states that we are only concerned if the interface eth0 has changed it's status to "up". I then use the <b>/sbin/ip</b> command to determine if eth0 is within the 10.0.0.0/8 subnet. If so, then I call start_synergy, passing it my desktop's hostname. Within the <b>start_synergy()</b> function we call the <b>wait_for_process</b> function, passing it <b>nm-applet</b>. We need this function because if we try to run synergyc before I've logged in via GDM, it will exit (this happens on bootup). By calling <b>wait_for_process</b>, we create a way to make synergyc wait until after the nm-applet (NetworkManager Applet) has started. Finally, once nm-applet has been detected as running, the script executes synergyc, and exits.</p>
+
+
+<h3>TODO's</h3>
+
+
+<ul><li>I should probably create a function that kills the remaining synergyc processes when eth0 goes down.</li><li>If there's already a synergyc running, we should just exit as the client will continue to try to reconnect.</li></ul>
+
+
+<p>&nbsp;</p>
+
+
+<h3>Conclusion</h3>
+
+
+<p>The purpose of this article wasn't to show you how to launch synergyc (although I think it's really handy), it was to get the creative juices flowing. Have you already utilized NetworkManagerDispatcher for something? What would you like to have it do? Comment away!</p>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Use LVM on an installation of Ubuntu]]></title>
+    <link href="http://justintime.github.com/content/2008/12/16/use-lvm-installation-ubuntu"/>
+    <updated>2008-12-16T00:00:00-06:00</updated>
+    <id>http://justintime.github.com/content/2008/12/16/use-lvm-on-an-installation-of-ubuntu</id>
+    <content type="html"><![CDATA[<p>RHEL/CentOS has had support for LVM in setup for quite some time now, but for
+whatever reason, Ubuntu has been slow at adopting support for LVM at
+installation. Usually, I just grumble and move on with ext3 -- not today.
+Convinced that I couldn't be the only person wanting LVM support, I set out to
+do just that. Luckily, it wasn't hard at all! As of Intrepid (8.10), the
+installer has basic support for LVM in the disk partitioner part of the
+installation. It's not pretty, but it works. The key is that the LVM binaries
+aren't installed into the image, so the installer won't detect the presence of
+the LVM PV's, VG's, and LV's. Here's how to a) create a new LVM setup during
+installation, and b) how to use an existing LVM setup during installation.</p>
+
+<h3>Pre-installation Common Steps</h3>
+
+<p>You need to do this section no matter what path you are taking.</p>
+
+<ul>
+<li>Boot into the Live CD mode - not the direct installation.</li>
+<li>Once you're looking at your desktop, we need to install LVM. Hit <strong>Alt+F2</strong>, and type in <strong>gnome-terminal</strong>, hit the <strong>OK</strong> button.</li>
+<li>At the terminal, type <strong>sudo apt-get install lvm2</strong>. Note that this installs the binaries into the ramdisk, not your final installation. We'll need to install LVM to the hard drive later.</li>
+<li>Once installed, we need to load the device mapper module into the kernel: <strong>sudo modprobe dm-mod</strong>
+If you're setting up LVM from scratch, continue with <strong>New LVM Setup</strong> below.
+Otherwise, skip to <strong>Use an Existing LVM Setup</strong> further down.</li>
+</ul>
+
+
+<h3>New LVM Setup</h3>
+
+<p>Creating LVM setups from scratch is not a "cookie cutter" operation,
+everyone's setup will be different. If you're trying to do LVM on
+installation, you likely already know what you're doing here. However, your
+general steps should be something like:</p>
+
+<ul>
+<li>Use <strong>sudo fdisk /dev/sda</strong> to setup your Linux boot partition and LVM (type 8e) partition(s)</li>
+<li>Update the kernel with the new partitions by running <strong>sudo partprobe</strong>.</li>
+<li>I recommend using ext2 on your boot partition. If boot will reside on partition 1, then do a <strong>sudo mkfs.ext2 /dev/sda1</strong> to format the partition with Ext2.</li>
+<li>Create the physical volume(s) (PV's) on the partitions of type 8e by using <strong>sudo pvcreate /dev/sdaN</strong>.</li>
+<li>Create a volume group (VG): <strong>sudo vgcreate MyLVMVG /dev/sdaN</strong></li>
+<li>Create logical volumes (LV's) within the group: <strong>sudo lvcreate -n root -L 5G MyLVMVG &amp;&amp; sudo lvcreate -n swap -L 1G MyLVMVG</strong></li>
+<li>Last, we need to put filesystems on the LV's. <strong>sudo mkfs.ext3 /dev/MyLVMVG/root &amp;&amp; mkfs.swap /dev/MyLVMVG/swap</strong>
+Skip the next section and continue on to <strong>Post-configuration Common Steps</strong>.</li>
+</ul>
+
+
+<h3>Use an Existing LVM Setup</h3>
+
+<p>In my personal case, I was replacing CentOS with Ubuntu. I like CentOS for
+it's stability, but my laptop needs a more bleeding edge in order to run the
+way I want it. I had setup an efficient LVM configuration already, I just
+wanted to reformat it during installation and use what I already had. Here's
+what you need to do:</p>
+
+<ul>
+<li>If you don't already know it, we need the volume group (VG) names from our current setup. You can obtain that by running <strong>sudo vgscan | grep Found</strong>. In cases where CentOS/RHEL did the setup, you'll likely have a VG name of VolGroup00.</li>
+<li>We need to tell the running kernel to scan for and activate the current logical volumes (LV's). Using the VG from above, run <strong>sudo lvchange -ay VolGroup00</strong></li>
+<li>At this point, your LV's should be found and available to the kernel. You can verify this by running <strong>sudo lvdisplay | grep "LV NAME\|LV Status"</strong>
+At this point, your LV's will be visible to the installer. Continue on to
+<strong>Post-configuration Common Steps</strong> below.</li>
+</ul>
+
+
+<h3>Post-configuration Common Steps</h3>
+
+<p>Now, you need to launch the installer. You can double-click the icon, or you
+can type <strong>ubiquity</strong> in your already open terminal. Continue through the
+installer as normal, but make sure you select the <strong>Manual</strong> radio button on
+the <strong>Prepare Disk Space</strong> panel of the installer. When you click the
+<strong>Forward</strong> button, you'll be presented with a list of devices that includes
+your /dev/mapper/VG/LV entries. Go ahead and click on each one, click the
+<strong>Edit Partition</strong> button, and set the mountpoint. <strong>Write down or memorize
+what LV's are mounted where, and which partition is your boot partition</strong> --
+you'll need it later. Format them if you used an existing setup. Continue
+through the installer just as you normally would, <strong>but make sure to click
+"Continue using the liveCD" at the end of installation!</strong> Failure to do so
+will give you a system that won't boot. Here's the only tricky part -- we need
+to mount our partitions that we installed to, and install LVM into it. Since
+you wrote down everything above, it's not hard. First, we need to make a
+mountpoint, and mount our root LV to it:
+<div>
+  <pre><code class='bash'>sudo su - mkdir /mnt/chroot/
+mount /dev/VolGroup00/root /mnt/chroot</code></pre>
+</div>
+
+Now,
+everyone will need to do this for the /boot partition, but you may need to
+mount /var, /home/, etc., if you created separate mount points for them.
+Here's what I had to do in my particular setup:
+<div>
+  <pre><code class='bash'>mount /dev/VolGroup00/home /mnt/chroot/home
+mount /dev/sda3 /mnt/chroot/boot</code></pre>
+</div>
+</p>
+
+<p>Now, we need to chroot into our environment, and install LVM.
+<div>
+  <pre><code class='bash'>chroot /mnt/chroot apt-get update apt-get install lvm2
+exit</code></pre>
+</div>
+</p>
+
+<p>At this point, you can restart the system by clicking
+System->Shut Down->Restart. If you're paranoid you can unmount the partitions,
+but the live cd will do that for you.</p>
+
+<h3>Conclusion</h3>
+
+<p>While it's not that hard to use LVM during installation of Ubuntu, it's still
+harder than it should be. It looks like something the Ubuntu devs are working
+on, as the ubiquity installer already has rudimentary support for it. Maybe
+9.04 will have it -- if not, check back here for a post on how to do it there
+too!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Disable SNMP Printer Scanning in Ubuntu Intrepid]]></title>
+    <link href="http://justintime.github.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid"/>
+    <updated>2008-11-05T00:00:00-06:00</updated>
+    <id>http://justintime.github.com/content/2008/11/05/disable-snmp-printer-scanning-in-ubuntu-intrepid</id>
+    <content type="html"><![CDATA[<p>After installing Ubuntu Intrepid on my laptop, I got a nastygram
+from IT saying that my laptop was tripping alerts from their NIDS. 
+They could tell me that it was an outbound SNMP request, but they
+couldn't supply the OID or anything.  Setting aside the fact that
+the NIDS should be configured to disregard SNMP requests for this
+particular OID, I set forth to try and figure out what the heck was
+causing the traffic. After much tcpdumping, I finally found the
+OID: 1.3.6.1.2.1.25.3.2.1.3.1.  Googling told me that this OID
+corresponds to a printer name.  At this point, I knew that it was
+coming from CUPS.  Now, one would think that there is a simple
+on/off switch in CUPS that you could use to disable SNMP scanning. 
+Nope!  You can remove the snmp binary from the CUPS distribution,
+but the next time CUPS is installed/upgraded, you'll be in the same
+boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:</p>
+
+<pre><code>#Address @LOCAL
+Address 127.0.0.1
+</code></pre>
+
+<p>Lo and behold, it worked!  Instead of disabling SNMP scanning, I
+told CUPS to only scan the localhost IP instead of the entire local
+LAN subnet.  After applying this change and restarting CUPS, I
+checked with IT.  The NIDS alerts had indeed stopped generating
+alerts! <strong>Notes</strong> It turns out the snmp auto-detection stuff had
+been removed from previous versions of Ubuntu.  After much
+bemoaning from users, the package maintainers put it back in
+place.  This is why I have the issue on Intrepid and not on
+previous versions. I don't really know what the optimal solution is
+here.  The fact that my laptop was broadcasting SNMP requests to
+the entire corporate subnet is a little disturbing, if harmless. 
+However I see where it would be nice to have in a SOHO
+environment.  I personally would prefer a "disabled by default"
+approach with a very simple checkbox mechanism to enable it, but
+I'm certainly biased. Anyways, hope this helps some people out
+there. When I ran into this issue, Google didn't have any help for
+me.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,364 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Profiling your Java 1.4.2 memory heap - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="New Java 6 devs and admins get all the fun. New toys, better performance, more auto-tuning &#8211; yet you get stuck supporting a legacy java app &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Profiling Your Java 1.4.2 Memory Heap</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-05T00:00:00-05:00" pubdate data-updated="true">Sep 5<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>New Java 6 devs and admins get all the fun.  New toys, better performance, more auto-tuning &#8211; yet you get stuck supporting a legacy java app that you can&#8217;t upgrade past 1.4.2.  Well, provided you have a more recent 1.4.2 JDK, you can use <a href="http://java.sun.com/javase/6/docs/technotes/tools/share/jhat.html">jhat</a> too!</p>
+
+<!--break-->
+
+
+<p>The key is to have your app do a heap dump when sending it the QUIT signal.  Append this option to your java options on startup of your application:</p>
+
+<pre>
+-XX:+HeapDumpOnCtrlBreak
+</pre>
+
+
+<p>Now, start your app, and let it run for awhile.  There is no overhead to running with this option, however do note that your app will freeze for awhile when you send it the magic signal as it creates a heap dump.  Once your app has ran for awhile, and your caches are loaded or your leak has leaked, send the java process the QUIT signal.  On Windows, this is done by doing a CTRL+C at the console.  On Linux &amp; Solaris, you can send the java process the QUIT signal either by doing a CTRL+C, or finding the PID of the process and sending the signal to it.  Assume a PID of 12345:</p>
+
+<pre>
+kill -3 12345
+</pre>
+
+
+<p>Upon sending the process the signal, you&#8217;ll see something similar to this get printed to stdout:</p>
+
+<pre>
+Dumping heap to java_pid12345.hprof.1220646896001 ...
+
+Heap dump file created [533206498 bytes in 22.836 secs]
+
+</pre>
+
+
+<p>Here you see it took my laptop about 22 seconds to dump a heap of a little over 512MB.</p>
+
+<p>So now, you have the heap.  You either need to have Java 6 available, or transfer the heap dump over to a computer that does.  Also note you need quite a bit of RAM to run JHAT.  Since JHAT loads the other VM&#8217;s heap, you need the size of your heap dump plus some working room - I recommend heapsize + 512MB.  Now, if I have a 512MB heap dump, and give it another 512MB, here&#8217;s what my JHAT command line looks like:</p>
+
+<pre>
+$JAVA6_HOME/bin/jhat -J-mx1g java_pid12345.hprof.1220646896001
+</pre>
+
+
+<p>You&#8217;ll see output like the following (this takes a while to load):</p>
+
+<pre>
+Reading from java_pid12345.hprof.1220646896001...
+
+Dump file created Fri Sep 05 15:34:56 CDT 2008
+
+Snapshot read, resolving...
+
+Resolving 12662545 objects...
+
+Chasing references, expect 2532 dots....
+
+Eliminating duplicate references............
+
+Snapshot resolved.
+
+Started HTTP server on port 7000
+
+Server is ready.
+
+</pre>
+
+
+<p>Now, open up a web browser to http://localhost:7000/, and find that memory leak!!!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-05T00:00:00-05:00" pubdate data-updated="true">Sep 5<span>th</span>, 2008</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap" data-via="justinellison" data-counturl="http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2008/09/01/use-gmail-smtp-relay-using-ssmtp" title="Previous Post: Use GMail as an SMTP relay using SSMTP">&laquo; Use GMail as an SMTP relay using SSMTP</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux" title="Next Post: Set it and forget it: Tether your Windows Mobile 6 Phone to Linux">Set it and forget it: Tether your Windows Mobile 6 Phone to Linux &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap';
+        var disqus_url = 'http://justintime.github.com/content/2008/09/05/profiling-your-java-142-memory-heap';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

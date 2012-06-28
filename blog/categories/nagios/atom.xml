@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Nagios | SysAdmin's Journey]]></title>
+  <link href="http://justintime.github.com/blog/categories/nagios/atom.xml" rel="self"/>
+  <link href="http://justintime.github.com/"/>
+  <updated>2012-06-28T00:10:45-05:00</updated>
+  <id>http://justintime.github.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[New and Improved check_mem.pl Nagios Plugin]]></title>
+    <link href="http://justintime.github.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin"/>
+    <updated>2009-06-05T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2009/06/04/new-and-improved-check_mem-pl-nagios-plugin</id>
+    <content type="html"><![CDATA[<p><strong>UPDATE 9/19/2011</strong>: I've moved this plugin over to github: <a href="https://github.com/justintime/nagios-plugins">https://github.com/justintime/nagios-plugins</a>.  It now has a PNP template, and support for AIX as well.</p>
+
+<p>We have always monitored RAM usage on all of boxes. Sure, there's the argument
+that unused RAM is money wasted, but I always like to know not just when the
+box is swapping, but when it's <strong>about to start swapping</strong>. There have been a
+few plugins over the years that I've used for this - check_ram for Solaris,
+check_mem for Linux, and there's also check_mem.pl. Well, migrating to Solaris
+10 and ZFS started tripping the check_ram thresholds due to the ZFS ARC cache.
+So, I attempted to pull together a cross platform Nagios plugin that did it's
+best to give me what I wanted, and what do you know, it works! This graph
+shows the ZFS ARC cache at it's best:</p>
+
+<p><img src="/assets/images/cacti.png" alt="cacti.png" /></p>
+
+<p>So, I started with the check_mem.pl script that's included in the contrib
+folder of the official <a href="http://nagiosplugins.org">Nagios Plugins</a>. What
+emerged when I was done was quite different. Here's some key differences:</p>
+
+<ul>
+<li>If run on a Solaris host:
+
+<ul>
+<li>If the Sun::Solaris::Kstat module is available, it grabs the total memory, memory in use by the ZFS ARC cache, and free memory using that module. If not, it uses vmstat and prtconf to determine total, used, and free memory. There's no easy way to track ARC cache usage without the module.</li>
+</ul>
+</li>
+<li>If run on a Linux host:
+
+<ul>
+<li>It uses /proc/meminfo to gather total memory, used memory, free memory, and cache/buffer memory.</li>
+</ul>
+</li>
+<li>If run on another Unix host:
+
+<ul>
+<li>It uses vmstat to do what it can. This code is unchanged from the original check_mem.pl.</li>
+</ul>
+</li>
+<li>If ran on a supported OS (Solaris with Kstat, or Linux), you can use the -C command line option which counts the cache memory as free memory when comparing it to the warning and critital thresholds.</li>
+<li>I enabled perfdata output for Nagios to use.</li>
+<li>Any user can run the plugin.</li>
+</ul>
+
+
+<p>Let's show an example, run from a Solaris host with ZFS:</p>
+
+<p><div>
+  <pre><code class='console'>&lt;br/&gt;
+$ /usr/local/nagios/libexec/check_mem.pl -w 10 -c 5 -f
+WARNING - 9.9% (406520 kB) free!|TOTAL=4113824KB;;;; USED=3707304KB;;;; FREE=406520KB;;;; CACHES=816947KB;;;;</code></pre>
+</div>
+</p>
+
+<p>Uh oh! I have less than 10% free of the 4GB total. Wait, the ZFS ARC is using
+up 800MB of that! Let's try again with the -C option:</p>
+
+<p><div>
+  <pre><code class='console'>&lt;br/&gt;
+$ /usr/local/nagios/libexec/check_mem.pl -w 10 -c 5 -f -C
+OK - 29.7% (1220611 kB) free.|TOTAL=4113823KB;;;; USED=2893212KB;;;; FREE=1220611KB;;;; CACHES=817075KB;;;;</code></pre>
+</div>
+</p>
+
+<p>That's better! You'll see the same sort of thing on Linux. Maybe some day I'll
+share the nasty hackery that is getting Nagios perfdata into Cacti
+automagically, but I don't know if the world's ready for that yet ;-) Until
+then, give my plugin a try, and let me know how it works. If you have another
+OS for me to add, I'd love to code it up!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Nagios check_dell_warranty Plugin Updated]]></title>
+    <link href="http://justintime.github.com/content/2009/05/28/nagios-checkdellwarranty-plugin-updated"/>
+    <updated>2009-05-28T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2009/05/28/nagios-check_dell_warranty-plugin-updated</id>
+    <content type="html"><![CDATA[<p>It's been blogged about recently how cool the <a href="http://www.monitoringexchange.org/cgi-%0Abin/page.cgi?g=Detailed%2F3094.html;d=1">check_dell_warranty
+plugin</a> by Erinn Looney-Triggs is. It solves
+a very real problem for us - sometimes servers run so well you forget to make
+sure that you renew your support contracts. However, it wasn't quite right for
+us - we have some older Dells that have RHEL 4 with an older (incompatible)
+python on them still. Also, the plugin wouldn't work without configuring sudo.
+Well, like any other sysadmin would do, I fixed it!  With a very small amount
+of code, I added the ability to specify the serial number on the command line
+with a -s parameter. This gives you a lot of flexibility:</p>
+
+<ul>
+<li>It lets you run this plugin on older machines with older Python interpreters</li>
+<li>It eliminates the dependency requiring a recent dmidecode</li>
+<li>It eliminates the sudo dependency, no need to configure sudo</li>
+<li>It gives you the ability to have your Nagios server check the warranty status on multiple hosts without using ssh/nrpe/etc.</li>
+<li>If you don't use the -s flag, the plugin will function like before, using sudo and dmidecode to determine the service tag.
+Erinn also found a bug at the same time I did where the check was working
+properly, but it would never return a WARNING or CRITICAL state. It's fixed
+now, so if you downloaded it before, make sure to get the most recent version.
+Erinn was kind enough to include my changes in the main script, so <a href="http://www.monitoringexchange.org/cgi-%0Abin/page.cgi?g=Detailed%2F3094.html;d=1">go
+download it</a>!</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[The Nagios Fork: Did Two Wrongs Make a Right???]]></title>
+    <link href="http://justintime.github.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right"/>
+    <updated>2009-05-12T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2009/05/12/the-nagios-fork-did-two-wrongs-make-a-right</id>
+    <content type="html"><![CDATA[<p>It's an item that I feel hasn't got much press, at least in the limited RSS
+entries I've had time to scan lately: <a href="http://www.icinga.org/">Nagios has been
+forked</a>. I've been using Nagios long enough that I
+actually used NetSaint for a bit, so I have some mixed feelings about Icinga.
+In general, I'm all for forks when they are indeed needed -
+<a href="http://foswiki.org/">FOSWiki</a> is a great example. But forks shouldn't be
+taken lightly, in many ways they are like a divorce - they should be a last
+resort, not a quick way out. Personally, I think that the fork will ultimately
+either fail or merge back into Nagios, but read on for why I think the Icinga
+fork is a case of two wrongs making a right.  First, let me state that this is
+all my personal opinion. I've been around Nagios for a long time, and while I
+don't know the developers involved personally, I've read enough of all of
+their emails over the years to have a good feel for what they are about. All
+this seems to have come about because of a few reasons:</p>
+
+<ul>
+<li>Ethan Galstad, the sole person with commit access to Nagios, has become a bottleneck in the project. It took forever for Nagios 3.0 to come about, and development has slowed even more since then.</li>
+<li>People seem to fear the commercialization of Nagios. Ethan's involvement in Nagios Enterprises appears to make some people nervous. I think this is all FUD - there's many examples of commercial OSS out there, and many of them are perfectly community-friendly. If Ethan finally wants to make some money over what he's developed over the past 10 years, then more power to him. If he and his company were to become "evil", <strong>then</strong> you fork the code, but not before.</li>
+<li><p>Ethan, like most developers, prioritized bugs and features based upon what he felt like working on the most. This lead many to feel that their requests were going unheard.
+Netways is the company that is sponsoring the fork, they are all great coders,
+and have committed a lot of their resources to Nagios. However, I feel they
+made a critical mistake - they treated the fork like a coup or a crusade.
+Ethan states that he was never directly approached about the fork before the
+announcement "Nagios is dead! Long live Icinga" was made on the mailing list.
+Part of OSS is open communication, I think that Netways should have tried to
+discuss things first. Going back to the divorce analogy, they filed for
+divorce before the spouse knew there was a problem. So, the title makes
+reference to two wrongs and a right. I think this may actually be one of the
+rare occasions where two wrongs do make a right. The two wrongs? Easy!</p></li>
+<li><p>Ethan was wrong for taking the community too lightly, and not allowing the community to have more input into the direction of Nagios. He had far too little participation in the mailing lists to be the sole dictator of the code base.</p></li>
+<li>Netways was wrong starting a fork for the wrong reasons. Don't misunderstand me here, I think nearly all of their reasons are valid, I just don't think that a fork should have been the first step to resolve them.
+So, what's the right here? Well, it appears as though this may have been the
+wake up call that Ethan may have needed. I encourage you to <a href="http://community.nagios.org/">read all of
+Ethan's posts on his blog</a>, but he is already
+taking steps to resolve some of the more obvious issues. First and foremost,
+he's appointed Ton Voon and Andreas Ericsson to be core developers. Ton and
+Andreas are excellent developers, and likely have committed more of their time
+to the development and support of Nagios and it's plugins than Ethan himself
+has over the last couple years. The project could not be in more competent
+hands than in theirs. He has committed to the setup of a bug/issue/request
+tracker for Nagios, and has <a href="http://ideas.nagios.org/">created a site that allows end-users to vote on
+what features they want to see in Nagios</a>.
+Unfortunately, my crystal ball tells me that Icinga will be a casualty, but it
+has already served it's purpose without a single release - it has pushed
+Nagios further in a few weeks than anything else has in the past few years.
+Perhaps two wrongs did make a right? <strong>Personal note:</strong> this is the first big
+opinion story I've ever written here, and it feels odd. Usually I reserve
+space on my blog for howto's and other facts instead of opinion. However,
+Nagios has done so much for me over the years, it's hard not to voice my
+opinion on a piece of software that I truly consider the single most important
+piece of software I've ever used in my role as a sysadmin. More than likely if
+you've read this far, you're a sysadmin too and likely have some strong
+opinions on this topic - please do share them!</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Installing NRPE 2.12 from source as a SMF managed service in Solaris 10]]></title>
+    <link href="http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10"/>
+    <updated>2009-05-07T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/2009/05/07/installing-nrpe-2-12-from-source-as-a-smf-managed-service-in-solaris-10.html</id>
+    <content type="html"><![CDATA[<p>Installing NRPE on Solaris 10 involves just a bit more than your normal './configure &amp;&amp; make &amp;&amp; make install' routine. However, all the dependencies are likely present on a freshly installed system, you just have to tell NRPE where to find it. There's one file you need to patch, and then it will install. From there it's easy to plug into SMF! <!--break--> First, let's make sure some directories are present, and create our Nagios user:</p>
+
+
+<pre># mkdir /usr/local
+# groupadd nagios
+# useradd -m -c "nagios system user" -d /usr/local/nagios -g nagios -m nagios
+</pre>
+
+
+<p>Next, download and extract the source code to NRPE:</p>
+
+
+<pre>$ cd /tmp/
+$ /usr/sfw/bin/wget http://superb-east.dl.sourceforge.net/sourceforge/nagios/nrpe-2.12.tar.gz
+$ gzip -dc nrpe-2.12.tar.gz | tar -xvf -
+$ cd nrpe-2.12
+</pre>
+
+
+<p>Now, we need to tell the configure script where to find the openssl libraries, and make sure that GCC is in our path:</p>
+
+
+<pre>$ PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin ./configure --with-ssl=/usr/sfw/ --with-ssl-lib=/usr/sfw/lib/
+</pre>
+
+
+<p>That should run just fine. Before we build, we need to apply a quick fix to nrpe.c. If you don't do this, you'll get an error from make that says "nrpe.c:617: error: 'LOG_AUTHPRIV' undeclared (first use in this function)".</p>
+
+
+<pre>$ perl -pi -e 's/LOG_AUTHPRIV/LOG_AUTH/; s/LOG_FTP/LOG_DAEMON/' src/nrpe.c
+</pre>
+
+
+<p>Now, we should be okay to build it:</p>
+
+
+<pre>$ PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin make 
+</pre>
+
+
+<p>Then, install it as root:</p>
+
+
+<pre># PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin make install
+</pre>
+
+
+<p>Either copy the nrpe.cfg sample included in the source code, or drop your own into /usr/local/nagios/etc/nrpe.cfg. Now, stay logged in as root for the following, now we'll get NRPE setup to run under SMF. First, we need to setup the service and present it to inetd:</p>
+
+
+<pre>echo "nrpe 5666/tcp # NRPE" &gt;&gt; /etc/services
+echo "nrpe stream tcp nowait nagios /usr/sfw/sbin/tcpd /usr/local/nagios/bin/nrpe \
+ -c /usr/local/nagios/etc/nrpe.cfg -i" &gt;&gt; /etc/inet/inetd.conf
+</pre>
+
+
+<p>Now, tell SMF to pull in the inetd config:</p>
+
+
+<pre>inetconv
+</pre>
+
+
+<p>At this point, the SMF service is available, but we want to use TCP wrappers so that only our Nagios server can talk to NRPE (substitute $NAGIOS_IP with the IP of your Nagios server):</p>
+
+
+<pre>inetadm -m svc:/network/nrpe/tcp:default tcp_wrappers=TRUE
+echo "nrpe: LOCAL, $NAGIOS_IP" &gt;&gt; /etc/hosts.allow
+echo "nrpe: ALL" &gt;&gt; /etc/hosts.deny
+</pre>
+
+
+<p>Finally, fire up the service:</p>
+
+
+<pre>svcadm enable nrpe/tcp
+</pre>
+
+
+<p>That's it! Nagios should be able to monitor your Solaris 10 box now. Someday, I'll make a package for this, but you can pretty well copy and paste the code here to get up and running.</p>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Compiling Nagios Plugins and NRPE on Solaris 10 with Sun Studio]]></title>
+    <link href="http://justintime.github.com/content/compiling-nagios-plugins-and-nrpe-solaris-10-sun-studio"/>
+    <updated>2007-07-06T00:00:00-05:00</updated>
+    <id>http://justintime.github.com/content/compiling-nagios-plugins-and-nrpe-on-solaris-10-with-sun-studio</id>
+    <content type="html"><![CDATA[<p>We have some Sun T1000's running Solaris 10 that we are going to deploy as web
+servers. By compiling Apache from source using the Sun Studio compilers, you
+get a huge boost in performance because of the compiler's built-in
+optimizations for the Niagra processor. Before deploying them, I needed to get
+NRPE setup, which requires that the Nagios plugins be installed. Once setup on
+the client side, I can point our Nagios server at the webserver and get
+notified of hardware issues, disk usage, load averages and what not.
+Installing NRPE and the plugins using gcc is a no brainer. I thought using Sun
+Studio wouldn't be too much harder, but after 5 hours of banging my head
+against the wall, I figured out how to make them compile... To compile the
+two, first set your PATH variable so that it can find Sun Studio, and the Sun
+make binary:</p>
+
+<p><div>
+  <pre><code class='bash'>PATH=/opt/SUNWspro/bin/:/usr/bin:/usr/local/bin:/opt/sfw/bin:/usr/ccs/bin:/usr/local/ssl/bin/
+PATH=$PATH:/usr/ucb
+export PATH</code></pre>
+</div>
+</p>
+
+<p>Now, the tricky part. Everything I did was failing
+with SSL issues. Once I fixed that, check_procs wasn't working properly. Turns
+out you need to set some CFLAGS and tell configure how to run ps:</p>
+
+<p><div>
+  <pre><code class='bash'>CFLAGS='-DSSL_EXPERIMENTAL -DSSL_ENGINE -xO4' ./configure --with-ps-command=&quot;/usr/bin/ps -eo 's uid pid ppid vsz rss pcpu etime comm args'&quot; --with-ps-format='%s %d %d %d %d %d %f %s %s %n' --with-ps-cols=10 --with-ps-varlist='procstat,&amp;;procuid,&amp;;procpid,&amp;;procppid,&amp;;procvsz,&amp;;procrss,&amp;;procpcpu,procetime,procprog,&amp;pos;'</code></pre>
+</div>
+</p>
+
+<p>Then <code>make</code>, <code>su</code>, <code>make
+install</code> as usual. Wash, rinse, and repeat for NRPE.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,386 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Apache, mod_ssl, and the Sun Fire T1000 - Part III - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="In part one of the series, I went over how to compile Apache 2.0 to take
+advantage of the T1000 hardware. In part
+two, I talked about patching Apache &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Apache, Mod_ssl, and the Sun Fire T1000 - Part III</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-15T00:00:00-05:00" pubdate data-updated="true">Aug 15<span>th</span>, 2007</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>In <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-%0Afire-t1000/">part one</a> of the series, I went over how to compile Apache 2.0 to take
+advantage of the T1000 hardware. In <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000%0A-part-ii/">part
+two</a>, I talked about patching Apache 2.0 to support the
+SSLHonorCipherOrder directive. I didn&#8217;t realize there might be a part three,
+but here we are! After finishing the second piece, I sent an email of thanks
+to <a href="http://blogs.sun.com/janp/">Jan Pechanec</a> at Sun for his blog entries
+mentioned in part one. In the email, I mentioned that I was running Apache 2.0
+in worker mode. He cautioned me that worker mode with Sun&#8217;s pkcs11 engine
+still had outstanding issues with worker mode, and pointed me to <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug%0A_id=6375348">this bug
+report on OpenSolaris</a>. I hadn&#8217;t been able to find a reliable load testing tool for
+HTTPS, so I was just using the check_http plugin from
+<a href="http://www.nagios.org">Nagios</a>. The performance results I were getting were
+correct, but I wasn&#8217;t stressing the server at all. Jan pointed me to
+<a href="http://www.acme.com/software/http_load/">http_load</a>, a simple multithreaded
+http load tester that supports HTTPS if you compile it against OpenSSL. He was
+also kind enough to give me his shell script that he was using to load up
+HTTPS connections. I later found the script posted on a bug report, so I&#8217;m
+assuming it&#8217;s okay to repost it here: <div>
+  <pre><code class='bash'>#!/bin/bash [ $#
+-ne 4 -a $# -ne 5 ] &amp;&amp; echo &quot;$0  []&quot; &amp;&amp; exit if [ -n &quot;$5&quot; ]; then
+cipher=&quot;-cipher $5&quot; fi # for SSL for i in <code>yes | head -$3</code>; do printf &quot;.&quot;
+./http_load $cipher -parallel $2 -fetch $4 $1 &amp; done echo &quot;&quot; # wait for all so
+that we can time the script wait</code></pre>
+</div>
+ You then run the shell
+script (named load.sh in this case) like so:</p>
+
+<pre><code>time ./load.sh sslurl.txt 10 20 500 RC4-MD5 &gt;/dev/null
+</code></pre>
+
+<p>This will fork 10 processes, each using 20 threads, to fetch the url contained
+within sslurl.txt as fast as possible 500 times. By wrapping the command with
+the &#8216;time&#8217; command, you get the amount of time it takes to fetch the HTTPS url
+5,000 times. Take 5,000 divided by the number of real seconds returned by
+time, and you have a requests per second benchmark. To my shock, running this
+against my Apache 2.0 worker server never even completed. OpenSSL started to
+complain about &#8216;bad mac&#8217; errors, and eventually started to time out. Well,
+back to the drawing board! I started by recompiling Apache to use the prefork
+MPM. See <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-%0Asun-fire-t1000/">part one</a> for the configure options I used. Since I had benchmarks from
+a T1000 using worker MPM, a V210 using worker MPM, a T1000 using prefork MPM,
+and the <a href="http://cooltools.sunsource.net/coolstack/">Sun CoolStack package</a>
+(Apache 2.2 w/prefork MPM) installed on a T1000, I decided to keep track of
+performance and publish some very pretty graphs. First up, a comparison of
+reported requests per second from ApacheBench (ApacheBench was used with
+keepalives requesting a very small static file): <img src="http://www.techadvise.com/images/abrs.gif" alt="ApacheBench Response Time
+Chart" /> You can see that the T1000
+is much faster than the v210 in all configurations. Interesting to note that
+the prefork 2.0 on the T1000 actually was faster than the worker 2.0 on the
+same box until extreme loads were placed on the server. Okay, what about
+response times? The below graph represents the 95th percentile of the number
+of milliseconds all requests were completed in: <img src="http://www.techadvise.com/images/abrt.gif" alt="ApacheBench Response Time
+Chart" /> Again, it&#8217;s safe to assume
+the T1000 is outperforming the v210. Here, prefork consistently outperformed
+worker, and Apache 2.2 is much better at keeping response times to a minimum
+under load. Finally, let&#8217;s look at HTTPS requests per second. The CoolStack
+Apache 2.2 isn&#8217;t present, because I had configuration issues with getting SSL
+to work. From the get-go, 2.2 was not an option, as we have a proprietary
+proxy module for our application server that does not yet support 2.2. That&#8217;s
+why 2.2 was not tuned, and I didn&#8217;t spend too much time with it. The T1000
+worker for 2.0 is missing because when using pkcs11, it would not complete the
+benchmark tests. <img src="http://www.techadvise.com/images/apsrs.gif" alt="Apache Peak SSL Requests Per
+Second" /> Rather obvious results,
+eh? The asterisk after the tuned prefork means that I only got it to perform
+this well after applying the Solaris patches to the SUNWCry package. <strong>Quick
+Tips and Tricks for Performance</strong></p>
+
+<ul>
+<li>Use noatime on your DocumentRoot partition.</li>
+<li>Apply all SUNWCry patches</li>
+<li>Use &#8216;pthread&#8217; for your SSLMutex and AcceptMutex</li>
+<li>Make sure to use the shmcb for your SSLSessionCache</li>
+<li>Use /dev/urandom for your SSLRandomSeed entries</li>
+<li>Compile all the modules you might ever need, but only load them if you need them.
+<strong>Closing Thoughts</strong><br/>
+The T1000 makes for a strong Apache box. I have a lot going on in my Apache
+config that probably drags down my performance - a lot of logging, about 100
+mod_rewrite rules, proxies, and whatnot. You might be able to google around
+and find people getting 20,000 requests per second and more from Apache, but
+they aren&#8217;t doing that with my configuration. By replacing our v210&#8217;s with
+cheaper T1000&#8217;s, we&#8217;ve ensured that our webserver layer will not be the
+bottleneck in our stack for years to come!</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2007-08-15T00:00:00-05:00" pubdate data-updated="true">Aug 15<span>th</span>, 2007</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii" data-via="justinellison" data-counturl="http://justintime.github.com/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii" title="Previous Post: Apache, mod_ssl, and the Sun Fire T1000 - Part II">&laquo; Apache, mod_ssl, and the Sun Fire T1000 - Part II</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router" title="Next Post: Combining IPSEC, Dynamic NAT, and Static NAT behind a Cisco IOS Router">Combining IPSEC, Dynamic NAT, and Static NAT behind a Cisco IOS Router &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii';
+        var disqus_url = 'http://justintime.github.com/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

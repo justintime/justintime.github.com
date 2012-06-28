@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Use LiveUpgrade to Migrate from UFS to ZFS with Minimal Downtime - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Continuing on from the article on how to use LiveUpgrade to upgrade from
+Solaris 9 to Solaris 10, we now migrate our Solaris 10 UFS file
+systems to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Use LiveUpgrade to Migrate From UFS to ZFS With Minimal Downtime</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-03T00:00:00-05:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Continuing on from <a href="http://www.sysadminsjourney.com/content/2009/05/25%0A/liveupgrade-solaris-9-solaris-10">the article on how to use LiveUpgrade to upgrade from
+Solaris 9 to Solaris 10</a>, we now migrate our Solaris 10 UFS file
+systems to ZFS. LiveUpgrade handles the migration of the critical filesystems,
+we&#8217;ll manually migrate three other filesystems from UFS to ZFS using ufsdump
+and ufsrestore to minimize downtime.</p>
+
+<h3>Phase One: Delete the Old Solaris 9 Boot Environment</h3>
+
+<p>We still have an old Solaris 9 boot environment laying around. It&#8217;s time to
+move on, and blow it away.</p>
+
+<pre><code>ludelete Solaris9 &amp;&amp; lustatus
+</code></pre>
+
+<p>There &#8211; that felt good now, didn&#8217;t it?</p>
+
+<h3>Phase Two: Create the Solaris 10 ZFS Boot Environment</h3>
+
+<p>Now that we&#8217;ve freed up c1t0d0 by removing the Solaris 9 boot environment, we
+can use it for our ZFS boot environment. Before we can do anything, it&#8217;s a lot
+easier to reformat the disk to use just one big slice. Go ahead and use
+&#8216;format&#8217; to reconfigure your slices so that s0 consists of the whole disk.
+With our slices in place, we need to create our root pool. Do this by running:</p>
+
+<pre><code>zpool create rpool c1t0d0s0
+</code></pre>
+
+<p>With that out of the way, we can now create a new boot environment named
+Solaris10ZFS that is a copy of the current one on our newly created ZFS pool
+named rpool:</p>
+
+<pre><code>lucreate -n Solaris10ZFS -p rpool
+</code></pre>
+
+<h3>Phase Three: Boot Into the Solaris 10 ZFS Boot Environment</h3>
+
+<p>The next step is to activate our ZFS boot environment, and boot into it.</p>
+
+<pre><code>luactivate Solaris10ZFS
+</code></pre>
+
+<p><strong>Note:</strong> if that fails with the message &#8216;/usr/sbin/luactivate: /etc/lu/DelayUpdate/: cannot create&#8217;, then you&#8217;ve tripped over a bug <a href="http://docs.sun.com/app/docs/doc/820-7273/installbugs-113?l=en&amp;a=view">described here</a>. To work around it, run the following:</p>
+
+<pre><code>export BOOT_MENU_FILE="menu.lst"
+luactivate Solaris10ZFS
+</code></pre>
+
+<p>You&#8217;ll get output similar to the following - be sure to print it out, or copy
+it someplace you can get to it later:</p>
+
+<pre><code>**********************************************************************
+
+The target boot environment has been activated. It will be used when you 
+reboot. NOTE: You MUST NOT USE the reboot, halt, or uadmin commands. You 
+MUST USE either the init or the shutdown command when you reboot. If you 
+do not use either init or shutdown, the system will not boot using the 
+target BE.
+
+**********************************************************************
+
+In case of a failure while booting to the target BE, the following process 
+needs to be followed to fallback to the currently working boot environment:
+
+1. Enter the PROM monitor (ok prompt).
+
+2. Change the boot device back to the original boot environment by typing:
+
+     setenv boot-device /pci@1c,600000/scsi@2/disk@1,0:a
+
+3. Boot to the original boot environment by typing:
+
+     boot
+
+**********************************************************************
+
+Modifying boot archive service
+Activation of boot environment  successful.
+</code></pre>
+
+<p>When ready, run</p>
+
+<pre><code>init 6
+</code></pre>
+
+<p>to reboot into your ZFS boot environment.</p>
+
+<h3>Phase Four: Migrate Non-Critical UFS Filesystems to ZFS</h3>
+
+<p>In our example, I had three UFS filesystems that were not a &#8220;critical&#8221;
+filesystem as marked by Sun:</p>
+
+<p>/apps</p>
+
+<p>/dev/dsk/c1t1d0s5</p>
+
+<p>/export/home</p>
+
+<p>/dev/dsk/c1t1d0s4</p>
+
+<p>/usr/local</p>
+
+<p>/dev/dsk/c1t1d0s3</p>
+
+<p>We will create new ZFS filesystems for these, and use ufsbackup and ufsrestore
+to quickly sync them over. You could write a script for this, but scripts that
+muck with filesystems make me nervous. Here&#8217;s a list of steps you&#8217;ll want to
+do for each filesystem you want to migrate. For this example, I&#8217;ll use the
+/apps partition above.</p>
+
+<ul>
+<li><p>First, create the ZFS filesystem under the rpool pool:</p>
+
+<p>zfs create rpool/apps</p></li>
+<li><p>Next, change to the new ZFS directory:</p>
+
+<p>cd /rpool/apps</p></li>
+<li><p>Next, we do a backup and restore from UFS to ZFS:</p>
+
+<p>ufsdump 0uf - /apps | ufsrestore rf -</p></li>
+<li><p>Now, create a temporary mountpoint for the UFS filesystem:</p>
+
+<p>mkdir /ap/apps</p>
+
+<ul>
+<li><p>Stop all processes that are accessing the UFS filesystem.  Use &#8216;fuser -c /apps&#8217; to make sure it&#8217;s no longer in use.</p></li>
+<li><p>Unshare the filesystem from NFS:</p></li>
+</ul>
+
+
+<p>unshare /apps</p></li>
+<li><p>Unmount the UFS filesystem from it&#8217;s old location:</p>
+
+<p>umount /apps</p></li>
+<li><p>Mount the UFS slice to the new, temporary location:</p>
+
+<p>mount /dev/dsk/c1t1d0s5 /a/apps</p></li>
+<li><p>Change to the ZFS directory:</p>
+
+<p>cd /rpool/apps</p></li>
+<li><p>Run a level one backup/restore. This will only copy over files that have changed since we did the level 0 backup above (and should be very quick):</p>
+
+<p>ufsdump 1uf - /a/apps | ufsrestore rf -</p></li>
+<li><p>Get out of the ZFS directory:</p>
+
+<p>cd /</p></li>
+<li><p>Set the mountpoint for the ZFS filesystem to be where the old UFS one was:</p>
+
+<p>zfs set mountpoint=/apps rpool/apps</p></li>
+<li><p>Start up your daemons and whatnot that were needing access to the filesystem.</p></li>
+<li><p>Unmount the temporary mount, and cleanup the directory:</p>
+
+<p>umount /a/apps &amp;&amp; rmdir /a/apps</p></li>
+<li><p>Edit /etc/vfstab, and comment out the line mounting /apps. ZFS handles mounting for us now.</p></li>
+<li>Wash, Rinse, Repeat - repeat this for /usr/local and /export/home.</li>
+</ul>
+
+
+<h3>Phase Four: Test</h3>
+
+<p>First, go ahead and exhale &#8211; holding your breath for that long isn&#8217;t good for
+you! You need to take a look around the system, and make sure everything is
+running properly. Check &#8216;dmesg&#8217;, /var/log/syslog, /var/adm/messages, etc. Run
+&#8216;mount&#8217; and make sure there&#8217;s no UFS mounts in there that you don&#8217;t want. I
+recommend a reboot, but it&#8217;s not really needed.</p>
+
+<h3>Summary</h3>
+
+<p>Well, you did it! Migrating an entire system from UFS to ZFS isn&#8217;t as painful
+as it could be, thanks to LiveUpgrade. If you have non-critical UFS
+filesystems you want to migrate, it requires a little elbow grease, but is
+easily done with minimal downtime. Welcome to your new ZFS root!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-03T00:00:00-05:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime" data-via="justinellison" data-counturl="http://justintime.github.com/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/06/03/adding-2nd-disk-zfs-root-pool" title="Previous Post: Adding a 2nd Disk to a ZFS Root Pool">&laquo; Adding a 2nd Disk to a ZFS Root Pool</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" title="Next Post: New and Improved check_mem.pl Nagios Plugin">New and Improved check_mem.pl Nagios Plugin &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime';
+        var disqus_url = 'http://justintime.github.com/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

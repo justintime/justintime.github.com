@@ -1,0 +1,1280 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="After installing Ubuntu Intrepid on my laptop, I got a nastygram
+from IT saying that my laptop was tripping alerts from their NIDS. 
+They could tell &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/blog/page/11/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid">Disable SNMP Printer Scanning in Ubuntu Intrepid</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-11-05T00:00:00-06:00" pubdate data-updated="true">Nov 5<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After installing Ubuntu Intrepid on my laptop, I got a nastygram
+from IT saying that my laptop was tripping alerts from their NIDS. 
+They could tell me that it was an outbound SNMP request, but they
+couldn&#8217;t supply the OID or anything.  Setting aside the fact that
+the NIDS should be configured to disregard SNMP requests for this
+particular OID, I set forth to try and figure out what the heck was
+causing the traffic. After much tcpdumping, I finally found the
+OID: 1.3.6.1.2.1.25.3.2.1.3.1.  Googling told me that this OID
+corresponds to a printer name.  At this point, I knew that it was
+coming from CUPS.  Now, one would think that there is a simple
+on/off switch in CUPS that you could use to disable SNMP scanning. 
+Nope!  You can remove the snmp binary from the CUPS distribution,
+but the next time CUPS is installed/upgraded, you&#8217;ll be in the same
+boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:</p>
+
+<pre><code>#Address @LOCAL
+Address 127.0.0.1
+</code></pre>
+
+<p>Lo and behold, it worked!  Instead of disabling SNMP scanning, I
+told CUPS to only scan the localhost IP instead of the entire local
+LAN subnet.  After applying this change and restarting CUPS, I
+checked with IT.  The NIDS alerts had indeed stopped generating
+alerts! <strong>Notes</strong> It turns out the snmp auto-detection stuff had
+been removed from previous versions of Ubuntu.  After much
+bemoaning from users, the package maintainers put it back in
+place.  This is why I have the issue on Intrepid and not on
+previous versions. I don&#8217;t really know what the optimal solution is
+here.  The fact that my laptop was broadcasting SNMP requests to
+the entire corporate subnet is a little disturbing, if harmless. 
+However I see where it would be nice to have in a SOHO
+environment.  I personally would prefer a &#8220;disabled by default&#8221;
+approach with a very simple checkbox mechanism to enable it, but
+I&#8217;m certainly biased. Anyways, hope this helps some people out
+there. When I ran into this issue, Google didn&#8217;t have any help for
+me.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/2008/09/15/profile-gc-with-gchisto">Profile Your Java GC Performance With GChisto</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-15T00:00:00-05:00" pubdate data-updated="true">Sep 15<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I stumbled across <a href="http://gchisto.dev.java.net/">GChisto</a> the other day when
+looking for some garbage collection analysis tools for Java. Anyone who&#8217;s
+tried tuning Java GC (especially on older JVM&#8217;s) knows that it&#8217;s about as much
+fun as watching paint dry. However, many times you can seriously improve
+performance by taking the time to analyze what your GC&#8217;s are doing. GChisto
+attempts to give you a birds-eye graphical view of your GC operations, and has
+a very handy comparison feature that allows you to compare the differences
+between GC logs.  A picture is worth a thousand words, so here&#8217;s a teaser:
+<img src="/assets/images/large_gchisto-example1.png" alt="large_gchisto-example1.png" /></p>
+
+<h3>Installation of GChisto</h3>
+
+<p>These instructions are tailored for Ubuntu, but should work for any distro. As
+long as you can do CVS on Windows, these instructions apply there as well.
+Also note that this overview is focusing only on how GChisto works with GC
+logs generated by the CMS collector. It works with all types, but the CMS type
+is all that is covered here. To run GChisto, you&#8217;ll need cvs, Java 6, and Ant.
+While GChisto requires Java 6, it can read GC logs from Java 1.4.2, 5, and 6.
+On Ubuntu run the following to make sure everything&#8217;s installed:</p>
+
+<pre><code>sudo apt-get install cvs sun-java6-jdk ant
+</code></pre>
+
+<p>First, you need to sign up for a Java.net account. The project doesn&#8217;t have
+any releases, so you need to have an account so you can checkout CVS. Click
+<a href="https://www.dev.java.net/servlets/Join">here</a> to register for an account.
+Once you&#8217;ve registered, we need to checkout the source code. We&#8217;ll install it
+into a directory just under our home directory:</p>
+
+<pre><code>cd ~
+cvs -d :pserver:myusername@cvs.dev.java.net:/cvs login
+cvs -z9 -d :pserver:myusername@cvs.dev.java.net:/cvs checkout gchisto
+</code></pre>
+
+<h3>Enable verbose GC logging in your java app.</h3>
+
+<p>This all depends on your particular application, but you need to add the
+following java command line options to your application startup:</p>
+
+<pre><code>-Xloggc:before-gc.out -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails
+</code></pre>
+
+<p>This will create a logfile named before-gc.out in the directory from which you
+start your application that contains all of your GC information. For
+illustration purposes, let&#8217;s assume you make some GC tuning optimizations, and
+you want to compare before and after. Before starting the app after making
+your changes, change the before-gc.out to after-gc.out in the above command
+line options.</p>
+
+<h3>Using GChisto</h3>
+
+<p>Now, we just need to run the appropriately named ant target &#8216;run&#8217;:</p>
+
+<pre><code>cd gchisto
+ant run
+</code></pre>
+
+<p>If that doesn&#8217;t work, try prepending the JAVA_HOME variable to ant like so:</p>
+
+<pre><code>JAVA_HOME=/path/to/java6/dir ant run
+</code></pre>
+
+<p>Once ant does it&#8217;s thing, you should be presented with the GChisto GUI. Let&#8217;s
+load our logs into it. You should be presented with the &#8220;Trace Management&#8221;
+tab, if not, select it. Now let&#8217;s load some traces (logs). Make sure that
+&#8220;HotSpot GC Log&#8221; is selected from the dropdown box at the lower left corner,
+and click the &#8220;Add&#8221; button. Browse to the location of before-gc.out, and load
+it. Repeat the exact same process for after-gc.out. When done, you should have
+a window that looks similar to this: <img src="/assets/images%0A/gchisto-start.jpg" alt="gchisto-start.jpg" /> Now, let&#8217;s start doing some digging around. The first
+place to visit is the &#8220;GC Pause Stats&#8221; tab. No pretty graphs right away, but
+once you understand the numbers being presented to you on the &#8220;All GC Stats&#8221;
+page, you will know what the graphs are telling you on the other tabs. First,
+since we are comparing two files from the same application, place a checkmark
+in the box &#8220;Comparison&#8221; in the lower left hand corner. Let&#8217;s explain what
+these numbers are. First, the rows are diveded into these sections:</p>
+
+<ul>
+<li><strong>All</strong>: Totals for all types of GC&#8217;s listed below.</li>
+<li><strong>Young GC</strong>: Metrics concerning the Eden/New/Young generation of heap.</li>
+<li><strong>Full GC</strong>: Metrics concerning any Full GC&#8217;s. If you care about response time in your application, avoid these at all costs. For us, even one full GC is regarded as a tuning failure.</li>
+<li><strong>Initial Mark</strong>: Metrics concerning the Initial Mark phase of the CMS collector on the Old/Tenured generation of heap. With CMS, this is a &#8216;stop-the-world&#8217; phase, meaning the entire application is paused for the duration of this phase. In all the cases that I have worked with, this pause is usually very quick, usually faster than GC&#8217;ing Eden. Keep an eye on this, but there&#8217;s a good chance you won&#8217;t have to tune around this one.</li>
+<li><p><strong>Remark</strong>: Metrics concerning Remark phase of the CMS collector on the Old/Tenured generation of heap. With CMS, this is a stop-the-world collection phase, meaning that the entire application is stopped during this phase - you want this to be as quick as possible. For our application, it&#8217;s the primary focus of our tuning.
+Each section has three rows:</p></li>
+<li><p><strong>File : before-gc.out</strong>: Metrics from our first file.</p></li>
+<li><strong>File : after-gc.out</strong>: Metrics from our second file.</li>
+<li><p>[Empty]: Comparison statistics. This line shows you the difference between this trace and the first trace in the list.
+Finally, the breakdown on the columns is as follows:</p></li>
+<li><p><strong>Num</strong>: Total number of occurrences.</p></li>
+<li><strong>Num (%)</strong>: Gives you the percent of occurrences - i.e, Young GC&#8217;s are > 99% of all GC&#8217;s.</li>
+<li><strong>Total GC (sec)</strong>: Number of seconds total spent in this GC type for the life of the VM.</li>
+<li><strong>Total GC (%)</strong>: Percentage of time spent on this type of GC.</li>
+<li><strong>Overhead(%)</strong>: Thanks to the author, Tony Printezis for clearing this one up. Overhead percentage is the percentage of total runtime in seconds (as defined by the last line of the logfile) that is spent in &#8216;stop-the-world&#8217; garbage collection. Obviously, the lower the better.</li>
+<li><strong>Avg (ms)</strong>: The average in milliseconds each GC of this type took. This is a very important metric.</li>
+<li><strong>Sigma (ms)</strong>: The standard deviation between the GC&#8217;s. Smaller is better.</li>
+<li><strong>Min(ms)</strong>: The fastest GC of this type in milliseconds.</li>
+<li><strong>Max(ms)</strong>: The longest GC of this type in milliseconds. To me, this is the most important metric.
+Now that you know what these numbers mean, go ahead and click around the
+various subtabs under the &#8220;GC Pause Stats&#8221; tab. My personal favorites are
+&#8220;Chart:Max (ms)&#8221; and &#8220;Chart: Avg (ms)&#8221;. Next, we&#8217;ll examine the &#8220;GC Pause
+Distribution&#8221; tab. Everything here is pretty well self explanatory. Instead of
+examining every type of GC at once, I usually deselect everything except for
+one type of GC, and compare those two. Your &#8220;Young GC&#8221; distrubution should
+normally be a very steep bell curve, like so: <img src="/assets/images/gchisto-distribution.jpg" alt="GChisto GC Pause Distribution
+tab" /> Personally, I don&#8217;t use the
+distribution tab much. I check it for anomalies, but that&#8217;s about it. Now,
+onto the &#8220;GC Timeline&#8221; tab. The &#8220;GC Timeline&#8221; tab has the same type of layout
+as the previous tab, but this one presents to you the frequency and length of
+each type of GC over the life of the VM. The one thing that I don&#8217;t like about
+this graph is that it doesn&#8217;t display a time and date along the X axis, it
+displays the number of seconds since VM startup. I&#8217;ve requested a feature that
+will convert the lifetime in seconds to a real date/time stamp if you
+optionally supply the VM startup time on trace file load. Hopefully the devs
+will implement that one. Anyways, the timeline is very good at showing you if
+your GC&#8217;s are getting longer or more frequent as time goes on. Here&#8217;s what the
+Young GC timeline looks like for me: <img src="/assets/images%0A/gchisto-timeline.jpg" alt="GChisto GC Timeline tab" /> Now, most of the charting in GChisto is provided by
+<a href="http://www.jfree.org/jfreechart/">JFreeChart</a>, so you get quite a bit of
+built in functionality here. The best feature is the ability to drill down on
+any chart. Simply left click and drag to form a rectangle on any existing
+chart. When you release the mouse, the chart will zoom into the subset you
+just gave it. To zoom back out, right click the chart, select &#8220;Auto
+Range->Both Axes&#8221;. While you&#8217;re at it, dig around the right-click menu. In the
+properties, you can change colors, axis titles, about anything else you can
+think of. Another very handy feature is the ability to save any chart as a PNG
+file. This helps when showing the metrics to people that don&#8217;t have GChisto
+installed and available. I hope this introduction gives you some insight into
+the power of GChisto. It is definitely going to become permanent in my toolbox
+of GC utilities.
+<a href="http://java.sun.com/performance/jvmstat/visualgc.html">VisualGC</a> is still my
+favorite real-time GC monitoring solution, but GChisto is now my favorite
+historical reporting tool, taking the place of <a href="http://java.sun.%0Acom/developer/technicalArticles/Programming/turbo">PrintGCStats</a>.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/09/11/solaris-10-howto-guides-suncom">Solaris 10 HowTo Guides on sun.com</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-11T00:00:00-05:00" pubdate data-updated="true">Sep 11<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just saw that Sun has posted <a href="http://www.sun.com/software/solaris/howto_guides.jsp">a Solaris 10 HowTo guides section on their
+website</a>. Looks like
+some good stuff: ZFS, SMF, DTrace, Containers, Live Upgrades, and more are
+covered.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/09/10/virtualbox-20-quick-impressions">VirtualBox 2.0 Quick Impressions</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-10T00:00:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m not new to the virtualization scene, but I&#8217;m no expert either &#8211; I&#8217;ve been
+using <a href="http://www.vmware.com">VMWare</a> Workstation since 1.0,
+<a href="http://www.vmware.com">VMWare</a> Server since 1.0, and
+<a href="http://www.xensource.org">Xen</a> since around 2.0. Well, I needed a Windows XP
+install on my laptop, and decided it would be a good time to see how
+<a href="http://www.virtualbox.org">VirtualBox</a> compared. <a href="http://www.virtualbox.org">VirtualBox
+2.0</a> was just released
+(<a href="http://www.virtualbox.org/wiki/Changelog">changelog</a>), so I went with the
+bleeding edge. Read on for my quick review of
+<a href="http://www.virtualbox.org">Virtualbox</a> 2.0.  My laptop was running Ubuntu
+Hardy, but your experience is likely to be the same no matter the distro you
+prefer.</p>
+
+<h3>Installation</h3>
+
+<p>Not much to say here. I clicked a link on <a href="http://www.virtualbox.org/wiki/Downloads">the download
+page</a>, GDebi popped up, and I
+installed the deb. Can&#8217;t get much easier!</p>
+
+<h3>Guest OS Installation</h3>
+
+<p>Anyone familiar with VMWare workstation should feel right at home here. Fire
+up the gui, click &#8216;New&#8217;, create a new Windows XP guest machine. I accepted the
+defaults of 192MB RAM and 10GB disk. Now, it&#8217;s been a really long time since
+I&#8217;ve installed Windows XP, but I swear that the installation went faster from
+within VirtualBox than natively. No metrics to back that up, just a gut
+feeling.</p>
+
+<h3>Networking</h3>
+
+<p>Worked out of the box. I accepted the default configuration of NAT through the
+host. Immediately I ran Windows Update after installation, and went to bed.
+The next day, everything had worked as it should have.</p>
+
+<h3>Performance</h3>
+
+<p>The changelog states that numerous performance improvements have been made
+since 1.0, but since I don&#8217;t have past experience, I can&#8217;t speak to how much
+better it performs. I can tell you that running Windows XP as a guest under
+Virtualbox 2.0 did not feel any faster, nor any slower that running Windows XP
+as a guest under VMWare Workstation on the same laptop. While installing SP3
+for Windows XP in the guest, I noticed fairly significant host responsiveness
+degradation. However, my laptop still has a PATA drive in it, and my XP VM was
+using the &#8220;hard disk as a file&#8221; method instead of a dedicated partition. My
+hunch is that support for <a href="http://en.wikipedia.org/wiki/NCQ">NCQ</a> and
+dedicated partitions helps this quite a bit. Also, when using the XP VM under
+normal conditions that didn&#8217;t write to the disk so extensively, the host
+machine was still very responsive.</p>
+
+<h3>Hardware Support</h3>
+
+<p>Below is the list of what I&#8217;ve tested under my XP VM:</p>
+
+<ul>
+<li><strong>USB:</strong> I&#8217;ll get to this eventually, but I don&#8217;t need it yet.</li>
+<li><strong>Sound:</strong> Worked flawlessly.</li>
+<li><strong>CD/DVD Drive:</strong> No problems here either.</li>
+</ul>
+
+
+<h3>Verdict</h3>
+
+<p>VirtualBox is an impressive product. Consider me a convert from VMWare
+Workstation, VirtualBox does everything I need it to and more, and the cost of
+zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux">Set It and Forget It: Tether Your Windows Mobile 6 Phone to Linux</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-06T00:00:00-05:00" pubdate data-updated="true">Sep 6<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I have a love/hate relationship with my phone - an HTC PPC6800. I can&#8217;t live
+without it - I can check my work email from anywhere, and surf the web. While
+I&#8217;ve tried many PDA&#8217;s through the years, none of them have stuck, because I
+got tired of lugging them around. I <strong>always</strong> have my phone with me, so
+therefore my smartphone has made me much more organized. My wife loves it
+because I can remember all the upcoming appointments. Yet, I hate it. It&#8217;s UI
+is horrible. It locks up and needs rebooted, and I feel dirty using a M$
+product. Well, I found one more reason to like it. I can tether my Ubuntu
+laptop to my phone and get Internet access from just about anywhere. This
+howto is for Ubuntu, but it should work for any distro that uses bluez-utils.
+Note that I briefly tried to get my laptop tethered via USB, but I found
+several comments that it wouldn&#8217;t work without a custom kernel module.
+Bluetooth is easier, works out of the box, and is much cooler besides ;-)
+First things first, let&#8217;s install the prerequisites:</p>
+
+<pre><code>sudo apt-get install bluez-utils bluetooth bluez-gnome bluez-hcidump
+</code></pre>
+
+<p>Next, enable the bluetooth applet in Gnome. Navigate to
+&#8220;System->Preferences->BlueTooth Preferences&#8221;. On the &#8220;Devices&#8221; tab, click
+&#8220;Other devices can connect&#8221;. Now we need to pair your phone to your PC. From
+your phone, click Start->Settings. Click on the Connections tab, and click the
+Bluetooth icon. Click &#8220;Add new device&#8230;&#8221; and choose the entry for your
+computer from the list. You will be asked for a passcode and when you enter it
+on your phone, the bluetooth applet will pop up saying that your phone is
+trying to connect. Click on the ballon and enter the same passcode.
+Congratulations, you have paired your phone to your PC! Now, let&#8217;s find the
+hardware address of your phone:</p>
+
+<pre><code>sudo hcitool scan
+</code></pre>
+
+<p>Document the 12 digit hex address somewhere, we&#8217;ll need it later. Now, open up
+<strong>/etc/default/bluetooth</strong> in your favorite text editor. Find the line that
+states:</p>
+
+<pre><code>PAND_ENABLED=0
+</code></pre>
+
+<p>and change the zero to a one like so:</p>
+
+<pre><code>PAND_ENABLED=1
+</code></pre>
+
+<p>Next, find the line which looks like:</p>
+
+<pre><code>PAND_OPTIONS=""
+</code></pre>
+
+<p>and change that to:</p>
+
+<pre><code>PAND_OPTIONS="--persist --connect XX:XX:XX:XX:XX:XX --role=PANU \
+ --devup /etc/bluetooth/pan/dev-up --devdown /etc/bluetooth/pan/dev-down"
+</code></pre>
+
+<p>changing the XX&#8217;s to the hardware address of your phone. Now, let&#8217;s run the
+following to create the scripts we need: <div>
+  <pre><code class='console'>sudo sh -c
+'mkdir -p /etc/bluetooth/pan &amp;&amp; \ echo &quot;iface bnep0 inet dhcp&quot; &gt;&gt;
+/etc/network/interfaces &amp;&amp; \ for i in up down; do touch
+/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo
+&quot;#!/bin/bash&quot; &gt; /etc/bluetooth/pan/dev-$i echo &quot;/sbin/if$i bnep0&quot; &gt;&gt;
+/etc/bluetooth/pan/dev-$i done &amp;&amp; \ /etc/init.d/networking restart &amp;&amp; \
+/etc/init.d/bluetooth restart'</code></pre>
+</div>
+ Finally, on your phone click
+Start->Programs->Internet Sharing. Select &#8220;Bluetooth PAN&#8221; on the PC Connection
+drop-down, and select the appropriate WAN Network Connection. One more note
+before you&#8217;re off and surfing the &#8216;net on your tethered phone: your bluetooth
+connection can&#8217;t be managed by NetworkManager because bluez-utils doesn&#8217;t make
+use of DBUS. So, in order to use your bluetooth connection, right click on
+your Network Manager icon, and select &#8220;Enable Networking&#8221; to disable
+NetworkManager. When you&#8217;re done, right click and reselect &#8220;Enable Networking&#8221;
+to switch things back. Okay, that&#8217;s out of the way. Click on &#8220;Connect&#8221; on your
+phone. As your phone is connecting, your Linux box will see your phone, and
+connect to it. Once the connection is established, your Linux box will get a
+DHCP-assigned IP from your phone. To verify all this, run the following
+command:</p>
+
+<pre><code>/sbin/ifconfig bnep0
+</code></pre>
+
+<p>You should see the interface, and see that it&#8217;s been assigned an IP. After you
+have the address, you can freely browse the Internet. To disconnect, simply
+click &#8220;Disconnect&#8221; on your phone. Don&#8217;t forget to re-enable networking via
+NetworkManager. Props go out to the following places in helping me determine
+how to do this in the first place:</p>
+
+<ul>
+<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812&#8217;s post in the Ubuntu forums</a></li>
+<li><a href="http://bluez.sourceforge.net/contrib/HOWTO-PAN">The bluez-utils howto</a></li>
+<li>The pand manpage, because I always RTFM ;-)
+Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/09/05/profiling-your-java-142-memory-heap">Profiling Your Java 1.4.2 Memory Heap</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-05T00:00:00-05:00" pubdate data-updated="true">Sep 5<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>New Java 6 devs and admins get all the fun.  New toys, better performance, more auto-tuning &#8211; yet you get stuck supporting a legacy java app that you can&#8217;t upgrade past 1.4.2.  Well, provided you have a more recent 1.4.2 JDK, you can use <a href="http://java.sun.com/javase/6/docs/technotes/tools/share/jhat.html">jhat</a> too!</p>
+
+<!--break-->
+
+
+<p>The key is to have your app do a heap dump when sending it the QUIT signal.  Append this option to your java options on startup of your application:</p>
+
+<pre>
+-XX:+HeapDumpOnCtrlBreak
+</pre>
+
+
+<p>Now, start your app, and let it run for awhile.  There is no overhead to running with this option, however do note that your app will freeze for awhile when you send it the magic signal as it creates a heap dump.  Once your app has ran for awhile, and your caches are loaded or your leak has leaked, send the java process the QUIT signal.  On Windows, this is done by doing a CTRL+C at the console.  On Linux &amp; Solaris, you can send the java process the QUIT signal either by doing a CTRL+C, or finding the PID of the process and sending the signal to it.  Assume a PID of 12345:</p>
+
+<pre>
+kill -3 12345
+</pre>
+
+
+<p>Upon sending the process the signal, you&#8217;ll see something similar to this get printed to stdout:</p>
+
+<pre>
+Dumping heap to java_pid12345.hprof.1220646896001 ...
+
+Heap dump file created [533206498 bytes in 22.836 secs]
+
+</pre>
+
+
+<p>Here you see it took my laptop about 22 seconds to dump a heap of a little over 512MB.</p>
+
+<p>So now, you have the heap.  You either need to have Java 6 available, or transfer the heap dump over to a computer that does.  Also note you need quite a bit of RAM to run JHAT.  Since JHAT loads the other VM&#8217;s heap, you need the size of your heap dump plus some working room - I recommend heapsize + 512MB.  Now, if I have a 512MB heap dump, and give it another 512MB, here&#8217;s what my JHAT command line looks like:</p>
+
+<pre>
+$JAVA6_HOME/bin/jhat -J-mx1g java_pid12345.hprof.1220646896001
+</pre>
+
+
+<p>You&#8217;ll see output like the following (this takes a while to load):</p>
+
+<pre>
+Reading from java_pid12345.hprof.1220646896001...
+
+Dump file created Fri Sep 05 15:34:56 CDT 2008
+
+Snapshot read, resolving...
+
+Resolving 12662545 objects...
+
+Chasing references, expect 2532 dots....
+
+Eliminating duplicate references............
+
+Snapshot resolved.
+
+Started HTTP server on port 7000
+
+Server is ready.
+
+</pre>
+
+
+<p>Now, open up a web browser to http://localhost:7000/, and find that memory leak!!!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/09/01/use-gmail-smtp-relay-using-ssmtp">Use GMail as an SMTP Relay Using SSMTP</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-09-01T00:00:00-05:00" pubdate data-updated="true">Sep 1<span>st</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>On some of your home workstations, and especially on a laptop,
+setting up a full-blown SMTP server such as Postfix, Sendmail, or
+Exim might be overkill.  Follow the jump to learn how to setup the
+lightweight ssmtp to relay all outbound mail through your GMail
+account by using Gmail as a smarthost. SSMTP is meant to be a
+no-frills, secure, and lightweight replacement for a full-blown
+MTA. Personally, I feel it&#8217;s best use is on a laptop where you&#8217;re
+moving around between networks a lot, and need to send outbound
+emails from cron or other shell scripts. By setting up SSMTP, it
+doesn&#8217;t matter where you are, sending mail will be sent out over
+encrypted SMTP to Google&#8217;s gmail servers. After handing it off,
+Google&#8217;s servers do all the routing for you. Setting up SSMTP is
+quick and easy - let&#8217;s get to it. On Ubuntu, run:</p>
+
+<div>
+  <pre><code class='console'>\# sudo apt-get install ssmtp mailx</code></pre>
+</div>
+
+
+<p>Now, we just need to configure SSMTP. Open up /etc/ssmtp/ssmtp.conf
+in your favorite editor, and add or update the following lines:</p>
+
+<div>
+  <pre><code class='properties'>\#The following line redirects mail to root to your gmail account root=myemail@gmail.com
+mailhub=smtp.gmail.com:587
+UseSTARTTLS=yes
+UseTLS=yes
+AuthUser=myemail@gmail.com
+AuthPass=mypassword</code></pre>
+</div>
+
+
+<p>That&#8217;s it! Now, let&#8217;s try testing it:</p>
+
+<div>
+  <pre><code class='console'>$ echo &quot;This is a test message.&quot; | mailx -s 'Test Message' myemail@gmail.com</code></pre>
+</div>
+
+
+<p>You should now be all setup
+and ready to go!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/08/31/quick-painless-ubuntu-speed-tweaks">Quick and Painless Ubuntu Speed Tweaks</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-31T00:00:00-05:00" pubdate data-updated="true">Aug 31<span>st</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As far as performance, Ubuntu 8.04 isn&#8217;t bad out of the box.
+However, the developers had to make some performance sacrifices in
+order to remain compatible with older machines. If you have a newer
+machine with at least 512MB RAM, enabling these tweaks will
+significantly speed up your Ubuntu experience. There&#8217;s a lot of
+copy and paste blog posts out there on Feisty, and a lot of
+so-called tweaks that I feel are unnecessary.  Where I aim to
+differentiate this post is to specialize on tweaks relevant to
+8.04, and to cover only the 80/20 rule of performance &#8211; 20% of the
+work done tweaking will net you 80% of the speed boost. There&#8217;s a
+lot more that you can tweak, but it really won&#8217;t net you that much
+gain. Here&#8217;s what I use on all my desktop Ubuntu installs.</p>
+
+<h3>1. Start your services in parallel at boot.</h3>
+
+<p>Instead of starting one service at a time, let&#8217;s start them all as
+fast as possible, and in parallel.  This will actually slow down
+older, single core machines, but faster P4&#8217;s, and multiple core CPU
+machines will benefit from this.  Run this command, and reboot:</p>
+
+<pre><code>sudo perl -i -pe 's/CONCURRENCY=none/CONCURRENCY=shell/' /etc/init.d/rc
+</code></pre>
+
+<h3>2. Utilize preload to speed up application startup time.</h3>
+
+<p>If you have some extra RAM, look into preload. From the preload
+website:</p>
+
+<blockquote><p>preload is an adaptive readahead daemon. It monitors applications
+that users run, and by analyzing this data, predicts what
+applications users might run, and fetches those binaries and their
+dependencies into memory for faster startup times.</p></blockquote>
+
+<p>You can read all about how it does it and how it can be tweaked on
+<a href="http://www.techthrob.com/tech/preload.php">this article on techthrob.com</a>,
+but you can just &#8220;set it and forget it&#8221; and it will be fine. Run
+the following command:</p>
+
+<pre><code>sudo apt-get install preload
+</code></pre>
+
+<p>and bask in the glory of the speed boost!</p>
+
+<h3>3. Swappiness != Happiness.</h3>
+
+<p>If you have enough RAM, you shouldn&#8217;t ever need to use swap. Heck,
+RAM is cheap. If you&#8217;re short on RAM, stop reading this article and
+go buy some.</p>
+
+<p>My best guess is that the Ubuntu devs do this for folks running on
+older systems with less RAM, but it doesn&#8217;t help any on systems
+with 512MB or more RAM. Swappiness basically controls the tendency
+of the kernel to page memory out to disk. You can read the gory
+details <a href="http://kerneltrap.org/node/3000">over at kerneltrap.org</a>,
+or just run the following commands:</p>
+
+<pre><code>sudo sysctl vm.swappiness=5
+sudo su -c 'echo vm.swappiness=5 &gt;&gt; /etc/sysctl.conf'
+</code></pre>
+
+<h3>4. Profile your boot process.</h3>
+
+<p>This has got to be one of the most undocumented features in
+Ubunutu. I found many sites saying to &#8220;do this&#8221;, but none said why.
+<a href="http://ubuntuforums.org/showthread.php?t=254263">A forum post on the Ubuntu site</a>
+pointed me in the right direction.</p>
+
+<p>Basically, the second thing to start during boot in Ubuntu is
+readahead. The init script is at /etc/rcS.d/S01readahead. It
+preloads all the libs that you might need during bootup. The list
+of files that this service will load is contained in
+/etc/readahead/boot (and /etc/readahead/desktop). It&#8217;s good to do
+this once, then repeat it after you do a major upgrade such as a
+dist-upgrade, or significantly change your startup services. Please
+note that it will slow the boot process during the profile step, as
+it&#8217;s recording what&#8217;s needed at boot time. Your next boot will be
+much faster.</p>
+
+<p>To start profiling, do the following on bootup:</p>
+
+<ul>
+<li>At the bootup menu (GRUB), select your default kernel. You may
+need to press ESC to see this menu.</li>
+<li>Press e for edit.</li>
+<li>Choose the first line (it should start with &#8220;kernel&#8221;). Press e
+again.</li>
+<li>Move to the end of the line, then add the word profile. Press
+enter.</li>
+<li>Press b to boot.</li>
+<li>Let the system boot to the login screen, and wait for all disk
+activity to stop. Remember, during this one bootup, you&#8217;ve told
+Ubuntu to keep track of all disk activity going on, in order to
+build that list. Don&#8217;t be surprised if it&#8217;s significantly slower
+than your ordinary bootups &#8211; that&#8217;s why it&#8217;s not activated by
+default, remember?</li>
+<li>Reboot your system, and enjoy the results.</li>
+</ul>
+
+
+<h3>5. Don&#8217;t start unneeded services.</h3>
+
+<p>Don&#8217;t start services that you don&#8217;t need or use. They eat up RAM,
+and consume CPU cycles. The purpose of this post isn&#8217;t to define
+all these services (that may make a nice post in and of itself),
+it&#8217;s to show you how to turn them off.</p>
+
+<p>If you like command line/curses interfaces:</p>
+
+<pre><code>sudo apt-get install sysv-rc-conf &amp;&amp; sudo sysv-rc-conf
+</code></pre>
+
+<p>If you want a GUI:</p>
+
+<pre><code>sudo apt-get install bum &amp;&amp; gksudo bum
+</code></pre>
+
+<p>I run a lot of stuff on my laptop, so I couldn&#8217;t disable too many
+things, but here&#8217;s what I did disable: rsync, nfs-kernel-server,
+apmd, apport, and avahi-daemon.</p>
+
+<h3>Noteables</h3>
+
+<p>Many of the other posts out there will have you tweaking your own
+kernel. While I&#8217;m not against this (it makes you learn a lot about
+how Linux works), doing it for performance reasons isn&#8217;t the way to
+go. You might speed things up a bit, but if you&#8217;re that much of a
+tweaker, look into <a href="http://www.gentoo.org">Gentoo Linux</a>.</p>
+
+<p>Another item left off the list is the tweaking of the ext3 mount
+options in /etc/fstab. For the most part, Hardy comes out of the
+box with decent mount options. The one <strong>possible</strong> exception is
+the use of noatime. noatime disables the logging of the last access
+time of the files, and if you&#8217;re
+<strong>absolutely sure there&#8217;s nothing you use that needs this</strong>, then
+you are okay to replace any occurrence of &#8216;relatime&#8217; with &#8216;noatime&#8217;
+in /etc/fstab. However, if you look at the man page for mount,
+you&#8217;ll see that relatime is a nice compromise between full access
+time logging and none at all.</p>
+
+<p>Well, that about wraps it up. If you have your own tweaks you&#8217;d
+like to share, post it in the comments!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/08/15/mozilla-weave-setup-centos-52">Mozilla Weave Setup on CentOS 5.2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-15T00:00:00-05:00" pubdate data-updated="true">Aug 15<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://labs.mozilla.com/projects/weave/">Mozilla Weave</a> is a
+project from Mozilla Labs that aims to keep all of your browser
+data synced between all of your PC&#8217;s.  The now defunct Google
+Browser Sync used to do this, as does
+<a href="http://www.foxmarks.com/">Foxmarks</a>.  Although Weave is still in
+it&#8217;s infancy, it&#8217;s been very promising thus far.  However, many of
+the users of Mozilla&#8217;s own Weave server complain that the service
+is very slow.  The beauty of Weave is that it uses the standard
+protocol <a href="http://en.wikipedia.org/wiki/WebDAV">WebDAV</a> to sync it&#8217;s
+data.  Why does that matter?  Because our good &#8216;ol buddy
+<a href="http://www.apache.org">Apache</a> can speak WebDAV out-of-the box! 
+Follow the jump to find out how you can setup your own server that
+you can sync to. In our scenario, we&#8217;ll be setting up Weave to sync
+to a <a href="http://www.centos.org">CentOS</a> 5.2 server running Apache
+2.2.  We&#8217;ll use mod_ssl to encrypt the communications - and to
+conserve IP&#8217;s and SSL certs, we&#8217;ll setup Weave as a subdirectory
+under the main SSL virtual host.  However, you should be able to
+adapt these instructions to any Apache installation where mod_ssl
+and mod_dav_fs is installed and available. There&#8217;s two phases to
+the installation:
+1.  Setup of the Apache server
+2.  Setup of the Firefox client(s)</p>
+
+<h3>Setup of the Apache server</h3>
+
+<p>First, make sure that you have mod_ssl installed:</p>
+
+<pre><code>yum install mod_ssl
+</code></pre>
+
+<p>Now, make sure the following lines are present in
+/etc/httpd/conf/httpd.conf to enable WebDAV:</p>
+
+<div>
+  <pre><code class='apache'>LoadModule dav_module modules/mod_dav.so
+LoadModule dav_fs_module modules/mod_dav_fs.so
+&lt;IfModule mod_dav_fs.c&gt;
+  DAVLockDB /var/lib/dav/lockdb
+&lt;/IfModule&gt;</code></pre>
+</div>
+
+
+<p>Now, let&#8217;s setup our directory alias off of the main SSL virtual
+host. We&#8217;ll maintain our configuration in a separate file. Create a
+file named /etc/httpd/conf.d/mozilla-weave.include with this in it:</p>
+
+<pre><code>Alias /weave /apps/mozilla_weave/www
+</code></pre>
+
+<div>
+  <pre><code class='apache'>&lt;Directory /apps/mozilla_weave/www&gt;
+  SSLRequireSSL
+  Options Indexes FollowSymLinks
+  AllowOverride AuthConfig Limit
+  Order allow,deny
+  Allow from all
+  AuthType Basic
+  AuthName &quot;WebDAV Restricted&quot;
+  AuthUserFile /apps/mozilla_weave/passwords
+  require valid-user
+&lt;/Directory&gt;
+
+&lt;Location /weave&gt;
+  DAV On
+&lt;/Location&gt;</code></pre>
+</div>
+
+
+<p>Now, let&#8217;s get this file included in the main SSL virtualhost. On
+CentOS, edit the file /etc/httpd/conf.d/ssl.conf. Just before the
+closing VirtualHost tag, insert the include statement:</p>
+
+<pre><code>include /etc/httpd/conf.d/mozilla-weave.include
+&lt;/VirtualHost&gt;
+</code></pre>
+
+<p>Now, let&#8217;s create our directory structure (replace &#8216;myusername&#8217;
+with whatever username you want to authenticate with):</p>
+
+<pre><code>cd /apps
+mkdir -p mozilla_weave/www/user/myusername
+chown -R apache:apache mozilla_weave
+</code></pre>
+
+<p>Now, we&#8217;ll create our htaccess file - again replace &#8216;myusername&#8217;:</p>
+
+<pre><code>echo "require user myusername" &gt; mozilla_weave/www/user/myusername/.htaccess
+chown apache:apache mozilla_weave/www/user/myusername/.htaccess
+htpasswd -c mozilla_weave/passwords myusername
+</code></pre>
+
+<p>Finally, let&#8217;s restart Apache:</p>
+
+<pre><code>/etc/init.d/httpd restart
+</code></pre>
+
+<h3>Setup of the Firefox client(s)</h3>
+
+<p>First, download the latest Weave plugin from
+<a href="https://people.mozilla.com/~cbeard/weave/dist/latest-weave.xpi">here</a>.
+Go ahead and restart Firefox. It will start the Weave wizard on
+startup, but for now click cancel. Click the new Weave icon down in
+your status bar, and click on &#8220;Preferences&#8221;.  Now click on the
+advanced tab.  You need to change the Server Location field to the
+URL that we just set up in Apache.  In my case, I used
+https://www.techadvise.com/weave. Now, click on the Account tab,
+and click the &#8220;Sign In&#8221; button.  Click the &#8220;Next&#8221; button, followed
+by &#8220;Set Up Another Computer&#8221;.  Should be self explanatory from here
+out - just use the same username and password we set up earlier via
+Apache.
+The latest versions of Weave require you to use SSL. Since not
+everyone has money to throw away, you might be using a self-signed
+certificate. When you do, you need to browse to
+https://www.yourdomain.com/ and jump through all the hoops to
+autmatically accept the certificate before it will work in Weave.
+If you don’t do this, Weave will give you the error “Username /
+password incorrect”</p>
+
+<p>One PC down, now go to all of your other machines and point them at
+your new WebDAV enabled directory. Then enjoy all the synchronized
+goodness with great performance!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2008/08/09/user-level-configuration-cpu-speed-gnome-under-ubuntu">User-level Configuration of CPU Speed in Gnome Under Ubuntu</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2008-08-09T00:00:00-05:00" pubdate data-updated="true">Aug 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>When I ran Fedora on my laptop, I loved how I could manually set
+the CPU speed in Gnome using the &#8220;CPU Frequency Scaling Monitor&#8221;
+applet.  I noticed that I could not do this under Ubuntu (you can
+monitor speed, but you can&#8217;t change it). It&#8217;s actually a feature,
+not a bug.  In order to change CPU frequency, the binary needs to
+be SUID, which Ubuntu doesn&#8217;t enable by default.  In order to
+change this behavior, run the following:</p>
+
+<pre><code>sudo dpkg-reconfigure gnome-applets
+</code></pre>
+
+<p>Answer &#8220;Yes&#8221; to the question regarding cpufreq-selector.  You will
+immediately get the ability to change your CPU frequency - no
+reboot, no restart of Gnome, not even the applet needs restarted!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/12/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/10/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It&#8217;s not you, it&#8217;s me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

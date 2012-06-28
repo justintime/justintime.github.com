@@ -1,0 +1,404 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Not So Typical Jumpstart: Part Two - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="In part one of the series, we setup the ISC DHCP server. Now it&#8217;s
+time to set up our install and config servers &#8211; both of which will &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Not So Typical Jumpstart: Part Two</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-21T00:00:00-05:00" pubdate data-updated="true">Sep 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/assets/images/solaris.gif" alt="" />In <a href="/content/2009/09/18%0A/not-so-typical-jumpstart-part-one">part one of the series</a>, we setup the ISC DHCP server. Now it&#8217;s
+time to set up our install and config servers &#8211; both of which will reside on
+the same box in this case. Solaris Jumpstart uses standard protocols, namely
+TFTP and NFS to provide these services. In this post, we&#8217;ll just be setting up
+the framework for the real customizations that will come in parts three and
+four.</p>
+
+<h2>Step 1: Setup the Install Server</h2>
+
+<p>In our example, we&#8217;ll be assuming that our install and config directories will
+be setup under /export/home/jumpstart/. So, pop the Solaris 10 DVD into the
+drive of your server, and issue the following commands as root:</p>
+
+<pre><code>mkdir -p /export/home/jumpstart/install/s10u7s
+cd /cdrom/cdrom0/Solaris_10/Tools
+./setup_install_server /export/home/jumpstart/install/s10u7s
+</code></pre>
+
+<p>Once that&#8217;s done (it will take awhile), we need to make sure the NFS server is
+running, and share our install location as a read-only mountpoint:</p>
+
+<pre><code>svcadm enable nfs/server
+echo 'share -F nfs -o ro,anon=0 -d "install server directory" /export/home/jumpstart/install/s10u7s' &gt;&gt; /etc/dfs/dfstab
+shareall
+</code></pre>
+
+<p>Now, it&#8217;s time to create a boot file and make it available via TFTP download
+for our client:</p>
+
+<pre><code>cd /export/home/jumpstart/install/s10u7s/Solaris_10/Tools
+./add_install_client -d SUNW,Sun-Fire-T1000 sun4v
+svcadm enable tftp/udp6
+</code></pre>
+
+<p><strong>Note that the add_install_client command is likely not a command you can cut and paste!</strong> To determine the two arguments to add_install_client, you need to run some uname&#8217;s if you&#8217;re deploying to Sparc. To get the platform name, run &#8216;uname -i&#8217;, and replace the &#8216;SUNW,Sun-Fire-T1000&#8217; string above with the response. Then, run &#8216;uname -m&#8217;, and replace sun4v with the response (which will most likely be sun4u). If you&#8217;re running x86, you&#8217;ll run this command:</p>
+
+<pre><code>./add_install_client -d SUNW.i86pc i86pc
+</code></pre>
+
+<p>At this point, you can do <strong>interactive</strong> network installations of the Solaris
+OS to your client. In fact, I recommend that you go ahead and try booting from
+the network and make sure that everything&#8217;s setup to this point. On a Sparc
+box, from OBP, type &#8216;boot net:dhcp - install&#8217;. If you&#8217;re on x86, boot via PXE.
+If you don&#8217;t have a working network installation at this point, stop here and
+get it working before you move on to setting up the config server.</p>
+
+<h2>Step 2: Setup the Config Server</h2>
+
+<p>We could do an interactive network install, which is helpful for systems that
+may not have a CD/DVD drive, but really &#8211; where&#8217;s the fun in that? We&#8217;re
+striving for automation here! That&#8217;s where the config server comes in. The
+config server provides a sysidcfg file to the system which tells it things
+like what IP&#8217;s belong on what interfaces, what is my hostname, etc. The
+sysidcfg file tells the system settings that will be unique to that system.
+The other function of the config server is to provide the jumpstart profile
+and all the scripts that the profile refers to. The jumpstart profile tells
+the machine specifics about the installation procedure &#8211; what packages to
+install, what locale to use, etc. Let&#8217;s setup our directories first:</p>
+
+<pre><code>for d in scripts sshkeys sysids jumpstart_sample; do
+mkdir -p /export/home/jumpstart/configs/$d
+done
+echo 'share -F nfs -o ro,anon=0 /export/home/jumpstart/configs' &gt;&gt; /etc/dfs/dfstab
+shareall
+</code></pre>
+
+<p>We&#8217;ve created our configs directory, which is the root of the config server
+setup. We created a few subdirectories &#8211; scripts is where we&#8217;ll store our
+add-on scripts, sshkeys is where we&#8217;ll keep our ssh public keys, sysids is
+where the system-specific sysidcfg files will be stored, and jumpstart_sample
+is where we will keep our jumpstart_sample profiles. These files are handy to
+have around for reference. Let&#8217;s copy those over now:</p>
+
+<pre><code>cp /export/home/jumpstart/install/s10u7s/Solaris_10/Misc/jumpstart_sample/* /export/home/jumpstart/configs/jumpstart_sample
+</code></pre>
+
+<p>Now, we&#8217;re ready to create our jumpstart rules file. Run the following:</p>
+
+<pre><code>cd /export/home/jumpstart/configs/
+ln -s  /export/home/jumpstart/configs/check  /export/home/jumpstart/configs/jumpstart_sample/check
+echo "hostname web1    delete_raidctl_vols    webserver      webserver_finish.sh" &gt;&gt; rules
+touch delete_raidctl_vols webserver_finish.sh
+chmod 755 delete_raidctl_vols webserver_finish.sh
+</code></pre>
+
+<p>We added one rule to the rules file. There is a well-commented rules file in
+the jumpstart_sample directory that you can pour over to get all the gory
+details. In our rules file, we&#8217;re essentially saying this:</p>
+
+<ul>
+<li><strong>hostname web1</strong>: Any client that has a hostname equal to &#8216;web1&#8217; will use this rule. Remember in part one when I told you to jot down the hostname we used in dhcpd.conf? That hostname and this one have to match exactly.</li>
+<li><strong>delete_raidctl_vols</strong>: This is the begin script. It is ran before the actual installation occurs. If you don&#8217;t need a begin script, you can simply use a &#8216;-&#8217; here. Right now, delete_raidctl_vols is empty, but in part four we&#8217;ll populate it with a script that deletes any &#8220;hardware&#8221; raid volumes so that we can use ZFS software mirroring in our installation.</li>
+<li><strong>webserver</strong>: This is the actual jumpstart profile file. We&#8217;ll go over this in part three.</li>
+<li><strong>webserver_finish</strong>: This is the finish script. This script provides the sysadmin with an interface to do anything he wants via a shell script after installation, but before reboot. All the power of jumpstart is in this one file. We&#8217;ll cover that in part four. Just as with the begin script, if you don&#8217;t need a finish script, just use a dash here.</li>
+</ul>
+
+
+<p>At this point, we still don&#8217;t have a full custom jumpstart setup yet. Before
+it&#8217;s ready to be tested, we need to add the content to our &#8216;webserver&#8217;
+jumpstart profile file, and run the &#8216;check&#8217; command on it to generate the
+rules.ok file. We&#8217;ll do this in part three. Part four will cover some examples
+of things you can do in the begin and finish scripts - stay tuned!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-09-21T00:00:00-05:00" pubdate data-updated="true">Sep 21<span>st</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/jumpstart/'>Jumpstart</a>, <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two" data-via="justinellison" data-counturl="http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/09/18/not-so-typical-jumpstart-part-one" title="Previous Post: Not So Typical Jumpstart: Part One">&laquo; Not So Typical Jumpstart: Part One</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile" title="Next Post: Not So Typical Jumpstart: Part Three - The Jumpstart Profile">Not So Typical Jumpstart: Part Three - The Jumpstart Profile &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two';
+        var disqus_url = 'http://justintime.github.com/content/2009/09/21/not-so-typical-jumpstart-part-two';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

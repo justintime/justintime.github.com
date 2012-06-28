@@ -1,0 +1,356 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Drupal on Heroku - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Heroku has been around for awhile now, but has been primarily a rails host. Well, until recently anway. With the announcement of their Facebook &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2011/09/20/drupal-heroku">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Drupal on Heroku</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-21T00:00:00-05:00" pubdate data-updated="true">Sep 21<span>st</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://www.heroku.com">Heroku</a> has been around for awhile now, but has been primarily a rails host. Well, <a href="http://blog.heroku.com/archives/2011/9/15/facebook/">until recently</a> anway. With the announcement of their Facebook integration, many others have noted that *any* PHP app can at least parse on Heroku&#8217;s cedar stack. I&#8217;ll be honest, it took me longer to get ruby+rails setup on my Macbook than it did to get a proof-of-concept installation of Drupal up and running. Here&#8217;s what I did:</p>
+
+<ol>
+<li>Get ruby, rails, and the heroku gem installed and running. <a href="http://pragmaticstudio.com/blog/2010/9/23/install-rails-ruby-mac">This page</a> had me up and running pretty quickly on my Mac.</li>
+<li><p>Download and extract Drupal:
+<div>
+<pre><code class='console'>curl http://ftp.drupal.org/files/projects/drupal-6.22.tar.gz | tar -xzvf -; cd drupal-6.22</code></pre>
+</div></p></li>
+<li><p>Initialize your git repo:
+<div>
+<pre><code class='console'>git init</code></pre>
+</div></p></li>
+<li><p>Here&#8217;s what makes all this proof-of-concept only. Many of the features used in Drupal core&#8217;s .htaccess file assume that the webhost has enabled the &#8220;AllowOverride All&#8221; option. Heroku doesn&#8217;t allow this, it only allows a small subset of overrides. <strong>DOING THIS WILL MORE THAN LIKELY COMPROMISE THE SECURITY OF YOUR DRUPAL INSTALL. </strong>Open up .htaccess in your editor, and comment out any line that starts with these strings:</p>
+
+<ul>
+<li>Order</li>
+<li>Options</li>
+<li>DirectoryIndex</li>
+<li>php_value</li>
+</ul>
+</li>
+<li><p>Add Drupal to git, and commit:
+<div>
+<pre><code class='console'>git add .; git commit -m 'initial commit'</code></pre>
+</div></p></li>
+<li><p>Create your heroku application. You&#8217;ll need to have signed up for a free account on http://www.heroku.com and give the following command your login credentials:</p>
+
+<p><div>
+<pre><code class='console'>heroku create --stack cedar</code></pre>
+</div></p></li>
+<li><p>Push your code up to heroku (note the URL it gives you back):
+<div>
+<pre><code class='console'>git push heroku master</code></pre>
+</div></p></li>
+<li><p>Now, we need to setup the Postgres instance:</p>
+
+<p><div>
+<pre><code class='console'>heroku addons:add shared-database</code></pre>
+</div></p></li>
+<li><p>Let&#8217;s display our Postgres credentials:</p>
+
+<p><div>
+<pre><code class='console'>heroku config</code></pre>
+</div></p></li>
+<li><p>You can now hit your Drupal instance at the URL given to you by your last git push. Install as you normally would, selecting Postgres as your database, and filling in the user, password, database, and host given to you by &#8216;heroku config&#8217;. Make sure to change the host from localhost under the &#8220;Advanced&#8221; fieldset.</p></li>
+</ol>
+
+
+<p>  At this point, you can poke around your install, and start seeing what all else is broken :) &#8216;heroku logs -t&#8217; is your friend. If you don&#8217;t believe me, <a href="http://electric-mountain-6735.herokuapp.com/">here&#8217;s a D7 instance</a>, and <a href="http://freezing-light-7795.herokuapp.com/">here&#8217;s a D6 one</a>.</p>
+
+<p>  Seriously, the .htaccess point is a deal-breaker. Unless someone with more time on their hands than I do can suggest a more secure configuration (or heroku allows Drupal to override all), there&#8217;s some serious security ramifications to commenting out the lines in .htaccess.</p>
+
+<p>  Drupal is definitely slow on the free plan for Heroku, but I mean, it&#8217;s free; what did you expect? Drupal 6 seemed to work throughout, but I noticed when getting D7 up and running that I couldn&#8217;t hit some &#8220;heavy&#8221; URL&#8217;s like /admin/configure and /admin/reports/status. I could get into other sub-menus such as /admin/configure/development/performance. We all know D7 takes a fair amount of horsepower to run, and horses aren&#8217;t free :). The whole point of heroku is being able to scale your app by dragging a slider in a web ui, and there&#8217;s no reason to believe that Drupal wouldn&#8217;t start running much faster given more resources from a non-free plan.</p>
+
+<p>  The point of this blog post was to just jot down my notes and save someone else a little time in getting started &#8211; hopefully the community can come up with some ideas so we have another awesome choice in Drupal hosting!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-09-21T00:00:00-05:00" pubdate data-updated="true">Sep 21<span>st</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/drupal/'>Drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2011/09/20/drupal-heroku" data-via="justinellison" data-counturl="http://justintime.github.com/content/2011/09/20/drupal-heroku" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2011/04/19/selecting-right-cdn-your-website" title="Previous Post: Selecting the right CDN for YOUR website">&laquo; Selecting the right CDN for YOUR website</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers" title="Next Post: It's not you, it's me: Call for Node Gallery co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2011/09/20/drupal-heroku';
+        var disqus_url = 'http://justintime.github.com/content/2011/09/20/drupal-heroku';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,456 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NGINX Performs Well on Solaris 10 x86 - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Just a quick posting of some simple benchmarks
+today. Please note, these are not the be all, end all performance results that
+allow everyone to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2009/12/15/nginx-performs-well-solaris-10-x86">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">NGINX Performs Well on Solaris 10 X86</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-15T00:00:00-06:00" pubdate data-updated="true">Dec 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/assets/images/nginx.gif" alt="" />Just a quick posting of some simple benchmarks
+today. Please note, these are not the be all, end all performance results that
+allow everyone to scream from atop yonder hill that Solaris performs better
+than Linux! This was just me doing a little due dilligence. I like Solaris 10,
+and wanted to run it on our webservers. We&#8217;re looking at using NGINX to serve
+up some static files, and I wanted to make sure it performed like it should on
+Solaris 10 before deploying it - you know, right tool for the job and all. So,
+disclaimers aside, here&#8217;s what I found.</p>
+
+<h2>The Hardware</h2>
+
+<p>The hardware I tested was a Dell PowerEdge R610, with 12GB RAM, and 2x4 Core
+Nehalem CPU&#8217;s. SATA disks were used with the internal RAID controller, but no
+RAID was configured.</p>
+
+<h2>The Benchmarks</h2>
+
+<p>I used ApacheBench, as shipped with Glassfish Webstack 1.5. Yes, I know,
+there&#8217;s all kinds of flaws with ApacheBench, but the key here isn&#8217;t the
+benchmarking tool, it&#8217;s that the tool and it&#8217;s configuration remain the same.
+Here&#8217;s the command line I used:</p>
+
+<p><code>/opt/sun/webstack/apache2/2.2/bin/ab -n1000000 -k -c 2000
+http://localhost/static/images/logo.jpg</code></p>
+
+<h2>CentOS 5.4</h2>
+
+<p>I installed CentOS 5.4, ran yum to get all the updates possible. I then
+installed NGINX 0.7.64 from source, and simply copied one image file into the
+document root. I did a few sysctl tweaks for buffers and whatnot, but found
+later that they didn&#8217;t impact the benchmark. Here&#8217;s what ApacheBench running
+on the local host had to say:</p>
+
+<pre><code>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100000 requests
+Completed 200000 requests
+Completed 300000 requests
+Completed 400000 requests
+Completed 500000 requests
+Completed 600000 requests
+Completed 700000 requests
+Completed 800000 requests
+Completed 900000 requests
+Completed 1000000 requests
+Finished 1000000 requests
+
+
+Server Software:        nginx/0.7.64
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /static/images/logo.jpg
+Document Length:        4404 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   21.916 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    990554
+Total transferred:      4625275893 bytes
+HTML transferred:       4407166476 bytes
+Requests per second:    45629.29 [#/sec] (mean)
+Time per request:       43.831 [ms] (mean)
+Time per request:       0.022 [ms] (mean, across all concurrent requests)
+Transfer rate:          206101.61 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.9      0     135
+Processing:     0   43  67.8     27     676
+Waiting:        0   43  67.7     27     676
+Total:          0   44  68.1     27     676
+
+Percentage of the requests served within a certain time (ms)
+  50%     27
+  66%     41
+  75%     49
+  80%     53
+  90%     72
+  95%    202
+  98%    245
+  99%    342
+ 100%    676 (longest request)
+</code></pre>
+
+<p>No matter how you slice it, that&#8217;s pretty darn fast. I knew that Solaris 10
+had a completely rewritten TCP/IP stack optimized for multithreading, and that
+it should keep right up with Linux. However, NGINX uses different event models
+for Linux and Solaris 10 (epoll vs eventport), so I wanted to make sure there
+weren&#8217;t any major differences in performance.</p>
+
+<h2>Solaris 10</h2>
+
+<p>I installed Solaris 10 x86, ran pca to get all the updates possible. I then
+installed NGINX 0.7.64 from source, and simply copied one image file into the
+document root. Here&#8217;s what ApacheBench running on the local host had to say:</p>
+
+<pre><code>Server Software:        nginx/0.7.64
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /static/images/logo.jpg
+Document Length:        4404 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   21.728 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    991224
+Total transferred:      4623536714 bytes
+HTML transferred:       4405506168 bytes
+Requests per second:    46023.73 [#/sec] (mean)
+Time per request:       43.456 [ms] (mean)
+Time per request:       0.022 [ms] (mean, across all concurrent requests)
+Transfer rate:          207805.08 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1  71.9      0    4434
+Processing:     0   42  57.2     29    1128
+Waiting:        0   41  56.0     29    1128
+Total:          0   43  98.6     29    4473
+
+Percentage of the requests served within a certain time (ms)
+  50%     29
+  66%     35
+  75%     42
+  80%     50 
+  90%     74
+  95%    108
+  98%    176
+  99%    256
+ 100%   4473 (longest request)
+</code></pre>
+
+<p>Again, very impressive results. Overall, it appeared as though Solaris+NGINX
+was just a few millis faster than CentOS+NGINX in most cases, but certainly
+not enough to change your mind of what platform to use. If you notice the 4.5
+second request on the Solaris box, I&#8217;m pretty sure that&#8217;s a TCP retransmit
+that I can work out with ndd tuning.</p>
+
+<h2>The Verdict</h2>
+
+<p>NGINX is freaking fast. My hunch is that it&#8217;s so fast, that I&#8217;m actually
+running up against the limits of ApacheBench, not NGINX &#8211; but that&#8217;s just a
+gut feeling. The verdict is that you won&#8217;t be making a mistake going with
+either Linux or Solaris when setting up your NGINX server.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-12-15T00:00:00-06:00" pubdate data-updated="true">Dec 15<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2009/12/15/nginx-performs-well-solaris-10-x86" data-via="justinellison" data-counturl="http://justintime.github.com/content/2009/12/15/nginx-performs-well-solaris-10-x86" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/11/30/ask-saj-what-do-apache-logs-50gb" title="Previous Post: Ask SAJ: What to do with Apache logs > 50GB?">&laquo; Ask SAJ: What to do with Apache logs > 50GB?</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/12/18/share-your-eclipse-plugins-and-configurations-across-platforms" title="Next Post: Share Your Eclipse Plugins and Configurations Across Platforms">Share Your Eclipse Plugins and Configurations Across Platforms &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2009/12/15/nginx-performs-well-solaris-10-x86';
+        var disqus_url = 'http://justintime.github.com/content/2009/12/15/nginx-performs-well-solaris-10-x86';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

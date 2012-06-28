@@ -1,0 +1,384 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Installing NRPE 2.12 from source as a SMF managed service in Solaris 10 - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Installing NRPE on Solaris 10 involves just a bit more than your normal &#8216;./configure &amp;&amp; make &amp;&amp; make install&#8217; routine. &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:justintime.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Installing NRPE 2.12 From Source as a SMF Managed Service in Solaris 10</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-07T00:00:00-05:00" pubdate data-updated="true">May 7<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Installing NRPE on Solaris 10 involves just a bit more than your normal &#8216;./configure &amp;&amp; make &amp;&amp; make install&#8217; routine. However, all the dependencies are likely present on a freshly installed system, you just have to tell NRPE where to find it. There&#8217;s one file you need to patch, and then it will install. From there it&#8217;s easy to plug into SMF! <!--break--> First, let&#8217;s make sure some directories are present, and create our Nagios user:</p>
+
+
+<pre># mkdir /usr/local
+# groupadd nagios
+# useradd -m -c "nagios system user" -d /usr/local/nagios -g nagios -m nagios
+</pre>
+
+
+<p>Next, download and extract the source code to NRPE:</p>
+
+
+<pre>$ cd /tmp/
+$ /usr/sfw/bin/wget http://superb-east.dl.sourceforge.net/sourceforge/nagios/nrpe-2.12.tar.gz
+$ gzip -dc nrpe-2.12.tar.gz | tar -xvf -
+$ cd nrpe-2.12
+</pre>
+
+
+<p>Now, we need to tell the configure script where to find the openssl libraries, and make sure that GCC is in our path:</p>
+
+
+<pre>$ PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin ./configure --with-ssl=/usr/sfw/ --with-ssl-lib=/usr/sfw/lib/
+</pre>
+
+
+<p>That should run just fine. Before we build, we need to apply a quick fix to nrpe.c. If you don&#8217;t do this, you&#8217;ll get an error from make that says &#8220;nrpe.c:617: error: &#8216;LOG_AUTHPRIV&#8217; undeclared (first use in this function)&#8221;.</p>
+
+
+<pre>$ perl -pi -e 's/LOG_AUTHPRIV/LOG_AUTH/; s/LOG_FTP/LOG_DAEMON/' src/nrpe.c
+</pre>
+
+
+<p>Now, we should be okay to build it:</p>
+
+
+<pre>$ PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin make 
+</pre>
+
+
+<p>Then, install it as root:</p>
+
+
+<pre># PATH=$PATH:/usr/sfw/bin:/usr/ccs/bin make install
+</pre>
+
+
+<p>Either copy the nrpe.cfg sample included in the source code, or drop your own into /usr/local/nagios/etc/nrpe.cfg. Now, stay logged in as root for the following, now we&#8217;ll get NRPE setup to run under SMF. First, we need to setup the service and present it to inetd:</p>
+
+
+<pre>echo "nrpe 5666/tcp # NRPE" &gt;&gt; /etc/services
+echo "nrpe stream tcp nowait nagios /usr/sfw/sbin/tcpd /usr/local/nagios/bin/nrpe \
+ -c /usr/local/nagios/etc/nrpe.cfg -i" &gt;&gt; /etc/inet/inetd.conf
+</pre>
+
+
+<p>Now, tell SMF to pull in the inetd config:</p>
+
+
+<pre>inetconv
+</pre>
+
+
+<p>At this point, the SMF service is available, but we want to use TCP wrappers so that only our Nagios server can talk to NRPE (substitute $NAGIOS_IP with the IP of your Nagios server):</p>
+
+
+<pre>inetadm -m svc:/network/nrpe/tcp:default tcp_wrappers=TRUE
+echo "nrpe: LOCAL, $NAGIOS_IP" &gt;&gt; /etc/hosts.allow
+echo "nrpe: ALL" &gt;&gt; /etc/hosts.deny
+</pre>
+
+
+<p>Finally, fire up the service:</p>
+
+
+<pre>svcadm enable nrpe/tcp
+</pre>
+
+
+<p>That&#8217;s it! Nagios should be able to monitor your Solaris 10 box now. Someday, I&#8217;ll make a package for this, but you can pretty well copy and paste the code here to get up and running.</p>
+
+
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-05-07T00:00:00-05:00" pubdate data-updated="true">May 7<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/nagios/'>Nagios</a>, <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10" data-via="justinellison" data-counturl="http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/05/06/use-lofiadm-mount-iso-solaris-10" title="Previous Post: Use lofiadm to mount an ISO in Solaris 10">&laquo; Use lofiadm to mount an ISO in Solaris 10</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/05/12/smf-manifests-endeca-iap-6x" title="Next Post: SMF Manifests for Endeca IAP 6.x">SMF Manifests for Endeca IAP 6.x &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10';
+        var disqus_url = 'http://justintime.github.com/content/2009/05/07/installing-nrpe-212-source-smf-managed-service-solaris-10';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
