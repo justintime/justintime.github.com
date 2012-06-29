@@ -9,10 +9,9 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="At one of my jobs, we recently went through the process of
-selecting a CDN (Content Delivery
-Network)
-for our site. While the first rule of CDN&#8217 &hellip;">
+  <meta name="description" content="At one of my jobs, we recently went through the process of selecting a
+CDN (Content Delivery Network) for our site. While the first rule of
+CDN’s is &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,250 +108,1093 @@ for our site. While the first rule of CDN&#8217 &hellip;">
   </header>
 
 
-<div class="entry-content"><p>At one of my jobs, we recently went through the process of
-selecting a <a href="http://en.wikipedia.org/wiki/Content_delivery_network">CDN (Content Delivery
-Network)</a>
-for our site. While the first rule of CDN&#8217;s is that &#8220;any CDN is
-better than no CDN&#8221;, it can be argued that certain CDN&#8217;s are a
-better fit in certain situation than others. This post is basically
-a summary of the process we went through when selecting our CDN. By
-no means is this a statement of &#8220;XYZ is better than ABC&#8221;, it&#8217;s
-simply documentation of the process we went through in order to
-select the right one for our business.  While most CDN&#8217;s are
-compatible with Drupal via excellent contrib modules such as
-<a href="http://drupal.org/project/cdn">CDN</a>, this information presented in
-this article is relative to any website and isn&#8217;t Drupal-specific.
-To illustrate the importance of a CDN using real numbers, one image
-being fetched from the data center to our office takes about
-323ms.  That same image fetched from Seattle is 483ms, and from
-Washington DC takes 599ms.  The worst cases appear when coming
-overseas - to fetch the same image from Paris it takes on average
-1,141ms **for just that one image**.  A Content Delivery
-Network (CDN) shortens that distance between your static content
-and the end-user.  While the text on most web pages is dynamic,
-most images, JavaScript, and CSS are static.  These static objects
-make up a large percentage of the total bytes downloaded for each
-page view.  By using a CDN, you place static content as close to
-the end-user as possible.  In turn this decreases the page load
-time a end-user experiences by leaps and bounds. ###
-Pre-selection Criteria There&#8217;s a plethora of CDN&#8217;s to choose from,
-and if you don&#8217;t filter the initial list down to five or fewer
-providers, you&#8217;ll end up spending months in evaluation time.  By
-defining specific must-have features, we were able to limit the
-initial number of companies to compare to four.  Many CDN&#8217;s provide
-value-add services above and beyone static objects, such as
-&#8220;Dynamic Site Acceleration&#8221; &#8211; this evaluation looked solely at
-serving up static file content, e.g. JPEG, GIF, CSS, and
-Javascript. The filtering properties we used to limit scope were:
-1. **The CDN must provide &#8220;origin pull&#8221; or &#8220;reverse proxy&#8221;
-support**.  If the CDN receives a request for a file that doesn&#8217;t
-exist at the edge, it applies a customer-defined URL rewrite to the
-request, and proxies the request to the origin site.  If the image
-exists at the origin, the edge server caches the image locally and
-serves it to the client from there.  For example, the CDN host name
-might be cdn.example.com (which points to the edge), and the origin
-site (my server) would be www.example.com.  If I point my browser
-to http://cdn.example.com/logo.gif, and that file doesn&#8217;t exist at
-the edge, the CDN will make a request for
-http://www.example.com/logo.gif.  If that file exists, it is
-fetched and cached.  If it doesn&#8217;t exist, a 404 is returned to the
-client.  The trade off is that you don&#8217;t have to pre-seed static
-content to the CDN, but the first user request for a static object
-takes a bit longer to complete (because it results in two requests
-instead of one).  Once the edge network&#8217;s cache is primed, there is
-no performance difference between origin pull and CDN origin. 2.
-**The CDN must propagate cache-related HTTP headers from the
-origin to the end-user**.  We&#8217;ve went to great lengths to use
-versioning of filenames so that we can set far-future expires
-headers on 99% of our static content as recommended by <a href="https://developer.yahoo.com/performance/rules.html">Yahoo&#8217;s
-&#8220;Best Practices for Speeding Up Your
-Website&#8221;</a>. 
-This results in far fewer HTTP requests to render a page that has
-already been requested by the end-user previously, ultimately
-decreasing page response time.  Some CDN&#8217;s that offer origin pull
-do not proxy these headers back. 3. **The CDN must use GZip
-compression on text-based content**.  Most CDN&#8217;s support this,
-but it&#8217;s something you definitely want to check.  When serving up
-static text-based content such as CSS or Javascript, the CDN can
-and should compress it for you before sending it to the end-user. 
-Compression makes the overall page content smaller, and therefore
-faster to render. 4. **Response time must be consistent and
-fast**.  Performance is a tricky thing.  While having the fastest
-response time overall didn&#8217;t guarantee that a CDN would &#8220;win&#8221;,
-having consistent relative poor performance would guarantee a CDN
-would &#8220;lose&#8221;.  Try not to focus too much on performance numbers &#8211;
-most of the CDN&#8217;s will have a standard deviation less than ten
-milliseconds between each other.  In our research we found out
-quickly that there&#8217;s a lot of features more important to us than
-5ms worth of response time. 5. **100% Uptime SLA**.  Since a
-CDN is at it&#8217;s most basic level a geographically distributed
-cluster of cache servers, it should be implied that a CDN can
-provide 100% uptime.  If one POP goes down, requests should be
-automatically routed to the next nearest POP.  If your CDN doesn&#8217;t
-offer this, you need a new CDN. 6. **Company financial strength
-and solvency**.  This is something often overlooked when people
-evaluate, but was very important to us.  There are a lot of CDN&#8217;s
-out there, and we found only 2 or 3 that could put in writing that
-they are a profitable corporation.  Our implementation required a
-fair amount of work, and it would take us some time to switch to
-another CDN.  If your CDN goes dark in the middle of the night, how
-long will it take you to switch? ### Important Features Whereas
-not meeting any of the above requirements would result in being
-excluded from our comparison, the following features were key
-points of consideration.  Not meeting them all wouldn&#8217;t exclude a
-CDN, but on the flip side, implementing them all would put the CDN
-in very good standing. 1. **Price**.  While high prices weren&#8217;t
-going to scare us away, bang for the buck played a large part in
-our decision.  We weren&#8217;t interested in paying a premium for brand
-recognition. 2. **Strong international presence**.  Our guests
-include international clients, and poor static object performance
-for those clients was the key motivation for implementing a CDN in
-the first place. 3. **Contract terms**.  Some CDN&#8217;s do
-month-to-month, some do 12 month, others require longer as you
-negotiate price. 4. **Overage fees**.  CDN&#8217;s meter you on the
-amount of bandwidth you consume.  You pay for a &#8220;bucket&#8221;.  No CDN&#8217;s
-turn your service off after you exceed that bucket, they just bill
-you for overages.  The good CDN&#8217;s will bill you at the same per-GB
-rate that you pay for your monthly bucket.  Some CDN&#8217;s charge as
-much as 2x for overages.  Avoid those. 5. **Traffic
-accounting**.  One other thing often overlooked with origin pull
-CDN&#8217;s is whether or not the traffic between the edge POP&#8217;s and the
-customer origin is counted as traffic against your total.  Some
-CDN&#8217;s count it against your bucket, others don&#8217;t. 6. **Setup
-fees**.  CDN&#8217;s vary wildly on their setup fees.  Some are free,
-some charge more than $5,000.  Make sure you incorporate that cost
-into your decision. 7. **User Interface**.  All CDN&#8217;s offer
-some form of web-based interface.  The quality of the interface
-greatly differs between CDN&#8217;s.  I could swear that some of the
-interfaces I saw were written in CGI Perl in the late 90&#8217;s.  Others
-interfaces offered everything a customer could ever want, including
-detailed analytics and reporting.  Key questions to ask are &#8220;If I
-get a bad image out on the edge, how do I purge it?&#8221;, and &#8220;How do I
-tell how much bandwidth is being consumed throughout the CDN at any
-particular point in time?&#8221; ### External Reporting Data We chose
-to invest in one month&#8217;s worth of reporting from <a href="http://cloudharmony.com/reports">CloudHarmony&#8217;s
-CloudReports</a> service.  This gave
-us a quick way to examine performance of CDN&#8217;s to the actual
-end-user browser behind a real cable/dsl/dialup connection (not to
-a datacenter somewhere).  While some might view those reports
-expensive, we found it quite a bargain to have another independent
-view into the performance of a vast majority of CDN&#8217;s. ### The
-Contenders Given the above requirements, coupled with the
-performance data provided from CloudHarmony we were able to refine
-our list of CDN&#8217;s to consider.  In alphabetical order: 1.
-<a href="http://www.akamai.com">Akamai</a> 2.
-<a href="http://www.cachefly.com">CacheFly</a> 3.
-<a href="http://www.edgecast.com">EdgeCast</a> 4.
-<a href="http://www.limelight.com">LimeLight</a> ### First elimination:
-Akamai Akamai is to the CDN market what Bose is to the home audio
-market.  While it&#8217;s not inherently a bad product, you&#8217;re paying a
-huge premium for the brand name.  While we never got so far as to
-setup a demo account, the performance data provided by CloudHarmony
-and other sources didn&#8217;t favor them well at all.  My personal
-opinion (which is little more than a wild guess) on why Akamai
-doesn&#8217;t perform as well is because of their product&#8217;s age.  Their
-network is by far the largest one out there, and I can guess that
-keeping up with the latest optimizations and protocols is a huge
-undertaking. When speaking with Akamai, I got the impression that
-they really don&#8217;t care to sell their static object delivery product
-by itself.  Their reps focused mostly on trying to upsell their
-Dynamic Site Acceleration product.  While DSA might indeed be a
-great product, it wasn&#8217;t what we were interested in. In the end,
-the best price I could get out of Akamai was more than twice that
-of the next most expensive CDN in our comparison, and they wanted a
-3 year contract at that price.  I&#8217;m just not that into paying twice
-as much for an equal product, so they were eliminated.  If we
-should move to a Dynamic Site Acceleration type of service later,
-Akamai will definitely be re-evaluated at that time. ### Second
-elimination: LimeLight LimeLight Networks is the 2nd largest CDN
-provider, behind Akamai.  It’s fitting that they are right behind
-Akamai, because they came across like a smaller Akamai to me. 
-Their pricing is much more competitive than Akamai, and performance
-appeared to be quite good across the board.  They supposedly have a
-nice web and reporting interface, but I was unable to get a demo
-setup without filling out paperwork that would have required
-approval from our legal department.  Therein lies the problem with
-LimeLight &#8211; getting them to do anything outside the everyday norm
-was like pulling teeth.  Like Akamai, LimeLight also is focused on
-the upsell and seemed to me generally disinterested in selling
-their static delivery service. If for some reason, we had to switch
-away from our primary choice, my second choice would likely be
-LimeLight Networks, but only after I was able to obtain a demo
-account so that I could verify their performance was within
-acceptable range and the functionality of their user interface. 
-### Independent Performance comparisons I was able to easily
-procure demo accounts from EdgeCast and CacheFly, so I set up some
-performance testing of our own using
-<a href="http://www.pingdom.com">Pingdom</a> to download a typical JPEG image
-from each Pingdom POP using the origin pull setup.  Note that since
-Pingdom&#8217;s servers are in data centers and not in actual residences;
-this isn&#8217;t a measure of end-to-end performance, rather a way to
-compare apples to apples response time from various regions around
-the world.  The executive summary here is that while EdgeCast
-&#8220;edged&#8221; out CacheFly, the real message is that any CDN is so much
-better than none at all. To really drive the point home for the
-PHB&#8217;s, we consolidate the data and give a very telling graph:
-<img src="/assets/images/cdn.png" alt="image" /> ### Third elimination: CacheFly
-CacheFly is an up-and-comer in the CDN arena.  They have
-**very** aggressive pricing, and have very good performance as
-well.  If the site in question was a popular blog or community
-website and was very price sensitive, I would select CacheFly as my
-first choice CDN.  However, where they fall short is in reporting
-and their web interface.  The best way to contact their support
-department is via email or web-based form.  Their web interface
-left a huge amount to be desired, and they have very little
-documentation on how to use it.  There is no reporting whatsoever –
-you get raw log files and have to write our own reporting scripts
-on top of that data.  I couldn&#8217;t help but wonder about all the
-“what ifs”.  What if we get an incorrect image cached and need to
-have it cleared from their network?  If we see a DDoS at the CDN,
-how do we know? These and other similiar questions are what
-ultimately eliminated CacheFly. In CacheFly&#8217;s defense, I was told
-that they were working on a complete refactor of the user interface
-and was offered a chance to help beta it, but I was under time
-constraints and declined.  The issues I had with the UI may or may
-not be present at the time of this writing. ### The winner (for
-us): EdgeCast It will appear when reading this post that I used the
-process of elimination to find the &#8220;lesser of all evils&#8221;, but
-understand that&#8217;s just the writing style I chose to convey the
-process.  It wasn&#8217;t that EdgeCast didn&#8217;t lose, it&#8217;s that they won. 
-Here&#8217;s why: - EdgeCast is routinely in the top tier of CDN’s in
-terms of performance. - Their support is very knowledgeable and
-responsive. - The sales reps care about your business and are
-willing to work with you. - They offer the most features of any CDN
-I evaluated.  One such feature is &#8220;rollover&#8221; where if you don&#8217;t use
-all your allotted transfer for one month, the remainder gets added
-to next months allotment.  This is perfect for a business with
-holiday traffic spikes such as ours.  - While they aren’t the
-cheapest CDN, they are certainly affordable, and offered the best
-“bang for the buck” for the feature set we needed. - Their UI is
-fully functional, offering configuration, reporting, and analytics
-in an easy to use fashion.  The UI includes a fully functional
-rules engine (for additional charge) that allows you to apply
-actions such as cache purge, header change, etc based upon
-conditions like client IP, HTTP request header, etc. - Last but
-certainly not least, the company is one of only two profitable
-CDN’s in the market today. ### IT&#8217;S NOT THE DESTINATION, IT&#8217;S
-THE JOURNEY!!! Please don&#8217;t read this article and walk away saying
-&#8220;Justin recommends EdgeCast, that&#8217;s who we&#8217;re going with&#8221;.  For
-one, if you&#8217;re letting my blog posts make business decisions for
-you instead of doing due diligence, then you&#8217;re doing it wrong. For
-our **very specific needs** EdgeCast was the best fit.  For
-your needs, you will very possibly arrive at a completely different
-decision, and that&#8217;s great.  By all means, blog about it.  What I&#8217;m
-trying to convey is that there are a lot of points of comparison
-when going through your evaluation, and not all of them are
-obvious.  It&#8217;s hard to get an objective point of view when doing
-this on your own &#8211; this is my best attempt at documenting what I
-came across. Hopefully if you haven&#8217;t implemented a CDN for your
-busy sites, this post will motivate you to do so.  If you&#8217;re
-unhappy with your current CDN, perhaps this post has given you some
-insight on how to find a replacement.  If you&#8217;re happy with your
-current CDN, please leave comments as to why. Lastly, I was in no
-way influenced monetarily or otherwise by any vendors, and none of
-the links in this article contain referral ID&#8217;s.  This is all my
-personal opinion and in no way represents the opinion of my
-employers.</p>
+<div class="entry-content"><p>At one of my jobs, we recently went through the process of selecting a
+<a href="http://en.wikipedia.org/wiki/Content_delivery_network">CDN (Content Delivery Network)</a> for our site. While the first rule of
+CDN’s is that “any CDN is better than no CDN”, it can be argued that
+certain CDN’s are a better fit in certain situation than others. This
+post is basically a summary of the process we went through when
+selecting our CDN. By no means is this a statement of “XYZ is better
+than ABC”, it’s simply documentation of the process we went through in
+order to select the right one for our business. While most CDN’s are
+compatible with Drupal via excellent contrib modules such as <a href="http://drupal.org/project/cdn">CDN</a>,
+this information presented in this article is relative to any website
+and isn’t Drupal-specific.</p>
+
+<p>To illustrate the importance of a CDN using real numbers, one image
+being fetched from the data center to our office takes about 323ms. That
+same image fetched from Seattle is 483ms, and from Washington DC takes
+599ms. The worst cases appear when coming overseas - to fetch the same
+image from Paris it takes on average 1,141ms <strong>for just that one image</strong>.</p>
+
+<p>A Content Delivery Network (CDN) shortens that distance between your
+static content and the end-user. While the text on most web pages is
+dynamic, most images, JavaScript, and CSS are static. These static
+objects make up a large percentage of the total bytes downloaded for
+each page view. By using a CDN, you place static content as close to the
+end-user as possible. In turn this decreases the page load time a
+end-user experiences by leaps and bounds.</p>
+
+<h3>Pre-selection Criteria</h3>
+
+<p>There’s a plethora of CDN’s to choose from, and if you don’t filter the
+initial list down to five or fewer providers, you’ll end up spending
+months in evaluation time. By defining specific must-have features, we
+were able to limit the initial number of companies to compare to four.
+Many CDN’s provide value-add services above and beyone static objects,
+such as “Dynamic Site Acceleration” – this evaluation looked solely at
+serving up static file content, e.g. JPEG, GIF, CSS, and Javascript.</p>
+
+<p>The filtering properties we used to limit scope were:</p>
+
+<ol>
+<li><p><strong>The CDN must provide “origin pull” or “reverse proxy” support</strong>. If
+the CDN receives a request for a file that doesn’t exist at the edge, it
+applies a customer-defined URL rewrite to the request, and proxies the
+request to the origin site. If the image exists at the origin, the edge
+server caches the image locally and serves it to the client from there.
+For example, the CDN host name might be cdn.example.com (which points to
+the edge), and the origin site (my server) would be www.example.com. If
+I point my browser to http://cdn.example.com/logo.gif, and that file
+doesn’t exist at the edge, the CDN will make a request for
+http://www.example.com/logo.gif. If that file exists, it is fetched and
+cached. If it doesn’t exist, a 404 is returned to the client. The trade
+off is that you don’t have to pre-seed static content to the CDN, but
+the first user request for a static object takes a bit longer to
+complete (because it results in two requests instead of one). Once the
+edge network’s cache is primed, there is no performance difference
+between origin pull and CDN origin.</p></li>
+<li><p><strong>The CDN must propagate cache-related HTTP headers from the origin to
+the end-user</strong> We’ve went to great lengths to use versioning of
+filenames so that we can set far-future expires headers on 99% of our
+static content as recommended by <a href="https://developer.yahoo.com/performance/rules.html">Yahoo’s “Best Practices for Speeding Up Your Website”</a>.
+This results in far fewer HTTP requests to render a
+page that has already been requested by the end-user previously,
+ultimately decreasing page response time. Some CDN’s that offer origin
+pull do not proxy these headers back.</p></li>
+<li><p><strong>The CDN must use GZip compression on text-based content</strong> Most CDN’s
+support this, but it’s something you definitely want to check. When
+serving up static text-based content such as CSS or Javascript, the CDN
+can and should compress it for you before sending it to the end-user.
+Compression makes the overall page content smaller, and therefore faster
+to render.</p></li>
+<li><p><strong>Response time must be consistent and fast</strong> Performance is a tricky
+thing. While having the fastest response time overall didn’t guarantee
+that a CDN would “win”, having consistent relative poor performance
+would guarantee a CDN would “lose”. Try not to focus too much on
+performance numbers – most of the CDN’s will have a standard deviation
+less than ten milliseconds between each other. In our research we found
+out quickly that there’s a lot of features more important to us than 5ms
+worth of response time.</p></li>
+<li><p><strong>100% Uptime SLA</strong> Since a CDN is at it’s most basic level a
+geographically distributed cluster of cache servers, it should be
+implied that a CDN can provide 100% uptime. If one POP goes down,
+requests should be automatically routed to the next nearest POP. If your
+CDN doesn’t offer this, you need a new CDN.</p></li>
+<li><p><strong>Company financial strength and solvency</strong> This is something often
+overlooked when people evaluate, but was very important to us. There are
+a lot of CDN’s out there, and we found only 2 or 3 that could put in
+writing that they are a profitable corporation. Our implementation
+required a fair amount of work, and it would take us some time to switch
+to another CDN. If your CDN goes dark in the middle of the night, how
+long will it take you to switch?</p></li>
+</ol>
+
+
+<h3>Important Features</h3>
+
+<p>Whereas not meeting any of the above requirements would result in being
+excluded from our comparison, the following features were key points of
+consideration. Not meeting them all wouldn’t exclude a CDN, but on the
+flip side, implementing them all would put the CDN in very good
+standing.</p>
+
+<ol>
+<li><p><strong>Price</strong>. While high prices weren’t going to scare us away, bang
+for the buck played a large part in our decision. We weren’t
+interested in paying a premium for brand recognition.</p></li>
+<li><p><strong>Strong international presence</strong>. Our guests include international
+clients, and poor static object performance for those clients was
+the key motivation for implementing a CDN in the first place.</p></li>
+<li><p><strong>Contract terms</strong>. Some CDN’s do month-to-month, some do 12 month,
+others require longer as you negotiate price.</p></li>
+<li><p><strong>Overage fees</strong>. CDN’s meter you on the amount of bandwidth you
+consume. You pay for a “bucket”. No CDN’s turn your service off
+after you exceed that bucket, they just bill you for overages. The
+good CDN’s will bill you at the same per-GB rate that you pay for
+your monthly bucket. Some CDN’s charge as much as 2x for overages.
+Avoid those.</p></li>
+<li><p><strong>Traffic accounting</strong>. One other thing often overlooked with origin
+pull CDN’s is whether or not the traffic between the edge POP’s and
+the customer origin is counted as traffic against your total. Some
+CDN’s count it against your bucket, others don’t.</p></li>
+<li><p><strong>Setup fees</strong>. CDN’s vary wildly on their setup fees. Some are
+free, some charge more than $5,000. Make sure you incorporate that
+cost into your decision.</p></li>
+<li><p><strong>User Interface</strong>. All CDN’s offer some form of web-based
+interface. The quality of the interface greatly differs between
+CDN’s. I could swear that some of the interfaces I saw were written
+in CGI Perl in the late 90’s. Others interfaces offered everything a
+customer could ever want, including detailed analytics and
+reporting. Key questions to ask are “If I get a bad image out on the
+edge, how do I purge it?”, and “How do I tell how much bandwidth is
+being consumed throughout the CDN at any particular point in time?”</p></li>
+</ol>
+
+
+<h3>External Reporting Data</h3>
+
+<p>We chose to invest in one month’s worth of reporting from
+<a href="http://cloudharmony.com/reports">CloudHarmony’s CloudReports</a> service. This gave us a quick way to
+examine performance of CDN’s to the actual end-user browser behind a
+real cable/dsl/dialup connection (not to a datacenter somewhere). While
+some might view those reports expensive, we found it quite a bargain to
+have another independent view into the performance of a vast majority of
+CDN’s.</p>
+
+<h3>The Contenders</h3>
+
+<p>Given the above requirements, coupled with the performance data provided
+from CloudHarmony we were able to refine our list of CDN’s to consider.
+In alphabetical order:</p>
+
+<ol>
+<li><a href="http://www.akamai.com">Akamai</a></li>
+<li><a href="http://www.cachefly.com">CacheFly</a></li>
+<li><a href="http://www.edgecast.com">EdgeCast</a></li>
+<li><a href="http://www.limelight.com">LimeLight</a></li>
+</ol>
+
+
+<h3>First elimination: Akamai</h3>
+
+<p>Akamai is to the CDN market what Bose is to the home audio market. While
+it’s not inherently a bad product, you’re paying a huge premium for the
+brand name. While we never got so far as to setup a demo account, the
+performance data provided by CloudHarmony and other sources didn’t favor
+them well at all. My personal opinion (which is little more than a wild
+guess) on why Akamai doesn’t perform as well is because of their
+product’s age. Their network is by far the largest one out there, and I
+can guess that keeping up with the latest optimizations and protocols is
+a huge undertaking.</p>
+
+<p>When speaking with Akamai, I got the impression that they really don’t
+care to sell their static object delivery product by itself. Their reps
+focused mostly on trying to upsell their Dynamic Site Acceleration
+product. While DSA might indeed be a great product, it wasn’t what we
+were interested in.</p>
+
+<p>In the end, the best price I could get out of Akamai was more than twice
+that of the next most expensive CDN in our comparison, and they wanted a
+3 year contract at that price. I’m just not that into paying twice as
+much for an equal product, so they were eliminated. If we should move to
+a Dynamic Site Acceleration type of service later, Akamai will
+definitely be re-evaluated at that time.</p>
+
+<h3>Second elimination: LimeLight</h3>
+
+<p>LimeLight Networks is the 2nd largest CDN provider, behind Akamai. It’s
+fitting that they are right behind Akamai, because they came across like
+a smaller Akamai to me. Their pricing is much more competitive than
+Akamai, and performance appeared to be quite good across the board. They
+supposedly have a nice web and reporting interface, but I was unable to
+get a demo setup without filling out paperwork that would have required
+approval from our legal department. Therein lies the problem with
+LimeLight – getting them to do anything outside the everyday norm was
+like pulling teeth. Like Akamai, LimeLight also is focused on the upsell
+and seemed to me generally disinterested in selling their static
+delivery service.</p>
+
+<p>If for some reason, we had to switch away from our primary choice, my
+second choice would likely be LimeLight Networks, but only after I was
+able to obtain a demo account so that I could verify their performance
+was within acceptable range and the functionality of their user
+interface.</p>
+
+<h3>Independent Performance comparisons</h3>
+
+<p>I was able to easily procure demo accounts from EdgeCast and CacheFly,
+so I set up some performance testing of our own using <a href="http://www.pingdom.com">Pingdom</a> to
+download a typical JPEG image from each Pingdom POP using the origin
+pull setup. Note that since Pingdom’s servers are in data centers and
+not in actual residences; this isn’t a measure of end-to-end
+performance, rather a way to compare apples to apples response time from
+various regions around the world. The executive summary here is that
+while EdgeCast “edged” out CacheFly, the real message is that any CDN is
+so much better than none at all:</p>
+
+<table>
+<thead>
+<tr>
+<th align="left">CDN                  </th>
+<th align="left"> US/Non-US    </th>
+<th align="left"> Location                 </th>
+<th align="left"> # of Polls </th>
+<th align="left"> Avg Response Time </th>
+<th align="left"> Max Response Time </th>
+<th align="left"> StdDev</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">CacheFly             </td>
+<td align="left"> Non-US       </td>
+<td align="left"> Amsterdam 2, Netherlands </td>
+<td align="left"> 289        </td>
+<td align="left"> 68                </td>
+<td align="left"> 4202              </td>
+<td align="left"> 285.98</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Copenhagen, Denmark      </td>
+<td align="left"> 259        </td>
+<td align="left"> 158               </td>
+<td align="left"> 461               </td>
+<td align="left"> 36.02 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Frankfurt, Germany       </td>
+<td align="left"> 287        </td>
+<td align="left"> 41                </td>
+<td align="left"> 567               </td>
+<td align="left"> 32.38 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London 2, UK             </td>
+<td align="left"> 290        </td>
+<td align="left"> 29                </td>
+<td align="left"> 2489              </td>
+<td align="left"> 145.26</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London, UK               </td>
+<td align="left"> 284        </td>
+<td align="left"> 29                </td>
+<td align="left"> 127               </td>
+<td align="left"> 11.30 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Madrid, Spain            </td>
+<td align="left"> 259        </td>
+<td align="left"> 201               </td>
+<td align="left"> 586               </td>
+<td align="left"> 31.36 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Manchester, UK           </td>
+<td align="left"> 281        </td>
+<td align="left"> 129               </td>
+<td align="left"> 1709              </td>
+<td align="left"> 184.87</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Montreal, Canada         </td>
+<td align="left"> 286        </td>
+<td align="left"> 105               </td>
+<td align="left"> 3084              </td>
+<td align="left"> 250.63</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Paris, France            </td>
+<td align="left"> 286        </td>
+<td align="left"> 143               </td>
+<td align="left"> 521               </td>
+<td align="left"> 60.11 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Stockholm, Sweden        </td>
+<td align="left"> 286        </td>
+<td align="left"> 54                </td>
+<td align="left"> 882               </td>
+<td align="left"> 80.88 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> Non-US Total </td>
+<td align="left">                          </td>
+<td align="left"> 2807       </td>
+<td align="left"> 94                </td>
+<td align="left"> 4202              </td>
+<td align="left"> 157.88           </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US           </td>
+<td align="left"> Atlanta, Georgia         </td>
+<td align="left"> 289        </td>
+<td align="left"> 16                </td>
+<td align="left"> 398               </td>
+<td align="left"> 23.52 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Chicago, IL              </td>
+<td align="left"> 288        </td>
+<td align="left"> 56                </td>
+<td align="left"> 2615              </td>
+<td align="left"> 158.33</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 4, TX             </td>
+<td align="left"> 286        </td>
+<td align="left"> 40                </td>
+<td align="left"> 960               </td>
+<td align="left"> 74.61 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 5, TX             </td>
+<td align="left"> 289        </td>
+<td align="left"> 26                </td>
+<td align="left"> 1506              </td>
+<td align="left"> 89.08 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 6, TX             </td>
+<td align="left"> 291        </td>
+<td align="left"> 47                </td>
+<td align="left"> 1473              </td>
+<td align="left"> 132.25</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Denver, CO               </td>
+<td align="left"> 289        </td>
+<td align="left"> 216               </td>
+<td align="left"> 925               </td>
+<td align="left"> 72.18 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Herndon, VA              </td>
+<td align="left"> 288        </td>
+<td align="left"> 473               </td>
+<td align="left"> 3472              </td>
+<td align="left"> 196.13</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Houston 3, TX            </td>
+<td align="left"> 289        </td>
+<td align="left"> 107               </td>
+<td align="left"> 382               </td>
+<td align="left"> 18.15 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Las Vegas, NV            </td>
+<td align="left"> 288        </td>
+<td align="left"> 74                </td>
+<td align="left"> 3044              </td>
+<td align="left"> 180.60</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Los Angeles, CA          </td>
+<td align="left"> 289        </td>
+<td align="left"> 12                </td>
+<td align="left"> 92                </td>
+<td align="left"> 11.52 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> New York, NY             </td>
+<td align="left"> 289        </td>
+<td align="left"> 175               </td>
+<td align="left"> 2571              </td>
+<td align="left"> 152.29</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> San Francisco, CA        </td>
+<td align="left"> 287        </td>
+<td align="left"> 28                </td>
+<td align="left"> 231               </td>
+<td align="left"> 24.17 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Seattle, WA              </td>
+<td align="left"> 288        </td>
+<td align="left"> 174               </td>
+<td align="left"> 1083              </td>
+<td align="left"> 108.41</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Tampa, Florida           </td>
+<td align="left"> 267        </td>
+<td align="left"> 68                </td>
+<td align="left"> 3048              </td>
+<td align="left"> 214.49</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Washington, DC           </td>
+<td align="left"> 286        </td>
+<td align="left"> 163               </td>
+<td align="left"> 1547              </td>
+<td align="left"> 141.67</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US Total     </td>
+<td align="left">                          </td>
+<td align="left"> 4303       </td>
+<td align="left"> 112               </td>
+<td align="left"> 3472              </td>
+<td align="left"> 170.11</td>
+</tr>
+<tr>
+<td align="left">CacheFly Total       </td>
+<td align="left">              </td>
+<td align="left">                          </td>
+<td align="left"> 7110       </td>
+<td align="left"> 105               </td>
+<td align="left"> 4202              </td>
+<td align="left"> 165.61</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left">                          </td>
+<td align="left">            </td>
+<td align="left">                   </td>
+<td align="left">                   </td>
+<td align="left">       </td>
+</tr>
+<tr>
+<td align="left">EdgeCast Small       </td>
+<td align="left"> Non-US       </td>
+<td align="left"> Amsterdam 2, Netherlands </td>
+<td align="left"> 284        </td>
+<td align="left"> 62                </td>
+<td align="left"> 381               </td>
+<td align="left"> 27.49 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Copenhagen, Denmark      </td>
+<td align="left"> 254        </td>
+<td align="left"> 126               </td>
+<td align="left"> 1148              </td>
+<td align="left"> 87.72 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Frankfurt, Germany       </td>
+<td align="left"> 284        </td>
+<td align="left"> 40                </td>
+<td align="left"> 318               </td>
+<td align="left"> 19.05 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London 2, UK             </td>
+<td align="left"> 284        </td>
+<td align="left"> 26                </td>
+<td align="left"> 975               </td>
+<td align="left"> 59.59 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London, UK               </td>
+<td align="left"> 283        </td>
+<td align="left"> 23                </td>
+<td align="left"> 191               </td>
+<td align="left"> 14.38 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Madrid, Spain            </td>
+<td align="left"> 252        </td>
+<td align="left"> 176               </td>
+<td align="left"> 1174              </td>
+<td align="left"> 112.31</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Manchester, UK           </td>
+<td align="left"> 275        </td>
+<td align="left"> 86                </td>
+<td align="left"> 1494              </td>
+<td align="left"> 118.26</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Montreal, Canada         </td>
+<td align="left"> 283        </td>
+<td align="left"> 163               </td>
+<td align="left"> 601               </td>
+<td align="left"> 59.56 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Paris, France            </td>
+<td align="left"> 283        </td>
+<td align="left"> 94                </td>
+<td align="left"> 1537              </td>
+<td align="left"> 140.76</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Stockholm, Sweden        </td>
+<td align="left"> 271        </td>
+<td align="left"> 162               </td>
+<td align="left"> 967               </td>
+<td align="left"> 81.87 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> Non-US Total </td>
+<td align="left">                          </td>
+<td align="left"> 2753       </td>
+<td align="left"> 94                </td>
+<td align="left"> 1537              </td>
+<td align="left"> 99.35            </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US           </td>
+<td align="left"> Atlanta, Georgia         </td>
+<td align="left"> 284        </td>
+<td align="left"> 129               </td>
+<td align="left"> 523               </td>
+<td align="left"> 34.51</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Chicago, IL              </td>
+<td align="left"> 284        </td>
+<td align="left"> 26                </td>
+<td align="left"> 463               </td>
+<td align="left"> 35.86 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 4, TX             </td>
+<td align="left"> 277        </td>
+<td align="left"> 30                </td>
+<td align="left"> 339               </td>
+<td align="left"> 25.79 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 5, TX             </td>
+<td align="left"> 284        </td>
+<td align="left"> 26                </td>
+<td align="left"> 581               </td>
+<td align="left"> 50.32 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 6, TX             </td>
+<td align="left"> 284        </td>
+<td align="left"> 23                </td>
+<td align="left"> 430               </td>
+<td align="left"> 33.68 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Denver, CO               </td>
+<td align="left"> 281        </td>
+<td align="left"> 244               </td>
+<td align="left"> 2169              </td>
+<td align="left"> 150.12</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Herndon, VA              </td>
+<td align="left"> 280        </td>
+<td align="left"> 24                </td>
+<td align="left"> 301               </td>
+<td align="left"> 20.44 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Houston 3, TX            </td>
+<td align="left"> 281        </td>
+<td align="left"> 115               </td>
+<td align="left"> 441               </td>
+<td align="left"> 40.02 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Las Vegas, NV            </td>
+<td align="left"> 281        </td>
+<td align="left"> 56                </td>
+<td align="left"> 559               </td>
+<td align="left"> 34.32 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Los Angeles, CA          </td>
+<td align="left"> 283        </td>
+<td align="left"> 11                </td>
+<td align="left"> 94                </td>
+<td align="left"> 8.45  </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> New York, NY             </td>
+<td align="left"> 284        </td>
+<td align="left"> 72                </td>
+<td align="left"> 1134              </td>
+<td align="left"> 161.16</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> San Francisco, CA        </td>
+<td align="left"> 280        </td>
+<td align="left"> 23                </td>
+<td align="left"> 118               </td>
+<td align="left"> 11.01 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Seattle, WA              </td>
+<td align="left"> 282        </td>
+<td align="left"> 131               </td>
+<td align="left"> 3571              </td>
+<td align="left"> 333.38</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Tampa, Florida           </td>
+<td align="left"> 260        </td>
+<td align="left"> 166               </td>
+<td align="left"> 4977              </td>
+<td align="left"> 303.29</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Washington, DC           </td>
+<td align="left"> 282        </td>
+<td align="left"> 83                </td>
+<td align="left"> 686               </td>
+<td align="left"> 111.97</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US Total     </td>
+<td align="left">                          </td>
+<td align="left"> 4207       </td>
+<td align="left"> 77                </td>
+<td align="left"> 4977              </td>
+<td align="left"> 148.63</td>
+</tr>
+<tr>
+<td align="left">EdgeCast Small Total </td>
+<td align="left">              </td>
+<td align="left">                          </td>
+<td align="left"> 6960       </td>
+<td align="left"> 84                </td>
+<td align="left"> 4977              </td>
+<td align="left"> 131.64</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left">                          </td>
+<td align="left">            </td>
+<td align="left">                   </td>
+<td align="left">                   </td>
+<td align="left">       </td>
+</tr>
+<tr>
+<td align="left">Data Center          </td>
+<td align="left"> Non-US       </td>
+<td align="left"> Amsterdam 2, Netherlands </td>
+<td align="left"> 292        </td>
+<td align="left"> 837               </td>
+<td align="left"> 1344              </td>
+<td align="left"> 35.72 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Copenhagen, Denmark      </td>
+<td align="left"> 262        </td>
+<td align="left"> 990               </td>
+<td align="left"> 4195              </td>
+<td align="left"> 297.90</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Frankfurt, Germany       </td>
+<td align="left"> 291        </td>
+<td align="left"> 867               </td>
+<td align="left"> 1533              </td>
+<td align="left"> 57.14 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London 2, UK             </td>
+<td align="left"> 291        </td>
+<td align="left"> 725               </td>
+<td align="left"> 1065              </td>
+<td align="left"> 25.95 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> London, UK               </td>
+<td align="left"> 290        </td>
+<td align="left"> 811               </td>
+<td align="left"> 1114              </td>
+<td align="left"> 49.50 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Madrid, Spain            </td>
+<td align="left"> 262        </td>
+<td align="left"> 1005              </td>
+<td align="left"> 1765              </td>
+<td align="left"> 75.84 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Manchester, UK           </td>
+<td align="left"> 281        </td>
+<td align="left"> 899               </td>
+<td align="left"> 8928              </td>
+<td align="left"> 580.11</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Montreal, Canada         </td>
+<td align="left"> 291        </td>
+<td align="left"> 342               </td>
+<td align="left"> 412               </td>
+<td align="left"> 11.52 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Paris, France            </td>
+<td align="left"> 293        </td>
+<td align="left"> 1128              </td>
+<td align="left"> 2680              </td>
+<td align="left"> 230.78</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Stockholm, Sweden        </td>
+<td align="left"> 292        </td>
+<td align="left"> 1063              </td>
+<td align="left"> 4056              </td>
+<td align="left"> 367.89</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> Non-US Total </td>
+<td align="left">                          </td>
+<td align="left"> 2845       </td>
+<td align="left"> 864               </td>
+<td align="left"> 8928              </td>
+<td align="left"> 326.71           </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US           </td>
+<td align="left"> Atlanta, Georgia         </td>
+<td align="left"> 291        </td>
+<td align="left"> 316               </td>
+<td align="left"> 1017              </td>
+<td align="left"> 63.48 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Chicago, IL              </td>
+<td align="left"> 290        </td>
+<td align="left"> 170               </td>
+<td align="left"> 253               </td>
+<td align="left"> 7.02  </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 4, TX             </td>
+<td align="left"> 292        </td>
+<td align="left"> 191               </td>
+<td align="left"> 3214              </td>
+<td align="left"> 253.67</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 5, TX             </td>
+<td align="left"> 292        </td>
+<td align="left"> 145               </td>
+<td align="left"> 263               </td>
+<td align="left"> 14.52 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Dallas 6, TX             </td>
+<td align="left"> 291        </td>
+<td align="left"> 147               </td>
+<td align="left"> 358               </td>
+<td align="left"> 22.93 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Denver, CO               </td>
+<td align="left"> 291        </td>
+<td align="left"> 71                </td>
+<td align="left"> 272               </td>
+<td align="left"> 14.63 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Herndon, VA              </td>
+<td align="left"> 293        </td>
+<td align="left"> 316               </td>
+<td align="left"> 487               </td>
+<td align="left"> 15.43 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Houston 3, TX            </td>
+<td align="left"> 293        </td>
+<td align="left"> 177               </td>
+<td align="left"> 372               </td>
+<td align="left"> 19.66 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Las Vegas, NV            </td>
+<td align="left"> 290        </td>
+<td align="left"> 246               </td>
+<td align="left"> 3194              </td>
+<td align="left"> 392.02</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Los Angeles, CA          </td>
+<td align="left"> 291        </td>
+<td align="left"> 303               </td>
+<td align="left"> 1188              </td>
+<td align="left"> 57.60 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> New York, NY             </td>
+<td align="left"> 290        </td>
+<td align="left"> 346               </td>
+<td align="left"> 1120              </td>
+<td align="left"> 123.55</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> San Francisco, CA        </td>
+<td align="left"> 293        </td>
+<td align="left"> 229               </td>
+<td align="left"> 519               </td>
+<td align="left"> 22.28 </td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Seattle, WA              </td>
+<td align="left"> 290        </td>
+<td align="left"> 489               </td>
+<td align="left"> 1078              </td>
+<td align="left"> 170.33</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Tampa, Florida           </td>
+<td align="left"> 270        </td>
+<td align="left"> 331               </td>
+<td align="left"> 4105              </td>
+<td align="left"> 247.99</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left">              </td>
+<td align="left"> Washington, DC           </td>
+<td align="left"> 290        </td>
+<td align="left"> 595               </td>
+<td align="left"> 1511              </td>
+<td align="left"> 235.84</td>
+</tr>
+<tr>
+<td align="left">                     </td>
+<td align="left"> US Total     </td>
+<td align="left">                          </td>
+<td align="left"> 4347       </td>
+<td align="left"> 271               </td>
+<td align="left"> 4105              </td>
+<td align="left"> 208.20</td>
+</tr>
+<tr>
+<td align="left">Data Center Total    </td>
+<td align="left">              </td>
+<td align="left">                          </td>
+<td align="left"> 7192       </td>
+<td align="left"> 506               </td>
+<td align="left"> 8928              </td>
+<td align="left"> 390.52</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>&#8230; and to really drive the point home for the PHB&#8217;s, we consolidate the
+data and give a very telling graph:</p>
+
+<p><img src="/assets/images/cdn.png" alt="" /></p>
+
+<h3>Third elimination: CacheFly</h3>
+
+<p>CacheFly is an up-and-comer in the CDN arena. They have <strong>very</strong>
+aggressive pricing, and have very good performance as well. If the site
+in question was a popular blog or community website and was very price
+sensitive, I would select CacheFly as my first choice CDN. However,
+where they fall short is in reporting and their web interface. The best
+way to contact their support department is via email or web-based form.
+Their web interface left a huge amount to be desired, and they have very
+little documentation on how to use it. There is no reporting whatsoever
+– you get raw log files and have to write our own reporting scripts on
+top of that data. I couldn&#8217;t help but wonder about all the “what ifs”.
+What if we get an incorrect image cached and need to have it cleared
+from their network? If we see a DDoS at the CDN, how do we know? These
+and other similiar questions are what ultimately eliminated CacheFly.</p>
+
+<p>In CacheFly&#8217;s defense, I was told that they were working on a complete
+refactor of the user interface and was offered a chance to help beta it,
+but I was under time constraints and declined. The issues I had with the
+UI may or may not be present at the time of this writing.</p>
+
+<h3>The winner (for us): EdgeCast</h3>
+
+<p>It will appear when reading this post that I used the process of
+elimination to find the &#8220;lesser of all evils&#8221;, but understand that&#8217;s
+just the writing style I chose to convey the process. It wasn&#8217;t that
+EdgeCast didn&#8217;t lose, it&#8217;s that they won. Here&#8217;s why:</p>
+
+<ul>
+<li>EdgeCast is routinely in the top tier of CDN’s in terms of
+performance.</li>
+<li>Their support is very knowledgeable and responsive.</li>
+<li>The sales reps care about your business and are willing to work with
+you.</li>
+<li>They offer the most features of any CDN I evaluated. One such
+feature is &#8220;rollover&#8221; where if you don&#8217;t use all your allotted
+transfer for one month, the remainder gets added to next months
+allotment. This is perfect for a business with holiday traffic
+spikes such as ours.</li>
+<li>While they aren’t the cheapest CDN, they are certainly affordable,
+and offered the best “bang for the buck” for the feature set we
+needed.</li>
+<li>Their UI is fully functional, offering configuration, reporting, and
+analytics in an easy to use fashion. The UI includes a fully
+functional rules engine (for additional charge) that allows you to
+apply actions such as cache purge, header change, etc based upon
+conditions like client IP, HTTP request header, etc.</li>
+<li>Last but certainly not least, the company is one of only two
+profitable CDN’s in the market today.</li>
+</ul>
+
+
+<h3>IT&#8217;S NOT THE DESTINATION, IT&#8217;S THE JOURNEY!!!</h3>
+
+<p>Please don&#8217;t read this article and walk away saying &#8220;Justin recommends
+EdgeCast, that&#8217;s who we&#8217;re going with&#8221;. For one, if you&#8217;re letting my
+blog posts make business decisions for you instead of doing due
+diligence, then you&#8217;re doing it wrong.</p>
+
+<p>For our <strong>very specific needs</strong> EdgeCast was the best fit. For your
+needs, you will very possibly arrive at a completely different decision,
+and that&#8217;s great. By all means, blog about it. What I&#8217;m trying to convey
+is that there are a lot of points of comparison when going through your
+evaluation, and not all of them are obvious. It&#8217;s hard to get an
+objective point of view when doing this on your own &#8211; this is my best
+attempt at documenting what I came across.</p>
+
+<p>Hopefully if you haven&#8217;t implemented a CDN for your busy sites, this
+post will motivate you to do so. If you&#8217;re unhappy with your current
+CDN, perhaps this post has given you some insight on how to find a
+replacement. If you&#8217;re happy with your current CDN, please leave
+comments as to why.</p>
+
+<p>Lastly, I was in no way influenced monetarily or otherwise by any
+vendors, and none of the links in this article contain referral ID&#8217;s.
+This is all my personal opinion and in no way represents the opinion of
+my employers.</p>
 </div>
 
 
