@@ -9,7 +9,9 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="NetworkManager is fast becoming the de facto network provider in desktop Linux distributions. The reason it&#8217;s so popular is that it &#8220;does &hellip;">
+  <meta name="description" content="NetworkManager is fast becoming the de facto network provider in
+desktop Linux distributions. The reason it’s so popular is that it “does
+the right &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -105,23 +107,140 @@
   </header>
 
 
-  <div class="entry-content"><p><a href="http://projects.gnome.org/NetworkManager/">NetworkManager</a> is fast becoming the de facto network provider in desktop Linux distributions. The reason it&#8217;s so popular is that it &#8220;does the right thing&#8221; 99% of the time. However, there&#8217;s not many examples out there that extend that functionality. NetworkManager provides hooks in which you can have scripts launch when network settings change. In today&#8217;s post, I will show you how to launch the <a href="http://synergy2.sourceforge.net/">Synergy</a> client whenever you plug into your corporate network. <!--break--> I&#8217;m lazy. I hate having to fire up my Synergy client on my laptop to connect to my desktop at work when I get to work everyday. Now, I could just fire up the Synergy client at boot, but when I&#8217;m at home if I have the VPN connected, Synergy will hook up and I don&#8217;t want it to. I needed a way to fire a script that says &#8220;if I&#8217;m on this network, then fire up synergyc, otherwise do nothing&#8221;. Writing the script was pretty easy, but I was stumped on how to get to run not only at bootup, but whenever I change networks &#8211; I very often suspend my laptop at night at home and resume it at work the next morning. It turns out that NetworkManager has a piece called NetworkManagerDispatcher that does all of this for us. Any script in /etc/NetworkManager/dispatcher.d will be called with two arguments, the name of the interface, and the status of the interface (up/down). If a picture is worth a thousand words, scripts are worth a million, so let&#8217;s get to it. First, a little background is needed. I know that I am on my corporate network if my eth0 interface has obtained an IP in the 10.0.0.0/8 subnet. Without further ado, I present to you /etc/NetworkManager/dispatcher.d/99smartsynergy.sh: <code type="bash"> #!/bin/sh IF=$1 STATUS=$2 USER=justintime wait_for_process() { PNAME=$1 PID=`/usr/bin/pgrep $PNAME` while [ -z "$PID" ]; do sleep 3; PID=`/usr/bin/pgrep $PNAME` done } start_synergy() { wait_for_process nm-applet /bin/su $USER -c "/usr/bin/synergyc $1" } if [ "$IF" = "eth0" ] &amp;&amp; [ "$STATUS" = "up" ]; then #LAN Subnet at work NETMASK="10.0.0.0/8" if [ -n "`/sbin/ip addr show $IF to $NETMASK`" ]; then ARGS="jentoo.bucklehq.com" start_synergy $ARGS exit $? fi fi </code> The <b>IF</b> and <b>STATUS</b> variables are those fed in from NetworkManager. The <b>USER</b> variable is the user that I run synergyc as. You could add some intelligence here, but it was overkill for my situation. The <b>if</b> at the bottom states that we are only concerned if the interface eth0 has changed it&#8217;s status to &#8220;up&#8221;. I then use the <b>/sbin/ip</b> command to determine if eth0 is within the 10.0.0.0/8 subnet. If so, then I call start_synergy, passing it my desktop&#8217;s hostname. Within the <b>start_synergy()</b> function we call the <b>wait_for_process</b> function, passing it <b>nm-applet</b>. We need this function because if we try to run synergyc before I&#8217;ve logged in via GDM, it will exit (this happens on bootup). By calling <b>wait_for_process</b>, we create a way to make synergyc wait until after the nm-applet (NetworkManager Applet) has started. Finally, once nm-applet has been detected as running, the script executes synergyc, and exits.</p>
+  <div class="entry-content"><p><a href="http://projects.gnome.org/NetworkManager/">NetworkManager</a> is fast becoming the de facto network provider in
+desktop Linux distributions. The reason it’s so popular is that it “does
+the right thing” 99% of the time. However, there’s not many examples out
+there that extend that functionality. NetworkManager provides hooks in
+which you can have scripts launch when network settings change. In
+today’s post, I will show you how to launch the <a href="http://synergy2.sourceforge.net/">Synergy</a> client
+whenever you plug into your corporate network.</p>
+
+<!--break-->
 
 
-<h3>TODO&#8217;s</h3>
+<p>I’m lazy. I hate having to fire up my Synergy client on my laptop to
+connect to my desktop at work when I get to work everyday. Now, I could
+just fire up the Synergy client at boot, but when I’m at home if I have
+the VPN connected, Synergy will hook up and I don’t want it to.</p>
+
+<p>I needed a way to fire a script that says “if I’m on this network, then
+fire up synergyc, otherwise do nothing”. Writing the script was pretty
+easy, but I was stumped on how to get to run not only at bootup, but
+whenever I change networks – I very often suspend my laptop at night at
+home and resume it at work the next morning.</p>
+
+<p>It turns out that NetworkManager has a piece called
+NetworkManagerDispatcher that does all of this for us. Any script in
+/etc/NetworkManager/dispatcher.d will be called with two arguments, the
+name of the interface, and the status of the interface (up/down).</p>
+
+<p>If a picture is worth a thousand words, scripts are worth a million, so
+let’s get to it.</p>
+
+<p>First, a little background is needed. I know that I am on my corporate
+network if my eth0 interface has obtained an IP in the 10.0.0.0/8
+subnet. Without further ado, I present to you
+/etc/NetworkManager/dispatcher.d/99smartsynergy.sh:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="nv">IF</span><span class="o">=</span><span class="nv">$1</span>
+</span><span class='line'><span class="nv">STATUS</span><span class="o">=</span><span class="nv">$2</span>
+</span><span class='line'><span class="nv">USER</span><span class="o">=</span>justintime
+</span><span class='line'>
+</span><span class='line'>wait_for_process<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>  <span class="nv">PNAME</span><span class="o">=</span><span class="nv">$1</span>
+</span><span class='line'>  <span class="nv">PID</span><span class="o">=</span><span class="sb">`</span>/usr/bin/pgrep <span class="nv">$PNAME</span><span class="sb">`</span>
+</span><span class='line'>  <span class="k">while</span> <span class="o">[</span> -z <span class="s2">&quot;$PID&quot;</span> <span class="o">]</span>; <span class="k">do</span>
+</span><span class='line'><span class="k">        </span>sleep 3;
+</span><span class='line'>        <span class="nv">PID</span><span class="o">=</span><span class="sb">`</span>/usr/bin/pgrep <span class="nv">$PNAME</span><span class="sb">`</span>
+</span><span class='line'>  <span class="k">done</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>start_synergy<span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>     wait_for_process nm-applet
+</span><span class='line'>     /bin/su <span class="nv">$USER</span> -c <span class="s2">&quot;/usr/bin/synergyc $1&quot;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$IF&quot;</span> <span class="o">=</span> <span class="s2">&quot;eth0&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">&quot;$STATUS&quot;</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="c">#LAN Subnet at work</span>
+</span><span class='line'>        <span class="nv">NETMASK</span><span class="o">=</span><span class="s2">&quot;10.0.0.0/8&quot;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;`/sbin/ip addr show $IF to $NETMASK`&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">                </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;jentoo.bucklehq.com&quot;</span>
+</span><span class='line'>                start_synergy <span class="nv">$ARGS</span>
+</span><span class='line'>                <span class="nb">exit</span> <span class="nv">$?</span>
+</span><span class='line'>        <span class="k">fi</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">fi</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<ul><li>I should probably create a function that kills the remaining synergyc processes when eth0 goes down.</li><li>If there&#8217;s already a synergyc running, we should just exit as the client will continue to try to reconnect.</li></ul>
+<p>The <strong>IF</strong> and <strong>STATUS</strong> variables are those fed in from
+NetworkManager. The <strong>USER</strong> variable is the user that I run synergyc
+as. You could add some intelligence here, but it was overkill for my
+situation.</p>
 
+<p>The <strong>if</strong> at the bottom states that we are only concerned if the
+interface eth0 has changed it’s status to “up”. I then use the
+<strong>/sbin/ip</strong> command to determine if eth0 is within the 10.0.0.0/8
+subnet. If so, then I call start_synergy, passing it my desktop’s
+hostname.</p>
 
-<p>&nbsp;</p>
+<p>Within the <strong>start_synergy()</strong> function we call the
+<strong>wait_for_process</strong> function, passing it <strong>nm-applet</strong>. We need this
+function because if we try to run synergyc before I’ve logged in via
+GDM, it will exit (this happens on bootup). By calling
+<strong>wait_for_process</strong>, we create a way to make synergyc wait until
+after the nm-applet (NetworkManager Applet) has started. Finally, once
+nm-applet has been detected as running, the script executes synergyc,
+and exits.</p>
+
+<h3>TODO’s</h3>
+
+<ul>
+<li>I should probably create a function that kills the remaining
+synergyc processes when eth0 goes down.</li>
+<li>If there’s already a synergyc running, we should just exit as the
+client will continue to try to reconnect.</li>
+</ul>
 
 
 <h3>Conclusion</h3>
 
-
-<p>The purpose of this article wasn&#8217;t to show you how to launch synergyc (although I think it&#8217;s really handy), it was to get the creative juices flowing. Have you already utilized NetworkManagerDispatcher for something? What would you like to have it do? Comment away!</p>
-
+<p>The purpose of this article wasn’t to show you how to launch synergyc
+(although I think it’s really handy), it was to get the creative juices
+flowing. Have you already utilized NetworkManagerDispatcher for
+something? What would you like to have it do? Comment away!</p>
 </div>
   
   
