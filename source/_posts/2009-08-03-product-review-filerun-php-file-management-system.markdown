@@ -9,8 +9,7 @@ comments: true
 sharing: true
 footer: true
 ---
-[![large_filerun.jpg](/assets/images/large_filerun.jpg)](/assets/images/fileru
-n.jpg)
+[![large_filerun.jpg](/assets/images/large_filerun.jpg)](/assets/images/filerun.jpg)
 
 At work, we had a need for software that addresses a specific problem. We have
 a bunch of users that need to share files in a secure manner via HTTPS, but
