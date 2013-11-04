@@ -1,0 +1,1176 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="At work, we had a need for software that addresses a specific problem. We have
+a bunch of users that need to share files in a secure manner via &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/blog/page/6/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/08/03/product-review-filerun-php-file-management-system">Product Review: FileRun PHP File Management System</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-03T00:00:00-05:00" pubdate data-updated="true">Aug 3<span>rd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="/assets/images/filerun.jpg"><img src="/assets/images/large_filerun.jpg" alt="large_filerun.jpg" /></a></p>
+
+<p>At work, we had a need for software that addresses a specific problem. We have
+a bunch of users that need to share files in a secure manner via HTTPS, but
+the app has to be drop-dead easy. Being an e-commerce shop, we could have
+written our own, but we didn&#8217;t have the time and resources. We could have
+outsourced it to <a href="http://www.box.net">box.net</a> or a similar service, but the
+company frowns upon outsourced solutions. I happened to stumble upon
+<a href="http://www.filerun.com">FileRun</a>, and I have to admit that I&#8217;ve been very
+impressed. Read on for the full review.</p>
+
+<p>First things first, let&#8217;s get the negatives out of the way. There&#8217;s just a
+few, and they didn&#8217;t impact us:</p>
+
+<ul>
+<li>FileRun encrypts it&#8217;s PHP code using <a href="http://www.zend.com/en/products/guard/">Zend Guard</a>, making the majority of their code not viewable by the end user. In order to run Zend Guard encrypted binaries, you have to install a PHP module to run them.</li>
+<li>The <a href="http://docs.filerun.com/index.php?title=Main_Page">online documentation</a> covers only the basics. Many of the features are undocumented, but are fairly self explanatory.</li>
+<li><p>The software is written by developers in Romania. Again, this was not a problem for us, but emailing support sometimes got replies at odd hours of the day.
+Now, onto the positives. First of all, FileRun is very well written software.
+I&#8217;ve found only one bug, and it was a minor bug introduced in only the most
+recent update. I emailed support about it, they offered to patch it for me
+immediately if I couldn&#8217;t wait for it to be fixed in the next release. The
+development team operates under the &#8220;release early, release often&#8221; mantra,
+with new updates coming out about once a month. The support is very good; I
+got fast, knowledgeable answers to all my questions. The pricing is very
+workable and advertised on their site, and there is <a href="http://www.filerun.com/demo">an online demo offered at
+their site</a>. Where the software shines is in it&#8217;s
+interface. The main file interface is a typical Windows-like explorer window
+with two panes - one for folder navigation, the other for contents of the
+selected folder. Using AJAX, they have made the application feel more like a
+desktop application than a webapp. There are three methods of uploading files,
+one is a standard HTML form-based upload, the second is a Flash-based upload,
+and the third is a Java applet. The java applet allows for drag-and-drop
+uploads, and it also gets around the PHP upload limitations allowing you to
+upload unlimited file sizes (I uploaded a 2.6GB Solaris DVD iso to it and it
+didn&#8217;t skip a beat!). Any user who is used to file management on a desktop
+system will be off and running in no time. The backend has the concepts of
+Users, Groups, and Roles. Roles should probably have been called a &#8220;User
+Template&#8221;, because that&#8217;s really what they are. Each user can have one Role
+assigned to it, and the Role overrides settings such as home directory,
+permissions, etc. Groups are simply containers that hold one or more users,
+and each user can belong to zero or greater groups. Groups are used for
+sharing folders and setting permissions on shares. If I&#8217;m in Accounting, I can
+create a new directory under my home directory, and share it to the Payroll
+department. When a member of the payroll department logs in, they will see my
+shared folder. I can dictate whether payroll can upload, download,
+rename/delete/change files and folders in that shared directory as well. While
+Groups are used to set permissions on files shared between authenticated
+users, one of the biggest requirements for us was to be able to offer
+downloads to unauthenticated users. This is where the weblinks feature comes
+in, and I believe it&#8217;s the biggest feature in the application. Once I upload a
+file to FileRun, I can generate a weblink. This is simply a link generated by
+the PHP script that looks something like
+http://my.domain.com/weblinks/?id=b6d767d2fde85d21a44b0e4567680cb9. The user
+generating the weblink can set a shared password on the link, set an
+expiration date for the link, or even set the max number of allowed downloads
+for the link. The UI also has built in support for emailing a weblink directly
+from the app instead of copy/paste into your MUA. FileRun supports thumbnail
+generation via the <strong>convert</strong> binary from ImageMagick, so anytime a user
+uploads a pdf, jpg, png, psd, etc, a thumbnail is generated. There is also a
+search index feature where MS Office documents and PDF&#8217;s are indexed and are
+searchable via the UI. FileRun also supports versioning, but I haven&#8217;t yet
+researched whether or not the versioning stores only the deltas, or complete
+copies of the files - I suspect the latter. Another important feature of
+FileRun is that it stores the file itself on the filesystem - metadata is
+stored in MySQL. This means that you can interact with the files from the OS
+as well as from within FileRun. Another nice feature is the fact that it
+supports zip/unzip operations from within the UI, no need for external
+programs to create/extract zip files. Features that are there, but I haven&#8217;t
+played with yet include:</p></li>
+<li><p>Online editing via Zoho.com and Snipshot.com</p></li>
+<li>WebDav - MS Web Folders isn&#8217;t supported (what&#8217;s the point?)</li>
+<li>Email files as attachments.</li>
+<li>All actions are logged to the DB, and you can generate email-based notifications using rules. You can get emailed about every little activity, or only failures.</li>
+<li>External Authentication is supported.</li>
+<li>A recycle bin prevents unintended deletions.</li>
+<li>See FileRun&#8217;s <a href="http://www.filerun.com/features">full feature list</a> for more details.
+We&#8217;ve been using the software here for a couple of weeks, and I love it. It
+solves a problem for us that would have cost a lot more in dev time than what
+the licensing cost is, and they support the software, not us. It&#8217;s not without
+it&#8217;s issues, the pros far outweigh the cons.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan">Book Review: Learning NAGIOS 3.0 by Wojciech Kocjan</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-22T00:00:00-05:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I was recently asked by <a href="http://www.packtpub.com">PACKT Publishing</a> to review
+the book <em><a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">Learning NAGIOS 3.0</a></em> by Wojciech Kocjan. I agreed to do so so long
+as I could state whatever I felt about the book, and PACKT was fine with that.
+I&#8217;m guessing they were fine with that because they knew the book was pretty
+darn good! Click through for a full chapter-by-chapter breakdown of the book.
+<a href="http://www.packtpub.com%0A/guide-for-learning-nagios-3/book/mid/240709quylb8"><img src="/assets/images/Learning%20Nagios%203.0.png" alt="Learning Nagios
+3.0.png" /></a> Title: <em><a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">Learning NAGIOS
+3.0</a></em> Author: Wojciech Kocjan ISBN:
+978-1-84719-518-0 Overall, this is a good book, with material that everyone
+except the most seasoned Nagios veterans can appreciate. I myself have been
+using Nagios for about the last 10 years, and I&#8217;ve been too lazy to upgrade my
+2.x install to the latest 3.x install. After reading the book, I think I&#8217;ll
+make it a priority. The book&#8217;s main audience is probably ideally someone who
+isn&#8217;t new to *nix, but is new to Nagios. They will get the most use out of
+this book. That being said, there was quite a bit of new information or tips
+that I hadn&#8217;t discovered on my own within the book as well. Perhaps what I
+liked most about the book is that not only did it tell you how to get things
+set up when you have only 10 hosts and 20 services to monitor, it told you how
+to set things up so that performance and manageability don&#8217;t become an issue
+when that same instance of Nagios is monitoring thousands of hosts and
+services. Here&#8217;s a quick breakdown of content by chapter. Note that <a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7-passive-%0Achecks-and-nsca.pdf">Chapter
+7</a> is clickable - you may download a PDF for free of that
+chapter.</p>
+
+<h2>Chapter 1: Nagios Overview</h2>
+
+<p>The author does a good introduction about the core ideas and conventions in
+Nagios, and at the end he offers a &#8220;What&#8217;s New&#8221; section for sysadmins who are
+upgrading from 2.x.</p>
+
+<h2>Chapter 2: Installation and Configuration</h2>
+
+<p>This chapter walks you through installing Nagios from source on Ubuntu &#8216;Gutsy&#8217;
+7.10. It also goes through the basic tasks of creating hosts, services,
+commands, time periods, contacts, and groups of objects. After getting your
+feet wet, the book dives into one of the key features of Nagios, inheritance.
+New to Nagios 3.0 is the capability to inherit from more than one parent,
+which is a welcome addition. The final section goes into one of the most
+important features (and one of the features Nagios implements best):
+notifications.</p>
+
+<h2>Chapter 3: Using the Nagios Web Interface</h2>
+
+<p>The first precursor to using the web interface is to get it setup properly.
+One key point that the book leaves out, and can be a major stumbling block for
+new users is that the core of the web interface is compiled C binaries. Most
+users expect PHP, Perl, or some other interpreted language, but this is not
+the case in Nagios. This severely limits the number of people who can go in
+and modify the web UI - everyone knows PHP, not many know C. The rest of the
+chapter goes through using the web interface to check status, print reports,
+etc.</p>
+
+<h2>Chapter 4: Overview of the Nagios Plugins</h2>
+
+<p>Each Nagios installation is only as good as it&#8217;s plugins. In fact, without any
+plugins, Nagios is unable to really do anything at all. Nagios&#8217; reliance upon
+plugins is one of the reasons that it&#8217;s been around for so long, and seems to
+fit everyone&#8217;s setup. Most use the same Nagios core, but you&#8217;d be hard pressed
+to find two installations using the exact same set of plugins. The majority of
+the chapter goes over the core plugins that are included in the Nagios Plugins
+distribution.</p>
+
+<h2>Chapter 5: Advanced Configuration</h2>
+
+<p>Chapter 5 covers some things that the Nagios docs don&#8217;t - mainly how to
+organize your definitions into a maintainable file and directory structure. It
+also goes into detail about the depth-first inheritance search order, and
+multiple inheritance - new to Nagios 3. Also new to Nagios 3, custom
+variables, are covered here as well. Chapter 5 also covers the algorithm used
+to determine flapping, and does it very well. I&#8217;d never comprehended it until
+reading the book.</p>
+
+<h2>Chapter 6: Notifications and Events</h2>
+
+<p>Note: This chapter has two abstracts available on PACKT&#8217;s website - you can
+read <a href="http://www.packtpub.com/article/notifications-and-events-%0Anagios-part1">Part 1 here</a>, and <a href="http://www.packtpub.com/article%0A/notifications-and-events-nagios-part2">Part 2 here</a>. This chapter goes over the ins and
+outs of setting up contacts properly. The key here is to not over-notify
+contacts about incidents they have no input or control on, because they will
+quickly delete or even filter all messages from Nagios. The chapter also goes
+into different types of notifications available to Nagios. When fixing a
+broken application&#8217;s source code is not an option, many times the only
+solution is to restart the application when it fails. Nagios can do this for
+you as well in what&#8217;s referred to as Event Handlers. This chapter walks you
+through setting up an event handler that restarts Apache should it die. New to
+Nagios 3 is Adaptive Monitoring. Adaptive monitoring gives you the ability to
+dynamically change configurations stored in the config files via the named
+pipe. The remainder of the chapter walks you through building, installing, and
+configuring NSCA to accept passive check results over the network.</p>
+
+<h2><a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7-passive-checks-and-nsca.pdf">Chapter 7: Passive Checks and NSCA</a></h2>
+
+<p><a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7%0A-passive-checks-and-nsca.pdf">Chapter 7</a> starts the content with the subject of passive
+checks. Passive checks are the key to scaling Nagios to thousands of hosts.
+The author then goes into the pros and cons of active and passive checks. From
+there, you are taken through several examples of passive host and service
+checks.</p>
+
+<h2>Chapter 8: Monitoring Remote Hosts</h2>
+
+<p>This chapter introduces the reader to the concept of remote checks, and how
+they differ from passive checks. The first part of the chapter goes into
+detail about using SSH to execute remote checks. Personally, I have never used
+this approach, as it introduces a little more security risk - if someone were
+to compromise the nagios user account on the Nagios server, they would likely
+get shells on all your other servers as well. The next section of the chapter
+goes into setting up NRPE, which I personally recommend and use extensively.
+NRPE is has much less overhead than SSH, but still encrypts the connection.
+Also, NRPE is not a shell, so if the nagios user is compromised on the server,
+the only thing the attacker could do to the remote machines is run the
+previously defined service checks on your client hosts. The author walks the
+reader through examples of using both approaches.</p>
+
+<h2>Chapter 9: SNMP</h2>
+
+<p>SNMP is very near and dear to me - I was forced to love it when working with
+DOCSIS back in my cable industry days. The author gives a pretty good
+introduction to SNMP in the beginning of the chapter. After introducing the
+reader to net-snmp utilities and some GUI&#8217;s, he goes into detail about
+installing and testing the net-snmp agent on the remote hosts. Once SNMP is
+set up on the remote hosts, it&#8217;s time to start playing with the check_snmp
+plugin. check_snmp is not so different from other plugins, and is not bad to
+setup at all. One thing that I had tried before, and failed at doing, was
+setting up Nagios to be a SNMP trap destination. The author presents a way to
+do this, but I would argue that his method wouldn&#8217;t scale very well. Either
+way, his method works - although it&#8217;s important to remember that Nagios is not
+a SNMP management package.</p>
+
+<h2>Chapter 10: Advanced Monitoring</h2>
+
+<p>The first part of the chapter goes into using NSClient++ to monitor Windows
+systems. I would argue that this is not necessarily &#8220;Advanced Monitoring&#8221; -
+maybe there should be a small chapter dedicated to monitoring Windows.
+However, that&#8217;s all semantics - the content itself is accurate and well
+stated. The chapter goes into detail about installing NSClient++ and using
+check_nt, check_nrpe, and passive checks using NSCA to get data from your
+Windows hosts. The remainder of the chapter goes into distributed Nagios
+instances. I myself have never had to do this, but in reading through the
+content, it certainly looks doable. It appears as though there isn&#8217;t too much
+to the initial setup, but config file maintenance looks like it could become
+cumbersome. I&#8217;ll have to noodle on that for a bit!</p>
+
+<h2>Chapter 11: Extending Nagios</h2>
+
+<p>Yoda might have been quoted as saying &#8220;Only after a padawan writes plugins
+will the true power of Nagios be unveiled to him&#8221; - or maybe not, but it&#8217;s
+definitely a true statement. That&#8217;s what chapter 11 is all about - writing
+your own plugins. I can especially appreciate the fact that the author
+distinguishes between a working plugin, and a plugin written the right way.
+The chapter finishes up with how you might go about writing your own web
+interface (only skimming the surface for obvious reasons).</p>
+
+<h2>Summary</h2>
+
+<p>In summary, this book is for anyone who runs, or is thinking about running
+Nagios 3.0 for business or pleasure. It&#8217;s a pretty quick read, and has quite a
+bit of information in it that will have you reaching for it like you would a
+reference book. In the interest of full disclosure, all links to <a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">PACKT&#8217;s
+website</a> from this article will result in me receiving
+referral dollars should you purchase the book from them. I only participate in
+referrals when I have personally used and approve of the product. If you
+enjoyed this review and are interested in purchasing the book, I would
+appreciate your referral.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/07/21/back-linux-my-desktop">Back to Linux for My Desktop</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-21T00:00:00-05:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, it&#8217;s been just over a month <a href="http://www.sysadminsjourney.com/content/2009/06/16%0A/plunging-deep-end-running-opensolaris-my-primary-workstation">since I&#8217;ve converted my main workstation
+over to OpenSolaris</a>. Unfortunately,
+I&#8217;m going to abandon the project, and switch back to Linux as my choice as
+primary desktop OS.  The main reason? Cost in productivity. It&#8217;s not that I
+can&#8217;t build things from source, or tweak config files, but I just don&#8217;t have
+the time to anymore. <a href="http://www.sysadminsjourney.com/content/2009/06/16/fixing-%0Ametacitys-window-placement-dual-head-setups-opensolaris">Unlike
+OpenSolaris</a>, dual-head works as
+expected on Linux. I had to <a href="http://www.sysadminsjourney.com/content/2009/07/07/making-home-and-%0Aend-work-they-do-linux-opensolaris">do
+voodoo</a> to make the home and end keys work in the
+gnome-terminal. Little things, like gcc being the first compiler found in
+PATH, but most binaries on the system being compiled with SunStudio cc cause
+larger issues like <a href="http://www.sysadminsjourney.com/content/2009/06/19/fixing-cpan-%0Aperl-module-installation-issues-opensolaris">CPAN not working
+correctly</a>. Certain things just aren&#8217;t even
+there yet, like virtual consoles, which are invaluable when troubleshooting
+Xorg issues. Each one of these issues is fixable, but the key is that they
+don&#8217;t exist in the first place when I use Linux. The lack of graphics
+acceleration for my card turned out to be more of an issue that I would have
+thought (you want your desktop environment to be snappy). Also, not being able
+to use the AHCI mode on my SATA controller killed disk I/O. Since OpenSolaris
+has far fewer adopters than Linux, binary-only applications often don&#8217;t
+release binaries for OpenSolaris (<a href="http://www.getdropbox.com">Dropbox</a> for
+example). The community is growing, and is very helpful, but it&#8217;s not near
+anywhere as massive as the Linux community. Often times, Google searches
+result in no hits when troubleshooting. Don&#8217;t get me wrong, it&#8217;s not that I
+dislike OpenSolaris, or the direction it&#8217;s going. The opposite is true - I
+love it! ZFS is truly incredible, and SMF is a godsend. IPS, while a long ways
+from being as fast and comprehensive as apt-get, is a huge improvement over
+the old way. In fact, one of the first things I plan on doing in Linux is
+installing VirtualBox and installing OpenSolaris within it. To summarize, when
+using OpenSolaris as my primary desktop OS, the &#8220;you gotta be kidding me&#8220;&#8216;s
+and the &#8220;dammit&#8220;&#8216;s far outnumbered the &#8220;ooh&#8220;&#8216;s and &#8220;ahh&#8220;&#8216;s. By using Linux as
+my desktop OS and OpenSolaris as a VM, I can isolate myself from the
+negatives. I just can&#8217;t afford the impact to my productivity right now. As
+long as Oracle doesn&#8217;t muck too much with the current state of affairs,
+there&#8217;s a good chance that in a year or two, I&#8217;ll try again and have much
+better luck. Until then, OpenSolaris will be on my VM&#8217;s and Servers, but won&#8217;t
+be on my workstation.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/07/15/23-quadrillion-character-space">The $23 Quadrillion Character - Space!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-15T00:00:00-05:00" pubdate data-updated="true">Jul 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>From <a href="http://rss.slashdot.org/~r/Slashdot/slashdot/~3/IMBNn2vUq7o%0A/Software-Glitch-Leads-To-23148855308184500-Visa-Charges">Slashdot</a>:  Hmmm2000 writes
+&#8220;Recently several Visa card holders were, um, overcharged for certain
+purchases, to the tune of $23,148,855,308,184,500.00 on a single charge. The
+company says it was due to a programming error, and that the problem has been
+corrected. What is interesting is that the amount charged actually reveals the
+type of programming error that caused the problem. 23,148,855,308,184,500.00 *
+100 (I&#8217;m guessing this is how the number is actually stored) is
+2314885530818450000. Convert 2314885530818450000 to hexadecimal, and you end
+up with 20 20 20 20 20 20 12 50. Most C/C++ programmers see the error now &#8230;
+hex 20 is a space. So spaces were stuffed into a field where binary zero
+should have been.&#8221;  That&#8217;s probably more damage than Y2K ever hoped of doing
+;-)</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/07/07/opensolaris-network-administration-linux-sysadmins">OpenSolaris Network Administration for Linux SysAdmins</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-07T00:00:00-05:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Why is it that we always find the good documentation after we&#8217;ve fumbled our
+way around the help and man pages? Such is the case with <a href="http://www.opensolaris.com/use/network_administration.pdf">&#8220;OpenSolaris Network
+Administration for Administrators Familiar with
+Linux&#8221;</a>. If you&#8217;re
+someone that is familiar with Linux (the doc annoyingly equates RHEL to
+Linux), and are thinking about installing OpenSolaris, make sure you download
+this PDF and keep a hardcopy handy!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/07/07/making-home-and-end-work-they-do-linux-opensolaris">Making Home and End Work Like They Do in Linux on OpenSolaris</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-07T00:00:00-05:00" pubdate data-updated="true">Jul 7<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In OpenSolaris, the xterm bindings aren&#8217;t there for the End and Home keys -
+they do nothing. Yes, I know, Ctrl+a and Ctrl+e do the same things, but my
+laziness has turned into muscle memory. Here&#8217;s how to fix it:  As your normal
+user, run the following:</p>
+
+<pre><code>mkdir /tmp/foo
+env TERMINFO=/usr/share/lib/terminfo /bin/infocmp xterm &gt; /tmp/foo/xterm.ti
+echo ' knp=\E[6~, kpp=\E[5~, kend=\EOF, khome=\EOH, '  &gt;&gt; /tmp/foo/xterm.ti
+env TERMINFO=/tmp/foo /bin/tic -v /tmp/foo/xterm.ti
+cd /usr/share/lib/terminfo/x/
+pfexec cp xterm xterm.orig
+pfexec cp /tmp/foo/x/xterm xterm.new
+pfexec cp xterm.new xterm
+</code></pre>
+
+<p>Now your home and end keys will behave like your used to in Linux! All of this
+was pretty much copied and pasted from <a href="http://tech.groups.yahoo.com/group/solarisx86/message/2%0A0027">http://tech.groups.yahoo.com/group/sol
+arisx86/message/20027</a> - thanks to Juergen Keil for the tip!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/30/migrating-zone-different-machine-solaris-10">Migrating a Zone to a Different Machine on Solaris 10</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-30T00:00:00-05:00" pubdate data-updated="true">Jun 30<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Zones are one of the best features in Solaris 10 &#8211; they&#8217;re so
+lightweight that you can use them at almost no cost in performance.
+Today, I ran across a situation where one of my zones needed more
+RAM, and the box it was on didn&#8217;t have it. Read on for how to
+migrate a Solaris Zone to a different machine, and an important
+update to Solaris 10/08 that makes the process <strong>so</strong> much easier.
+The initial steps in migrating a zone are very similar. First, you
+need to halt the zone:</p>
+
+<div>
+  <pre><code class='console'># zoneadm -z myzone halt</code></pre>
+</div>
+
+
+<p>Next, you need to detach it from it&#8217;s non-global zone:</p>
+
+<div>
+  <pre><code class='console'># zoneadm -z my-zone detach</code></pre>
+</div>
+
+
+<p>Now, you need to copy the zone files over to machine B. You can use
+rsync + ssh, tar + ssh, tar + ftp, cpio, or any other mechanism. If
+you have your zone installed in /apps/zones, then the following
+should do the trick:</p>
+
+<div>
+  <pre><code class='console'>root@hostA # cd /apps/zones; tar -cf myzone.tar myzone
+root@hostA # scp myzone.tar someuser@hostB:/var/tmp/ &amp;&amp; rm myzone.tar
+# ssh over to hostB, and become root 
+root@hostB # cd /apps/zones/ &amp;&amp; tar -xf /var/tmp/myzone.tar &amp;&amp; rm /var/tmp/myzone.tar
+root@hostB # zonecfg -z my-zone
+my-zone: No such zone configured
+Use 'create' to begin configuring a new zone.
+zonecfg:my-zone&gt; create -a /apps/zones/my-zone
+zonecfg:my-zone&gt; commit
+zonecfg:my-zone&gt; exit</code></pre>
+</div>
+
+
+<p>As you can see, the process of moving a zone isn&#8217;t too difficult,
+but the sticking point is when the global zone on machine A has
+different software and patches than machine B. Since a non-global
+zone&#8217;s inherit files and packages from the global zone, things can
+get messy. Up until Solaris 10/08, getting things straightened out
+was an exercise left up to the sysadmin, and it often times was no
+small task. If you&#8217;re on a release prior to 10/08, and there&#8217;s a
+lot of difference between Machine A &amp; B, then you have your work
+cut out for you. Try this (running this on 10/08 or newer doesn&#8217;t
+hurt anything, and it allows you to &#8220;preview&#8221; changes):</p>
+
+<div>
+  <pre><code class='console'>root@gaia /apps# zoneadm -z sstg attach
+These packages installed on this system were not installed on the source system:
+    SUNWi15cs (2.0,REV=2004.08.23.14.43)
+    SUNWi1cs (2.0,REV=2004.08.12.10.14)
+    SUNWlocaledefsrc (11.10.0,REV=2004.08.12.18.18)
+    SUNWnamdt (1.0,REV=2004.08.12.10.18)
+    SUNWnamos (11.10.0,REV=2003.12.08.12.08)
+    SUNWnamow (1.0,REV=2004.03.03.14.07)
+    SUNWplow (1.0,REV=2004.08.12.10.19)
+    SUNWplow1 (1.0,REV=2004.11.10.13.49)
+    SUNWpsvrr (5.0,REV=2005.05.13.16.32)
+    SUNWpsvru (5.0,REV=2005.05.13.16.32)
+    SUNWtcatr (11.10.0,REV=2005.01.08.05.16)
+    These patches installed on the source system are inconsistent with this system:
+        118666: version mismatch
+            (18) (20)
+        118667: version mismatch
+            (18) (19)
+        118683: version mismatch
+            (02) (03)
+        118718: version mismatch
+            (01) (02)
+        118777: version mismatch
+            (13) (14)
+        118959: version mismatch
+            (03) (04)
+        119059: version mismatch
+            (46) (47)
+        119090: version mismatch
+            (31) (32)
+        119213: version mismatch
+            (18) (19)
+        119254: version mismatch
+            (65) (66)
+        119278: version mismatch
+            (25) (27)
+        119280: version mismatch
+            (19) (20)
+        119315: version mismatch
+            (15) (16)
+        119470: version mismatch
+            (15) (16)
+        119538: version mismatch
+            (18) (19)
+        119757: version mismatch
+            (14) (15)
+        119963: version mismatch
+            (12) (15)
+        120272: version mismatch
+            (23) (24)
+        120410: version mismatch
+            (30) (31)
+        120753: version mismatch
+            (05) (07)
+        120812: version mismatch
+            (29) (30)
+        121081: version mismatch
+            (06) (08)
+        121104: version mismatch
+            (06) (07)
+        122212: version mismatch
+            (32) (33)
+        122259: version mismatch
+            (01) (02)
+        122261: version mismatch
+            (01) (02)
+        122675: version mismatch
+            (02) (03)
+        122911: version mismatch
+            (15) (16)
+        123590: version mismatch
+            (09) (10)
+        123893: version mismatch
+            (05) (15)
+        123938: version mismatch
+            (01) (02)
+        124149: version mismatch
+            (14) (15)
+        125172: version mismatch
+            (01) (02)
+        125332: version mismatch
+            (05) (06)
+        125533: version mismatch
+            (10) (11)
+        125555: version mismatch
+            (02) (04)
+        125719: version mismatch
+            (17) (20)
+        125952: version mismatch
+            (18) (19)
+        126530: version mismatch
+            (01) (02)
+        126655: version mismatch
+            (01) (02)
+        127976: version mismatch
+            (04) (05)
+        136998: version mismatch
+            (05) (06)
+        137000: version mismatch
+            (03) (04)
+        137034: version mismatch
+            (01) (02)
+        137080: version mismatch
+            (02) (03)
+        138174: version mismatch
+            (01) (02)
+        138322: version mismatch
+            (02) (03)
+        138822: version mismatch
+            (02) (04)
+        138826: version mismatch
+            (02) (04)
+        138874: version mismatch
+            (01) (03)
+        139099: version mismatch
+            (01) (02)
+        139606: version mismatch
+            (01) (02)
+        139928: version mismatch
+            (01) (02)
+        139966: version mismatch
+            (01) (02)
+        139974: version mismatch
+            (02) (03)
+        139977: version mismatch
+            (03) (04)
+        140074: version mismatch
+            (05) (08)
+        140171: version mismatch
+            (01) (02)
+        140391: version mismatch
+            (02) (03)
+        140397: version mismatch
+            (06) (08)
+    These patches installed on this system were not installed on the source system:
+        119397-09
+        119788-09
+        122130-04
+        125060-05
+        136708-01
+        140589-01
+        140916-01
+        140917-01
+        140919-01
+        140921-01
+        141414-01
+        141686-01
+        141688-01
+        141690-01
+        141692-01
+        141694-01
+        141715-01
+        141717-01
+        141719-01
+        141721-01
+        141726-01
+        141729-01
+        141731-01
+        141733-01
+        141736-01
+        141738-01
+        141740-01
+        141742-01
+        141743-01
+        141765-01
+        141767-01
+        141773-01
+        141775-01
+        141781-01</code></pre>
+</div>
+
+
+<p>WOW. That&#8217;s a lot of cleanup. It&#8217;s no wonder Sun was compelled to
+add the update flag. Here&#8217;s how to save yourself some hair:
+At this point, you&#8217;re good to &#8216;boot&#8217; the zone on HostB. Thanks to
+Sun&#8217;s update feature, moving my resource-starved zone to a larger
+server was a painless ordeal</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/19/fixing-cpan-perl-module-installation-issues-opensolaris">Fixing CPAN Perl Module Installation Issues on OpenSolaris</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-19T00:00:00-05:00" pubdate data-updated="true">Jun 19<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In OpenSolaris, if you&#8217;re installing perl modules via CPAN, you might run into
+this error:</p>
+
+<pre><code>cc: unrecognized option `-KPIC'
+cc: language ildoff not recognized
+cc: ReadKey.c: linker input file unused because linking not done
+</code></pre>
+
+<p>In order to fix that, edit the file /usr/perl5/5.8.4/lib/i86pc-solaris-
+64int/Config.pm, and make the following changes to the existing lines for
+&#8216;optimize&#8217; and &#8216;cccldflags&#8217;: <strong>UPDATE! Thanks to reader Vesta for his tip. The
+original tip I posted will not fix all the issues, for example Apache2::Util
+won&#8217;t install.</strong> This problem occurs because the Sun developers build perl
+with the cc from SunStudio, but by default, the first &#8216;cc&#8217; found in a user&#8217;s
+path is a symlink to gcc. All you need to do is to install SunStudio, and
+prefer it&#8217;s cc:</p>
+
+<pre><code>pfexec pkg install ss-dev
+</code></pre>
+
+<p>Now, edit ~/.profile, and prepend your path with SunStudio&#8217;s bin directory,
+like so:</p>
+
+<pre><code>export PATH=/opt/SunStudioExpress/bin/:/usr/gnu/bin:/usr/bin:/usr/X11/bin:/usr/sbin:/sbin
+</code></pre>
+
+<p>You can log out, reboot, source the new .profile, or export a new PATH
+variable to make the new settings stick. Now you should be able to install
+most any Perl module!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/16/plunging-deep-end-running-opensolaris-my-primary-workstation">Plunging Into the Deep End: Running OpenSolaris on My Primary Workstation</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-16T00:00:00-05:00" pubdate data-updated="true">Jun 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Well, like I did with Linux ten years ago, I installed OpenSolaris 2009.06 on
+my primary workstation at work. There&#8217;s simply no better way to learn an OS
+than to force yourself to run it. While I was pretty close to Ctrl-C&#8217;ing the
+whole project a couple of times, I&#8217;m now getting things set up pretty much the
+way I need them to be. Stay tuned for articles with my tips, but here&#8217;s my
+first impressions:</p>
+
+<ul>
+<li>IPS - the new package manager is fairly robust. It certainly appears to have some speed issues, but all in all, it works pretty well. It has a good selection of software available - not extensive, but enough to get you going. I&#8217;m sure both the speed and the quantity will both improve with time.</li>
+<li>The Gnome Desktop as shipped has a very sharp and clean feel to it. It&#8217;s hard to describe, but I like it.</li>
+<li>From what I can tell, Compiz is only supported with NVidia graphics cards. The fglrx driver doesn&#8217;t yet exist for OpenSolaris.</li>
+<li>It really sucks trying to debug Xorg setup without virtual consoles!</li>
+<li>While I&#8217;m a long ways from being comfortable, I&#8217;m now at a point that I don&#8217;t think I&#8217;ll find any showstopping issues.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/16/installing-pidgin-encryption-plugin-opensolaris">Installing the Pidgin-Encryption Plugin on OpenSolaris</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-06-16T00:00:00-05:00" pubdate data-updated="true">Jun 16<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>You can install Pidgin from the OpenSolaris.org repository, but there&#8217;s no
+package for the Pidgin-Encryption plugin. Once you point it in the right
+direction, it&#8217;s not hard to install the plugin from source.</p>
+
+<pre><code>pfexec pkg install SUNWgcc SUNWxorg-headers SUNWgnome-common-devel
+tar -xzvf pidgin-encryption-3.0.tar.gz
+cd pidgin-encryption-3.0
+./configure --with-nspr-includes=/usr/include/firefox/nspr/ \
+  --with-nspr-libs=/usr/lib/firefox/ \
+  --with-nss-includes=/usr/include/firefox/nss/ \
+  --with-nss-libs=/usr/lib/firefox/ --prefix=/usr
+make
+pfexec make install
+</code></pre>
+
+<p>Restart Pidgin, and go to Tools->Plugins, and enable the Pidgin Encryption
+plugin.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/7/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/blog/page/5/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It&#8217;s not you, it&#8217;s me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

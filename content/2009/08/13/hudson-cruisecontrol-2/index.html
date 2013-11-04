@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hudson > (CruiseControl * 2) - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="CruiseControl and I have never really gotten along. When you&#8217;re a Java shop,
+you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Hudson > (CruiseControl * 2)</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-13T00:00:00-05:00" pubdate data-updated="true">Aug 13<span>th</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&#8217;re a Java shop,
+you have to use continuous integration. In fact, if you&#8217;re a code shop, you
+need CI. For the longest time, CruiseControl was the only kid on the block.
+I&#8217;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
+didn&#8217;t take the time to try it. Why not? Well, because CI is hard, and it
+takes forever to get setup right &#8211; I didn&#8217;t want to have to re-invest all
+that time. Man, if only I&#8217;d known how wrong I was.</p>
+
+<p>Everyone&#8217;s gripe with CruiseControl was that you had to edit XML files to make
+the configuration. Well, I don&#8217;t mind XML, and it&#8217;s often pretty good at
+config files. But CruiseControl was always quirky. Switching from CVS to SVN?
+A day&#8217;s worth of work. Adding a new build? At least an hour or two. Little
+things: CruiseControl would freak out and die if you didn&#8217;t do the initial
+checkout from CVS/SVN - CruiseControl only does updates, not checkouts. We
+often joke how the developers that write CruiseControl favorite motto was &#8220;let
+the sucker sysadmin deal with it&#8221;.</p>
+
+<p>So, I downloaded Hudson, and in less than 10 minutes I had everything that was
+being done in CruiseControl working in Hudson. And, I&#8217;m being honest here, I
+actually smiled a few times to myself when setting it up! It took another 20
+minutes, and I have authentication working against our LDAP server, which I
+never had working in CruiseControl.</p>
+
+<p>If you&#8217;re running CruiseControl now, drop everything, do yourself a favor, and
+go try Hudson. If it doesn&#8217;t do what you want, it has plugins that do. It has
+API&#8217;s for XML, JSON, and Python, and the XML implementation has full XPATH
+support. Every field in the web interface has inline help that is actually
+helpful. Having different projects use different Java&#8217;s and Ant&#8217;s are a click
+away. You can build multiple projects at once, create build dependencies, and
+even have distributed builds run amongst multiple machines.</p>
+
+<p>Please, I&#8217;m begging you. Give Hudson a try, and get back some of your life
+from CruiseControl! If you&#8217;re not running CruiseControl or Hudson, then you
+probably should be.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-08-13T00:00:00-05:00" pubdate data-updated="true">Aug 13<span>th</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic" title="Previous Post: Forcing Apache's mod_deflate module to compress JSP's from Weblogic">&laquo; Forcing Apache's mod_deflate module to compress JSP's from Weblogic</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/08/16/trying-my-rhce" title="Next Post: Trying for my RHCE">Trying for my RHCE &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

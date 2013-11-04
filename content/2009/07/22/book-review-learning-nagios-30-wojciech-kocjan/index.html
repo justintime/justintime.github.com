@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Book Review: Learning NAGIOS 3.0 by Wojciech Kocjan - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="I was recently asked by PACKT Publishing to review
+the book Learning NAGIOS 3.0 by Wojciech Kocjan. I agreed to do so so long
+as I could state &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Book Review: Learning NAGIOS 3.0 by Wojciech Kocjan</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-22T00:00:00-05:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I was recently asked by <a href="http://www.packtpub.com">PACKT Publishing</a> to review
+the book <em><a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">Learning NAGIOS 3.0</a></em> by Wojciech Kocjan. I agreed to do so so long
+as I could state whatever I felt about the book, and PACKT was fine with that.
+I&#8217;m guessing they were fine with that because they knew the book was pretty
+darn good! Click through for a full chapter-by-chapter breakdown of the book.
+<a href="http://www.packtpub.com%0A/guide-for-learning-nagios-3/book/mid/240709quylb8"><img src="/assets/images/Learning%20Nagios%203.0.png" alt="Learning Nagios
+3.0.png" /></a> Title: <em><a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">Learning NAGIOS
+3.0</a></em> Author: Wojciech Kocjan ISBN:
+978-1-84719-518-0 Overall, this is a good book, with material that everyone
+except the most seasoned Nagios veterans can appreciate. I myself have been
+using Nagios for about the last 10 years, and I&#8217;ve been too lazy to upgrade my
+2.x install to the latest 3.x install. After reading the book, I think I&#8217;ll
+make it a priority. The book&#8217;s main audience is probably ideally someone who
+isn&#8217;t new to *nix, but is new to Nagios. They will get the most use out of
+this book. That being said, there was quite a bit of new information or tips
+that I hadn&#8217;t discovered on my own within the book as well. Perhaps what I
+liked most about the book is that not only did it tell you how to get things
+set up when you have only 10 hosts and 20 services to monitor, it told you how
+to set things up so that performance and manageability don&#8217;t become an issue
+when that same instance of Nagios is monitoring thousands of hosts and
+services. Here&#8217;s a quick breakdown of content by chapter. Note that <a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7-passive-%0Achecks-and-nsca.pdf">Chapter
+7</a> is clickable - you may download a PDF for free of that
+chapter.</p>
+
+<h2>Chapter 1: Nagios Overview</h2>
+
+<p>The author does a good introduction about the core ideas and conventions in
+Nagios, and at the end he offers a &#8220;What&#8217;s New&#8221; section for sysadmins who are
+upgrading from 2.x.</p>
+
+<h2>Chapter 2: Installation and Configuration</h2>
+
+<p>This chapter walks you through installing Nagios from source on Ubuntu &#8216;Gutsy&#8217;
+7.10. It also goes through the basic tasks of creating hosts, services,
+commands, time periods, contacts, and groups of objects. After getting your
+feet wet, the book dives into one of the key features of Nagios, inheritance.
+New to Nagios 3.0 is the capability to inherit from more than one parent,
+which is a welcome addition. The final section goes into one of the most
+important features (and one of the features Nagios implements best):
+notifications.</p>
+
+<h2>Chapter 3: Using the Nagios Web Interface</h2>
+
+<p>The first precursor to using the web interface is to get it setup properly.
+One key point that the book leaves out, and can be a major stumbling block for
+new users is that the core of the web interface is compiled C binaries. Most
+users expect PHP, Perl, or some other interpreted language, but this is not
+the case in Nagios. This severely limits the number of people who can go in
+and modify the web UI - everyone knows PHP, not many know C. The rest of the
+chapter goes through using the web interface to check status, print reports,
+etc.</p>
+
+<h2>Chapter 4: Overview of the Nagios Plugins</h2>
+
+<p>Each Nagios installation is only as good as it&#8217;s plugins. In fact, without any
+plugins, Nagios is unable to really do anything at all. Nagios&#8217; reliance upon
+plugins is one of the reasons that it&#8217;s been around for so long, and seems to
+fit everyone&#8217;s setup. Most use the same Nagios core, but you&#8217;d be hard pressed
+to find two installations using the exact same set of plugins. The majority of
+the chapter goes over the core plugins that are included in the Nagios Plugins
+distribution.</p>
+
+<h2>Chapter 5: Advanced Configuration</h2>
+
+<p>Chapter 5 covers some things that the Nagios docs don&#8217;t - mainly how to
+organize your definitions into a maintainable file and directory structure. It
+also goes into detail about the depth-first inheritance search order, and
+multiple inheritance - new to Nagios 3. Also new to Nagios 3, custom
+variables, are covered here as well. Chapter 5 also covers the algorithm used
+to determine flapping, and does it very well. I&#8217;d never comprehended it until
+reading the book.</p>
+
+<h2>Chapter 6: Notifications and Events</h2>
+
+<p>Note: This chapter has two abstracts available on PACKT&#8217;s website - you can
+read <a href="http://www.packtpub.com/article/notifications-and-events-%0Anagios-part1">Part 1 here</a>, and <a href="http://www.packtpub.com/article%0A/notifications-and-events-nagios-part2">Part 2 here</a>. This chapter goes over the ins and
+outs of setting up contacts properly. The key here is to not over-notify
+contacts about incidents they have no input or control on, because they will
+quickly delete or even filter all messages from Nagios. The chapter also goes
+into different types of notifications available to Nagios. When fixing a
+broken application&#8217;s source code is not an option, many times the only
+solution is to restart the application when it fails. Nagios can do this for
+you as well in what&#8217;s referred to as Event Handlers. This chapter walks you
+through setting up an event handler that restarts Apache should it die. New to
+Nagios 3 is Adaptive Monitoring. Adaptive monitoring gives you the ability to
+dynamically change configurations stored in the config files via the named
+pipe. The remainder of the chapter walks you through building, installing, and
+configuring NSCA to accept passive check results over the network.</p>
+
+<h2><a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7-passive-checks-and-nsca.pdf">Chapter 7: Passive Checks and NSCA</a></h2>
+
+<p><a href="http://www.packtpub.com/files/learning-nagios-3-sample-chapter-7%0A-passive-checks-and-nsca.pdf">Chapter 7</a> starts the content with the subject of passive
+checks. Passive checks are the key to scaling Nagios to thousands of hosts.
+The author then goes into the pros and cons of active and passive checks. From
+there, you are taken through several examples of passive host and service
+checks.</p>
+
+<h2>Chapter 8: Monitoring Remote Hosts</h2>
+
+<p>This chapter introduces the reader to the concept of remote checks, and how
+they differ from passive checks. The first part of the chapter goes into
+detail about using SSH to execute remote checks. Personally, I have never used
+this approach, as it introduces a little more security risk - if someone were
+to compromise the nagios user account on the Nagios server, they would likely
+get shells on all your other servers as well. The next section of the chapter
+goes into setting up NRPE, which I personally recommend and use extensively.
+NRPE is has much less overhead than SSH, but still encrypts the connection.
+Also, NRPE is not a shell, so if the nagios user is compromised on the server,
+the only thing the attacker could do to the remote machines is run the
+previously defined service checks on your client hosts. The author walks the
+reader through examples of using both approaches.</p>
+
+<h2>Chapter 9: SNMP</h2>
+
+<p>SNMP is very near and dear to me - I was forced to love it when working with
+DOCSIS back in my cable industry days. The author gives a pretty good
+introduction to SNMP in the beginning of the chapter. After introducing the
+reader to net-snmp utilities and some GUI&#8217;s, he goes into detail about
+installing and testing the net-snmp agent on the remote hosts. Once SNMP is
+set up on the remote hosts, it&#8217;s time to start playing with the check_snmp
+plugin. check_snmp is not so different from other plugins, and is not bad to
+setup at all. One thing that I had tried before, and failed at doing, was
+setting up Nagios to be a SNMP trap destination. The author presents a way to
+do this, but I would argue that his method wouldn&#8217;t scale very well. Either
+way, his method works - although it&#8217;s important to remember that Nagios is not
+a SNMP management package.</p>
+
+<h2>Chapter 10: Advanced Monitoring</h2>
+
+<p>The first part of the chapter goes into using NSClient++ to monitor Windows
+systems. I would argue that this is not necessarily &#8220;Advanced Monitoring&#8221; -
+maybe there should be a small chapter dedicated to monitoring Windows.
+However, that&#8217;s all semantics - the content itself is accurate and well
+stated. The chapter goes into detail about installing NSClient++ and using
+check_nt, check_nrpe, and passive checks using NSCA to get data from your
+Windows hosts. The remainder of the chapter goes into distributed Nagios
+instances. I myself have never had to do this, but in reading through the
+content, it certainly looks doable. It appears as though there isn&#8217;t too much
+to the initial setup, but config file maintenance looks like it could become
+cumbersome. I&#8217;ll have to noodle on that for a bit!</p>
+
+<h2>Chapter 11: Extending Nagios</h2>
+
+<p>Yoda might have been quoted as saying &#8220;Only after a padawan writes plugins
+will the true power of Nagios be unveiled to him&#8221; - or maybe not, but it&#8217;s
+definitely a true statement. That&#8217;s what chapter 11 is all about - writing
+your own plugins. I can especially appreciate the fact that the author
+distinguishes between a working plugin, and a plugin written the right way.
+The chapter finishes up with how you might go about writing your own web
+interface (only skimming the surface for obvious reasons).</p>
+
+<h2>Summary</h2>
+
+<p>In summary, this book is for anyone who runs, or is thinking about running
+Nagios 3.0 for business or pleasure. It&#8217;s a pretty quick read, and has quite a
+bit of information in it that will have you reaching for it like you would a
+reference book. In the interest of full disclosure, all links to <a href="http://www.packtpub.com/guide-for-learning-%0Anagios-3/book/mid/240709quylb8">PACKT&#8217;s
+website</a> from this article will result in me receiving
+referral dollars should you purchase the book from them. I only participate in
+referrals when I have personally used and approve of the product. If you
+enjoyed this review and are interested in purchasing the book, I would
+appreciate your referral.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2009-07-22T00:00:00-05:00" pubdate data-updated="true">Jul 22<span>nd</span>, 2009</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/book-review/'>Book Review</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/07/21/back-linux-my-desktop" title="Previous Post: Back to Linux for my Desktop">&laquo; Back to Linux for my Desktop</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/08/03/product-review-filerun-php-file-management-system" title="Next Post: Product Review: FileRun PHP File Management System">Product Review: FileRun PHP File Management System &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/07/22/book-review-learning-nagios-30-wojciech-kocjan';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

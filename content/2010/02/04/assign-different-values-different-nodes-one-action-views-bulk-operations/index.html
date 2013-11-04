@@ -1,0 +1,492 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Assign Different Values to Different Nodes via One Action in Views Bulk Operations - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="The Views Bulk
+Operations module
+(a.k.a. VBO), is a godsend for busy Drupal site
+administrators. Don&#8217;t just take my word for it -
+Lullabot &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Assign Different Values to Different Nodes via One Action in Views Bulk Operations</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-04T00:00:00-06:00" pubdate data-updated="true">Feb 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>The <a href="http://drupal.org/project/views_bulk_operations">Views Bulk
+Operations</a> module
+(a.k.a. VBO), is a godsend for busy <a href="http://drupal.org">Drupal</a> site
+administrators. Don&#8217;t just take my word for it -
+<a href="http://www.lullabot.com">Lullabot</a> wrote a chapter about it in
+<a href="http://oreilly.com/catalog/9780596515805/">O&#8217;Reilly&#8217;s Using Drupal</a>,
+it&#8217;s included in the <a href="http://openatrium.com/">Open Atrium Drupal
+distribution</a>, and it&#8217;s even used on
+<a href="http://drupal.org/node/520290">Drupal.org</a>! Out of the box, VBO does a
+lot to streamline the things you do everyday, so that you spend less
+time doing them. A perfect example is bulk content moderation - with a
+few clicks of the mouse, you can mark a huge amount of comments as spam.
+You can even enable batch processing with a single click of a mouse so
+that you can literally do thousands of these without timing out.</p>
+
+<p>VBO was
+attractive enough that we decided to offload the bulk/batch operations
+of <a href="http://drupal.org/project/node_gallery">Node Gallery</a> to VBO.
+Integration for the most part was surprisingly easy - VBO &#8220;speaks&#8221; in
+Drupal Actions, so by <a href="http://drupal.org/node/172152">writing actions</a>,
+we were writing integration with VBO.</p>
+
+<p>There&#8217;s one undocumented case
+where VBO can be used that was critical for us. Most VBO actions you
+will find perform one action to a set of nodes, one at a time. Often
+times, that one action is to set a value of some sort on said nodes. In
+the case of <a href="http://drupal.org/project/node_gallery">Node Gallery</a>, we
+wanted to be able to assign different weight values (used for sorting)
+to a bunch of nodes. The key here is that we aren&#8217;t assigning a value of
+&#8216;2&#8217; to all selected node&#8217;s weight, we want to assign a weight of 2 to
+node #1, 3 to node #2, 8 to node #3, and so on. While not
+straightforward, it&#8217;s definitely achievable.</p>
+
+<p>The general idea we&#8217;ll be
+taking is to have VBO display a list of nodes to the admin. The admin
+can place a checkmark next to the nodes that he wishes to change the
+weight on, then select &#8220;Change the image&#8217;s weight&#8221; from the action
+dropdown, and click submit. We will then draw a form that includes some
+summary information about the nodes, and a select box with the node&#8217;s
+current weight. The admin sets the weight he wants for each node, then
+clicks submit. VBO then takes over, assigning each node the proper
+weight. Let&#8217;s get into the code - first we implement
+hook_action_info(), telling Drupal that we have actions to provide:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+/**
+* Implementation of hook_action_info().
+*/
+function node_gallery_action_info() {
+  return array(
+    'node_gallery_change_image_weight_action' =&gt; array(
+      'description' =&gt; t('Change image weight (sort order)'),
+      'type' =&gt; 'node',
+      'behavior' =&gt; array('changes_node_property'),
+      'configurable' =&gt; TRUE,
+      'hooks' =&gt; array(
+        'node' =&gt; array('presave'),
+      ),
+    ),
+  );
+}</code></pre>
+</div>
+
+
+<p>The only real items of note in the hook above are setting &#8216;configurable&#8217;
+to true, and setting &#8216;behavior&#8217; to &#8216;changes_node_property&#8217;. Setting
+&#8216;configurable&#8217; allows us to display a custom form, and setting the
+behavior tells VBO that we&#8217;ll be modifying the node. In turn, VBO will
+call $node->save on each node after it&#8217;s been processed. Next, we
+define our configurable action&#8217;s form function:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action_form($context = array()) {
+  //We're being called from VBO - we can do extra validation
+  if ($context['view']-&gt;plugin_name == 'bulk') {
+    //@todo: Add imagefield support in our sort form, and theme it with draggable items
+    $sql = &quot;SELECT n.nid, n.title, ngi.weight FROM {node} n &quot; .
+            &quot;INNER JOIN {node_gallery_images} ngi ON n.nid = ngi.nid &quot; .
+            &quot;WHERE n.nid IN (&quot;. db_placeholders($context['selection']) .&quot;)&quot;;
+    $result = db_query($sql,$context['selection']);
+    $delta = count($context['selection']) &gt; 20 ? intval(count($context['selection'])/2) : 10;
+    $form['node_gallery_change_image_weight_action']['#tree'] = TRUE;
+    while ($image = db_fetch_object($result)) {
+      $form['node_gallery_change_image_weight_action'][$image-&gt;nid]['title'] = array(
+        '#type' =&gt; 'item',  
+        '#value' =&gt; $image-&gt;title,
+      );
+      $form['node_gallery_change_image_weight_action'][$image-&gt;nid]['weight'] = array(
+        '#type' =&gt; 'weight',
+        '#title' =&gt; t('Weight'),
+        '#default_value' =&gt; $image-&gt;weight,
+        '#delta' =&gt; $delta,
+      );
+    }
+  }
+  //We're called from a standard advanced action where we assign one weight to all nodes
+  else {
+    $form['node_gallery_change_image_weight_action'] = array(
+      '#type' =&gt; 'weight',
+      '#title' =&gt; t('Weight'),
+      '#description' =&gt; t('When listing images in a gallery, heavier items will sink at the lighter items will be positioned near the top'),
+      '#delta' =&gt; 10,
+    );
+    if (isset($context['imageweight'])) {
+      $form['node_gallery_change_image_weight_action']['#default_value'] = $context['imageweight'];
+    }
+  }
+  return $form;
+}</code></pre>
+</div>
+
+
+<p>To define your form function, simply append &#8216;_form&#8217; to your action name
+and you have the function name. Nothing too wild and crazy in the form
+function above, but there&#8217;s two key points:</p>
+
+<ul>
+<li>Line 3 shows you how you can detect when your function is being
+called from a VBO view.</li>
+<li>When your function is called from VBO, it will pass you the nid&#8217;s of
+the selected nodes in the array $context[&#8216;selected&#8217;]</li>
+</ul>
+
+
+<p>Next, we define our submit function (you can define a validate function
+if needed). Our submit function will pull the important data from the
+submitted form and assemble it into a concise array that our action can
+use. Here&#8217;s our submit function:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action_submit($form, $form_state) {
+  //We're setting all nodes to the same weight
+  if (is_numeric($form_state['values']['node_gallery_change_image_weight_action'])) {
+    $weight = $form_state['values']['node_gallery_change_image_weight_action']; 
+  }
+  //VBO is passing us a set of nids
+  else {
+    foreach ($form_state['values']['node_gallery_change_image_weight_action'] as $nid =&gt; $val) {
+      $weight[$nid] = $val['weight'];
+    }
+  }
+  return array('imageweight' =&gt; $weight);
+}</code></pre>
+</div>
+
+
+<p>The key here is that if we are passed in the &#8220;single value&#8221; form, we
+stick the value into the variable $weight as a simple scalar. If we are
+passed in form data from the VBO &#8220;multi value&#8221; form, then $weight
+becomes an associative array where the key is the nid, and the value is
+the weight for that node.</p>
+
+<p>Finally, we define our action function. Our
+action is pretty simple, because it will only be called with one node
+and one value. This is a key thing to remember when writing code for VBO
+- even though you are working with batches of nodes, VBO is essentially
+one big loop around the actions &#8211; it executes the action once for each
+node. So, in our action, we simply check to see if the value of the
+$context[&#8216;imageweight&#8217;] index that we passed from our submit function is
+an integer or an array, and perform the correct operation on the node to
+assign it it&#8217;s new weight. Once this function returns, VBO will call
+$node->save for us.</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action(&amp;$node, $context = array()) {
+  if (in_array($node-&gt;type, (array)node_gallery_get_types('image'))) {
+    //All nodes are set to the same weight
+    if (is_numeric($context['imageweight'])) {
+      $node-&gt;weight = $context['imageweight'];
+    }
+    //VBO is sending us a list of nodes to modify with different weights
+    else {
+      $node-&gt;weight = $context['imageweight'][$node-&gt;nid];
+    }
+  } 
+}</code></pre>
+</div>
+
+
+<p>While not always obvious, there&#8217;s not too many bulk operation conditions
+that VBO can&#8217;t handle. Hats off to
+<a href="http://drupal.org/user/48424">infojunkie</a> for writing such a helpful
+module that is also easily integrated with!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-04T00:00:00-06:00" pubdate data-updated="true">Feb 4<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/code/'>Code</a>, <a class='category' href='/blog/categories/drupal/'>Drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2010/02/03/hiphop-php-and-drupal" title="Previous Post: HipHop PHP and Drupal">&laquo; HipHop PHP and Drupal</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features" title="Next Post: Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features">Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations';
+        var disqus_url = 'http://sysadminsjourney.com/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

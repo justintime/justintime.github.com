@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Drupal, meet Hudson; Hudson, Drupal... - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="At $work, we use Hudson extensively, and it
+rocks. For those who don&#8217;t know already, Hudson is an implementation of
+Continuous Integration
+that &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2010/01/20/drupal-meet-hudson-hudson-drupal">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+      
+        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
+      
+      <h1 class="entry-title">Drupal, Meet Hudson; Hudson, Drupal...</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-20T00:00:00-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>At $work, we use <a href="https://hudson.dev.java.net/">Hudson</a> extensively, and it
+rocks. For those who don&#8217;t know already, Hudson is an implementation of
+<a href="http://en.wikipedia.org/wiki/Continuous_integration">Continuous Integration</a>
+that is remarkably easy to use. I wrote about my <a href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2">first impressions of Hudson</a>
+previously. Hudson&#8217;s original audience was Java developers using Ant or Maven,
+but with plugins and some hacking, we can make it do some things for us as
+module contributors to Drupal.  I&#8217;ve been cutting my Drupal developer teeth by
+working pretty intensively on a few modules for Drupal - <a href="http://drupal.org/project/node_gallery">Node Gallery</a> and it&#8217;s derivatives. We are
+hitting a crucial point in development where we are switching from the old way
+of defining fields on a node to using CCK. While the module is still in alpha,
+it&#8217;s still in use by quite a few sites - as of this writing it&#8217;s number 465 on
+the list of Drupal modules. Not exactly the spotlight, but we can&#8217;t go
+breaking things without making people angry either. I figured this would be
+the perfect place for Hudson - it will let you know when you break something.</p>
+
+<h3>Pieces of the Puzzle</h3>
+
+<p>Here&#8217;s the pieces you&#8217;ll need:</p>
+
+<ul>
+<li>A linux server with Java, a working Drupal install (that may get broken at times) and the cvs command-line utility.</li>
+<li>These Drupal modules installed and enabled: <a href="http://drupal.org/project/drush">drush</a>, <a href="http://drupal.org/project/coder">coder</a>, and optionally <a href="http://drupal.org/project/simpletest">simpletest</a>.</li>
+<li>Some time on your hands</li>
+</ul>
+
+
+<h3>The shell script</h3>
+
+<p>This is the most important piece of the setup. By utilizing Hudson&#8217;s
+environment variables, we can make this as portable as possible. By using the
+same script for all Hudson jobs, changing the script automatically changes all
+of our jobs at once. Let&#8217;s dive right in:</p>
+
+<div>
+  <pre><code class='bash'>#!/bin/bash
+#set -x
+
+PHP=/usr/bin/php
+DRUSH_PATH=/apps/drupal/drush
+DRUPAL_PATH=/apps/drupal/drupal_core
+MODULES_DIR=$DRUPAL_PATH/sites/ngdemo.sysadminsjourney.com/modules
+SITE=&quot;http://ngdemo.sysadminsjourney.com/&quot;
+
+DRUSH=&quot;$PHP $DRUSH_PATH/drush.php -n -r $DRUPAL_PATH -i $DRUPAL_PATH -l $SITE&quot;
+EXITVAL=0
+
+# Check our syntax
+PHP_FILES=`/usr/bin/find $WORKSPACE -type f -exec grep -q '&lt;?php' {} \; -print`
+for f in $PHP_FILES; do
+  $PHP -l $f
+  if [ $? != 0 ]; then
+    let &quot;EXITVAL += 1&quot;
+    echo &quot;$f failed PHP lint test, not syncing to ngdemo website.&quot;
+    exit $EXITVAL
+  fi
+done
+
+#Install the files
+/usr/bin/rsync -a --delete $WORKSPACE/* $MODULES_DIR/$JOB_NAME
+
+#Run update.php
+$DRUSH updatedb -q --yes
+
+#Run coder
+CODER_OUTPUT=`$DRUSH coder no-empty`
+if [ -n &quot;`echo $CODER_OUTPUT | grep $JOB_NAME`&quot; ]; then
+  $DRUSH coder no-empty
+  echo &quot;Coder module reported errors.&quot;
+  let &quot;EXITVAL += 1&quot;
+fi
+
+#Run potx
+cd $MODULES_DIR/$JOB_NAME
+../potx/potx-cli.php
+if [ $? != 0 ]; then
+  let &quot;EXITVAL += 1&quot;
+  echo &quot;POTX failed.&quot;
+fi
+if [ -e $MODULES_DIR/$JOB_NAME/general.pot ]; then
+  cp $MODULES_DIR/$JOB_NAME/general.pot $MODULES_DIR/../files/$JOB_NAME.pot
+fi
+
+exit $EXITVAL</code></pre>
+</div>
+
+
+<p>Lines 14 through 23 find all files in $WORKSPACE (which is
+set by Hudson) that have the &#8216;must** name your Hudson project the same as the
+module name. Also note that your Hudson user needs to have write access to the
+specific module directory that it&#8217;s installing. Line 29 runs drush so that it
+invokes update.php, and answers yes to all questions. Lines 32 through 37 runs
+the default code review from the coder module. You will have had to set this
+up initially via the web interface. It then scans through that output looking
+for any complaints about our $JOB_NAME, and if found, prints it to stdout and
+increments our exit value by 1. Note we don&#8217;t exit here, as it&#8217;s a non-fatal
+error. However, Hudson will treat it as a failed build and email everyone
+about it. Lines 40 through 48 runs the Translation Template Extractor command
+line utility against our module. It then copies the general.pot to the files
+directory. Again, the user running Hudson will need write access for this to
+work properly. If the potx-cli.php script should exit uncleanly, we increment
+our exit value by one. Last in my script, we simply exit with whatever value
+we have ended up with at this point. Again, if Hudson sees anything other than
+a zero, it will email everyone about it. Since the modules I&#8217;m working on
+don&#8217;t have Simpletest tests ready yet, I don&#8217;t run them in this script.
+However, it&#8217;s on the horizon, and can be ran easily using run-tests.sh. Note
+that there is <a href="http://drupal.org/node/602332">a patch</a> that will cause run-
+tests.sh to output it&#8217;s results in a JUnit style output, which Hudson
+understands fully. If you implement this, I strongly recommend applying that
+patch.</p>
+
+<h3>Hudson Setup</h3>
+
+<p>Now that we have our script ready, we need to setup our Hudson job. Note that
+installing Hudson itself is outside the scope of this article - it&#8217;s
+refreshingly easy and doesn&#8217;t need repeating here. There are two things you
+must do before creating the build task. First, setup your &#8220;E-mail
+Notification&#8221; section according to your mail server at
+http://myhudsonserver:8080/configure. Also, you will need to install the &#8220;URL
+Change Trigger&#8221; plugin by navigating to
+http://myhudsonserver:8080/pluginManager/available. Once you install that
+plugin, create a new job. In my case, the job was named &#8216;node_gallery&#8217;, since
+that&#8217;s the name of the Drupal module I was working with. Select &#8216;Build a free-
+style software project&#8217; when asked. Under the &#8220;Source Code Management&#8221;
+section, select &#8220;CVS&#8221;, and then fill in the CVSROOT of the project you&#8217;re
+working with. In my case, it was
+&#8216;:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib&#8217;. Next, fill
+in the path to the module in the &#8220;Module(s)&#8221; form - for me it&#8217;s
+&#8216;contributions/modules/node_gallery/&#8217;. If you&#8217;re working with CVS HEAD, leave
+the Branch field empty, otherwise type in the branch name there.
+<strong>IMPORTANT:</strong> to avoid abusing Drupal.org&#8217;s already overloaded CVS server
+with cvs logins once every 5 minutes, we will point Hudson instead to the RSS
+feed for the CVS log messages. Make sure &#8220;Poll SCM&#8221; is unchecked, and check
+&#8220;Build when a URL&#8217;s content changes&#8221;. To obtain the URL, you need the node id
+of your project. There&#8217;s many ways to do this, but you can find it by going to
+the project&#8217;s Drupal.org page and click on &#8220;View CVS Messages&#8221;. From that
+page, click the orange RSS icon at the bottom left of that page. Copy and
+paste that URL into the URL field in Hudson. Under the Build section, click
+&#8220;Add build step&#8221;, and select &#8220;Execute Shell&#8221;. In the resulting &#8220;Command&#8221;
+textarea, type the full path to the shell script we setup above. The final
+section, &#8220;Post-build actions&#8221; is up to you, but you&#8217;ll likely want to enable
+email notifications. Place a checkmark in the &#8220;Email Notification&#8221; box, and
+type in the email addresses of the desired recipients. Click Save, and you&#8217;re
+done! Hudson will start doing a CVS checkout of your project, and will start
+running tests on it. It will email you once anything goes wrong, and will
+notify you again when the problem is resolved. It will only run these tests
+after someone commits code to CVS, so you will likely need to hit the &#8220;Build
+Now&#8221; link in the left nav a few times. We&#8217;ve really only scratched the surface
+of what Hudson can do. You can track performance using JMeter, add all kinds
+of crazy plugins, require logins, the list goes on and on. While this helps,
+it&#8217;s still nowhere as helpful as a Ant/Maven job can be. Hopefully this
+article is enough to spark some interest from the Drupal community so that we
+can write some better continuous integration code in the future. Also, I&#8217;m far
+from being an expert on either Drupal or Hudson. I wrote my first code for
+Drupal in November of 2009, and I only tinker with Hudson on occasion at work.
+Hudson works so well, it&#8217;s one of those &#8220;set it and forget it&#8221; apps. I would
+love for readers to leave comments on any mistakes I might have made, or
+possible improvements I may have missed!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-20T00:00:00-06:00" pubdate data-updated="true">Jan 20<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/drupal/'>Drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/01/20/drupal-meet-hudson-hudson-drupal" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/01/20/drupal-meet-hudson-hudson-drupal" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/12/29/zfs-trenches-presentation-lisa-09" title="Previous Post: ZFS in the Trenches presentation at LISA 09">&laquo; ZFS in the Trenches presentation at LISA 09</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form" title="Next Post: Display a CCK Filefield or Imagefield Upload Widget on Your Own Custom Form">Display a CCK Filefield or Imagefield Upload Widget on Your Own Custom Form &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2010/01/20/drupal-meet-hudson-hudson-drupal';
+        var disqus_url = 'http://sysadminsjourney.com/content/2010/01/20/drupal-meet-hudson-hudson-drupal';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

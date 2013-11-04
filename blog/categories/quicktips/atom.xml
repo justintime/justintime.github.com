@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: QuickTips | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/quicktips/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2012-12-11T08:49:00-06:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[QuickTip: Make life easier with ssh-copy-id]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id"/>
+    <updated>2009-11-12T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/11/12/quicktip-make-life-easier-with-ssh-copy-id</id>
+    <content type="html"><![CDATA[<p>How many times have you ran through this series of events?
+<div>
+  <pre><code class='console'>$ cat ~/.ssh/id_dsa.pub
+...copy output to clipboard...
+$ ssh myhost
+...enter password...
+myhost$ vi ~./ssh/authorized_keys
+...paste public key and save...
+myhost$ exit</code></pre>
+</div>
+
+Thanks to bash's tab completion, I
+happened upon <strong>ssh-copy-id</strong>. Instead of all that above, just do this:
+<div>
+  <pre><code class='console'>$ ssh-copy-id myhost
+...enter password...</code></pre>
+</div>
+
+You're done!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Set it and forget it: Tether your Windows Mobile 6 Phone to Linux]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux"/>
+    <updated>2008-09-06T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-to-linux</id>
+    <content type="html"><![CDATA[<p>I have a love/hate relationship with my phone - an HTC PPC6800. I can't live
+without it - I can check my work email from anywhere, and surf the web. While
+I've tried many PDA's through the years, none of them have stuck, because I
+got tired of lugging them around. I <strong>always</strong> have my phone with me, so
+therefore my smartphone has made me much more organized. My wife loves it
+because I can remember all the upcoming appointments. Yet, I hate it. It's UI
+is horrible. It locks up and needs rebooted, and I feel dirty using a M$
+product. Well, I found one more reason to like it. I can tether my Ubuntu
+laptop to my phone and get Internet access from just about anywhere. This
+howto is for Ubuntu, but it should work for any distro that uses bluez-utils.
+Note that I briefly tried to get my laptop tethered via USB, but I found
+several comments that it wouldn't work without a custom kernel module.
+Bluetooth is easier, works out of the box, and is much cooler besides ;-)
+First things first, let's install the prerequisites:</p>
+
+<pre><code>sudo apt-get install bluez-utils bluetooth bluez-gnome bluez-hcidump
+</code></pre>
+
+<p>Next, enable the bluetooth applet in Gnome. Navigate to
+"System->Preferences->BlueTooth Preferences". On the "Devices" tab, click
+"Other devices can connect". Now we need to pair your phone to your PC. From
+your phone, click Start->Settings. Click on the Connections tab, and click the
+Bluetooth icon. Click "Add new device..." and choose the entry for your
+computer from the list. You will be asked for a passcode and when you enter it
+on your phone, the bluetooth applet will pop up saying that your phone is
+trying to connect. Click on the ballon and enter the same passcode.
+Congratulations, you have paired your phone to your PC! Now, let's find the
+hardware address of your phone:</p>
+
+<pre><code>sudo hcitool scan
+</code></pre>
+
+<p>Document the 12 digit hex address somewhere, we'll need it later. Now, open up
+<strong>/etc/default/bluetooth</strong> in your favorite text editor. Find the line that
+states:</p>
+
+<pre><code>PAND_ENABLED=0
+</code></pre>
+
+<p>and change the zero to a one like so:</p>
+
+<pre><code>PAND_ENABLED=1
+</code></pre>
+
+<p>Next, find the line which looks like:</p>
+
+<pre><code>PAND_OPTIONS=""
+</code></pre>
+
+<p>and change that to:</p>
+
+<pre><code>PAND_OPTIONS="--persist --connect XX:XX:XX:XX:XX:XX --role=PANU \
+ --devup /etc/bluetooth/pan/dev-up --devdown /etc/bluetooth/pan/dev-down"
+</code></pre>
+
+<p>changing the XX's to the hardware address of your phone. Now, let's run the
+following to create the scripts we need: <div>
+  <pre><code class='console'>sudo sh -c
+'mkdir -p /etc/bluetooth/pan &amp;amp;&amp;amp; \ echo &quot;iface bnep0 inet dhcp&quot; &gt;&gt;
+/etc/network/interfaces &amp;amp;&amp;amp; \ for i in up down; do touch
+/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo
+&quot;#!/bin/bash&quot; &gt; /etc/bluetooth/pan/dev-$i echo &quot;/sbin/if$i bnep0&quot; &gt;&gt;
+/etc/bluetooth/pan/dev-$i done &amp;amp;&amp;amp; \ /etc/init.d/networking restart &amp;amp;&amp;amp; \
+/etc/init.d/bluetooth restart'</code></pre>
+</div>
+ Finally, on your phone click
+Start->Programs->Internet Sharing. Select "Bluetooth PAN" on the PC Connection
+drop-down, and select the appropriate WAN Network Connection. One more note
+before you're off and surfing the 'net on your tethered phone: your bluetooth
+connection can't be managed by NetworkManager because bluez-utils doesn't make
+use of DBUS. So, in order to use your bluetooth connection, right click on
+your Network Manager icon, and select "Enable Networking" to disable
+NetworkManager. When you're done, right click and reselect "Enable Networking"
+to switch things back. Okay, that's out of the way. Click on "Connect" on your
+phone. As your phone is connecting, your Linux box will see your phone, and
+connect to it. Once the connection is established, your Linux box will get a
+DHCP-assigned IP from your phone. To verify all this, run the following
+command:</p>
+
+<pre><code>/sbin/ifconfig bnep0
+</code></pre>
+
+<p>You should see the interface, and see that it's been assigned an IP. After you
+have the address, you can freely browse the Internet. To disconnect, simply
+click "Disconnect" on your phone. Don't forget to re-enable networking via
+NetworkManager. Props go out to the following places in helping me determine
+how to do this in the first place:</p>
+
+<ul>
+<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812's post in the Ubuntu forums</a></li>
+<li><a href="http://bluez.sourceforge.net/contrib/HOWTO-PAN">The bluez-utils howto</a></li>
+<li>The pand manpage, because I always RTFM ;-)
+Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Use GMail as an SMTP relay using SSMTP]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/09/01/use-gmail-smtp-relay-using-ssmtp"/>
+    <updated>2008-09-01T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/09/01/use-gmail-as-an-smtp-relay-using-ssmtp</id>
+    <content type="html"><![CDATA[<p>On some of your home workstations, and especially on a laptop,
+setting up a full-blown SMTP server such as Postfix, Sendmail, or
+Exim might be overkill.  Follow the jump to learn how to setup the
+lightweight ssmtp to relay all outbound mail through your GMail
+account by using Gmail as a smarthost. SSMTP is meant to be a
+no-frills, secure, and lightweight replacement for a full-blown
+MTA. Personally, I feel it's best use is on a laptop where you're
+moving around between networks a lot, and need to send outbound
+emails from cron or other shell scripts. By setting up SSMTP, it
+doesn't matter where you are, sending mail will be sent out over
+encrypted SMTP to Google's gmail servers. After handing it off,
+Google's servers do all the routing for you. Setting up SSMTP is
+quick and easy - let's get to it. On Ubuntu, run:
+<div>
+  <pre><code class='console'># sudo apt-get install ssmtp mailx</code></pre>
+</div>
+
+Now, we just need to configure SSMTP. Open up /etc/ssmtp/ssmtp.conf
+in your favorite editor, and add or update the following lines:
+<div>
+  <pre><code class='properties'>#The following line redirects mail to root to your gmail account root=myemail@gmail.com
+mailhub=smtp.gmail.com:587
+UseSTARTTLS=yes
+UseTLS=yes
+AuthUser=myemail@gmail.com
+AuthPass=mypassword</code></pre>
+</div>
+</p>
+
+<p>That's it! Now, let's try testing it:
+<div>
+  <pre><code class='console'>$ echo &quot;This is a test message.&quot; | mailx -s 'Test Message' myemail@gmail.com</code></pre>
+</div>
+</p>
+
+<p>You should now be all setup
+and ready to go!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[User-level configuration of CPU speed in Gnome under Ubuntu]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/08/09/user-level-configuration-cpu-speed-gnome-under-ubuntu"/>
+    <updated>2008-08-09T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/08/09/user-level-configuration-of-cpu-speed-in-gnome-under-ubuntu</id>
+    <content type="html"><![CDATA[<p>When I ran Fedora on my laptop, I loved how I could manually set
+the CPU speed in Gnome using the "CPU Frequency Scaling Monitor"
+applet.  I noticed that I could not do this under Ubuntu (you can
+monitor speed, but you can't change it). It's actually a feature,
+not a bug.  In order to change CPU frequency, the binary needs to
+be SUID, which Ubuntu doesn't enable by default.  In order to
+change this behavior, run the following:</p>
+
+<pre><code>sudo dpkg-reconfigure gnome-applets
+</code></pre>
+
+<p>Answer "Yes" to the question regarding cpufreq-selector.  You will
+immediately get the ability to change your CPU frequency - no
+reboot, no restart of Gnome, not even the applet needs restarted!</p>
+]]></content>
+  </entry>
+  
+</feed>

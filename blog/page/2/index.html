@@ -1,0 +1,1125 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="For those who might not know, Pantheon
+Mercury is: &#8230; a drop-in replacement for your Drupal website hosting service that
+delivers break-through &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/blog/page/2/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/04/12/new-linode-stackscript-pantheon-mercury-high-performance-drupal-10-minutes-or-less">New Linode StackScript: Pantheon Mercury (High Performance Drupal in 10 Minutes or Less)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-04-12T00:00:00-05:00" pubdate data-updated="true">Apr 12<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>For those who might not know, <a href="http://www.getpantheon.com/mercury/what-is-mercury">Pantheon
+Mercury</a> is:</p>
+
+<blockquote><p>&#8230; a drop-in replacement for your Drupal website hosting service that
+delivers break-through performance. Mercury can serve two-hundred times more
+pages per second and generate pages three times faster than standard hosting
+services.</p></blockquote>
+
+<p>Mercury achieves this by using open-source technologies like so many
+ingredients of a complex dish - a little <a href="http://varnish-%0Acache.org/wiki/LoadBalancing">Varnish</a> here, a dash of
+<a href="http://memcached.org/">Memcached</a> there, a hint of <a href="http://php.net/manual/en/book.apc.php">the Alternative PHP
+Cache</a>, a healthy dose of
+<a href="http://tomcat.apache.org">Tomcat</a> and <a href="http://lucene.apache.org/solr/">Solr</a>,
+all based upon the <a href="http://fourkitchens.com/pressflow-makes-drupal-%0Ascale">Pressflow</a> distribution of <a href="http://drupal.org">Drupal</a>. None of it is anything you
+couldn&#8217;t do yourself &#8211; many before <a href="http://www.chapterthree.com">Chapter
+Three</a> had done it actually. However, they were
+the first to tie it all together using
+<a href="http://trac.mcs.anl.gov/projects/bcfg2">BCFG2</a>, and release an Amazon EC2 AMI
+image of it. As word spread, many liked the idea of Mercury, but wanted to
+brew their own non-EC2 instance. While they <a href="http://groups.drupal.org/node/50408">posted a wiki
+article</a> on how to do it yourself, they
+went to work on native support for <a href="http://www.rackspace.com">RackSpace</a>. When
+I read <a href="http://www.chapterthree.com/blog/josh_koenig">Josh Koenig</a>&#8217;s post on
+the
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+blog stating <a href="http://blog.linode.com/2010/02/09/introducing-%0Astackscripts/#comment-40480?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">he wanted to bring Mercury to
+Linode</a>, I
+made a mental note. Some time passed, I became much more involved in Drupal,
+and I decided to volunteer to write the <a href="http://www.linode.com/stackscripts/view/?StackScriptID=353&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a>
+. Josh said okay, and put me in touch with <a href="http://www.chapterthree.com/blog/greg_coit">Greg
+Coit</a>, their resident sysadmin,
+and we went to work. Fast forward a couple weeks, and we&#8217;ve announced a beta!
+<a href="http://www.linode.com/stackscripts/view/?StackScriptID=353&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">The StackScript</a> is quite complete - it supports
+Ubuntu Jaunty and Karmic, and can use the current stable branch or the soon-
+to-be-released 1.1 development branch. Once Lucid is released, we&#8217;ll test to
+make sure it works there as well. I want to thank Greg for all his help. We
+found some bugs in Ubuntu, some quirks in the memcached init script, and fixed
+many bugs and added some features to <a href="https://edge.launchpad.net/pantheon/bcfg2">their BCFG2 bazaar
+repo</a>. Thanks also go out to Josh
+for his oversight and guidance. It was a great time, a great learning
+experience, and I came out of it with some new colleagues (and some free beers
+at <a href="http://sf2010.drupal.org">DrupalConSF</a>). Feel free to <a href="http://www.sysadminsjourney.com/category/linode">read up on my
+experiences with Linode</a>, and
+if you like what you see, click on <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">one of the many links to
+Linode</a>
+from my blog. If you sign up and stay a customer for 90 days (trust me, you
+will), I&#8217;ll get $20 credited to my account. Feel free to comment below about
+the StackScript and let me know about any issues you might find.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump">Tracking Drupal&#8217;s Outbound HTTP Requests Using Tcpdump</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-03-11T00:00:00-06:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>While working on tweaking performance for a client, I was able to
+shave 7 seconds of PHP execution time time off the homepage load.
+The cause was eventually tracked down to calls out to TinyURL for
+every node being rendered. The core problem came from the
+<a href="http://drupal.org/project/service_links">service links</a> module. We
+were able to fix it by disabling short URL&#8217;s in the module, but the
+problem has been addressed in the current pre-release 2.x branch by
+using caching. We might have ended up discovering this by disabling
+module after module one at a time, but that would have taken
+forever. In today&#8217;s world of API&#8217;s and social media, it&#8217;s very
+common for a module to make calls to outside websites. However,
+care should be taken by the module authors when coding in these
+features. In our example, each call to TinyURL was fairly fast (300
+- 400ms average), but on a homepage displaying 25 nodes, that adds
+over 7 seconds page load time. Think of the impact if TinyURL
+experienced a large slowdown, or even an outage? As far as I know,
+Drupal doesn&#8217;t give you a way out of the box to track such
+requests. However, using the tcpdump binary which is available on
+virtually all Unix variants, we can see exactly what&#8217;s happening.
+Note that you need root access to run tcpdump. Let&#8217;s say that the
+IP address of your primary interface is 10.0.0.1. By using this
+tcpdump command, we can see all outbound HTTP and HTTPS requests in
+real time:</p>
+
+<pre><code>tcpdump src host 10.0.0.1 and dst port 80 or dst port 443
+</code></pre>
+
+<p>If you don&#8217;t get any traffic after a few seconds, go hit your
+/cron.php page - this should generate some traffic like this for
+you to see:
+Here we can see that our host is making a bunch of outbound
+requests to master.drupal.org. This is because the &#8220;Update Status&#8221;
+module is checking to see what upgrades are available for us. What
+if you see traffic and don&#8217;t know what module is causing it? grep
+to the rescue! In order to find out which module was making the
+calls to TinyURL, we ran the following command:</p>
+
+<pre><code>grep -R 'tinyurl.com' /path/to/drupal/sites/all/modules/\*
+</code></pre>
+
+<p>This returned one hit, from
+/path/to/drupal/sites/all/modules/service_links/service_links.module.
+By disabling the short links feature within the module we decreased
+page load time by 7 seconds!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/25/register-free-drupalcon-tickets-drupalmodulescom">Register for Free DrupalCon Tickets From DrupalModules.com!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-25T00:00:00-06:00" pubdate data-updated="true">Feb 25<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Make sure you sign to <a href="http://drupalmodules.com/articles/drupalcon-2010-ticket-contest">win free tickets to DrupalCon SF
+2010</a> over at
+<a href="http://www.drupalmodules.com">DrupalModules.com</a>.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal">Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-24T00:00:00-06:00" pubdate data-updated="true">Feb 24<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
+build their own installation script by &#8220;stacking&#8221; previously existing scripts
+together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
+yourself, or publish it for the world to use. Deploying a distribution with a
+StackScript takes only about 5 minutes, afterwards you have a fully configured
+system with applications up and running. Here&#8217;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
+StackScript for RH Derivatives</a> deployment just
+before launch: <img src="/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+appear to prefer Ubuntu, and there&#8217;s good reason &#8211; it&#8217;s a great distribution.
+I run it on all my laptops and most of my desktops. However, I personally find
+it a bit too bleeding edge for my servers and prefer CentOS for the server
+room. Currently there are 16 StackScripts available for Ubuntu, with only 3
+available for CentOS. Well, after today, there&#8217;s now 6 for CentOS! After
+clicking the deploy button, you&#8217;ll have the images ready to go in less than a
+minute. Boot the config, and the StackScript will run on first boot - when
+it&#8217;s done, you&#8217;ll have a secured and configured LAMP stack,
+<a href="http://drupal.org/project/drush">drush</a> install, <a href="http://drupal.org">Drupal</a>
+install, and all updates applied via yum. I&#8217;ve published these StackScripts so
+that anyone with a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+can use them with their CentOS and Fedora installations:</p>
+
+<ul>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&#8217;s (of Linode) Bash Library for Ubuntu. You don&#8217;t use this script directly, it&#8217;s strictly for inclusion by other scripts.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=162">Drupal Library for RH Derivatives</a></strong>: This library provides two functions, install_drush and install_drupal.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&#8217;ll have a working Drupal installation up and running in about 5 minutes.
+If you use them and find any bugs or have any RH-based StackScripts you&#8217;d like
+made available, post a comment and I&#8217;ll see what I can do. In the interest of
+full disclosure, the links to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> in
+this article have a referral code in them that will give me $20 credit if you
+sign up and keep your account open for 90 days. If you like these
+StackScripts, please use my links to sign up for a Linode - you&#8217;ll wonder how
+you did without one!</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/22/sysadmin-humor">Sysadmin Humor</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00-06:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I laughed out loud when I saw this <a href="http://xkcd.com">XKCD</a> comic this morning:
+<img src="http://imgs.xkcd.com/comics/devotion_to_duty.png" alt="" /></p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features">Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-22T00:00:00-06:00" pubdate data-updated="true">Feb 22<span>nd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
+review</a>. I was
+talking to a co-worker (whom I converted to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> as
+well) about how I would pay double the amount to keep my
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+now that I know how much I use it. Don&#8217;t tell them that, they&#8217;re cheap :) If
+you find this article helpful (or my article about <a href="http://sysadminsjourney.com/content/2008/11/26/bringing-your-linode-%0Ahome-you">moving VM&#8217;s to and from
+Linode</a>), please consider clicking one of the links in this article to sign
+up for a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> -
+if you sign up for 90 days, I&#8217;ll get $20 credited to my account. I was setting
+up a second
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+that was to be a testing ground for some
+<a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>
+I&#8217;m working on. The new
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+will eventually replace my existing one. For whatever reason, the most recent
+version of CentOS they had available was 5.3. Not a big deal, I can &#8216;yum
+upgrade&#8217; up to 5.4 after installation. Well, after doing so, I found that a
+lot of features that I wanted had been stripped out. In Linode&#8217;s defense, it&#8217;s
+in their best interest to offer very stripped down images for their customers.
+The one feature I wanted that I couldn&#8217;t get enabled was SELinux, and simply
+installing the packages still wouldn&#8217;t let me use &#8216;setenforce 1&#8217; to get it
+turned on. My best guess as to why is that the Linode kernel didn&#8217;t support
+it, but I honestly didn&#8217;t troubleshoot it too much. I really wanted root LVM
+capabilities as well, so I decided that a full-on anaconda based installation
+was the way to go. Plus, I couldn&#8217;t find anything in the forums about it, so
+there was the lure of being the first to do it ;-) Well, thanks to the
+flexibility offered by
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>,
+not only can you do a anaconda-based installation (with optional Kickstart),
+but you can do so using the GUI over VNC if you&#8217;re so inclined!</p>
+
+<h3>Step 1: Setup Finnix</h3>
+
+<p>Finnix is the distro of Linode&#8217;s choice for &#8216;rescue&#8217; operations on your
+server. Think of it as a Swiss Army knife - it&#8217;s a very powerful tool that
+takes very little setup. For more on Finnix, checkout the <a href="http://library.linode.com/troubleshooting/finnix-recovery">Linode Library
+article</a>. First, we
+need to setup a very small, 20MB ext3 disk that will house our installation
+kernel and initrd. Set up another ext3 disk of 100MB to be mounted at /boot
+for PV-GRUB. Finally, setup your raw disk that will be used for the OS
+installation. Since we&#8217;ll be using LVM, you can easily add to and resize your
+disk later, so don&#8217;t overdo it. I went with 5GB for my root disk. If you&#8217;re
+following along, here&#8217;s what you should have: <img src="/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &#8220;Create a new
+configuration profile&#8221;, and type &#8220;Finnix Rescue&#8221; for the label. For the
+kernel, select &#8220;Recovery - Finnix (kernel)&#8221;. For /dev/xvda, select the
+&#8220;Recovery - Finnix (iso)&#8221;. For /dev/xvdb, select the &#8220;Centos 5.4 Install
+Disk&#8221;. For uncompressed initrd image, select &#8220;Recovery - Finnix (initrd).
+Leave the other settings at defaults, and save the profile. Here&#8217;s what it
+should look like: <img src="/assets/images/linode-finnix.png" alt="" /></p>
+
+<h3>Step 2: Upload the Xen-enabled Kernel and Initrd from the DVD</h3>
+
+<p>Next, boot Finnix from your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel. Click on the console tab, and launch the AJAX console. Once at
+the console, we need to mount our install disk, and fetch the xen-enabled
+kernel and initrd from your favorite mirror. Mount the installation disk,
+change directories, and download the files:</p>
+
+<pre><code>mount /dev/xvdb /mnt/xvdb 
+cd /mnt/xvdb
+for f in initrd.img vmlinuz; do
+wget http://mirror.unl.edu/centos/5.4/os/i386/images/xen/${f}
+done
+cd
+umount /mnt/xvdb
+</code></pre>
+
+<p>Now, shutdown Finnix from the
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel.</p>
+
+<h3>Step 3: Setup the CentOS configuration profile</h3>
+
+<p>Create a new profile, and name it CentOS 5.4. For the kernel, select &#8220;pv-grub-
+x86_32&#8221;. For /dev/xvda, select &#8220;CentOS 5.4 PV-GRUB Boot&#8221;. For /dev/xvdb choose
+&#8220;CentOS 5.4 OS Disk&#8221;. For /dev/xvdh, select our &#8220;CentOS 5.4 Install Disk&#8221;.
+Point the root device to a custom location: &#8220;/dev/mapper/VolGroup00-LogVol00&#8221;.
+Leave the rest as defaults, here&#8217;s a screenshot: <img src="/assets/images/linode-%0Acentos.png" alt="" /></p>
+
+<h3>Step 4: Boot the CentOS configuration profile and start the installation</h3>
+
+<p>Save the profile, and boot it. Note that it won&#8217;t boot automatically, we have
+to point GRUB in the right direction first. You&#8217;ll be greeted by a scary-
+looking &#8216;grubdom>&#8217; prompt. Now, we need to tell grub to boot our install
+kernel and initrd:</p>
+
+<pre><code>root (hd2)
+kernel (hd2)/vmlinuz
+initrd (hd2)/initrd.img
+boot
+</code></pre>
+
+<p>Note that if you want to do a kickstart install, you would append
+ks=http://my.com/this.ks to the kernel line above. More on this later. Once
+the kernel loads, you&#8217;ll be presented with the familiar anaconda text-based
+installer. Choose your language, and your installation type. I prefer HTTP
+from a mirror. If you choose to do the same, use the mirror hostname for the
+Web site name, and the path to the directory that contains all the release
+notes &#8211; usually it&#8217;s /centos/5.4/os/i386/. Anaconda will fetch the stage2
+image, then launch the installer. Here&#8217;s where it gets cool - it will give you
+a choice to &#8220;Start VNC&#8221;. If you choose this option, you can connect to your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+via VNC (note it launches on display 1, not 0), and complete the installation
+via a GUI. Install as you would any other CentOS installation. <strong>Make note of
+where your root directory is at.</strong> The installer may complain about your
+/dev/xvdh being a loop device, tell anaconda to ignore it. Exclude /dev/xvda
+from any partitioning, we&#8217;ll set that up manually later.</p>
+
+<h3>Step 5: Modify the CentOS configuration profile and start the operating</h3>
+
+<p>system</p>
+
+<p>Once you click the &#8220;Reboot&#8221; button on the installer, you&#8217;ll be disconnected
+from VNC. Your machine will be restarted, but it will stick at the grubdom
+prompt again - that&#8217;s okay. We&#8217;ll be stuck at the grubdom> prompt one more
+time - use this to tell it to boot CentOS using the boot partition the
+installer setup for us:</p>
+
+<pre><code>grubdom&gt; root (hd1,0)                                                          
+grubdom&gt; kernel (hd1,0)/vmlinuz-2.6.18-164.el5xen                              
+grubdom&gt; initrd (hd1,0)/initrd-2.6.18-164.el5xen.img                           
+grubdom&gt; boot
+</code></pre>
+
+<p>You will then boot into CentOS - exit the system settings GUI - you can run it
+again later by running system-config-securitylevel-tui. Now we need to setup
+our boot disk so that pv-grub knows how to boot our kernel so we&#8217;re not
+consistently prompted upon reboot.
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+uses PV-GRUB to boot our kernel, and it&#8217;s looking for a &#8216;boot&#8217; directory
+directly on /dev/xvda. For more details, <a href="http://www.linode.com/wiki/index.php/PV-GRUB#Partitioning">see the Linode
+Wiki</a>. Run this as
+root, and make sure your block devices are aligned with mine before
+copy/pasting:</p>
+
+<pre><code>mkdir /mnt/newboot
+mkfs.ext3 /dev/xvda
+mount /dev/xvda /mnt/newboot
+rsync -av /boot /mnt/newboot
+cd /mnt/newboot/boot
+ln -s . boot
+cd
+umount /mnt/newboot
+umount /boot
+e2label /dev/xvdb1 oldboot
+e2label /dev/xvda /boot
+</code></pre>
+
+<p>That&#8217;s it - reboot, and you should be up and running! You can create a LVM
+physical volume out of the old boot partition on /dev/xvdb1, or just leave it
+around unused.</p>
+
+<h3>Streamlining the process with Kickstart</h3>
+
+<p>We can use kickstart to <strong>really</strong> streamline the process. Follow steps 1, 2,
+and 3 above, but on step 4, replace the kernel line with this:</p>
+
+<pre><code>kernel (hd2)/vmlinuz ks=http://www.sysadminsjourney.com/assets/files/linode-minimal.ks
+</code></pre>
+
+<p>That&#8217;s it! The kickstart file handles partitioning, and setting up the right
+boot partition, as well as disabling unneeded services that you don&#8217;t need for
+a Linode. Make sure you check out the file
+http://www.sysadminsjourney.com/assets/files/linode-minimal.ks - your root password is there, change it immediately! Stay
+tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/04/assign-different-values-different-nodes-one-action-views-bulk-operations">Assign Different Values to Different Nodes via One Action in Views Bulk Operations</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-04T00:00:00-06:00" pubdate data-updated="true">Feb 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>The <a href="http://drupal.org/project/views_bulk_operations">Views Bulk
+Operations</a> module
+(a.k.a. VBO), is a godsend for busy <a href="http://drupal.org">Drupal</a> site
+administrators. Don&#8217;t just take my word for it -
+<a href="http://www.lullabot.com">Lullabot</a> wrote a chapter about it in
+<a href="http://oreilly.com/catalog/9780596515805/">O&#8217;Reilly&#8217;s Using Drupal</a>,
+it&#8217;s included in the <a href="http://openatrium.com/">Open Atrium Drupal
+distribution</a>, and it&#8217;s even used on
+<a href="http://drupal.org/node/520290">Drupal.org</a>! Out of the box, VBO does a
+lot to streamline the things you do everyday, so that you spend less
+time doing them. A perfect example is bulk content moderation - with a
+few clicks of the mouse, you can mark a huge amount of comments as spam.
+You can even enable batch processing with a single click of a mouse so
+that you can literally do thousands of these without timing out.</p>
+
+<p>VBO was
+attractive enough that we decided to offload the bulk/batch operations
+of <a href="http://drupal.org/project/node_gallery">Node Gallery</a> to VBO.
+Integration for the most part was surprisingly easy - VBO &#8220;speaks&#8221; in
+Drupal Actions, so by <a href="http://drupal.org/node/172152">writing actions</a>,
+we were writing integration with VBO.</p>
+
+<p>There&#8217;s one undocumented case
+where VBO can be used that was critical for us. Most VBO actions you
+will find perform one action to a set of nodes, one at a time. Often
+times, that one action is to set a value of some sort on said nodes. In
+the case of <a href="http://drupal.org/project/node_gallery">Node Gallery</a>, we
+wanted to be able to assign different weight values (used for sorting)
+to a bunch of nodes. The key here is that we aren&#8217;t assigning a value of
+&#8216;2&#8217; to all selected node&#8217;s weight, we want to assign a weight of 2 to
+node #1, 3 to node #2, 8 to node #3, and so on. While not
+straightforward, it&#8217;s definitely achievable.</p>
+
+<p>The general idea we&#8217;ll be
+taking is to have VBO display a list of nodes to the admin. The admin
+can place a checkmark next to the nodes that he wishes to change the
+weight on, then select &#8220;Change the image&#8217;s weight&#8221; from the action
+dropdown, and click submit. We will then draw a form that includes some
+summary information about the nodes, and a select box with the node&#8217;s
+current weight. The admin sets the weight he wants for each node, then
+clicks submit. VBO then takes over, assigning each node the proper
+weight. Let&#8217;s get into the code - first we implement
+hook_action_info(), telling Drupal that we have actions to provide:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+/**
+* Implementation of hook_action_info().
+*/
+function node_gallery_action_info() {
+  return array(
+    'node_gallery_change_image_weight_action' =&gt; array(
+      'description' =&gt; t('Change image weight (sort order)'),
+      'type' =&gt; 'node',
+      'behavior' =&gt; array('changes_node_property'),
+      'configurable' =&gt; TRUE,
+      'hooks' =&gt; array(
+        'node' =&gt; array('presave'),
+      ),
+    ),
+  );
+}</code></pre>
+</div>
+
+
+<p>The only real items of note in the hook above are setting &#8216;configurable&#8217;
+to true, and setting &#8216;behavior&#8217; to &#8216;changes_node_property&#8217;. Setting
+&#8216;configurable&#8217; allows us to display a custom form, and setting the
+behavior tells VBO that we&#8217;ll be modifying the node. In turn, VBO will
+call $node->save on each node after it&#8217;s been processed. Next, we
+define our configurable action&#8217;s form function:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action_form($context = array()) {
+  //We're being called from VBO - we can do extra validation
+  if ($context['view']-&gt;plugin_name == 'bulk') {
+    //@todo: Add imagefield support in our sort form, and theme it with draggable items
+    $sql = &quot;SELECT n.nid, n.title, ngi.weight FROM {node} n &quot; .
+            &quot;INNER JOIN {node_gallery_images} ngi ON n.nid = ngi.nid &quot; .
+            &quot;WHERE n.nid IN (&quot;. db_placeholders($context['selection']) .&quot;)&quot;;
+    $result = db_query($sql,$context['selection']);
+    $delta = count($context['selection']) &gt; 20 ? intval(count($context['selection'])/2) : 10;
+    $form['node_gallery_change_image_weight_action']['#tree'] = TRUE;
+    while ($image = db_fetch_object($result)) {
+      $form['node_gallery_change_image_weight_action'][$image-&gt;nid]['title'] = array(
+        '#type' =&gt; 'item',  
+        '#value' =&gt; $image-&gt;title,
+      );
+      $form['node_gallery_change_image_weight_action'][$image-&gt;nid]['weight'] = array(
+        '#type' =&gt; 'weight',
+        '#title' =&gt; t('Weight'),
+        '#default_value' =&gt; $image-&gt;weight,
+        '#delta' =&gt; $delta,
+      );
+    }
+  }
+  //We're called from a standard advanced action where we assign one weight to all nodes
+  else {
+    $form['node_gallery_change_image_weight_action'] = array(
+      '#type' =&gt; 'weight',
+      '#title' =&gt; t('Weight'),
+      '#description' =&gt; t('When listing images in a gallery, heavier items will sink at the lighter items will be positioned near the top'),
+      '#delta' =&gt; 10,
+    );
+    if (isset($context['imageweight'])) {
+      $form['node_gallery_change_image_weight_action']['#default_value'] = $context['imageweight'];
+    }
+  }
+  return $form;
+}</code></pre>
+</div>
+
+
+<p>To define your form function, simply append &#8216;_form&#8217; to your action name
+and you have the function name. Nothing too wild and crazy in the form
+function above, but there&#8217;s two key points:</p>
+
+<ul>
+<li>Line 3 shows you how you can detect when your function is being
+called from a VBO view.</li>
+<li>When your function is called from VBO, it will pass you the nid&#8217;s of
+the selected nodes in the array $context[&#8216;selected&#8217;]</li>
+</ul>
+
+
+<p>Next, we define our submit function (you can define a validate function
+if needed). Our submit function will pull the important data from the
+submitted form and assemble it into a concise array that our action can
+use. Here&#8217;s our submit function:</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action_submit($form, $form_state) {
+  //We're setting all nodes to the same weight
+  if (is_numeric($form_state['values']['node_gallery_change_image_weight_action'])) {
+    $weight = $form_state['values']['node_gallery_change_image_weight_action']; 
+  }
+  //VBO is passing us a set of nids
+  else {
+    foreach ($form_state['values']['node_gallery_change_image_weight_action'] as $nid =&gt; $val) {
+      $weight[$nid] = $val['weight'];
+    }
+  }
+  return array('imageweight' =&gt; $weight);
+}</code></pre>
+</div>
+
+
+<p>The key here is that if we are passed in the &#8220;single value&#8221; form, we
+stick the value into the variable $weight as a simple scalar. If we are
+passed in form data from the VBO &#8220;multi value&#8221; form, then $weight
+becomes an associative array where the key is the nid, and the value is
+the weight for that node.</p>
+
+<p>Finally, we define our action function. Our
+action is pretty simple, because it will only be called with one node
+and one value. This is a key thing to remember when writing code for VBO
+- even though you are working with batches of nodes, VBO is essentially
+one big loop around the actions &#8211; it executes the action once for each
+node. So, in our action, we simply check to see if the value of the
+$context[&#8216;imageweight&#8217;] index that we passed from our submit function is
+an integer or an array, and perform the correct operation on the node to
+assign it it&#8217;s new weight. Once this function returns, VBO will call
+$node->save for us.</p>
+
+<div>
+  <pre><code class='php'>&lt;?php
+function node_gallery_change_image_weight_action(&amp;$node, $context = array()) {
+  if (in_array($node-&gt;type, (array)node_gallery_get_types('image'))) {
+    //All nodes are set to the same weight
+    if (is_numeric($context['imageweight'])) {
+      $node-&gt;weight = $context['imageweight'];
+    }
+    //VBO is sending us a list of nodes to modify with different weights
+    else {
+      $node-&gt;weight = $context['imageweight'][$node-&gt;nid];
+    }
+  } 
+}</code></pre>
+</div>
+
+
+<p>While not always obvious, there&#8217;s not too many bulk operation conditions
+that VBO can&#8217;t handle. Hats off to
+<a href="http://drupal.org/user/48424">infojunkie</a> for writing such a helpful
+module that is also easily integrated with!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/03/hiphop-php-and-drupal">HipHop PHP and Drupal</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-03T00:00:00-06:00" pubdate data-updated="true">Feb 3<span>rd</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, <a href="http://www.facebook.com">Facebook</a> has <a href="http://developers.facebook.com/news.php?blog=1&amp;story=358">released HipHop
+PHP</a> - a PHP-to-C++
+converter. While the name is stupid, the idea is not. 100% of their developers
+know PHP, I would guess that less than 5% of them are proficient at C++. So,
+HipHop takes their PHP code, and converts it to compiled C++ &#8211; in turn, they
+get a huge boost in performance and get to keep their existing developers.
+HipHop is also it&#8217;s own webserver too - fun! My first thought was: I wonder
+what this could mean for Drupal? Well, <a href="http://fourkitchens.com/authors/david-timothy-strauss">David
+Struass</a>, a maintainer
+of <a href="http://fourkitchens.com/pressflow-makes-drupal-scale">Pressflow (a set of patches for Drupal performance and
+scalability)</a> put up a
+<a href="http://fourkitchens.com/blog/2010/02/03/making-drupal-pressflow-%0Amore-mundane">blog post</a> about what it would take for Pressflow and Drupal to become
+HipHop-friendly. Exciting times!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel">Apache Mod_proxy &#8216;[Error] (13)Permission Denied&#8217; Error on RHEL</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-02-01T00:00:00-06:00" pubdate data-updated="true">Feb 1<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Had an interesting issue today working on a mod_proxy setup of Apache
+forwarding requests in a reverse proxy setup to a backend Tomcat server. No
+matter what I did, I kept getting this in Apache&#8217;s error log:</p>
+
+<pre><code>[error] (13)Permission denied: proxy: AJP: attempt to connect to 10.x.x.x:7009 (virtualhost.virtualdomain.com) failed
+</code></pre>
+
+<p>I thought for sure it was proxy permissions, but nothing I did fixed the
+issue. Then it hit me: SELinux! Why I always think of SELinux last when it&#8217;s
+responsible for 90% of my problems, I&#8217;ll never know. SELinux on RHEL/CentOS by
+default ships so that httpd processes cannot initiate outbound connections,
+which is just what mod_proxy attempts to do. If this is your problem, you&#8217;ll
+see something like this in /var/log/audit/audit.log:</p>
+
+<pre><code>type=AVC msg=audit(1265039669.305:14): avc:  denied  { name_connect } for  pid=4343 comm="httpd" dest=7009 
+scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:port_t:s0 tclass=tcp_socket
+</code></pre>
+
+<p>To fix this, first test by setting the boolean dynamically (not permanent
+yet):</p>
+
+<pre><code> /usr/sbin/setsebool httpd_can_network_connect 1
+</code></pre>
+
+<p>If that works, you can set it so that the default policy is changed and this
+setting will persist across reboots:</p>
+
+<pre><code> /usr/sbin/setsebool -P httpd_can_network_connect 1
+</code></pre>
+
+<p>Hope this saves others some time!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/01/29/teaching-java-how-commit-suicide">Teaching Java How to Commit Suicide</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-01-29T00:00:00-06:00" pubdate data-updated="true">Jan 29<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At $work, we have a lot of java processes that are ran via cron and other
+wrappers that do some pretty critical tasks. The apps have been written so
+that the whole thing is wrapped in a try/catch that will call system.exit(1)
+should something not go right. Our wrapper scripts watch for a non-zero exit
+code, and alert Nagios if something went wrong. This works great except for
+when a VM encounters an outOfMemory exception (OOM). The Java VM attempts to
+continue on, but if the main thread hits this exception, the entire VM will
+exit. However, the application code that exits with a status of 1 never gets
+called, so the application ends up dying with a status of 0. Well, Sun (Oracle
+now I guess) gave us a new option in Java 6 that was backported to 1.4.2_12
+and up that allows us to tell Java to run a shell command when it encounters
+an OOM exception. By adding the option</p>
+
+<pre><code>-XX:OnOutOfMemoryError="kill -9 %p"
+</code></pre>
+
+<p>to our Java command line, the VM will execute a shell that calls the kill
+command, with an argument of the PID of the VM. The -9 option to kill will
+cause the VM to exit with a non-zero status, so that our wrappers will pick up
+the error and alert the right people. Note: this feature was never backported
+to Java5 - sorry!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It&#8217;s not you, it&#8217;s me: Call for Node Gallery co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
