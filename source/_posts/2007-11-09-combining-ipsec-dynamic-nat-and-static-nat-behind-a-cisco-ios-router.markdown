@@ -12,8 +12,7 @@ sharing: true
 footer: true
 ---
 Trying to combine IPSEC, dynamic NAT, & static NAT on a Cisco router? Check
-out [Cisco's article on how to do it](http://www.cisco.com/en/US/tech/tk583/tk
-372/technologies_configuration_example09186a0080094634.shtml) first. If that
+out [Cisco's article on how to do it](http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml) first. If that
 doesn't work and you're ready to drop kick the router out of the datacenter
 like I was, put away your black belt for a few minutes, and read about how I
 worked around a couple of bugs. Let's define our problem first.
@@ -26,9 +25,7 @@ but I did finally get it to work. The IOS I was using was 12.4(17). Now,
 here's my personal take on what I think happens that causes things to break.
 Again, I worked on this for 2 days straight, so I'm a little blurry on
 everything, but I do know that this method works. According to [ Cisco's artic
-le](http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_exa
-mple09186a0080094634.shtml), you can get these results by simply using route-
-maps on your static NAT commands. Almost, but not really. I found two other
+le](http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml), you can get these results by simply using route-maps on your static NAT commands. Almost, but not really. I found two other
 requirements had to be in place before the NAT's would work as they were
 supposed to:
 
@@ -37,15 +34,16 @@ supposed to:
 Step One: Configure Dynamic NAT We first need to setup an access list that
 will:
 
-  * **NOT NAT** packets from our host that needs static NAT applied.
-  * **NOT NAT** packets that traverse the VPN.
-  * **NAT** packets from our 192.168.11.0/24 subnet to everywhere else.
+    * **NOT NAT** packets from our host that needs static NAT applied.
+    * **NOT NAT** packets that traverse the VPN.
+    * **NAT** packets from our 192.168.11.0/24 subnet to everywhere else.
     
-    
+     ``` 
     ip access-list extended NoNat
      deny   ip host 192.168.11.5 any
      deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
      permit ip 192.168.11.0 0.0.0.255 any
+     ```
     
 
 Then, we use this command to setup dynamic NAT:
