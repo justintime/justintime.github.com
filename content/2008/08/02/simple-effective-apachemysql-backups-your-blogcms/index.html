@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Simple and Effective Apache+MySQL Backups for your Blog/CMS - SysAdmin's Journey</title>
+  <title>Simple and Effective Apache+MySQL Backups for Your Blog/CMS - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -57,9 +58,9 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,10 +80,6 @@
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Simple and Effective Apache+MySQL Backups for Your Blog/CMS</h1>
     
     
@@ -92,14 +89,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-02T00:00:00-05:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-02T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -113,16 +103,16 @@
 
 <p><strong>DISCLAIMER:</strong> I make no guarantees to the effectiveness of this script.  It works for me, and it should work for you, but it is up to you to test it!  Also note, you need to have SSH access and root privileges to your server.</p>
 
-<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp&#8217;s code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day&#8217;s state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
+<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp&rsquo;s code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day&rsquo;s state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
 
-<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can&#8217;t go changing your MySQL db names around very easily, but you can use symbolic links to make your document root&#8217;s have the same name as your DB.</p>
+<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can&rsquo;t go changing your MySQL db names around very easily, but you can use symbolic links to make your document root&rsquo;s have the same name as your DB.</p>
 
-<p>First, let&#8217;s setup our hypothetical webapp, which will be a wordpress blog.  We&#8217;ll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
+<p>First, let&rsquo;s setup our hypothetical webapp, which will be a wordpress blog.  We&rsquo;ll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
 
 <h3>Step One: Backup MySQL</h3>
 
 
-<p>First, let&#8217;s setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let&#8217;s create this script, and name it /apps/scripts/backupMySQL.sh:</p>
+<p>First, let&rsquo;s setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let&rsquo;s create this script, and name it /apps/scripts/backupMySQL.sh:</p>
 
 <pre>#!/bin/bash
 
@@ -245,12 +235,12 @@ chmod 700 /apps/scripts/backupMySQL.sh
 
 <p>to make it so only the root user can view the password.</p>
 
-<p>Now, let&#8217;s test the script.  Jump out to a command prompt, and run &#8216;/apps/scripts/backupMySQL.sh MySite_wp&#8217;.  Once that&#8217;s done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
+<p>Now, let&rsquo;s test the script.  Jump out to a command prompt, and run &lsquo;/apps/scripts/backupMySQL.sh MySite_wp&rsquo;.  Once that&rsquo;s done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
 
 <h3>Step Two: Backup the Document Root</h3>
 
 
-<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel&#8217;s site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
+<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel&rsquo;s site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
 
 <pre>
 #!/bin/bash
@@ -340,12 +330,12 @@ eval $CMD
 </pre>
 
 
-<p>Now, do a &#8216;chmod 755 /apps/scripts/rsyncBackup.sh&#8217; and let&#8217;s test it out.  Run &#8216;/apps/scripts/rsyncBackup.sh MySite_wp&#8217;.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
+<p>Now, do a &lsquo;chmod 755 /apps/scripts/rsyncBackup.sh&rsquo; and let&rsquo;s test it out.  Run &lsquo;/apps/scripts/rsyncBackup.sh MySite_wp&rsquo;.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
 
 <h3>Step Three: Tie It All Together</h3>
 
 
-<p>Now, for the easy part.  Let&#8217;s tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
+<p>Now, for the easy part.  Let&rsquo;s tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
 
 <pre>
 #!/bin/bash
@@ -359,7 +349,7 @@ done
 </pre>
 
 
-<p>Now, run &#8216;chmod 755 /etc/cron.daily/backupWebApps.sh&#8217;, and you will have a backup of your MySite_wp applicaton!  What&#8217;s best, is let&#8217;s say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
+<p>Now, run &lsquo;chmod 755 /etc/cron.daily/backupWebApps.sh&rsquo;, and you will have a backup of your MySite_wp applicaton!  What&rsquo;s best, is let&rsquo;s say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
 
 <pre>
 WEBAPPS=( MySite_wp MySite_Drupal )
@@ -371,7 +361,7 @@ WEBAPPS=( MySite_wp MySite_Drupal )
 <h3>Restoration</h3>
 
 
-<p>Heaven forbid, you&#8217;ve made a critical mistake, installed a bad plugin, or something else that&#8217;s horribly broken your MySite_wp install.  No fear!  Here&#8217;s how to restore it.</p>
+<p>Heaven forbid, you&rsquo;ve made a critical mistake, installed a bad plugin, or something else that&rsquo;s horribly broken your MySite_wp install.  No fear!  Here&rsquo;s how to restore it.</p>
 
 <pre>
 mkdir /apps/MySite_wp-broken && mv /apps/MySite_wp/* /apps/MySite_wp-broken/
@@ -403,19 +393,12 @@ rm /tmp/mysite.sql
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-02T00:00:00-05:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-02T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/mysql/'>MySQL</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/apache/'>apache</a>, <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/mysql/'>mysql</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -424,7 +407,7 @@ rm /tmp/mysite.sql
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/08/02/simple-effective-apachemysql-backups-your-blogcms" >Tweet</a>
   
   
   
@@ -452,20 +435,30 @@ rm /tmp/mysite.sql
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -473,7 +466,7 @@ rm /tmp/mysite.sql
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -488,7 +481,7 @@ rm /tmp/mysite.sql
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -536,7 +529,7 @@ rm /tmp/mysite.sql
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -554,7 +547,7 @@ rm /tmp/mysite.sql
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -570,7 +563,7 @@ rm /tmp/mysite.sql
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

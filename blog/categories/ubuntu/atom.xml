@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ubuntu | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: ubuntu | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/ubuntu/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -23,9 +23,9 @@ on how to re-enable Ctrl+Alt+Backspace in
 Jaunty</a> come through my feed reader. A little more research dug up
 this <a href="https://wiki.ubuntu.com/X/Config/DontZap">Ubuntu Wiki entry</a>
 proclaiming: a number of users have complained about accidentally restarting
-their X-Server Now, maybe I'm getting old, but I can't tell you how many times
-I've been saved a reboot by that handy Ctrl+Alt+Backspace shortcut. My rant?
-What in the hell are you trying to do that you "accidentally kill X" by
+their X-Server Now, maybe I&rsquo;m getting old, but I can&rsquo;t tell you how many times
+I&rsquo;ve been saved a reboot by that handy Ctrl+Alt+Backspace shortcut. My rant?
+What in the hell are you trying to do that you &ldquo;accidentally kill X&rdquo; by
 happening upon hitting that key combination? Was it really <strong>so</strong> many people
 that you had to kill the shortcut for <strong>everyone</strong>? There is a line that can
 be crossed when listening to your users, and I think Ubuntu has just crossed
@@ -39,19 +39,13 @@ it. What are your thoughts?</p>
     <updated>2009-01-06T00:00:00-06:00</updated>
     <id>http://sysadminsjourney.com/content/2009/01/06/list-installed-packages-in-ubuntu</id>
     <content type="html"><![CDATA[<p>I found this over at the <a href="http://ubuntuforums.org/showthread.php?t=261366">Ubuntu Forums</a>, but since it took me
-forever to find, I'm dropping notes here. In RPM-based distros, you can do
-'rpm -qa > somefile.txt'. In Debian/Ubuntu, do this:
-<div>
-  <pre><code class='bash'>dpkg --get-selections &gt; machineA.txt</code></pre>
-</div>
-</p>
+forever to find, I&rsquo;m dropping notes here. In RPM-based distros, you can do
+&lsquo;rpm -qa > somefile.txt&rsquo;. In Debian/Ubuntu, do this:
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">dpkg <span class="p">&amp;</span>ndash<span class="p">;</span>get-selections &gt; machineA.txt</code></pre></div></p>
 
 <p>In true apt fashion, if you
 then want to have machine B have all the software machine A has, do this:
-<div>
-  <pre><code class='bash'>dpkg --set-selections &amp;lt; machineA.txt &amp;amp;&amp;amp; dselect</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">dpkg <span class="p">&amp;</span>ndash<span class="p">;</span><span class="nb">set</span>-selections <span class="p">&amp;</span>lt<span class="p">;</span> machineA.txt <span class="p">&amp;</span>amp<span class="p">;&amp;</span>amp<span class="p">;</span> dselect</code></pre></div></p>
 
 <p>Enjoy!</p>
 ]]></content>
@@ -97,47 +91,37 @@ network if my eth0 interface has obtained an IP in the 10.0.0.0/8
 subnet. Without further ado, I present to you
 /etc/NetworkManager/dispatcher.d/99smartsynergy.sh:</p>
 
-<p>``` bash</p>
-
-<h1>!/bin/sh</h1>
-
-<p>IF=$1
+<pre><code class="bash">#!/bin/sh
+IF=$1
 STATUS=$2
-USER=justintime</p>
+USER=justintime
 
-<p>wait_for_process() {
+wait_for_process() {
   PNAME=$1
-  PID=<code>/usr/bin/pgrep $PNAME</code>
-  while [ -z "$PID" ]; do</p>
+  PID=`/usr/bin/pgrep $PNAME`
+  while [ -z "$PID" ]; do
+        sleep 3;
+        PID=`/usr/bin/pgrep $PNAME`
+  done
+}
 
-<pre><code>    sleep 3;
-    PID=`/usr/bin/pgrep $PNAME`
+start_synergy() {
+     wait_for_process nm-applet
+     /bin/su $USER -c "/usr/bin/synergyc $1"
+}
+
+if [ "$IF" = "eth0" ] &amp;&amp; [ "$STATUS" = "up" ]; then
+
+        #LAN Subnet at work
+        NETMASK="10.0.0.0/8"
+        if [ -n "`/sbin/ip addr show $IF to $NETMASK`" ]; then
+                ARGS="jentoo.bucklehq.com"
+                start_synergy $ARGS
+                exit $?
+        fi
+
+fi
 </code></pre>
-
-<p>  done
-}</p>
-
-<p>start_synergy() {</p>
-
-<pre><code> wait_for_process nm-applet
- /bin/su $USER -c "/usr/bin/synergyc $1"
-</code></pre>
-
-<p>}</p>
-
-<p>if [ "$IF" = "eth0" ] &amp;&amp; [ "$STATUS" = "up" ]; then</p>
-
-<pre><code>    #LAN Subnet at work
-    NETMASK="10.0.0.0/8"
-    if [ -n "`/sbin/ip addr show $IF to $NETMASK`" ]; then
-            ARGS="jentoo.bucklehq.com"
-            start_synergy $ARGS
-            exit $?
-    fi
-</code></pre>
-
-<p>fi
-```</p>
 
 <p>The <strong>IF</strong> and <strong>STATUS</strong> variables are those fed in from
 NetworkManager. The <strong>USER</strong> variable is the user that I run synergyc
@@ -185,13 +169,13 @@ something? What would you like to have it do? Comment away!</p>
     <id>http://sysadminsjourney.com/content/2008/12/16/use-lvm-on-an-installation-of-ubuntu</id>
     <content type="html"><![CDATA[<p>RHEL/CentOS has had support for LVM in setup for quite some time now, but for
 whatever reason, Ubuntu has been slow at adopting support for LVM at
-installation. Usually, I just grumble and move on with ext3 -- not today.
-Convinced that I couldn't be the only person wanting LVM support, I set out to
-do just that. Luckily, it wasn't hard at all! As of Intrepid (8.10), the
+installation. Usually, I just grumble and move on with ext3 &ndash; not today.
+Convinced that I couldn&rsquo;t be the only person wanting LVM support, I set out to
+do just that. Luckily, it wasn&rsquo;t hard at all! As of Intrepid (8.10), the
 installer has basic support for LVM in the disk partitioner part of the
-installation. It's not pretty, but it works. The key is that the LVM binaries
-aren't installed into the image, so the installer won't detect the presence of
-the LVM PV's, VG's, and LV's. Here's how to a) create a new LVM setup during
+installation. It&rsquo;s not pretty, but it works. The key is that the LVM binaries
+aren&rsquo;t installed into the image, so the installer won&rsquo;t detect the presence of
+the LVM PV&rsquo;s, VG&rsquo;s, and LV&rsquo;s. Here&rsquo;s how to a) create a new LVM setup during
 installation, and b) how to use an existing LVM setup during installation.</p>
 
 <h3>Pre-installation Common Steps</h3>
@@ -200,29 +184,29 @@ installation, and b) how to use an existing LVM setup during installation.</p>
 
 <ul>
 <li>Boot into the Live CD mode - not the direct installation.</li>
-<li>Once you're looking at your desktop, we need to install LVM. Hit <strong>Alt+F2</strong>, and type in <strong>gnome-terminal</strong>, hit the <strong>OK</strong> button.</li>
-<li>At the terminal, type <strong>sudo apt-get install lvm2</strong>. Note that this installs the binaries into the ramdisk, not your final installation. We'll need to install LVM to the hard drive later.</li>
+<li>Once you&rsquo;re looking at your desktop, we need to install LVM. Hit <strong>Alt+F2</strong>, and type in <strong>gnome-terminal</strong>, hit the <strong>OK</strong> button.</li>
+<li>At the terminal, type <strong>sudo apt-get install lvm2</strong>. Note that this installs the binaries into the ramdisk, not your final installation. We&rsquo;ll need to install LVM to the hard drive later.</li>
 <li>Once installed, we need to load the device mapper module into the kernel: <strong>sudo modprobe dm-mod</strong>
-If you're setting up LVM from scratch, continue with <strong>New LVM Setup</strong> below.
+If you&rsquo;re setting up LVM from scratch, continue with <strong>New LVM Setup</strong> below.
 Otherwise, skip to <strong>Use an Existing LVM Setup</strong> further down.</li>
 </ul>
 
 
 <h3>New LVM Setup</h3>
 
-<p>Creating LVM setups from scratch is not a "cookie cutter" operation,
-everyone's setup will be different. If you're trying to do LVM on
-installation, you likely already know what you're doing here. However, your
+<p>Creating LVM setups from scratch is not a &ldquo;cookie cutter&rdquo; operation,
+everyone&rsquo;s setup will be different. If you&rsquo;re trying to do LVM on
+installation, you likely already know what you&rsquo;re doing here. However, your
 general steps should be something like:</p>
 
 <ul>
 <li>Use <strong>sudo fdisk /dev/sda</strong> to setup your Linux boot partition and LVM (type 8e) partition(s)</li>
 <li>Update the kernel with the new partitions by running <strong>sudo partprobe</strong>.</li>
 <li>I recommend using ext2 on your boot partition. If boot will reside on partition 1, then do a <strong>sudo mkfs.ext2 /dev/sda1</strong> to format the partition with Ext2.</li>
-<li>Create the physical volume(s) (PV's) on the partitions of type 8e by using <strong>sudo pvcreate /dev/sdaN</strong>.</li>
+<li>Create the physical volume(s) (PV&rsquo;s) on the partitions of type 8e by using <strong>sudo pvcreate /dev/sdaN</strong>.</li>
 <li>Create a volume group (VG): <strong>sudo vgcreate MyLVMVG /dev/sdaN</strong></li>
-<li>Create logical volumes (LV's) within the group: <strong>sudo lvcreate -n root -L 5G MyLVMVG &amp;&amp; sudo lvcreate -n swap -L 1G MyLVMVG</strong></li>
-<li>Last, we need to put filesystems on the LV's. <strong>sudo mkfs.ext3 /dev/MyLVMVG/root &amp;&amp; mkfs.swap /dev/MyLVMVG/swap</strong>
+<li>Create logical volumes (LV&rsquo;s) within the group: <strong>sudo lvcreate -n root -L 5G MyLVMVG &amp;&amp; sudo lvcreate -n swap -L 1G MyLVMVG</strong></li>
+<li>Last, we need to put filesystems on the LV&rsquo;s. <strong>sudo mkfs.ext3 /dev/MyLVMVG/root &amp;&amp; mkfs.swap /dev/MyLVMVG/swap</strong>
 Skip the next section and continue on to <strong>Post-configuration Common Steps</strong>.</li>
 </ul>
 
@@ -230,16 +214,16 @@ Skip the next section and continue on to <strong>Post-configuration Common Steps
 <h3>Use an Existing LVM Setup</h3>
 
 <p>In my personal case, I was replacing CentOS with Ubuntu. I like CentOS for
-it's stability, but my laptop needs a more bleeding edge in order to run the
+it&rsquo;s stability, but my laptop needs a more bleeding edge in order to run the
 way I want it. I had setup an efficient LVM configuration already, I just
-wanted to reformat it during installation and use what I already had. Here's
+wanted to reformat it during installation and use what I already had. Here&rsquo;s
 what you need to do:</p>
 
 <ul>
-<li>If you don't already know it, we need the volume group (VG) names from our current setup. You can obtain that by running <strong>sudo vgscan | grep Found</strong>. In cases where CentOS/RHEL did the setup, you'll likely have a VG name of VolGroup00.</li>
-<li>We need to tell the running kernel to scan for and activate the current logical volumes (LV's). Using the VG from above, run <strong>sudo lvchange -ay VolGroup00</strong></li>
-<li>At this point, your LV's should be found and available to the kernel. You can verify this by running <strong>sudo lvdisplay | grep "LV NAME\|LV Status"</strong>
-At this point, your LV's will be visible to the installer. Continue on to
+<li>If you don&rsquo;t already know it, we need the volume group (VG) names from our current setup. You can obtain that by running <strong>sudo vgscan | grep Found</strong>. In cases where CentOS/RHEL did the setup, you&rsquo;ll likely have a VG name of VolGroup00.</li>
+<li>We need to tell the running kernel to scan for and activate the current logical volumes (LV&rsquo;s). Using the VG from above, run <strong>sudo lvchange -ay VolGroup00</strong></li>
+<li>At this point, your LV&rsquo;s should be found and available to the kernel. You can verify this by running <strong>sudo lvdisplay | grep &ldquo;LV NAME|LV Status&rdquo;</strong>
+At this point, your LV&rsquo;s will be visible to the installer. Continue on to
 <strong>Post-configuration Common Steps</strong> below.</li>
 </ul>
 
@@ -250,49 +234,40 @@ At this point, your LV's will be visible to the installer. Continue on to
 can type <strong>ubiquity</strong> in your already open terminal. Continue through the
 installer as normal, but make sure you select the <strong>Manual</strong> radio button on
 the <strong>Prepare Disk Space</strong> panel of the installer. When you click the
-<strong>Forward</strong> button, you'll be presented with a list of devices that includes
+<strong>Forward</strong> button, you&rsquo;ll be presented with a list of devices that includes
 your /dev/mapper/VG/LV entries. Go ahead and click on each one, click the
 <strong>Edit Partition</strong> button, and set the mountpoint. <strong>Write down or memorize
-what LV's are mounted where, and which partition is your boot partition</strong> --
-you'll need it later. Format them if you used an existing setup. Continue
+what LV&rsquo;s are mounted where, and which partition is your boot partition</strong> &ndash;
+you&rsquo;ll need it later. Format them if you used an existing setup. Continue
 through the installer just as you normally would, <strong>but make sure to click
-"Continue using the liveCD" at the end of installation!</strong> Failure to do so
-will give you a system that won't boot. Here's the only tricky part -- we need
+&ldquo;Continue using the liveCD&rdquo; at the end of installation!</strong> Failure to do so
+will give you a system that won&rsquo;t boot. Here&rsquo;s the only tricky part &ndash; we need
 to mount our partitions that we installed to, and install LVM into it. Since
-you wrote down everything above, it's not hard. First, we need to make a
+you wrote down everything above, it&rsquo;s not hard. First, we need to make a
 mountpoint, and mount our root LV to it:
-<div>
-  <pre><code class='bash'>sudo su - mkdir /mnt/chroot/
-mount /dev/VolGroup00/root /mnt/chroot</code></pre>
-</div>
-
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo su - mkdir /mnt/chroot/
+mount /dev/VolGroup00/root /mnt/chroot</code></pre></div>
 Now,
 everyone will need to do this for the /boot partition, but you may need to
 mount /var, /home/, etc., if you created separate mount points for them.
-Here's what I had to do in my particular setup:
-<div>
-  <pre><code class='bash'>mount /dev/VolGroup00/home /mnt/chroot/home
-mount /dev/sda3 /mnt/chroot/boot</code></pre>
-</div>
-</p>
+Here&rsquo;s what I had to do in my particular setup:
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mount /dev/VolGroup00/home /mnt/chroot/home
+mount /dev/sda3 /mnt/chroot/boot</code></pre></div></p>
 
 <p>Now, we need to chroot into our environment, and install LVM.
-<div>
-  <pre><code class='bash'>chroot /mnt/chroot apt-get update apt-get install lvm2
-exit</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">chroot /mnt/chroot apt-get update apt-get install lvm2
+<span class="nb">exit</span></code></pre></div></p>
 
 <p>At this point, you can restart the system by clicking
-System->Shut Down->Restart. If you're paranoid you can unmount the partitions,
+System->Shut Down->Restart. If you&rsquo;re paranoid you can unmount the partitions,
 but the live cd will do that for you.</p>
 
 <h3>Conclusion</h3>
 
-<p>While it's not that hard to use LVM during installation of Ubuntu, it's still
+<p>While it&rsquo;s not that hard to use LVM during installation of Ubuntu, it&rsquo;s still
 harder than it should be. It looks like something the Ubuntu devs are working
 on, as the ubiquity installer already has rudimentary support for it. Maybe
-9.04 will have it -- if not, check back here for a post on how to do it there
+9.04 will have it &ndash; if not, check back here for a post on how to do it there
 too!</p>
 ]]></content>
   </entry>
@@ -305,7 +280,7 @@ too!</p>
     <content type="html"><![CDATA[<p>After installing Ubuntu Intrepid on my laptop, I got a nastygram
 from IT saying that my laptop was tripping alerts from their NIDS. 
 They could tell me that it was an outbound SNMP request, but they
-couldn't supply the OID or anything.  Setting aside the fact that
+couldn&rsquo;t supply the OID or anything.  Setting aside the fact that
 the NIDS should be configured to disregard SNMP requests for this
 particular OID, I set forth to try and figure out what the heck was
 causing the traffic. After much tcpdumping, I finally found the
@@ -314,12 +289,10 @@ corresponds to a printer name.  At this point, I knew that it was
 coming from CUPS.  Now, one would think that there is a simple
 on/off switch in CUPS that you could use to disable SNMP scanning. 
 Nope!  You can remove the snmp binary from the CUPS distribution,
-but the next time CUPS is installed/upgraded, you'll be in the same
-boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:</p>
-
-<pre><code>#Address @LOCAL
-Address 127.0.0.1
-</code></pre>
+but the next time CUPS is installed/upgraded, you&rsquo;ll be in the same
+boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:
+    #Address @LOCAL
+    Address 127.0.0.1</p>
 
 <p>Lo and behold, it worked!  Instead of disabling SNMP scanning, I
 told CUPS to only scan the localhost IP instead of the entire local
@@ -329,14 +302,14 @@ alerts! <strong>Notes</strong> It turns out the snmp auto-detection stuff had
 been removed from previous versions of Ubuntu.  After much
 bemoaning from users, the package maintainers put it back in
 place.  This is why I have the issue on Intrepid and not on
-previous versions. I don't really know what the optimal solution is
+previous versions. I don&rsquo;t really know what the optimal solution is
 here.  The fact that my laptop was broadcasting SNMP requests to
 the entire corporate subnet is a little disturbing, if harmless. 
 However I see where it would be nice to have in a SOHO
-environment.  I personally would prefer a "disabled by default"
+environment.  I personally would prefer a &ldquo;disabled by default&rdquo;
 approach with a very simple checkbox mechanism to enable it, but
-I'm certainly biased. Anyways, hope this helps some people out
-there. When I ran into this issue, Google didn't have any help for
+I&rsquo;m certainly biased. Anyways, hope this helps some people out
+there. When I ran into this issue, Google didn&rsquo;t have any help for
 me.</p>
 ]]></content>
   </entry>

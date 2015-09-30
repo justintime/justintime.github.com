@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Apache, mod_ssl, and the Sun Fire T1000 - Part II - SysAdmin's Journey</title>
+  <title>Apache, Mod_ssl, and the Sun Fire T1000 - Part II - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="After recompiling Apache to take advantage of the T1000&#8217;s MAU as described in
+  <meta name="description" content="After recompiling Apache to take advantage of the T1000&rsquo;s MAU as described in
 part I, I set out to doing some testing. Something was amiss - &hellip;">
   
 
@@ -22,10 +22,11 @@ part I, I set out to doing some testing. Something was amiss - &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ part I, I set out to doing some testing. Something was amiss - &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ part I, I set out to doing some testing. Something was amiss - &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Apache, Mod_ssl, and the Sun Fire T1000 - Part II</h1>
     
     
@@ -93,33 +90,26 @@ part I, I set out to doing some testing. Something was amiss - &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2007-08-08T00:00:00-05:00" pubdate data-updated="true">Aug 8<span>th</span>, 2007</time>
+<time class='entry-date' datetime='2007-08-08T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>After recompiling Apache to take advantage of the T1000&#8217;s MAU as described in
+<div class="entry-content"><p>After recompiling Apache to take advantage of the T1000&rsquo;s MAU as described in
 <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000/">part I</a>, I set out to doing some testing. Something was amiss - using
 some clients, I would see SSL page load times of about .025 seconds, others
 took close to a second. The v210 consistently tested out at about .080 seconds
-per page. <strong>Do not use the worker MPM with the pkcs11 engine!!!!</strong> There is <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6540060">a bug on OpenSolaris.org</a> that <strong>will</strong> bite you. <a href="http://techadvise.com/2007/08/15/apache-mod_ssl-and-the-sun-fire-t1000-part-iii/">In part III I&#8217;ll compare performance of worker vs prefork on the T1000 that will follow up with this issue</a>. After a lot of Googling, I finally figured out what it was. The
-T1000&#8217;s MAU is only fast at doing RSA, and it generally sucks loudly when it
+per page. <strong>Do not use the worker MPM with the pkcs11 engine!!!!</strong> There is <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6540060">a bug on OpenSolaris.org</a> that <strong>will</strong> bite you. <a href="http://techadvise.com/2007/08/15/apache-mod_ssl-and-the-sun-fire-t1000-part-iii/">In part III I&rsquo;ll compare performance of worker vs prefork on the T1000 that will follow up with this issue</a>. After a lot of Googling, I finally figured out what it was. The
+T1000&rsquo;s MAU is only fast at doing RSA, and it generally sucks loudly when it
 tries to do anything with DH signing. <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6241300">Bug # 6241300 on OpenSolaris</a> confirmed the
-issue. If you limit mod_ssl&#8217;s CipherSuite to just RSA algorithms, performance
-is great. However, we&#8217;re ecommerce here, and we don&#8217;t want to turn away
-anyone. Especially if they&#8217;re trying to go SSL, which is generally reserved
+issue. If you limit mod_ssl&rsquo;s CipherSuite to just RSA algorithms, performance
+is great. However, we&rsquo;re ecommerce here, and we don&rsquo;t want to turn away
+anyone. Especially if they&rsquo;re trying to go SSL, which is generally reserved
 for registering and checkout. So I though to myself, why not try our best to
-use RSA with everyone, but if they can&#8217;t or won&#8217;t do it, then we fall back to
-DH and eat the performance hit? I read <a href="http://httpd.apache.org/docs/2.0/mod/mod_ssl.html#sslciphersuite">Apache&#8217;s documentation on the CipherSuite directive</a>
+use RSA with everyone, but if they can&rsquo;t or won&rsquo;t do it, then we fall back to
+DH and eat the performance hit? I read <a href="http://httpd.apache.org/docs/2.0/mod/mod_ssl.html#sslciphersuite">Apache&rsquo;s documentation on the CipherSuite directive</a>
 until I could recite it word-for-word from memory. No matter what I did, I
 could not get FireFox to negotiate RC4-MD5 if there were any 256bit
 ciphersuites offered. I found a nice online tool at
@@ -128,7 +118,7 @@ find out what other sites are offering for ciphersuites. Using Amazon.com as
 my model, I found that they were somehow forcing me to use RC4-MD5 as long as
 my browser supported it. Just as I was ready to throw in the towel, and give
 up, I found the <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslhonorcipherorder">SSLHonorCipherOrder</a> Apache directive. Yaayyyy!!! Crap! That feature
-was added in Apache 2.2 - we&#8217;re on 2.0. Before I get into the details, let me
+was added in Apache 2.2 - we&rsquo;re on 2.0. Before I get into the details, let me
 explain what this option does. The SSL specification says that as part of SSL
 negotiation, the server can dictate what the ciphersuite will be. However,
 until the SSLHonorCipherOrder option was introduced, Apache always went with
@@ -138,7 +128,7 @@ language:</p>
 
 <ul>
 <li><strong>Server:</strong> Hi, I can speak the following secret languages: A,B,C,X,Y,Z. Which would you like to use?</li>
-<li><strong>Client:</strong> I can speak all of those too, but my favorite is Y. Let&#8217;s use that.</li>
+<li><strong>Client:</strong> I can speak all of those too, but my favorite is Y. Let&rsquo;s use that.</li>
 <li><strong>Server:</strong> Sounds good to me!</li>
 </ul>
 
@@ -148,45 +138,41 @@ language:</p>
 <ul>
 <li><strong>Server:</strong> Hi, what secret languages can you speak?</li>
 <li><strong>Client:</strong> I can speak A,B,C,X,Y,Z.</li>
-<li><strong>Server:</strong> Well, A is first in my list, we&#8217;ll use A.</li>
+<li><strong>Server:</strong> Well, A is first in my list, we&rsquo;ll use A.</li>
 </ul>
 
 
 <p>So, by turning on SSLHonorCipherOrder, I can get the desired behavior where
 Apache does everything it can to use high performance ciphersuites before
-falling back to the slow ones! Now about that Apache 2.2 thing&#8230; Using my
+falling back to the slow ones! Now about that Apache 2.2 thing&hellip; Using my
 elite Googling skills once more, I found that the SSLHonorCipherOrder was a
 feature that was actually added to Apache when it was in 2.0, but it was
 branched off into 2.1 which eventually became 2.2. This meant that I might
-actually be able to &#8220;backport&#8221; that feature to 2.0 by simply copying and
+actually be able to &ldquo;backport&rdquo; that feature to 2.0 by simply copying and
 pasting some code. I found <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=28665">the original Apache bug</a> and tried to
-patch it against 2.0.59. Using &#8216;patch &lt; myfile.patch&#8217; got most of the way, but
+patch it against 2.0.59. Using &lsquo;patch &lt; myfile.patch&rsquo; got most of the way, but
 there was a chunk at the end that I had to manually paste into the source
 code. It still fit perfectly, but the line numbers had changed a bit. So, once
 more I recompiled Apache, used the SSLHonorCipherOrder flag, and with no
 complaints, Apache was off and serving requests. Now, how in the world do I
-find out if it&#8217;s working or not? <strong>Verification</strong> First, make sure that the
+find out if it&rsquo;s working or not? <strong>Verification</strong> First, make sure that the
 RSA operations of SSL are getting handed off to the hardware:</p>
 
-<div>
-  <pre><code class='console'>root@web1-&gt;kstat -n ncp0 -s rsaprivate
-module: ncp                             instance: 0
-name:   ncp0                            class:    misc
-rsaprivate                      840</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt;kstat -n ncp0 -s rsaprivate</span>
+<span class="go">module: ncp                             instance: 0</span>
+<span class="go">name:   ncp0                            class:    misc</span>
+<span class="go">rsaprivate                      840</span></code></pre></div>
 
 
 <p>Hit an SSL page, then check the counter again. It should be incrementing. So,
 that tells us that the crypto hardware is being used, but I wanted a way to
-find out what the ciphersuite distribution was. While memorizing mod_ssl&#8217;s
+find out what the ciphersuite distribution was. While memorizing mod_ssl&rsquo;s
 documentation, I remembered that I could log the protocol version and
 ciphersuite. So, I created a new logformat named combinedssl and used it in
 httpd.conf like so:</p>
 
-<div>
-  <pre><code class='apache'>LogFormat &quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot; %{SSL_PROTOCOL}x %{SSL_CIPHER}x&quot; combinedssl
-CustomLog logs/www_ssl combinedssl</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">LogFormat</span> <span class="s2">&quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot; %{SSL_PROTOCOL}x %{SSL_CIPHER}x&quot;</span> combinedssl
+<span class="nb">CustomLog</span> logs/www_ssl combinedssl</code></pre></div>
 
 
 <p>After restarting Apache, I had a logfile named logs/www_ssl with lines like
@@ -195,88 +181,82 @@ this:</p>
 <pre><code>1.2.3.6 - - [08/Aug/2007:17:14:27 -0500] "GET /favicon.ico HTTP/1.1" 200 1406 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.12) Gecko/20070508 Firefox/1.5.0.12" TLSv1 RC4-MD5
 </code></pre>
 
-<p>Look at the last two fields - there&#8217;s our SSL info! Next, I whipped up some
+<p>Look at the last two fields - there&rsquo;s our SSL info! Next, I whipped up some
 Perl to do a report on the data. I named it sslparse.pl:</p>
 
-<div>
-  <pre><code class='perl'>#!/usr/bin/perl -w
-use strict;
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="c1">#!/usr/bin/perl -w</span>
+<span class="k">use</span> <span class="n">strict</span><span class="p">;</span>
 
-$|++;
-my $input;
-if (-t STDIN) { #is STDIN standard?
-  my $file = shift || die &quot;I need a filename to parse!n&quot;;
-  open(F,&quot;$file&quot;);
-  $input = *F;
-} else {
-  $input = *STDIN;
-}
+<span class="vg">$|</span><span class="o">++</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$input</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">t</span> <span class="bp">STDIN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">#is STDIN standard?</span>
+  <span class="k">my</span> <span class="nv">$file</span> <span class="o">=</span> <span class="nb">shift</span> <span class="o">||</span> <span class="nb">die</span> <span class="s">&quot;I need a filename to parse!n&quot;</span><span class="p">;</span>
+  <span class="nb">open</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="s">&quot;$file&quot;</span><span class="p">);</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="o">*</span><span class="n">F</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="o">*</span><span class="bp">STDIN</span><span class="p">;</span>
+<span class="p">}</span>
 
-my %sslcounts;
-my %ips;
-while (&lt;$input&gt;) {
-  if (/^([0-9.]+) .* ([w-]+) ([w-]+$)/) {
-    if (! defined($ips{$1})) {
-      next if ($1 eq '-' || $2 eq '-');
-      $ips{$1}++;
-      $sslcounts{$2}{$3}{total}++;
-      $sslcounts{$2}{total}++;
-      $sslcounts{total}++;
-    }
-  }
-  else { die &quot;Can't parse!&quot;; }
-}
+<span class="k">my</span> <span class="nv">%sslcounts</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">%ips</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="sr">&lt;$input&gt;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="sr">/^([0-9.]+) .* ([w-]+) ([w-]+$)/</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nb">defined</span><span class="p">(</span><span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}))</span> <span class="p">{</span>
+      <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$1</span> <span class="ow">eq</span> <span class="s">&#39;-&#39;</span> <span class="o">||</span> <span class="nv">$2</span> <span class="ow">eq</span> <span class="s">&#39;-&#39;</span><span class="p">);</span>
+      <span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="nv">$3</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span> <span class="nb">die</span> <span class="s">&quot;Can&#39;t parse!&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
 
-my $grandtotal = $sslcounts{total};
-delete $sslcounts{total};
-printf(&quot;%-25s %6d (%5.2f&quot;,&quot;SSL Connections&quot;,$grandtotal,&quot;100&quot;); print &quot;%)n&quot;;
-foreach my $proto (sort { $sslcounts{$b}{total} &lt;=&gt; $sslcounts{$a}{total} } keys(%sslcounts)) {
-  next if ($proto eq &quot;total&quot;);
-  my $ptotal = $sslcounts{$proto}{total};
-  delete $sslcounts{$proto}{total};
-  printf(&quot;%-25s %6d (%5.2f&quot;,&quot;  Protocol: $proto&quot;,$ptotal,($ptotal / $grandtotal * 100)); print &quot;%)n&quot;;
-  foreach my $cipher (sort { $sslcounts{$proto}{$b}{total} &lt;=&gt; $sslcounts{$proto}{$a}{total} } keys(%{$sslcounts{$proto}})) {
-    next if ($cipher eq &quot;total&quot;);
-    my $ctotal = $sslcounts{$proto}{$cipher}{total};
-    delete $sslcounts{$proto}{$cipher}{total};
-    printf(&quot;%-25s %6d (%5.2f&quot;,&quot;    $cipher&quot;,$ctotal,($ctotal / $grandtotal * 100)); print &quot;%)n&quot;;
-  }
-}</code></pre>
-</div>
+<span class="k">my</span> <span class="nv">$grandtotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;SSL Connections&quot;</span><span class="p">,</span><span class="nv">$grandtotal</span><span class="p">,</span><span class="s">&quot;100&quot;</span><span class="p">);</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+<span class="k">foreach</span> <span class="k">my</span> <span class="nv">$proto</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%sslcounts</span><span class="p">))</span> <span class="p">{</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$proto</span> <span class="ow">eq</span> <span class="s">&quot;total&quot;</span><span class="p">);</span>
+  <span class="k">my</span> <span class="nv">$ptotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;  Protocol: $proto&quot;</span><span class="p">,</span><span class="nv">$ptotal</span><span class="p">,(</span><span class="nv">$ptotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+  <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$cipher</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%</span><span class="p">{</span><span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}}))</span> <span class="p">{</span>
+    <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$cipher</span> <span class="ow">eq</span> <span class="s">&quot;total&quot;</span><span class="p">);</span>
+    <span class="k">my</span> <span class="nv">$ctotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;    $cipher&quot;</span><span class="p">,</span><span class="nv">$ctotal</span><span class="p">,(</span><span class="nv">$ctotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
 
 
-<p>I don&#8217;t claim that the above code is proper, but I do know
+<p>I don&rsquo;t claim that the above code is proper, but I do know
 that it works:</p>
 
-<div>
-  <pre><code class='console'>root@web1-&gt; perl /tmp/sslparse.pl logs/www_ssl
-    SSL Connections              250 (100.00%)
-      Protocol: TLSv1            130 (52.00%)
-        RC4-MD5                  117 (46.80%)
-        AES256-SHA                 9 ( 3.60%)
-        DES-CBC3-SHA               4 ( 1.60%)
-      Protocol: SSLv3            120 (48.00%)
-        RC4-MD5                  106 (42.40%)
-        DES-CBC3-SHA              10 ( 4.00%)
-        AES256-SHA                 4 ( 1.60%)</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt; perl /tmp/sslparse.pl logs/www_ssl</span>
+<span class="go">    SSL Connections              250 (100.00%)</span>
+<span class="go">      Protocol: TLSv1            130 (52.00%)</span>
+<span class="go">        RC4-MD5                  117 (46.80%)</span>
+<span class="go">        AES256-SHA                 9 ( 3.60%)</span>
+<span class="go">        DES-CBC3-SHA               4 ( 1.60%)</span>
+<span class="go">      Protocol: SSLv3            120 (48.00%)</span>
+<span class="go">        RC4-MD5                  106 (42.40%)</span>
+<span class="go">        DES-CBC3-SHA              10 ( 4.00%)</span>
+<span class="go">        AES256-SHA                 4 ( 1.60%)</span></code></pre></div>
 
 
 <p>Nice! All SSL requests since we redeployed Apache are using the fast RSA
-ciphersuites! For what it&#8217;s worth, I could not get the nicely formatted
+ciphersuites! For what it&rsquo;s worth, I could not get the nicely formatted
 +HIGH:+MEDIUM:+LOW type of ciphersuite syntax to work properly. Every time I
-added the word ALL to the mix, it blew up my sort order. I&#8217;d beaten my head
+added the word ALL to the mix, it blew up my sort order. I&rsquo;d beaten my head
 against the wall enough already, so I just hardcoded all the ones I wanted in
 there.</p>
 
-<div>
-  <pre><code class='apache'>SSLCipherSuite RC4-MD5:RC4-SHA:AES256-SHA:DES-CBC3-SHA:AES128-SHA:DES-CBC-SHA:DHE-RSA-AES256-SHA: DHE-DSS-AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DHE-RSA-AES128-SHA: DHE-DSS-AES128-SHA:DHE-DSS-RC4-SHA:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA: DES-CBC3-MD5:RC2-CBC-MD5:RC4-64-MD5:DES-CBC-MD5:EXP1024-DHE-DSS-RC4-SHA: EXP1024-DHE-DSS-DES-CBC-SHA:EXP1024-RC2-CBC-MD5:EXP1024-RC4-MD5: EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">SSLCipherSuite</span> RC4-MD5:RC4-SHA:AES256-SHA:DES-CBC3-SHA:AES128-SHA:DES-CBC-SHA:DHE-RSA-AES256-SHA: DHE-DSS-AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DHE-RSA-AES128-SHA: DHE-DSS-AES128-SHA:DHE-DSS-RC4-SHA:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA: DES-CBC3-MD5:RC2-CBC-MD5:RC4-64-MD5:DES-CBC-MD5:EXP1024-DHE-DSS-RC4-SHA: EXP1024-DHE-DSS-DES-CBC-SHA:EXP1024-RC2-CBC-MD5:EXP1024-RC4-MD5: EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5</code></pre></div>
 
 
 <p>If anyone
 knows of a cleaner way to represent that list in the same order, please let me
-know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
+know. I&rsquo;d also like to know what ciphersuites other ecommerce shops use.
 <strong>References used but not linked above:</strong> Sun offers a <a href="http://www.sun.com/blueprints/0306/819-5782.pdf">blueprint of the crypto accelerator of the UltraSPARC T1 processor</a> as a PDF.</p>
 </div>
 
@@ -293,19 +273,12 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2007-08-08T00:00:00-05:00" pubdate data-updated="true">Aug 8<span>th</span>, 2007</time>
+<time class='entry-date' datetime='2007-08-08T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/apache/'>Apache</a>, <a class='category' href='/blog/categories/perl/'>Perl</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/apache/'>apache</a>, <a class='category' href='/blog/categories/perl/'>perl</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -314,7 +287,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii" >Tweet</a>
   
   
   
@@ -342,20 +315,30 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -363,7 +346,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -378,7 +361,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -426,7 +409,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -444,7 +427,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -460,7 +443,7 @@ know. I&#8217;d also like to know what ciphersuites other ecommerce shops use.
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

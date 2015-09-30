@@ -9,7 +9,7 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="I&#8217;m not new to the virtualization scene, but I&#8217;m no expert either &#8211; I&#8217;ve been
+  <meta name="description" content="I&rsquo;m not new to the virtualization scene, but I&rsquo;m no expert either &ndash; I&rsquo;ve been
 using VMWare Workstation since 1.0,
 VMWare &hellip;">
   
@@ -23,10 +23,11 @@ VMWare &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ VMWare &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ VMWare &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">VirtualBox 2.0 Quick Impressions</h1>
     
     
@@ -94,21 +91,14 @@ VMWare &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-09-10T00:00:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-09-10T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I&#8217;m not new to the virtualization scene, but I&#8217;m no expert either &#8211; I&#8217;ve been
+<div class="entry-content"><p>I&rsquo;m not new to the virtualization scene, but I&rsquo;m no expert either &ndash; I&rsquo;ve been
 using <a href="http://www.vmware.com">VMWare</a> Workstation since 1.0,
 <a href="http://www.vmware.com">VMWare</a> Server since 1.0, and
 <a href="http://www.xensource.org">Xen</a> since around 2.0. Well, I needed a Windows XP
@@ -125,14 +115,14 @@ prefer.</p>
 
 <p>Not much to say here. I clicked a link on <a href="http://www.virtualbox.org/wiki/Downloads">the download
 page</a>, GDebi popped up, and I
-installed the deb. Can&#8217;t get much easier!</p>
+installed the deb. Can&rsquo;t get much easier!</p>
 
 <h3>Guest OS Installation</h3>
 
 <p>Anyone familiar with VMWare workstation should feel right at home here. Fire
-up the gui, click &#8216;New&#8217;, create a new Windows XP guest machine. I accepted the
-defaults of 192MB RAM and 10GB disk. Now, it&#8217;s been a really long time since
-I&#8217;ve installed Windows XP, but I swear that the installation went faster from
+up the gui, click &lsquo;New&rsquo;, create a new Windows XP guest machine. I accepted the
+defaults of 192MB RAM and 10GB disk. Now, it&rsquo;s been a really long time since
+I&rsquo;ve installed Windows XP, but I swear that the installation went faster from
 within VirtualBox than natively. No metrics to back that up, just a gut
 feeling.</p>
 
@@ -145,24 +135,24 @@ The next day, everything had worked as it should have.</p>
 <h3>Performance</h3>
 
 <p>The changelog states that numerous performance improvements have been made
-since 1.0, but since I don&#8217;t have past experience, I can&#8217;t speak to how much
+since 1.0, but since I don&rsquo;t have past experience, I can&rsquo;t speak to how much
 better it performs. I can tell you that running Windows XP as a guest under
 Virtualbox 2.0 did not feel any faster, nor any slower that running Windows XP
 as a guest under VMWare Workstation on the same laptop. While installing SP3
 for Windows XP in the guest, I noticed fairly significant host responsiveness
 degradation. However, my laptop still has a PATA drive in it, and my XP VM was
-using the &#8220;hard disk as a file&#8221; method instead of a dedicated partition. My
+using the &ldquo;hard disk as a file&rdquo; method instead of a dedicated partition. My
 hunch is that support for <a href="http://en.wikipedia.org/wiki/NCQ">NCQ</a> and
 dedicated partitions helps this quite a bit. Also, when using the XP VM under
-normal conditions that didn&#8217;t write to the disk so extensively, the host
+normal conditions that didn&rsquo;t write to the disk so extensively, the host
 machine was still very responsive.</p>
 
 <h3>Hardware Support</h3>
 
-<p>Below is the list of what I&#8217;ve tested under my XP VM:</p>
+<p>Below is the list of what I&rsquo;ve tested under my XP VM:</p>
 
 <ul>
-<li><strong>USB:</strong> I&#8217;ll get to this eventually, but I don&#8217;t need it yet.</li>
+<li><strong>USB:</strong> I&rsquo;ll get to this eventually, but I don&rsquo;t need it yet.</li>
 <li><strong>Sound:</strong> Worked flawlessly.</li>
 <li><strong>CD/DVD Drive:</strong> No problems here either.</li>
 </ul>
@@ -172,7 +162,7 @@ machine was still very responsive.</p>
 
 <p>VirtualBox is an impressive product. Consider me a convert from VMWare
 Workstation, VirtualBox does everything I need it to and more, and the cost of
-zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
+zero is something VMWare Workstation can&rsquo;t begin to compete with!</p>
 </div>
 
 
@@ -188,19 +178,12 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-09-10T00:00:00-05:00" pubdate data-updated="true">Sep 10<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-09-10T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>10</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/reviews/'>Reviews</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/virtualization/'>Virtualization</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/reviews/'>reviews</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a>, <a class='category' href='/blog/categories/virtualization/'>virtualization</a>
   
 </span>
 
@@ -209,7 +192,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions" >Tweet</a>
   
   
   
@@ -237,20 +220,30 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -258,7 +251,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -273,7 +266,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -321,7 +314,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -339,7 +332,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -355,7 +348,7 @@ zero is something VMWare Workstation can&#8217;t begin to compete with!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

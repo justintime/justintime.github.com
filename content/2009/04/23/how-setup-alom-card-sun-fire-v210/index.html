@@ -5,12 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>How to Setup the ALOM card on a Sun Fire v210 - SysAdmin's Journey</title>
+  <title>How to Setup the ALOM Card on a Sun Fire V210 - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="Here&#8217;s a step-by-step howto on how to configure the ALOM card on a Sun Fire
-server so that it&#8217;s accessible over the network via SSH. It &hellip;">
+  <meta name="description" content="Here&rsquo;s a step-by-step howto on how to configure the ALOM card on a Sun Fire
+server so that it&rsquo;s accessible over the network via SSH. It &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,10 +22,11 @@ server so that it&#8217;s accessible over the network via SSH. It &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/04/23/how-setup-alom-card-sun-fire-v210">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ server so that it&#8217;s accessible over the network via SSH. It &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ server so that it&#8217;s accessible over the network via SSH. It &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">How to Setup the ALOM Card on a Sun Fire V210</h1>
     
     
@@ -93,22 +90,15 @@ server so that it&#8217;s accessible over the network via SSH. It &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-04-23T00:00:00-05:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-04-23T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Here&#8217;s a step-by-step howto on how to configure the ALOM card on a Sun Fire
-server so that it&#8217;s accessible over the network via SSH. It should also work
+<div class="entry-content"><p>Here&rsquo;s a step-by-step howto on how to configure the ALOM card on a Sun Fire
+server so that it&rsquo;s accessible over the network via SSH. It should also work
 for Sun Fire V210, V215, V240, V245, V445, V250, V440, and V445 servers as
 well.  You must first program the card via the operating system. You can do
 this via the serial cable or SSH session.</p>
@@ -123,7 +113,7 @@ this via the serial cable or SSH session.</p>
 </ul>
 
 
-<p>If it&#8217;s not version 1.6, <a href="https://cds.sun.com%0A/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_SMI-Site/en_US/-/USD/ViewProductDetail-%0AStart?ProductRef=ALOM-1.6-G-F@CDS-CDS_SMI">download the latest from Sun</a></p>
+<p>If it&rsquo;s not version 1.6, <a href="https://cds.sun.com%0A/is-bin/INTERSHOP.enfinity/WFS/CDS-CDS_SMI-Site/en_US/-/USD/ViewProductDetail-%0AStart?ProductRef=ALOM-1.6-G-F@CDS-CDS_SMI">download the latest from Sun</a></p>
 
 <pre><code>* Current latest version of firmware is 1.6.9, you will download the file ALOM_1.6.9_fw_hw0.tar.gz
 * Run the following commands to update firmware:
@@ -177,7 +167,7 @@ sys_eventlevel="2"
 </code></pre>
 
 <ul>
-<li><p>Let&#8217;s setup the card so that it can be reached via SSH. Run the following commands, replacing the IP settings with your own:</p>
+<li><p>Let&rsquo;s setup the card so that it can be reached via SSH. Run the following commands, replacing the IP settings with your own:</p>
 
 <p>./scadm set if_network true
 ./scadm set netsc_tpelinktest true
@@ -185,7 +175,7 @@ sys_eventlevel="2"
 ./scadm set netsc_ipnetmask 255.255.255.0
 ./scadm set netsc_ipgateway 192.168.1.1
 ./scadm set sc_cliprompt srv1-mgmt
-./scadm set mgt_mailalert &#8220;me@my.com 3&#8221;
+./scadm set mgt_mailalert &ldquo;<a href="&#x6d;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x6d;&#x65;&#64;&#109;&#121;&#46;&#x63;&#x6f;&#x6d;">&#x6d;&#101;&#64;&#x6d;&#x79;&#x2e;&#99;&#111;&#x6d;</a> 3&rdquo;
 ./scadm set mgt_mailhost 192.168.1.5
 ./scadm userpassword admin
 ./scadm set if_connection ssh
@@ -201,7 +191,7 @@ sys_eventlevel="2"
 <pre><code>./scadm resetrsc
 </code></pre>
 
-<p>You&#8217;re done!</p>
+<p>You&rsquo;re done!</p>
 </div>
 
 
@@ -217,14 +207,7 @@ sys_eventlevel="2"
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-04-23T00:00:00-05:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-04-23T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
@@ -238,7 +221,7 @@ sys_eventlevel="2"
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/04/23/how-setup-alom-card-sun-fire-v210" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/04/23/how-setup-alom-card-sun-fire-v210" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/04/23/how-setup-alom-card-sun-fire-v210" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/04/23/how-setup-alom-card-sun-fire-v210" >Tweet</a>
   
   
   
@@ -266,20 +249,30 @@ sys_eventlevel="2"
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -287,7 +280,7 @@ sys_eventlevel="2"
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -302,7 +295,7 @@ sys_eventlevel="2"
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -350,7 +343,7 @@ sys_eventlevel="2"
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -368,7 +361,7 @@ sys_eventlevel="2"
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -384,7 +377,7 @@ sys_eventlevel="2"
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

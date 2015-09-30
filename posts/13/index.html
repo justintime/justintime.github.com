@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="In part one of the series, I went over how to compile Apache 2.0 to take
+advantage of the T1000 hardware. In part
+two, I talked about patching Apache &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/posts/13/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2007/08/15/apache-modssl-and-sun-fire-t1000-part-iii">Apache, Mod_ssl, and the Sun Fire T1000 - Part III</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2007-08-15T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>In <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-%0Afire-t1000/">part one</a> of the series, I went over how to compile Apache 2.0 to take
+advantage of the T1000 hardware. In <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000%0A-part-ii/">part
+two</a>, I talked about patching Apache 2.0 to support the
+SSLHonorCipherOrder directive. I didn&rsquo;t realize there might be a part three,
+but here we are! After finishing the second piece, I sent an email of thanks
+to <a href="http://blogs.sun.com/janp/">Jan Pechanec</a> at Sun for his blog entries
+mentioned in part one. In the email, I mentioned that I was running Apache 2.0
+in worker mode. He cautioned me that worker mode with Sun&rsquo;s pkcs11 engine
+still had outstanding issues with worker mode, and pointed me to <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug%0A_id=6375348">this bug
+report on OpenSolaris</a>. I hadn&rsquo;t been able to find a reliable load testing tool for
+HTTPS, so I was just using the check_http plugin from
+<a href="http://www.nagios.org">Nagios</a>. The performance results I were getting were
+correct, but I wasn&rsquo;t stressing the server at all. Jan pointed me to
+<a href="http://www.acme.com/software/http_load/">http_load</a>, a simple multithreaded
+http load tester that supports HTTPS if you compile it against OpenSSL. He was
+also kind enough to give me his shell script that he was using to load up
+HTTPS connections. I later found the script posted on a bug report, so I&rsquo;m
+assuming it&rsquo;s okay to repost it here:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash [ $#</span>
+-ne <span class="m">4</span> -a <span class="nv">$# </span>-ne <span class="m">5</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&quot;$0  []&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span><span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;$5&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+<span class="nv">cipher</span><span class="o">=</span><span class="s2">&quot;-cipher $5&quot;</span> <span class="k">fi</span> <span class="c"># for SSL for i in `yes | head -$3`; do printf &quot;.&quot;</span>
+./http_load <span class="nv">$cipher</span> -parallel <span class="nv">$2</span> -fetch <span class="nv">$4</span> <span class="nv">$1</span> <span class="p">&amp;</span> <span class="k">done</span> <span class="nb">echo</span> <span class="s2">&quot;&quot;</span> <span class="c"># wait for all so</span>
+that we can <span class="nb">time </span>the script <span class="nb">wait</span></code></pre></div>
+
+
+<p> You then run the shell
+script (named load.sh in this case) like so:</p>
+
+<pre><code>time ./load.sh sslurl.txt 10 20 500 RC4-MD5 &gt;/dev/null
+</code></pre>
+
+<p>This will fork 10 processes, each using 20 threads, to fetch the url contained
+within sslurl.txt as fast as possible 500 times. By wrapping the command with
+the &lsquo;time&rsquo; command, you get the amount of time it takes to fetch the HTTPS url
+5,000 times. Take 5,000 divided by the number of real seconds returned by
+time, and you have a requests per second benchmark. To my shock, running this
+against my Apache 2.0 worker server never even completed. OpenSSL started to
+complain about &lsquo;bad mac&rsquo; errors, and eventually started to time out. Well,
+back to the drawing board! I started by recompiling Apache to use the prefork
+MPM. See <a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-%0Asun-fire-t1000/">part one</a> for the configure options I used. Since I had benchmarks from
+a T1000 using worker MPM, a V210 using worker MPM, a T1000 using prefork MPM,
+and the <a href="http://cooltools.sunsource.net/coolstack/">Sun CoolStack package</a>
+(Apache 2.2 w/prefork MPM) installed on a T1000, I decided to keep track of
+performance and publish some very pretty graphs. First up, a comparison of
+reported requests per second from ApacheBench (ApacheBench was used with
+keepalives requesting a very small static file): <img src="http://www.techadvise.com/images/abrs.gif" alt="ApacheBench Response Time
+Chart" /> You can see that the T1000
+is much faster than the v210 in all configurations. Interesting to note that
+the prefork 2.0 on the T1000 actually was faster than the worker 2.0 on the
+same box until extreme loads were placed on the server. Okay, what about
+response times? The below graph represents the 95th percentile of the number
+of milliseconds all requests were completed in: <img src="http://www.techadvise.com/images/abrt.gif" alt="ApacheBench Response Time
+Chart" /> Again, it&rsquo;s safe to assume
+the T1000 is outperforming the v210. Here, prefork consistently outperformed
+worker, and Apache 2.2 is much better at keeping response times to a minimum
+under load. Finally, let&rsquo;s look at HTTPS requests per second. The CoolStack
+Apache 2.2 isn&rsquo;t present, because I had configuration issues with getting SSL
+to work. From the get-go, 2.2 was not an option, as we have a proprietary
+proxy module for our application server that does not yet support 2.2. That&rsquo;s
+why 2.2 was not tuned, and I didn&rsquo;t spend too much time with it. The T1000
+worker for 2.0 is missing because when using pkcs11, it would not complete the
+benchmark tests. <img src="http://www.techadvise.com/images/apsrs.gif" alt="Apache Peak SSL Requests Per
+Second" /> Rather obvious results,
+eh? The asterisk after the tuned prefork means that I only got it to perform
+this well after applying the Solaris patches to the SUNWCry package. <strong>Quick
+Tips and Tricks for Performance</strong></p>
+
+<ul>
+<li>Use noatime on your DocumentRoot partition.</li>
+<li>Apply all SUNWCry patches</li>
+<li>Use &lsquo;pthread&rsquo; for your SSLMutex and AcceptMutex</li>
+<li>Make sure to use the shmcb for your SSLSessionCache</li>
+<li>Use /dev/urandom for your SSLRandomSeed entries</li>
+<li>Compile all the modules you might ever need, but only load them if you need them.
+<strong>Closing Thoughts</strong><br/>
+The T1000 makes for a strong Apache box. I have a lot going on in my Apache
+config that probably drags down my performance - a lot of logging, about 100
+mod_rewrite rules, proxies, and whatnot. You might be able to google around
+and find people getting 20,000 requests per second and more from Apache, but
+they aren&rsquo;t doing that with my configuration. By replacing our v210&rsquo;s with
+cheaper T1000&rsquo;s, we&rsquo;ve ensured that our webserver layer will not be the
+bottleneck in our stack for years to come!</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii">Apache, Mod_ssl, and the Sun Fire T1000 - Part II</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2007-08-08T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After recompiling Apache to take advantage of the T1000&rsquo;s MAU as described in
+<a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000/">part I</a>, I set out to doing some testing. Something was amiss - using
+some clients, I would see SSL page load times of about .025 seconds, others
+took close to a second. The v210 consistently tested out at about .080 seconds
+per page. <strong>Do not use the worker MPM with the pkcs11 engine!!!!</strong> There is <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6540060">a bug on OpenSolaris.org</a> that <strong>will</strong> bite you. <a href="http://techadvise.com/2007/08/15/apache-mod_ssl-and-the-sun-fire-t1000-part-iii/">In part III I&rsquo;ll compare performance of worker vs prefork on the T1000 that will follow up with this issue</a>. After a lot of Googling, I finally figured out what it was. The
+T1000&rsquo;s MAU is only fast at doing RSA, and it generally sucks loudly when it
+tries to do anything with DH signing. <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6241300">Bug # 6241300 on OpenSolaris</a> confirmed the
+issue. If you limit mod_ssl&rsquo;s CipherSuite to just RSA algorithms, performance
+is great. However, we&rsquo;re ecommerce here, and we don&rsquo;t want to turn away
+anyone. Especially if they&rsquo;re trying to go SSL, which is generally reserved
+for registering and checkout. So I though to myself, why not try our best to
+use RSA with everyone, but if they can&rsquo;t or won&rsquo;t do it, then we fall back to
+DH and eat the performance hit? I read <a href="http://httpd.apache.org/docs/2.0/mod/mod_ssl.html#sslciphersuite">Apache&rsquo;s documentation on the CipherSuite directive</a>
+until I could recite it word-for-word from memory. No matter what I did, I
+could not get FireFox to negotiate RC4-MD5 if there were any 256bit
+ciphersuites offered. I found a nice online tool at
+<a href="http://www.serversniff.net/sslcheck.php">ServerSniff.net</a> that allows you to
+find out what other sites are offering for ciphersuites. Using Amazon.com as
+my model, I found that they were somehow forcing me to use RC4-MD5 as long as
+my browser supported it. Just as I was ready to throw in the towel, and give
+up, I found the <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslhonorcipherorder">SSLHonorCipherOrder</a> Apache directive. Yaayyyy!!! Crap! That feature
+was added in Apache 2.2 - we&rsquo;re on 2.0. Before I get into the details, let me
+explain what this option does. The SSL specification says that as part of SSL
+negotiation, the server can dictate what the ciphersuite will be. However,
+until the SSLHonorCipherOrder option was introduced, Apache always went with
+what the client wanted to use. So, envision the server and the client walking
+down the street. They bump into each other, and want to talk in a secret
+language:</p>
+
+<ul>
+<li><strong>Server:</strong> Hi, I can speak the following secret languages: A,B,C,X,Y,Z. Which would you like to use?</li>
+<li><strong>Client:</strong> I can speak all of those too, but my favorite is Y. Let&rsquo;s use that.</li>
+<li><strong>Server:</strong> Sounds good to me!</li>
+</ul>
+
+
+<p>Now, when you set SSLHonorCipherOrder to true, the conversation is like this:</p>
+
+<ul>
+<li><strong>Server:</strong> Hi, what secret languages can you speak?</li>
+<li><strong>Client:</strong> I can speak A,B,C,X,Y,Z.</li>
+<li><strong>Server:</strong> Well, A is first in my list, we&rsquo;ll use A.</li>
+</ul>
+
+
+<p>So, by turning on SSLHonorCipherOrder, I can get the desired behavior where
+Apache does everything it can to use high performance ciphersuites before
+falling back to the slow ones! Now about that Apache 2.2 thing&hellip; Using my
+elite Googling skills once more, I found that the SSLHonorCipherOrder was a
+feature that was actually added to Apache when it was in 2.0, but it was
+branched off into 2.1 which eventually became 2.2. This meant that I might
+actually be able to &ldquo;backport&rdquo; that feature to 2.0 by simply copying and
+pasting some code. I found <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=28665">the original Apache bug</a> and tried to
+patch it against 2.0.59. Using &lsquo;patch &lt; myfile.patch&rsquo; got most of the way, but
+there was a chunk at the end that I had to manually paste into the source
+code. It still fit perfectly, but the line numbers had changed a bit. So, once
+more I recompiled Apache, used the SSLHonorCipherOrder flag, and with no
+complaints, Apache was off and serving requests. Now, how in the world do I
+find out if it&rsquo;s working or not? <strong>Verification</strong> First, make sure that the
+RSA operations of SSL are getting handed off to the hardware:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt;kstat -n ncp0 -s rsaprivate</span>
+<span class="go">module: ncp                             instance: 0</span>
+<span class="go">name:   ncp0                            class:    misc</span>
+<span class="go">rsaprivate                      840</span></code></pre></div>
+
+
+<p>Hit an SSL page, then check the counter again. It should be incrementing. So,
+that tells us that the crypto hardware is being used, but I wanted a way to
+find out what the ciphersuite distribution was. While memorizing mod_ssl&rsquo;s
+documentation, I remembered that I could log the protocol version and
+ciphersuite. So, I created a new logformat named combinedssl and used it in
+httpd.conf like so:</p>
+
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">LogFormat</span> <span class="s2">&quot;%h %l %u %t \&quot;%r\&quot; %&gt;s %b \&quot;%{Referer}i\&quot; \&quot;%{User-Agent}i\&quot; %{SSL_PROTOCOL}x %{SSL_CIPHER}x&quot;</span> combinedssl
+<span class="nb">CustomLog</span> logs/www_ssl combinedssl</code></pre></div>
+
+
+<p>After restarting Apache, I had a logfile named logs/www_ssl with lines like
+this:</p>
+
+<pre><code>1.2.3.6 - - [08/Aug/2007:17:14:27 -0500] "GET /favicon.ico HTTP/1.1" 200 1406 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.12) Gecko/20070508 Firefox/1.5.0.12" TLSv1 RC4-MD5
+</code></pre>
+
+<p>Look at the last two fields - there&rsquo;s our SSL info! Next, I whipped up some
+Perl to do a report on the data. I named it sslparse.pl:</p>
+
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="c1">#!/usr/bin/perl -w</span>
+<span class="k">use</span> <span class="n">strict</span><span class="p">;</span>
+
+<span class="vg">$|</span><span class="o">++</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$input</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">t</span> <span class="bp">STDIN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">#is STDIN standard?</span>
+  <span class="k">my</span> <span class="nv">$file</span> <span class="o">=</span> <span class="nb">shift</span> <span class="o">||</span> <span class="nb">die</span> <span class="s">&quot;I need a filename to parse!n&quot;</span><span class="p">;</span>
+  <span class="nb">open</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="s">&quot;$file&quot;</span><span class="p">);</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="o">*</span><span class="n">F</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="o">*</span><span class="bp">STDIN</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">my</span> <span class="nv">%sslcounts</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">%ips</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="sr">&lt;$input&gt;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="sr">/^([0-9.]+) .* ([w-]+) ([w-]+$)/</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nb">defined</span><span class="p">(</span><span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}))</span> <span class="p">{</span>
+      <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$1</span> <span class="ow">eq</span> <span class="s">&#39;-&#39;</span> <span class="o">||</span> <span class="nv">$2</span> <span class="ow">eq</span> <span class="s">&#39;-&#39;</span><span class="p">);</span>
+      <span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="nv">$3</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span> <span class="nb">die</span> <span class="s">&quot;Can&#39;t parse!&quot;</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">my</span> <span class="nv">$grandtotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;SSL Connections&quot;</span><span class="p">,</span><span class="nv">$grandtotal</span><span class="p">,</span><span class="s">&quot;100&quot;</span><span class="p">);</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+<span class="k">foreach</span> <span class="k">my</span> <span class="nv">$proto</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%sslcounts</span><span class="p">))</span> <span class="p">{</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$proto</span> <span class="ow">eq</span> <span class="s">&quot;total&quot;</span><span class="p">);</span>
+  <span class="k">my</span> <span class="nv">$ptotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;  Protocol: $proto&quot;</span><span class="p">,</span><span class="nv">$ptotal</span><span class="p">,(</span><span class="nv">$ptotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+  <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$cipher</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="sr">&lt;=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%</span><span class="p">{</span><span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}}))</span> <span class="p">{</span>
+    <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$cipher</span> <span class="ow">eq</span> <span class="s">&quot;total&quot;</span><span class="p">);</span>
+    <span class="k">my</span> <span class="nv">$ctotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="s">&quot;%-25s %6d (%5.2f&quot;</span><span class="p">,</span><span class="s">&quot;    $cipher&quot;</span><span class="p">,</span><span class="nv">$ctotal</span><span class="p">,(</span><span class="nv">$ctotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="s">&quot;%)n&quot;</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>I don&rsquo;t claim that the above code is proper, but I do know
+that it works:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt; perl /tmp/sslparse.pl logs/www_ssl</span>
+<span class="go">    SSL Connections              250 (100.00%)</span>
+<span class="go">      Protocol: TLSv1            130 (52.00%)</span>
+<span class="go">        RC4-MD5                  117 (46.80%)</span>
+<span class="go">        AES256-SHA                 9 ( 3.60%)</span>
+<span class="go">        DES-CBC3-SHA               4 ( 1.60%)</span>
+<span class="go">      Protocol: SSLv3            120 (48.00%)</span>
+<span class="go">        RC4-MD5                  106 (42.40%)</span>
+<span class="go">        DES-CBC3-SHA              10 ( 4.00%)</span>
+<span class="go">        AES256-SHA                 4 ( 1.60%)</span></code></pre></div>
+
+
+<p>Nice! All SSL requests since we redeployed Apache are using the fast RSA
+ciphersuites! For what it&rsquo;s worth, I could not get the nicely formatted
++HIGH:+MEDIUM:+LOW type of ciphersuite syntax to work properly. Every time I
+added the word ALL to the mix, it blew up my sort order. I&rsquo;d beaten my head
+against the wall enough already, so I just hardcoded all the ones I wanted in
+there.</p>
+
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">SSLCipherSuite</span> RC4-MD5:RC4-SHA:AES256-SHA:DES-CBC3-SHA:AES128-SHA:DES-CBC-SHA:DHE-RSA-AES256-SHA: DHE-DSS-AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DHE-RSA-AES128-SHA: DHE-DSS-AES128-SHA:DHE-DSS-RC4-SHA:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA: DES-CBC3-MD5:RC2-CBC-MD5:RC4-64-MD5:DES-CBC-MD5:EXP1024-DHE-DSS-RC4-SHA: EXP1024-DHE-DSS-DES-CBC-SHA:EXP1024-RC2-CBC-MD5:EXP1024-RC4-MD5: EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5</code></pre></div>
+
+
+<p>If anyone
+knows of a cleaner way to represent that list in the same order, please let me
+know. I&rsquo;d also like to know what ciphersuites other ecommerce shops use.
+<strong>References used but not linked above:</strong> Sun offers a <a href="http://www.sun.com/blueprints/0306/819-5782.pdf">blueprint of the crypto accelerator of the UltraSPARC T1 processor</a> as a PDF.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-i">Apache, Mod_ssl, and the Sun Fire T1000 - Part I</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2007-08-08T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I like Apache. A lot. It’s one of the few apps out there that you
+can count on in a production environment, and it always does what
+you expect it to. However, Apache is only as good as the person
+configuring it. **Do not use the worker MPM with the pkcs11
+engine!!!!** There is <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6540060">a bug on OpenSolaris.org</a> that
+**will** bite you. <a href="http://techadvise.com/2007/08/15/apache-mod_ssl-and-the-sun-fire-t1000-part-iii/">In part III I’ll compare performance of
+worker vs prefork on the T1000 that will follow up with this
+issue</a> Since our Apache’s run on Sparc hardware, I like to
+compile it from source using Sun Studio compilers tweaked for
+performance. It goes against my open source bias, but when you’re
+at work, you do what’s best for the bottom line. Anyways, we are in
+the process of swapping out our Sun Fire v210’s with Sun Fire
+T1000’s for use as our frontend webservers. I did some initial
+performance testing in our lab environment. The general gist was
+that the v210 and T1000 were almost identical when testing Apache
+with a single thread, but the T1000 started to severely outrun the
+v210 once the load jumped up. That was what we hoped to see, so we
+kept going with our plan to replace the v210’s. Here are the actual
+numbers from siege: **v210** siege -c60 -b -r50 -f \~/urls.txt
+Transactions: 2999 hits Availability: 99.30 % Elapsed time: 48.50
+secs Data transferred: 21.86 MB Response time: 0.38 secs
+Transaction rate: 61.84 trans/sec Throughput: 0.45 MB/sec
+Concurrency: 23.56 Successful transactions: 2999 Failed
+transactions: 21 Longest transaction: 29.85 Shortest transaction:
+0.00 **T1000:** siege -c60 -b -r50 -f \~/urls.txt Transactions:
+3000 hits Availability: 100.00 % Elapsed time: 6.45 secs Data
+transferred: 22.28 MB Response time: 0.11 secs Transaction rate:
+465.12 trans/sec Throughput: 3.45 MB/sec Concurrency: 51.91
+Successful transactions: 3000 Failed transactions: 0 Longest
+transaction: 2.08 Shortest transaction: 0.00 So, like any good
+sysadmin, I put the new servers in place in a phased approach. Take
+one v210 out of the load balancer, insert the new T1000, and slowly
+bring it into service. All went fine, and the load balancer was
+even favoring the T1000 over the v210. Then I happened to look at
+SSL stats. For some reason, the load balancer was favoring the v210
+by a ratio of 3:1 for SSL connections. I knew this couldn’t be
+right, as the T1000 has circuitry in the CPU itself that acts as a
+hardware crypto accelerator. After Googling for a bit, I found
+<a href="http://blogs.sun.com/chichang1/entry/rsa_performance_of_sun_fire">Chi-Chang Lin’s blog</a>. There, he details a way to performance
+test OpenSSL. Read the blog entry for the specifics, but here’s
+what I got from the v210 and the T1000: **v210:** sign verify
+sign/s verify/s rsa 1024 bits 0.003673s 0.000199s 272.3 5017.1 rsa
+2048 bits 0.021869s 0.000625s 45.7 1600.9 **T1000:** sign
+verify sign/s verify/s rsa 1024 bits 0.004711s 0.000250s 212.3
+4003.2 rsa 2048 bits 0.028339s 0.000814s 35.3 1229.2 For some
+reason, my T1000 is indeed not outperforming my v210 in SSL crypto
+operations. Also on Chi-Chang’s blog, I discovered that in order to
+use the crypto hardware on the UltraSparc T1, you have to either
+use Sun’s SSL, or patch the one you have. Aha! As a habit, I always
+compile OpenSSL from source and build Apache sources against that.
+My Apache on the T1000 was not using the patch, nor Sun’s OpenSSL.
+Just to make sure I was barking up the right tree, I ran the same
+OpenSSL tests as above, except this time I ran it with Sun’s
+OpenSSL. The v210 was virtually the same, but the T1000 - well:
+sign verify sign/s verify/s rsa 1024 bits 0.0003s 0.0001s 3175.2
+7940.5 rsa 2048 bits 0.0014s 0.0003s 730.1 3284.7 WOW. 1,500%
+better numbers. I’d say that it’s worth recompiling Apache for that
+kind of benefit. So, I set out and recompiled Apache. For those
+wondering, here’s my configure:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">make distclean
+<span class="nv">INSTALLDIR</span><span class="o">=</span>/apps/apache2 <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;-L/usr/sfw/lib -R/usr/sfw/lib&quot;</span>
+<span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-DSSL\_EXPERIMENTAL -DSSL\_ENGINE -xO4 -xtarget=ultraT1&#39;</span>
+./configure --prefix<span class="o">=</span><span class="nv">$INSTALLDIR</span> --enable-mods-shared<span class="o">=</span>all
+--enable-logio --enable-proxy --enable-proxy-connect
+--enable-proxy-ftp --enable-proxy-http --enable-cache
+--enable-mem-cache --enable-ssl --with-mpm<span class="o">=</span>prefork --enable-so
+--enable-rule<span class="o">=</span>SSL<span class="se">\_</span>EXPERIMENTAL --with-ssl<span class="o">=</span>/usr/sfw
+--enable-deflate --with-z<span class="o">=</span>/usr <span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">&quot;$LDFLAGS&quot;</span> <span class="o">&amp;&amp;</span> dmake -j <span class="m">64</span> <span class="o">&amp;&amp;</span>
+dmake install</code></pre></div>
+
+
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/compiling-nagios-plugins-and-nrpe-solaris-10-sun-studio">Compiling Nagios Plugins and NRPE on Solaris 10 With Sun Studio</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2007-07-06T00:00:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>We have some Sun T1000&rsquo;s running Solaris 10 that we are going to deploy as web
+servers. By compiling Apache from source using the Sun Studio compilers, you
+get a huge boost in performance because of the compiler&rsquo;s built-in
+optimizations for the Niagra processor. Before deploying them, I needed to get
+NRPE setup, which requires that the Nagios plugins be installed. Once setup on
+the client side, I can point our Nagios server at the webserver and get
+notified of hardware issues, disk usage, load averages and what not.
+Installing NRPE and the plugins using gcc is a no brainer. I thought using Sun
+Studio wouldn&rsquo;t be too much harder, but after 5 hours of banging my head
+against the wall, I figured out how to make them compile&hellip; To compile the
+two, first set your PATH variable so that it can find Sun Studio, and the Sun
+make binary:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">PATH</span><span class="o">=</span>/opt/SUNWspro/bin/:/usr/bin:/usr/local/bin:/opt/sfw/bin:/usr/ccs/bin:/usr/local/ssl/bin/
+<span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/ucb
+<span class="nb">export </span>PATH</code></pre></div>
+
+
+<p>Now, the tricky part. Everything I did was failing
+with SSL issues. Once I fixed that, check_procs wasn&rsquo;t working properly. Turns
+out you need to set some CFLAGS and tell configure how to run ps:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-DSSL_EXPERIMENTAL -DSSL_ENGINE -xO4&#39;</span> ./configure --with-ps-command<span class="o">=</span><span class="s2">&quot;/usr/bin/ps -eo &#39;s uid pid ppid vsz rss pcpu etime comm args&#39;&quot;</span> --with-ps-format<span class="o">=</span><span class="s1">&#39;%s %d %d %d %d %d %f %s %s %n&#39;</span> --with-ps-cols<span class="o">=</span><span class="m">10</span> --with-ps-varlist<span class="o">=</span><span class="s1">&#39;procstat,&amp;;procuid,&amp;;procpid,&amp;;procppid,&amp;;procvsz,&amp;;procrss,&amp;;procpcpu,procetime,procprog,&amp;pos;&#39;</span></code></pre></div>
+
+
+<p>Then <code>make</code>, <code>su</code>, <code>make
+install</code> as usual. Wash, rinse, and repeat for NRPE.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/12">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

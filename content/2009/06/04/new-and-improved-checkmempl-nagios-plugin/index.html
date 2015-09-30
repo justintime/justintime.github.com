@@ -9,7 +9,7 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="UPDATE 9/19/2011: I&#8217;ve moved this plugin over to github: https://github.com/justintime/nagios-plugins. It now has a PNP template, and support &hellip;">
+  <meta name="description" content="UPDATE 9/19/2011: I&rsquo;ve moved this plugin over to github: https://github.com/justintime/nagios-plugins. It now has a PNP template, and support &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -57,9 +58,9 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,10 +80,6 @@
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">New and Improved check_mem.pl Nagios Plugin</h1>
     
     
@@ -92,43 +89,36 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-05T00:00:00-05:00" pubdate data-updated="true">Jun 5<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-05T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><strong>UPDATE 9/19/2011</strong>: I&#8217;ve moved this plugin over to github: <a href="https://github.com/justintime/nagios-plugins">https://github.com/justintime/nagios-plugins</a>.  It now has a PNP template, and support for AIX as well.</p>
+<div class="entry-content"><p><strong>UPDATE 9/19/2011</strong>: I&rsquo;ve moved this plugin over to github: <a href="https://github.com/justintime/nagios-plugins">https://github.com/justintime/nagios-plugins</a>.  It now has a PNP template, and support for AIX as well.</p>
 
-<p>We have always monitored RAM usage on all of boxes. Sure, there&#8217;s the argument
+<p>We have always monitored RAM usage on all of boxes. Sure, there&rsquo;s the argument
 that unused RAM is money wasted, but I always like to know not just when the
-box is swapping, but when it&#8217;s <strong>about to start swapping</strong>. There have been a
-few plugins over the years that I&#8217;ve used for this - check_ram for Solaris,
-check_mem for Linux, and there&#8217;s also check_mem.pl. Well, migrating to Solaris
+box is swapping, but when it&rsquo;s <strong>about to start swapping</strong>. There have been a
+few plugins over the years that I&rsquo;ve used for this - check_ram for Solaris,
+check_mem for Linux, and there&rsquo;s also check_mem.pl. Well, migrating to Solaris
 10 and ZFS started tripping the check_ram thresholds due to the ZFS ARC cache.
-So, I attempted to pull together a cross platform Nagios plugin that did it&#8217;s
+So, I attempted to pull together a cross platform Nagios plugin that did it&rsquo;s
 best to give me what I wanted, and what do you know, it works! This graph
-shows the ZFS ARC cache at it&#8217;s best:</p>
+shows the ZFS ARC cache at it&rsquo;s best:</p>
 
 <p><img src="/assets/images/cacti.png" alt="cacti.png" /></p>
 
-<p>So, I started with the check_mem.pl script that&#8217;s included in the contrib
+<p>So, I started with the check_mem.pl script that&rsquo;s included in the contrib
 folder of the official <a href="http://nagiosplugins.org">Nagios Plugins</a>. What
-emerged when I was done was quite different. Here&#8217;s some key differences:</p>
+emerged when I was done was quite different. Here&rsquo;s some key differences:</p>
 
 <ul>
 <li>If run on a Solaris host:
 
 <ul>
-<li>If the Sun::Solaris::Kstat module is available, it grabs the total memory, memory in use by the ZFS ARC cache, and free memory using that module. If not, it uses vmstat and prtconf to determine total, used, and free memory. There&#8217;s no easy way to track ARC cache usage without the module.</li>
+<li>If the Sun::Solaris::Kstat module is available, it grabs the total memory, memory in use by the ZFS ARC cache, and free memory using that module. If not, it uses vmstat and prtconf to determine total, used, and free memory. There&rsquo;s no easy way to track ARC cache usage without the module.</li>
 </ul>
 </li>
 <li>If run on a Linux host:
@@ -149,28 +139,24 @@ emerged when I was done was quite different. Here&#8217;s some key differences:<
 </ul>
 
 
-<p>Let&#8217;s show an example, run from a Solaris host with ZFS:</p>
+<p>Let&rsquo;s show an example, run from a Solaris host with ZFS:</p>
 
-<div>
-  <pre><code class='console'>$ /usr/local/nagios/libexec/check_mem.pl -w 10 -c 5 -f 
-WARNING - 9.9% (406520 kB) free!|TOTAL=4113824KB;;;; USED=3707304KB;;;; FREE=406520KB;;;; CACHES=816947KB;;;;</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> /usr/local/nagios/libexec/check_mem.pl -w <span class="m">10</span> -c <span class="m">5</span> -f 
+<span class="go">WARNING - 9.9% (406520 kB) free!|TOTAL=4113824KB;;;; USED=3707304KB;;;; FREE=406520KB;;;; CACHES=816947KB;;;;</span></code></pre></div>
 
 
 <p>Uh oh! I have less than 10% free of the 4GB total. Wait, the ZFS ARC is using
-up 800MB of that! Let&#8217;s try again with the -C option:</p>
+up 800MB of that! Let&rsquo;s try again with the -C option:</p>
 
-<div>
-  <pre><code class='console'>$ /usr/local/nagios/libexec/check_mem.pl -w 10 -c 5 -f -C
-OK - 29.7% (1220611 kB) free.|TOTAL=4113823KB;;;; USED=2893212KB;;;; FREE=1220611KB;;;; CACHES=817075KB;;;;</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> /usr/local/nagios/libexec/check_mem.pl -w <span class="m">10</span> -c <span class="m">5</span> -f -C
+<span class="go">OK - 29.7% (1220611 kB) free.|TOTAL=4113823KB;;;; USED=2893212KB;;;; FREE=1220611KB;;;; CACHES=817075KB;;;;</span></code></pre></div>
 
 
-<p>That&#8217;s better! You&#8217;ll see the same sort of thing on Linux. Maybe some day I&#8217;ll
+<p>That&rsquo;s better! You&rsquo;ll see the same sort of thing on Linux. Maybe some day I&rsquo;ll
 share the nasty hackery that is getting Nagios perfdata into Cacti
-automagically, but I don&#8217;t know if the world&#8217;s ready for that yet ;-) Until
+automagically, but I don&rsquo;t know if the world&rsquo;s ready for that yet ;-) Until
 then, give my plugin a try, and let me know how it works. If you have another
-OS for me to add, I&#8217;d love to code it up!</p>
+OS for me to add, I&rsquo;d love to code it up!</p>
 </div>
 
 
@@ -186,19 +172,12 @@ OS for me to add, I&#8217;d love to code it up!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-05T00:00:00-05:00" pubdate data-updated="true">Jun 5<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-05T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/code/'>Code</a>, <a class='category' href='/blog/categories/nagios/'>Nagios</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/code/'>code</a>, <a class='category' href='/blog/categories/nagios/'>nagios</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -207,7 +186,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" >Tweet</a>
   
   
   
@@ -235,20 +214,30 @@ OS for me to add, I&#8217;d love to code it up!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -256,7 +245,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -271,7 +260,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -319,7 +308,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -337,7 +326,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -353,7 +342,7 @@ OS for me to add, I&#8217;d love to code it up!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

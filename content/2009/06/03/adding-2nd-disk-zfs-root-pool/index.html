@@ -9,7 +9,7 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="So, let&#8217;s say you&#8217;ve just completed migrating to ZFS from UFS using
+  <meta name="description" content="So, let&rsquo;s say you&rsquo;ve just completed migrating to ZFS from UFS using
 LiveUpgrade, and now you want use that
 leftover disk to make a mirror &hellip;">
   
@@ -23,10 +23,11 @@ leftover disk to make a mirror &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/06/03/adding-2nd-disk-zfs-root-pool">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ leftover disk to make a mirror &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ leftover disk to make a mirror &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Adding a 2nd Disk to a ZFS Root Pool</h1>
     
     
@@ -94,23 +91,16 @@ leftover disk to make a mirror &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-03T00:00:00-05:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-03T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>So, let&#8217;s say you&#8217;ve just completed <a href="http://www.sysadminsjourney.com/content/2009/06/02/use-%0Aliveupgrade-migrate-ufs-zfs-minimal-downtime">migrating to ZFS from UFS using
+<div class="entry-content"><p>So, let&rsquo;s say you&rsquo;ve just completed <a href="http://www.sysadminsjourney.com/content/2009/06/02/use-%0Aliveupgrade-migrate-ufs-zfs-minimal-downtime">migrating to ZFS from UFS using
 LiveUpgrade</a>, and now you want use that
-leftover disk to make a mirror. Easily done, but there&#8217;s one caveat &#8211; you
+leftover disk to make a mirror. Easily done, but there&rsquo;s one caveat &ndash; you
 need to make the second disk bootable in case the first fails.  So, starting
 off from <a href="http://www.sysadminsjourney.com/content/2009/06/02/use-liveupgrade-%0Amigrate-ufs-zfs-minimal-downtime">where we left
 off</a>, you have an old UFS based boot environment
@@ -119,7 +109,7 @@ sitting on c1t1d0. First, delete the old environment:</p>
 <pre><code>ludelete Solaris10 &amp;&amp; lustatus
 </code></pre>
 
-<p>That was easy. Now run &#8216;format&#8217; on c1t1d0, and make slice 0 encompass the
+<p>That was easy. Now run &lsquo;format&rsquo; on c1t1d0, and make slice 0 encompass the
 whole disk. Write out the label, and get back to the prompt. Now, we need to
 make our single-disk ZPool into a two-way mirror. This operation is mind-
 blowingly simple and is one of the showcases of ZFS and its ease of
@@ -129,19 +119,19 @@ management:</p>
 </code></pre>
 
 <p>This sets up the mirror, and automatically starts the resilvering (syncing)
-process. You can monitor its progress by running &#8216;zpool status&#8217;. The final
+process. You can monitor its progress by running &lsquo;zpool status&rsquo;. The final
 step is to actually make c1t1d0 bootable in case c1t0d0 fails. Here, we use
-the &#8216;installboot&#8217; program for SPARC:</p>
+the &lsquo;installboot&rsquo; program for SPARC:</p>
 
 <pre><code>installboot -F zfs /usr/platform/`uname -i`/lib/fs/zfs/bootblk /dev/rdsk/c1t1d0s0
 </code></pre>
 
-<p>or use installgrub if you&#8217;re on x86:</p>
+<p>or use installgrub if you&rsquo;re on x86:</p>
 
 <pre><code>installgrub /boot/grub/stage1 /boot/grub/stage2 /dev/rdsk/c1d0s0
 </code></pre>
 
-<p>That&#8217;s it, you can now boot from either drive!</p>
+<p>That&rsquo;s it, you can now boot from either drive!</p>
 </div>
 
 
@@ -157,14 +147,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-03T00:00:00-05:00" pubdate data-updated="true">Jun 3<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-03T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
@@ -178,7 +161,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/03/adding-2nd-disk-zfs-root-pool" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/03/adding-2nd-disk-zfs-root-pool" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/03/adding-2nd-disk-zfs-root-pool" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/03/adding-2nd-disk-zfs-root-pool" >Tweet</a>
   
   
   
@@ -206,20 +189,30 @@ the &#8216;installboot&#8217; program for SPARC:</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -227,7 +220,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -242,7 +235,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -290,7 +283,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -308,7 +301,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -324,7 +317,7 @@ the &#8216;installboot&#8217; program for SPARC:</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

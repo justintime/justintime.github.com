@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Back to Linux for my Desktop - SysAdmin's Journey</title>
+  <title>Back to Linux for My Desktop - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="Well, it&#8217;s been just over a month since I&#8217;ve converted my main workstation
+  <meta name="description" content="Well, it&rsquo;s been just over a month since I&rsquo;ve converted my main workstation
 over to OpenSolaris. Unfortunately,
-I&#8217;m going to abandon &hellip;">
+I&rsquo;m going to abandon &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,10 +23,11 @@ I&#8217;m going to abandon &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/07/21/back-linux-my-desktop">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ I&#8217;m going to abandon &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ I&#8217;m going to abandon &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Back to Linux for My Desktop</h1>
     
     
@@ -94,25 +91,18 @@ I&#8217;m going to abandon &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-07-21T00:00:00-05:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+<time class='entry-date' datetime='2009-07-21T00:00:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Well, it&#8217;s been just over a month <a href="http://www.sysadminsjourney.com/content/2009/06/16%0A/plunging-deep-end-running-opensolaris-my-primary-workstation">since I&#8217;ve converted my main workstation
+<div class="entry-content"><p>Well, it&rsquo;s been just over a month <a href="http://www.sysadminsjourney.com/content/2009/06/16%0A/plunging-deep-end-running-opensolaris-my-primary-workstation">since I&rsquo;ve converted my main workstation
 over to OpenSolaris</a>. Unfortunately,
-I&#8217;m going to abandon the project, and switch back to Linux as my choice as
-primary desktop OS.  The main reason? Cost in productivity. It&#8217;s not that I
-can&#8217;t build things from source, or tweak config files, but I just don&#8217;t have
+I&rsquo;m going to abandon the project, and switch back to Linux as my choice as
+primary desktop OS.  The main reason? Cost in productivity. It&rsquo;s not that I
+can&rsquo;t build things from source, or tweak config files, but I just don&rsquo;t have
 the time to anymore. <a href="http://www.sysadminsjourney.com/content/2009/06/16/fixing-%0Ametacitys-window-placement-dual-head-setups-opensolaris">Unlike
 OpenSolaris</a>, dual-head works as
 expected on Linux. I had to <a href="http://www.sysadminsjourney.com/content/2009/07/07/making-home-and-%0Aend-work-they-do-linux-opensolaris">do
@@ -120,30 +110,30 @@ voodoo</a> to make the home and end keys work in the
 gnome-terminal. Little things, like gcc being the first compiler found in
 PATH, but most binaries on the system being compiled with SunStudio cc cause
 larger issues like <a href="http://www.sysadminsjourney.com/content/2009/06/19/fixing-cpan-%0Aperl-module-installation-issues-opensolaris">CPAN not working
-correctly</a>. Certain things just aren&#8217;t even
+correctly</a>. Certain things just aren&rsquo;t even
 there yet, like virtual consoles, which are invaluable when troubleshooting
 Xorg issues. Each one of these issues is fixable, but the key is that they
-don&#8217;t exist in the first place when I use Linux. The lack of graphics
+don&rsquo;t exist in the first place when I use Linux. The lack of graphics
 acceleration for my card turned out to be more of an issue that I would have
 thought (you want your desktop environment to be snappy). Also, not being able
 to use the AHCI mode on my SATA controller killed disk I/O. Since OpenSolaris
-has far fewer adopters than Linux, binary-only applications often don&#8217;t
+has far fewer adopters than Linux, binary-only applications often don&rsquo;t
 release binaries for OpenSolaris (<a href="http://www.getdropbox.com">Dropbox</a> for
-example). The community is growing, and is very helpful, but it&#8217;s not near
+example). The community is growing, and is very helpful, but it&rsquo;s not near
 anywhere as massive as the Linux community. Often times, Google searches
-result in no hits when troubleshooting. Don&#8217;t get me wrong, it&#8217;s not that I
-dislike OpenSolaris, or the direction it&#8217;s going. The opposite is true - I
+result in no hits when troubleshooting. Don&rsquo;t get me wrong, it&rsquo;s not that I
+dislike OpenSolaris, or the direction it&rsquo;s going. The opposite is true - I
 love it! ZFS is truly incredible, and SMF is a godsend. IPS, while a long ways
 from being as fast and comprehensive as apt-get, is a huge improvement over
 the old way. In fact, one of the first things I plan on doing in Linux is
 installing VirtualBox and installing OpenSolaris within it. To summarize, when
-using OpenSolaris as my primary desktop OS, the &#8220;you gotta be kidding me&#8220;&#8216;s
-and the &#8220;dammit&#8220;&#8216;s far outnumbered the &#8220;ooh&#8220;&#8216;s and &#8220;ahh&#8220;&#8216;s. By using Linux as
+using OpenSolaris as my primary desktop OS, the &ldquo;you gotta be kidding me&rdquo;&rsquo;s
+and the &ldquo;dammit&rdquo;&rsquo;s far outnumbered the &ldquo;ooh&rdquo;&rsquo;s and &ldquo;ahh&rdquo;&rsquo;s. By using Linux as
 my desktop OS and OpenSolaris as a VM, I can isolate myself from the
-negatives. I just can&#8217;t afford the impact to my productivity right now. As
-long as Oracle doesn&#8217;t muck too much with the current state of affairs,
-there&#8217;s a good chance that in a year or two, I&#8217;ll try again and have much
-better luck. Until then, OpenSolaris will be on my VM&#8217;s and Servers, but won&#8217;t
+negatives. I just can&rsquo;t afford the impact to my productivity right now. As
+long as Oracle doesn&rsquo;t muck too much with the current state of affairs,
+there&rsquo;s a good chance that in a year or two, I&rsquo;ll try again and have much
+better luck. Until then, OpenSolaris will be on my VM&rsquo;s and Servers, but won&rsquo;t
 be on my workstation.</p>
 </div>
 
@@ -160,19 +150,12 @@ be on my workstation.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-07-21T00:00:00-05:00" pubdate data-updated="true">Jul 21<span>st</span>, 2009</time>
+<time class='entry-date' datetime='2009-07-21T00:00:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -181,7 +164,7 @@ be on my workstation.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/07/21/back-linux-my-desktop" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/07/21/back-linux-my-desktop" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/07/21/back-linux-my-desktop" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/07/21/back-linux-my-desktop" >Tweet</a>
   
   
   
@@ -209,20 +192,30 @@ be on my workstation.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -230,7 +223,7 @@ be on my workstation.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -245,7 +238,7 @@ be on my workstation.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -293,7 +286,7 @@ be on my workstation.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -311,7 +304,7 @@ be on my workstation.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -327,7 +320,7 @@ be on my workstation.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

@@ -9,7 +9,7 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="With all the (deserved) hype about ZFS, there&#8217;s
+  <meta name="description" content="With all the (deserved) hype about ZFS, there&rsquo;s
 still a lot of systems that make use of UFS out there. With all the things
 that ZFS can do, &hellip;">
   
@@ -20,13 +20,14 @@ that ZFS can do, &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://sysadminsjourney.com/blog/page/5/">
+  <link rel="canonical" href="http://sysadminsjourney.com/posts/5/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ that ZFS can do, &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -93,27 +94,20 @@ that ZFS can do, &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-25T00:00:00-05:00" pubdate data-updated="true">Aug 25<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-25T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><img src="/assets/images/solaris.gif" alt="" />With all the (deserved) hype about ZFS, there&#8217;s
+  <div class="entry-content"><p><img src="/assets/images/solaris.gif" alt="" />With all the (deserved) hype about ZFS, there&rsquo;s
 still a lot of systems that make use of UFS out there. With all the things
-that ZFS can do, there&#8217;s still some things that it can&#8217;t do (incompatability
-with flash archives, and POSIX ACL&#8217;s are examples). I needed to basically make
+that ZFS can do, there&rsquo;s still some things that it can&rsquo;t do (incompatability
+with flash archives, and POSIX ACL&rsquo;s are examples). I needed to basically make
 an image of a T1000 that had some non-global zones installed, stick it into a
-lab for a couple weeks, and then return it to it&#8217;s previous state. Since this
-server had non-global zones, using flar&#8217;s was questionable. So I decided to
+lab for a couple weeks, and then return it to it&rsquo;s previous state. Since this
+server had non-global zones, using flar&rsquo;s was questionable. So I decided to
 use <strong>fssnap</strong> and <strong>ufsdump</strong> to make my backups.</p>
 
 <p>The best part about UFS is that while it may not have the latest and greatest
@@ -122,16 +116,16 @@ features, what features it does have are rock-solid stable and supported.
 slices. In order to do a <strong>ufsdump</strong> on your / mount, you either need to boot
 to rescue media, or create a snapshot and run <strong>ufsdump</strong> against that.</p>
 
-<p>For this example, we&#8217;ll assume that you have just two slices &#8211; / and /apps.
+<p>For this example, we&rsquo;ll assume that you have just two slices &ndash; / and /apps.
 The first step is to find out where to store your backing store files. Your
 backing store files will be the size not of the entire slice <em>but of the size
-of the changes to the slice since the snapshot was made</em>. Let&#8217;s say your /apps
+of the changes to the slice since the snapshot was made</em>. Let&rsquo;s say your /apps
 mount is 40GB, but seldom changes - your backing store file will likely be
 less than 512MB in size. Nonetheless, your backing store must not reside on
-the same partition that you&#8217;re making a snapshot of. For our example, we&#8217;ll
+the same partition that you&rsquo;re making a snapshot of. For our example, we&rsquo;ll
 assume that we have a third slice available, mounted at /snaps.</p>
 
-<p>Before creating your snapshot, it&#8217;s best to get the system into a state where
+<p>Before creating your snapshot, it&rsquo;s best to get the system into a state where
 things are as quiet as possible. The best way to do this is to switch to
 single user mode, but you can do whatever you like here. Issue the following
 two commands to create your snapshots:</p>
@@ -145,11 +139,11 @@ two commands to create your snapshots:</p>
 <p>You can see here that it has created two devices for us that represent the
 snapshot. Note that these commands may take 20 seconds or so to return to the
 shell. Once your snapshot devices are created, you may now return the system
-to a normal state. Once you&#8217;re back to normal, we need to create our UFS
+to a normal state. Once you&rsquo;re back to normal, we need to create our UFS
 dumps, but use our snapshot devices as the source. In our example, we have a
 NFS mount at /mnt/shared that has all the room we need.</p>
 
-<p>Now, let&#8217;s create our UFS dump files:</p>
+<p>Now, let&rsquo;s create our UFS dump files:</p>
 
 <pre><code># ufsdump 0uf /mnt/shared/root.ufsdump /dev/rfssnap/0 
   DUMP: Date of this level 0 dump: Tue Aug 25 08:49:31 2009
@@ -203,7 +197,7 @@ NFS mount at /mnt/shared that has all the room we need.</p>
 
 <p>As you can see, the /apps mount was quite large, but even after the backup,
 the backing store file was less that 30MB when I was done. Make sure you
-remember to remove your snapshots when you&#8217;re done with them:</p>
+remember to remove your snapshots when you&rsquo;re done with them:</p>
 
 <pre><code># fssnap -d /
 # fssnap -d /apps
@@ -232,14 +226,7 @@ remember to remove your snapshots when you&#8217;re done with them:</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-25T00:00:00-05:00" pubdate data-updated="true">Aug 25<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-25T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -247,7 +234,7 @@ remember to remove your snapshots when you&#8217;re done with them:</p>
 
 
   <div class="entry-content"><p><img src="/assets/images/red_hat_cert_eng_logo-clr.jpg" alt="" />Just got my test results back
-&#8211; I got 100% on my exam, so now I&#8217;m a RHCE!</p>
+&ndash; I got 100% on my exam, so now I&rsquo;m a RHCE!</p>
 </div>
   
   
@@ -260,7 +247,7 @@ remember to remove your snapshots when you&#8217;re done with them:</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe">Don&#8217;t Reboot After Adding Partitions - Partprobe!</a></h1>
+      <h1 class="entry-title"><a href="/content/2009/08/20/dont-reboot-after-adding-partitions-partprobe">Don't Reboot After Adding Partitions - Partprobe!</a></h1>
     
     
       <p class="meta">
@@ -269,14 +256,7 @@ remember to remove your snapshots when you&#8217;re done with them:</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-20T00:00:00-05:00" pubdate data-updated="true">Aug 20<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-20T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -287,7 +267,7 @@ remember to remove your snapshots when you&#8217;re done with them:</p>
 the class bustled in excitement over learning something new and simple came up
 today. After running fdisk, you will almost always get an error about the
 kernel not using the new partition table you just modified. Before GNU
-released parted, you had to reboot in order for the kernel to purge it&#8217;s cache
+released parted, you had to reboot in order for the kernel to purge it&rsquo;s cache
 and reload the partition table, but now, all you need to do is run
 <strong>partprobe</strong> after exiting fdisk. AFAIK, partprobe is included in most all
 distros.</p>
@@ -312,14 +292,7 @@ distros.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-19T00:00:00-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-19T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -328,26 +301,26 @@ distros.</p>
 
   <div class="entry-content"><p><img src="/assets/images/logo_rh_home.png" alt="" />Today in class we were talking about how
 you needed to save your iptables changes using <strong>service iptables save</strong>
-before rebooting at the end of the test, or else you&#8217;ll fail that section of
-the test. I brought up the setting IPTABLES_SAVE_ON_STOP to &#8220;yes&#8221; in
-/etc/sysconfig/iptables-config, and no one else knew about that file. There&#8217;s
+before rebooting at the end of the test, or else you&rsquo;ll fail that section of
+the test. I brought up the setting IPTABLES_SAVE_ON_STOP to &ldquo;yes&rdquo; in
+/etc/sysconfig/iptables-config, and no one else knew about that file. There&rsquo;s
 some pretty cool settings in there - read on for details.</p>
 
 <p>The file /etc/sysconfig/iptables-config provides a place to configure the
 behavior of the iptables initscript in /etc/init.d/iptables. The file is
-documented <strong>very</strong> well, so give it a quick read. Here&#8217;s some of the more
+documented <strong>very</strong> well, so give it a quick read. Here&rsquo;s some of the more
 interesting settings:</p>
 
 <ul>
-<li><strong>IPTABLES_SAVE_ON_STOP</strong> - this defaults to &#8220;no&#8221;. When set to &#8220;yes&#8221;, every time the initscript is called with the argument of &#8220;stop&#8221; (whether via command line or via system shutdown), the initscript will take the current iptables ruleset and dump it into /etc/sysconfig/iptables. Essentially, this is doing a <strong>service iptables save </strong>behind the scenes when you do a <strong>service iptables stop</strong>. This is great for sysadmins who get distracted often and forget to commit their iptables commands to persistent storage often.</li>
-<li><strong>IPTABLES_SAVE_ON_RESTART</strong> - defaults to &#8220;no&#8221;. When set to &#8220;yes&#8221;, it does the exact same thing as <strong>IPTABLES_SAVE_ON_START</strong> except this does a save operation when the initscript is called with the &#8220;restart&#8221; option.</li>
-<li><strong>IPTABLES_SAVE_COUNTER</strong> - defaults to &#8220;no&#8221;. Everytime <strong>service iptables save</strong> is called (including in the two cases above), the rule and chain counters are saved to the file, and restored on startup. This prevents your counters from being reset every time you restart the service.</li>
-<li><strong>IPTABLES_STATUS_NUMERIC</strong> - defaults to &#8220;yes&#8221;. When you do a <strong>service iptables status</strong>, this will print IP&#8217;s instead of hostnames when set to &#8220;yes&#8221;. When set to &#8220;no&#8221;, it will do reverse DNS lookups on all the IP&#8217;s and /etc/services lookups on all ports.</li>
+<li><strong>IPTABLES_SAVE_ON_STOP</strong> - this defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, every time the initscript is called with the argument of &ldquo;stop&rdquo; (whether via command line or via system shutdown), the initscript will take the current iptables ruleset and dump it into /etc/sysconfig/iptables. Essentially, this is doing a <strong>service iptables save </strong>behind the scenes when you do a <strong>service iptables stop</strong>. This is great for sysadmins who get distracted often and forget to commit their iptables commands to persistent storage often.</li>
+<li><strong>IPTABLES_SAVE_ON_RESTART</strong> - defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, it does the exact same thing as <strong>IPTABLES_SAVE_ON_START</strong> except this does a save operation when the initscript is called with the &ldquo;restart&rdquo; option.</li>
+<li><strong>IPTABLES_SAVE_COUNTER</strong> - defaults to &ldquo;no&rdquo;. Everytime <strong>service iptables save</strong> is called (including in the two cases above), the rule and chain counters are saved to the file, and restored on startup. This prevents your counters from being reset every time you restart the service.</li>
+<li><strong>IPTABLES_STATUS_NUMERIC</strong> - defaults to &ldquo;yes&rdquo;. When you do a <strong>service iptables status</strong>, this will print IP&rsquo;s instead of hostnames when set to &ldquo;yes&rdquo;. When set to &ldquo;no&rdquo;, it will do reverse DNS lookups on all the IP&rsquo;s and /etc/services lookups on all ports.</li>
 <li><strong>IPTABLES_STATUS_VERBOSE</strong> - prints packet and byte counters in the output of <strong>service iptables status</strong>.</li>
 </ul>
 
 
-<p>There&#8217;s a few other settings in there, but these are the ones that I&#8217;m usually
+<p>There&rsquo;s a few other settings in there, but these are the ones that I&rsquo;m usually
 interested in. Happy firewalling!</p>
 </div>
   
@@ -370,14 +343,7 @@ interested in. Happy firewalling!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-18T00:00:00-05:00" pubdate data-updated="true">Aug 18<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-18T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -390,20 +356,20 @@ wanted to know more about it, so I hit Google, and came up with some
 interesting results.</p>
 
 <p><a href="http://www.linuxquestions.org/questions%0A/red-hat-31/when-we-shall-expect-rhel-6-711537/">This post over at linuxquestions.org</a> starts out innocently enough
-&#8211; someone asks for an expected release data on RHEL 6. A poster named
+&ndash; someone asks for an expected release data on RHEL 6. A poster named
 <strong>lazlow</strong> who appears to be a RH or Fedora dev gives a few interesting
 tidbits:</p>
 
 <ul>
 <li>RHEL 5 is based on Fedora Core 6. No wonder it feels a little long in the tooth!</li>
 <li>RHEL 6 was intended to be based upon Fedora 9, but it had too many bugs to even be considered.</li>
-<li><strong>Since the Fedora development has been driven by the community, the focus has shifted towards new features</strong>. I&#8217;ve seen this before in community driven projects. Unless devs are motivated either via cash or fixing the bug helps their situation, no one wants to fix bugs. New features are more fun to work on.</li>
-<li>To solve the problem, <strong>RedHat didn&#8217;t take the project out of the community&#8217;s hands, they paid their own devs to fix Fedora bugs</strong>. This is very commendable behavior for a big corporation, and I feel it&#8217;s a win/win for RedHat and the community.</li>
+<li><strong>Since the Fedora development has been driven by the community, the focus has shifted towards new features</strong>. I&rsquo;ve seen this before in community driven projects. Unless devs are motivated either via cash or fixing the bug helps their situation, no one wants to fix bugs. New features are more fun to work on.</li>
+<li>To solve the problem, <strong>RedHat didn&rsquo;t take the project out of the community&rsquo;s hands, they paid their own devs to fix Fedora bugs</strong>. This is very commendable behavior for a big corporation, and I feel it&rsquo;s a win/win for RedHat and the community.</li>
 <li>It looks like RHEL6 will be based upon Fedora 11.</li>
 </ul>
 
 
-<p>Now, this could all be someone spouting off about things they don&#8217;t know
+<p>Now, this could all be someone spouting off about things they don&rsquo;t know
 anything about, but it looks like it checks out to me. Some pretty interesting
 tidbits, and (if true) an example of a corporation contributing to OSS and
 making money off of it. If anyone can confirm or deny this information, please
@@ -420,7 +386,7 @@ do so!</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/content/2009/08/18/happiness-not">Happiness Is *NOT*&#8230;</a></h1>
+      <h1 class="entry-title"><a href="/content/2009/08/18/happiness-not">Happiness Is *NOT*...</a></h1>
     
     
       <p class="meta">
@@ -429,14 +395,7 @@ do so!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-18T00:00:00-05:00" pubdate data-updated="true">Aug 18<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-18T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -444,12 +403,12 @@ do so!</p>
 
 
   <div class="entry-content"><p><img src="/assets/images/medium_sad_face.jpg" alt="No happiness here!" />I bit the bullet and
-jumped on a sweet deal on a latest-gen 17&#8221; MacBook Pro late last week. It was
+jumped on a sweet deal on a latest-gen 17" MacBook Pro late last week. It was
 a refurb, and I was too cheap to pay for quick shipping, so Apple told me it
-wouldn&#8217;t ship for 5-7 business days. Whatdya know, they were on-the ball and
+wouldn&rsquo;t ship for 5-7 business days. Whatdya know, they were on-the ball and
 shipped it out early. It arrived at my desk on Monday. Normally this would be
-good except that I&#8217;m almost 400 miles away from my desk, and won&#8217;t be back
-until Friday! Arrrggghhh! Oh well, I probably wouldn&#8217;t get any studying done
+good except that I&rsquo;m almost 400 miles away from my desk, and won&rsquo;t be back
+until Friday! Arrrggghhh! Oh well, I probably wouldn&rsquo;t get any studying done
 if I had it with me!</p>
 </div>
   
@@ -472,24 +431,17 @@ if I had it with me!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-16T00:00:00-05:00" pubdate data-updated="true">Aug 16<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-16T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>This week, I&#8217;m off to my <a href="https://www.redhat.com/courses/rh300_r%0Ahce_rapid_track_course_and_rhce_exam/">RH300 course</a> which involves taking my
-<a href="http://www.redhat.com/certification/rhce/">RHCE</a> exam on Friday. It&#8217;s funny
-&#8211; studying one thing from 9-5 without any distractions or multitasking truly
-feels like a vacation to me. After 5pm, I go back to my room and play. I&#8217;m
+  <div class="entry-content"><p>This week, I&rsquo;m off to my <a href="https://www.redhat.com/courses/rh300_r%0Ahce_rapid_track_course_and_rhce_exam/">RH300 course</a> which involves taking my
+<a href="http://www.redhat.com/certification/rhce/">RHCE</a> exam on Friday. It&rsquo;s funny
+&ndash; studying one thing from 9-5 without any distractions or multitasking truly
+feels like a vacation to me. After 5pm, I go back to my room and play. I&rsquo;m
 pumped! Wish me luck!</p>
 </div>
   
@@ -512,53 +464,46 @@ pumped! Wish me luck!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-13T00:00:00-05:00" pubdate data-updated="true">Aug 13<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-13T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&#8217;re a Java shop,
-you have to use continuous integration. In fact, if you&#8217;re a code shop, you
+  <div class="entry-content"><p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&rsquo;re a Java shop,
+you have to use continuous integration. In fact, if you&rsquo;re a code shop, you
 need CI. For the longest time, CruiseControl was the only kid on the block.
-I&#8217;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
-didn&#8217;t take the time to try it. Why not? Well, because CI is hard, and it
-takes forever to get setup right &#8211; I didn&#8217;t want to have to re-invest all
-that time. Man, if only I&#8217;d known how wrong I was.</p>
+I&rsquo;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
+didn&rsquo;t take the time to try it. Why not? Well, because CI is hard, and it
+takes forever to get setup right &ndash; I didn&rsquo;t want to have to re-invest all
+that time. Man, if only I&rsquo;d known how wrong I was.</p>
 
-<p>Everyone&#8217;s gripe with CruiseControl was that you had to edit XML files to make
-the configuration. Well, I don&#8217;t mind XML, and it&#8217;s often pretty good at
+<p>Everyone&rsquo;s gripe with CruiseControl was that you had to edit XML files to make
+the configuration. Well, I don&rsquo;t mind XML, and it&rsquo;s often pretty good at
 config files. But CruiseControl was always quirky. Switching from CVS to SVN?
-A day&#8217;s worth of work. Adding a new build? At least an hour or two. Little
-things: CruiseControl would freak out and die if you didn&#8217;t do the initial
+A day&rsquo;s worth of work. Adding a new build? At least an hour or two. Little
+things: CruiseControl would freak out and die if you didn&rsquo;t do the initial
 checkout from CVS/SVN - CruiseControl only does updates, not checkouts. We
-often joke how the developers that write CruiseControl favorite motto was &#8220;let
-the sucker sysadmin deal with it&#8221;.</p>
+often joke how the developers that write CruiseControl favorite motto was &ldquo;let
+the sucker sysadmin deal with it&rdquo;.</p>
 
 <p>So, I downloaded Hudson, and in less than 10 minutes I had everything that was
-being done in CruiseControl working in Hudson. And, I&#8217;m being honest here, I
+being done in CruiseControl working in Hudson. And, I&rsquo;m being honest here, I
 actually smiled a few times to myself when setting it up! It took another 20
 minutes, and I have authentication working against our LDAP server, which I
 never had working in CruiseControl.</p>
 
-<p>If you&#8217;re running CruiseControl now, drop everything, do yourself a favor, and
-go try Hudson. If it doesn&#8217;t do what you want, it has plugins that do. It has
-API&#8217;s for XML, JSON, and Python, and the XML implementation has full XPATH
+<p>If you&rsquo;re running CruiseControl now, drop everything, do yourself a favor, and
+go try Hudson. If it doesn&rsquo;t do what you want, it has plugins that do. It has
+API&rsquo;s for XML, JSON, and Python, and the XML implementation has full XPATH
 support. Every field in the web interface has inline help that is actually
-helpful. Having different projects use different Java&#8217;s and Ant&#8217;s are a click
+helpful. Having different projects use different Java&rsquo;s and Ant&rsquo;s are a click
 away. You can build multiple projects at once, create build dependencies, and
 even have distributed builds run amongst multiple machines.</p>
 
-<p>Please, I&#8217;m begging you. Give Hudson a try, and get back some of your life
-from CruiseControl! If you&#8217;re not running CruiseControl or Hudson, then you
+<p>Please, I&rsquo;m begging you. Give Hudson a try, and get back some of your life
+from CruiseControl! If you&rsquo;re not running CruiseControl or Hudson, then you
 probably should be.</p>
 </div>
   
@@ -572,7 +517,7 @@ probably should be.</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic">Forcing Apache&#8217;s Mod_deflate Module to Compress JSP&#8217;s From Weblogic</a></h1>
+      <h1 class="entry-title"><a href="/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic">Forcing Apache's Mod_deflate Module to Compress JSP's From Weblogic</a></h1>
     
     
       <p class="meta">
@@ -581,21 +526,14 @@ probably should be.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-06T00:00:00-05:00" pubdate data-updated="true">Aug 6<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-06T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>This is one of those &#8220;note for myself, and maybe it will help someone else&#8221;
+  <div class="entry-content"><p>This is one of those &ldquo;note for myself, and maybe it will help someone else&rdquo;
 posts. When you use Apache and mod_weblogic as a frontend to a WebLogic
 application server, you will likely want to compress your output. It makes
 sense to put the load of compression on the webservers, since the application
@@ -621,7 +559,7 @@ order of filters in the chain. No matter the exact cause, here is the fix:</p>
 
 <p>This simply forces Apache to assume that all files that end in .jsp are of
 type text/html. This happens before the mod_deflate filter is applied, and
-therefore your JSP&#8217;s will be gzipped!</p>
+therefore your JSP&rsquo;s will be gzipped!</p>
 </div>
   
   
@@ -643,14 +581,7 @@ therefore your JSP&#8217;s will be gzipped!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-05T00:00:00-05:00" pubdate data-updated="true">Aug 5<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-05T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -658,31 +589,31 @@ therefore your JSP&#8217;s will be gzipped!</p>
 
 
   <div class="entry-content"><p>Matt Simmons over at <a href="http://www.standalone-%0Asysadmin.com/">Standalone Sysadmin</a> has been evangelizing ServerFault.com for awhile now. The idea
-is great, and it really works - I&#8217;ve learned a lot of things from the site
+is great, and it really works - I&rsquo;ve learned a lot of things from the site
 already. However, checking websites is so 1998 - everything I do is RSS now.
 Simply adding the homepage of ServerFault.com to your RSS reader using
-http://serverfault.com/feeds results in a huge amount of items that I could
+<a href="http://serverfault.com/feeds">http://serverfault.com/feeds</a> results in a huge amount of items that I could
 care less about, and I hate clutter in my RSS reader. After poking around a
 bit, I found some undocumented features that you can use to eliminate unneeded
 noise from your RSS feed (or your browser if you still live in 1998 :-) ).
 The key to doing this is tags. Every question on ServerFault has one or more
 tags. You can view them all at
-<a href="http://serverfault.com/tags">http://serverfault.com/tags</a>. There&#8217;s two ways
-you can go about getting only what you want in your feed &#8211; excluding tags or
-including tags. Let&#8217;s start with including tags.</p>
+<a href="http://serverfault.com/tags">http://serverfault.com/tags</a>. There&rsquo;s two ways
+you can go about getting only what you want in your feed &ndash; excluding tags or
+including tags. Let&rsquo;s start with including tags.</p>
 
 <h2>Including Tags</h2>
 
-<p>When using this method, I haven&#8217;t figured out how to use an &#8220;OR&#8221; when using
-multiple tags, you can only use the builtin AND operation. Let&#8217;s say that you
+<p>When using this method, I haven&rsquo;t figured out how to use an &ldquo;OR&rdquo; when using
+multiple tags, you can only use the builtin AND operation. Let&rsquo;s say that you
 only want questions tagged with Linux. Easy enough, your feed URL would be <a href="http://serverfault.com/feeds/tag/linux">ht
 tp://serverfault.com/feeds/tag/linux</a>.
-Now your feed will only show you questions tagged with Linux. Say that&#8217;s
+Now your feed will only show you questions tagged with Linux. Say that&rsquo;s
 getting to be TMI, and you want to limit that feed to only include questions
 tagged Linux and Ubuntu. Simply add more tags to your feed URL with +tagname,
 and urlencode the plus - resulting in this URL: <a href="http://serverfault.com/feeds/tag/linux%2Bubuntu">http://serverfault.com/feeds/
 tag/linux%2bubuntu</a>. Now, you
-can&#8217;t do &#8220;OR&#8220;&#8216;s in a single query, but you can create multiple feed URL&#8217;s that
+can&rsquo;t do &ldquo;OR&rdquo;&rsquo;s in a single query, but you can create multiple feed URL&rsquo;s that
 include just what you want and use your feed reader to combine them into one
 folder.</p>
 
@@ -690,26 +621,26 @@ folder.</p>
 
 <p>The above example works, but not many sysadmins I know are so focused in just
 a few areas. Also, the above configuration will not keep you in-tune to new
-tags that you might be interested in. For myself, I&#8217;m interested in everything
+tags that you might be interested in. For myself, I&rsquo;m interested in everything
 except anything Windows related. By excluding tags, you will need to go
-through an iterative process, but once you&#8217;re done you&#8217;ll be quite happy with
-the results. Let&#8217;s get to it. The first step is to make a URL that gives an
+through an iterative process, but once you&rsquo;re done you&rsquo;ll be quite happy with
+the results. Let&rsquo;s get to it. The first step is to make a URL that gives an
 RSS feed for all posts not tagged windows. Easy: <a href="http://serverfault.com/feeds/tag/-windows">http://serverfault.com/feeds
 /tag/-windows</a>. Now, unfortunately,
 many questions are tagged as windows-server-2003, but are not tagged windows.
-So, we append the URL with a &#8220;AND NOT THISTAG&#8221; operation like this:
+So, we append the URL with a &ldquo;AND NOT THISTAG&rdquo; operation like this:
 <a href="http://serverfault.com/feeds/tag/-windows%2B-windows-%0Aserver-2003">http://serverfault.com/feeds/tag/-windows%2B-windows-
-server-2003</a>. You can see where I&#8217;m going with this now. Using these two
+server-2003</a>. You can see where I&rsquo;m going with this now. Using these two
 methods, you can create a very nice, clean, and relevant personal RSS feed for
-ServerFault&#8217;s questions. Nothing here is rocket science, but it&#8217;s not
-documented either &#8211; hopefully it helps someone else. Note that you can
-preview what your query will generate in your browser by replacing &#8220;feeds/tag&#8221;
-in the URL with &#8220;tags&#8221;. In case you&#8217;re wondering, my &#8220;everything except
-Windows&#8221; feed URL is still not perfect, but here&#8217;s what I&#8217;ve got so far:
+ServerFault&rsquo;s questions. Nothing here is rocket science, but it&rsquo;s not
+documented either &ndash; hopefully it helps someone else. Note that you can
+preview what your query will generate in your browser by replacing &ldquo;feeds/tag&rdquo;
+in the URL with &ldquo;tags&rdquo;. In case you&rsquo;re wondering, my &ldquo;everything except
+Windows&rdquo; feed URL is still not perfect, but here&rsquo;s what I&rsquo;ve got so far:
 <a href="http://serverfault.com/feeds/tag/-windows%0A%2B-windows-server-2003%2B-sqlserver%2B-windows-server-2008%2B-windows-xp%2B-%0Aiis%2B-active-directory%2B-sharepoint%2B-vista%2B-exchange%2B-outlook">http://serverfault.com/feeds/tag/-windows%2B-windows-server-2003%2B-sqlserver
 %2B-windows-server-2008%2B-windows-xp%2B-iis%2B-active-directory%2B-sharepoint
 %2B-vista%2B-exchange%2B-outlook</a>. Share
-your URL&#8217;s and tips I may have missed in the comments!</p>
+your URL&rsquo;s and tips I may have missed in the comments!</p>
 </div>
   
   
@@ -719,30 +650,40 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
   
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/6/">&larr; Older</a>
+      <a class="prev" href="/posts/6">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
-    <a class="next" href="/blog/page/4/">Newer &rarr;</a>
+    <a class="next" href="/posts/4">Newer &rarr;</a>
     
   </div>
 </div>
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It&#8217;s not you, it&#8217;s me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -750,7 +691,7 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -759,13 +700,13 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -789,7 +730,7 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -812,7 +753,7 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -827,7 +768,7 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -843,7 +784,7 @@ your URL&#8217;s and tips I may have missed in the comments!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>iptables Options in RHEL/CentOS - SysAdmin's Journey</title>
+  <title>Iptables Options in RHEL/CentOS - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -23,10 +23,11 @@ before rebooting at the end of the test &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ before rebooting at the end of the test &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ before rebooting at the end of the test &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Iptables Options in RHEL/CentOS</h1>
     
     
@@ -94,14 +91,7 @@ before rebooting at the end of the test &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-19T00:00:00-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-19T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -110,26 +100,26 @@ before rebooting at the end of the test &hellip;">
 
 <div class="entry-content"><p><img src="/assets/images/logo_rh_home.png" alt="" />Today in class we were talking about how
 you needed to save your iptables changes using <strong>service iptables save</strong>
-before rebooting at the end of the test, or else you&#8217;ll fail that section of
-the test. I brought up the setting IPTABLES_SAVE_ON_STOP to &#8220;yes&#8221; in
-/etc/sysconfig/iptables-config, and no one else knew about that file. There&#8217;s
+before rebooting at the end of the test, or else you&rsquo;ll fail that section of
+the test. I brought up the setting IPTABLES_SAVE_ON_STOP to &ldquo;yes&rdquo; in
+/etc/sysconfig/iptables-config, and no one else knew about that file. There&rsquo;s
 some pretty cool settings in there - read on for details.</p>
 
 <p>The file /etc/sysconfig/iptables-config provides a place to configure the
 behavior of the iptables initscript in /etc/init.d/iptables. The file is
-documented <strong>very</strong> well, so give it a quick read. Here&#8217;s some of the more
+documented <strong>very</strong> well, so give it a quick read. Here&rsquo;s some of the more
 interesting settings:</p>
 
 <ul>
-<li><strong>IPTABLES_SAVE_ON_STOP</strong> - this defaults to &#8220;no&#8221;. When set to &#8220;yes&#8221;, every time the initscript is called with the argument of &#8220;stop&#8221; (whether via command line or via system shutdown), the initscript will take the current iptables ruleset and dump it into /etc/sysconfig/iptables. Essentially, this is doing a <strong>service iptables save </strong>behind the scenes when you do a <strong>service iptables stop</strong>. This is great for sysadmins who get distracted often and forget to commit their iptables commands to persistent storage often.</li>
-<li><strong>IPTABLES_SAVE_ON_RESTART</strong> - defaults to &#8220;no&#8221;. When set to &#8220;yes&#8221;, it does the exact same thing as <strong>IPTABLES_SAVE_ON_START</strong> except this does a save operation when the initscript is called with the &#8220;restart&#8221; option.</li>
-<li><strong>IPTABLES_SAVE_COUNTER</strong> - defaults to &#8220;no&#8221;. Everytime <strong>service iptables save</strong> is called (including in the two cases above), the rule and chain counters are saved to the file, and restored on startup. This prevents your counters from being reset every time you restart the service.</li>
-<li><strong>IPTABLES_STATUS_NUMERIC</strong> - defaults to &#8220;yes&#8221;. When you do a <strong>service iptables status</strong>, this will print IP&#8217;s instead of hostnames when set to &#8220;yes&#8221;. When set to &#8220;no&#8221;, it will do reverse DNS lookups on all the IP&#8217;s and /etc/services lookups on all ports.</li>
+<li><strong>IPTABLES_SAVE_ON_STOP</strong> - this defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, every time the initscript is called with the argument of &ldquo;stop&rdquo; (whether via command line or via system shutdown), the initscript will take the current iptables ruleset and dump it into /etc/sysconfig/iptables. Essentially, this is doing a <strong>service iptables save </strong>behind the scenes when you do a <strong>service iptables stop</strong>. This is great for sysadmins who get distracted often and forget to commit their iptables commands to persistent storage often.</li>
+<li><strong>IPTABLES_SAVE_ON_RESTART</strong> - defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, it does the exact same thing as <strong>IPTABLES_SAVE_ON_START</strong> except this does a save operation when the initscript is called with the &ldquo;restart&rdquo; option.</li>
+<li><strong>IPTABLES_SAVE_COUNTER</strong> - defaults to &ldquo;no&rdquo;. Everytime <strong>service iptables save</strong> is called (including in the two cases above), the rule and chain counters are saved to the file, and restored on startup. This prevents your counters from being reset every time you restart the service.</li>
+<li><strong>IPTABLES_STATUS_NUMERIC</strong> - defaults to &ldquo;yes&rdquo;. When you do a <strong>service iptables status</strong>, this will print IP&rsquo;s instead of hostnames when set to &ldquo;yes&rdquo;. When set to &ldquo;no&rdquo;, it will do reverse DNS lookups on all the IP&rsquo;s and /etc/services lookups on all ports.</li>
 <li><strong>IPTABLES_STATUS_VERBOSE</strong> - prints packet and byte counters in the output of <strong>service iptables status</strong>.</li>
 </ul>
 
 
-<p>There&#8217;s a few other settings in there, but these are the ones that I&#8217;m usually
+<p>There&rsquo;s a few other settings in there, but these are the ones that I&rsquo;m usually
 interested in. Happy firewalling!</p>
 </div>
 
@@ -146,19 +136,12 @@ interested in. Happy firewalling!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-19T00:00:00-05:00" pubdate data-updated="true">Aug 19<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-19T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/redhat/'>RedHat</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/redhat/'>redhat</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -167,7 +150,7 @@ interested in. Happy firewalling!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos" >Tweet</a>
   
   
   
@@ -195,20 +178,30 @@ interested in. Happy firewalling!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -216,7 +209,7 @@ interested in. Happy firewalling!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -231,7 +224,7 @@ interested in. Happy firewalling!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -279,7 +272,7 @@ interested in. Happy firewalling!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -297,7 +290,7 @@ interested in. Happy firewalling!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -313,7 +306,7 @@ interested in. Happy firewalling!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

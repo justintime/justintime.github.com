@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: OpenSolaris | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: opensolaris | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/opensolaris/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -18,10 +18,10 @@
     <link href="http://sysadminsjourney.com/content/2009/07/07/opensolaris-network-administration-linux-sysadmins"/>
     <updated>2009-07-07T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/07/07/opensolaris-network-administration-for-linux-sysadmins</id>
-    <content type="html"><![CDATA[<p>Why is it that we always find the good documentation after we've fumbled our
-way around the help and man pages? Such is the case with <a href="http://www.opensolaris.com/use/network_administration.pdf">"OpenSolaris Network
+    <content type="html"><![CDATA[<p>Why is it that we always find the good documentation after we&rsquo;ve fumbled our
+way around the help and man pages? Such is the case with <a href="http://www.opensolaris.com/use/network_administration.pdf">&ldquo;OpenSolaris Network
 Administration for Administrators Familiar with
-Linux"</a>. If you're
+Linux&rdquo;</a>. If you&rsquo;re
 someone that is familiar with Linux (the doc annoyingly equates RHEL to
 Linux), and are thinking about installing OpenSolaris, make sure you download
 this PDF and keep a hardcopy handy!</p>
@@ -33,9 +33,9 @@ this PDF and keep a hardcopy handy!</p>
     <link href="http://sysadminsjourney.com/content/2009/07/07/making-home-and-end-work-they-do-linux-opensolaris"/>
     <updated>2009-07-07T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/07/07/making-home-and-end-work-like-they-do-in-linux-on-opensolaris</id>
-    <content type="html"><![CDATA[<p>In OpenSolaris, the xterm bindings aren't there for the End and Home keys -
+    <content type="html"><![CDATA[<p>In OpenSolaris, the xterm bindings aren&rsquo;t there for the End and Home keys -
 they do nothing. Yes, I know, Ctrl+a and Ctrl+e do the same things, but my
-laziness has turned into muscle memory. Here's how to fix it:  As your normal
+laziness has turned into muscle memory. Here&rsquo;s how to fix it:  As your normal
 user, run the following:</p>
 
 <pre><code>mkdir /tmp/foo
@@ -59,7 +59,7 @@ arisx86/message/20027</a> - thanks to Juergen Keil for the tip!</p>
     <link href="http://sysadminsjourney.com/content/2009/06/19/fixing-cpan-perl-module-installation-issues-opensolaris"/>
     <updated>2009-06-19T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/06/19/fixing-cpan-perl-module-installation-issues-on-opensolaris</id>
-    <content type="html"><![CDATA[<p>In OpenSolaris, if you're installing perl modules via CPAN, you might run into
+    <content type="html"><![CDATA[<p>In OpenSolaris, if you&rsquo;re installing perl modules via CPAN, you might run into
 this error:</p>
 
 <pre><code>cc: unrecognized option `-KPIC'
@@ -69,17 +69,17 @@ cc: ReadKey.c: linker input file unused because linking not done
 
 <p>In order to fix that, edit the file /usr/perl5/5.8.4/lib/i86pc-solaris-
 64int/Config.pm, and make the following changes to the existing lines for
-'optimize' and 'cccldflags': <strong>UPDATE! Thanks to reader Vesta for his tip. The
+&lsquo;optimize&rsquo; and &lsquo;cccldflags&rsquo;: <strong>UPDATE! Thanks to reader Vesta for his tip. The
 original tip I posted will not fix all the issues, for example Apache2::Util
-won't install.</strong> This problem occurs because the Sun developers build perl
-with the cc from SunStudio, but by default, the first 'cc' found in a user's
+won&rsquo;t install.</strong> This problem occurs because the Sun developers build perl
+with the cc from SunStudio, but by default, the first &lsquo;cc&rsquo; found in a user&rsquo;s
 path is a symlink to gcc. All you need to do is to install SunStudio, and
-prefer it's cc:</p>
+prefer it&rsquo;s cc:</p>
 
 <pre><code>pfexec pkg install ss-dev
 </code></pre>
 
-<p>Now, edit ~/.profile, and prepend your path with SunStudio's bin directory,
+<p>Now, edit ~/.profile, and prepend your path with SunStudio&rsquo;s bin directory,
 like so:</p>
 
 <pre><code>export PATH=/opt/SunStudioExpress/bin/:/usr/gnu/bin:/usr/bin:/usr/X11/bin:/usr/sbin:/sbin
@@ -97,18 +97,18 @@ most any Perl module!</p>
     <updated>2009-06-16T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/06/16/plunging-into-the-deep-end-running-opensolaris-on-my-primary-workstation</id>
     <content type="html"><![CDATA[<p>Well, like I did with Linux ten years ago, I installed OpenSolaris 2009.06 on
-my primary workstation at work. There's simply no better way to learn an OS
+my primary workstation at work. There&rsquo;s simply no better way to learn an OS
 than to force yourself to run it. While I was pretty close to Ctrl-C'ing the
-whole project a couple of times, I'm now getting things set up pretty much the
-way I need them to be. Stay tuned for articles with my tips, but here's my
+whole project a couple of times, I&rsquo;m now getting things set up pretty much the
+way I need them to be. Stay tuned for articles with my tips, but here&rsquo;s my
 first impressions:</p>
 
 <ul>
-<li>IPS - the new package manager is fairly robust. It certainly appears to have some speed issues, but all in all, it works pretty well. It has a good selection of software available - not extensive, but enough to get you going. I'm sure both the speed and the quantity will both improve with time.</li>
-<li>The Gnome Desktop as shipped has a very sharp and clean feel to it. It's hard to describe, but I like it.</li>
-<li>From what I can tell, Compiz is only supported with NVidia graphics cards. The fglrx driver doesn't yet exist for OpenSolaris.</li>
+<li>IPS - the new package manager is fairly robust. It certainly appears to have some speed issues, but all in all, it works pretty well. It has a good selection of software available - not extensive, but enough to get you going. I&rsquo;m sure both the speed and the quantity will both improve with time.</li>
+<li>The Gnome Desktop as shipped has a very sharp and clean feel to it. It&rsquo;s hard to describe, but I like it.</li>
+<li>From what I can tell, Compiz is only supported with NVidia graphics cards. The fglrx driver doesn&rsquo;t yet exist for OpenSolaris.</li>
 <li>It really sucks trying to debug Xorg setup without virtual consoles!</li>
-<li>While I'm a long ways from being comfortable, I'm now at a point that I don't think I'll find any showstopping issues.</li>
+<li>While I&rsquo;m a long ways from being comfortable, I&rsquo;m now at a point that I don&rsquo;t think I&rsquo;ll find any showstopping issues.</li>
 </ul>
 
 ]]></content>
@@ -119,9 +119,9 @@ first impressions:</p>
     <link href="http://sysadminsjourney.com/content/2009/06/16/installing-pidgin-encryption-plugin-opensolaris"/>
     <updated>2009-06-16T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/06/16/installing-the-pidgin-encryption-plugin-on-opensolaris</id>
-    <content type="html"><![CDATA[<p>You can install Pidgin from the OpenSolaris.org repository, but there's no
+    <content type="html"><![CDATA[<p>You can install Pidgin from the OpenSolaris.org repository, but there&rsquo;s no
 package for the Pidgin-Encryption plugin. Once you point it in the right
-direction, it's not hard to install the plugin from source.</p>
+direction, it&rsquo;s not hard to install the plugin from source.</p>
 
 <pre><code>pfexec pkg install SUNWgcc SUNWxorg-headers SUNWgnome-common-devel
 tar -xzvf pidgin-encryption-3.0.tar.gz

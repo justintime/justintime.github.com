@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Ask SAJ | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: ask saj | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/ask-saj/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -18,11 +18,11 @@
     <link href="http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-drupalconsf"/>
     <updated>2010-04-18T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2010/04/18/ask-saj-any-sas-at-drupalconsf</id>
-    <content type="html"><![CDATA[<p>It snuck up on me so fast, I forgot to ask - are any of my SysAdmin's Journey
+    <content type="html"><![CDATA[<p>It snuck up on me so fast, I forgot to ask - are any of my SysAdmin&rsquo;s Journey
 readers going to San Franciso for DrupalCon? If so, <a href="http://sysadminsjourney.com/contact">contact
-me</a>, and we'll see if we can meet up for
-a beer! I'm posting this from DIA, so if you happen to be here and want to
-grab a bite to eat, ping me. I'm flying out to SF at about 12:30pm MDT.</p>
+me</a>, and we&rsquo;ll see if we can meet up for
+a beer! I&rsquo;m posting this from DIA, so if you happen to be here and want to
+grab a bite to eat, ping me. I&rsquo;m flying out to SF at about 12:30pm MDT.</p>
 ]]></content>
   </entry>
   
@@ -32,9 +32,9 @@ grab a bite to eat, ping me. I'm flying out to SF at about 12:30pm MDT.</p>
     <updated>2009-11-30T00:00:00-06:00</updated>
     <id>http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
     <content type="html"><![CDATA[<p>Our site at $work is generating Apache logs that, when combined sequentially
-into one file, are larger than 50GB in size for one day's worth of traffic.
+into one file, are larger than 50GB in size for one day&rsquo;s worth of traffic.
 AWStats' perl script pretty much chokes when working on this much data. Last I
-checked, Webalizer wasn't much different, and probably wouldn't scale up to
+checked, Webalizer wasn&rsquo;t much different, and probably wouldn&rsquo;t scale up to
 that amount of data either. Does anyone out there have any advice on a
 commercial solution for Apache log analysis that can scale up like that?</p>
 ]]></content>
@@ -46,44 +46,44 @@ commercial solution for Apache log analysis that can scale up like that?</p>
     <updated>2009-05-29T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2009/05/29/call-for-comments-help-advise-an-aspiring-sysadmin</id>
     <content type="html"><![CDATA[<p>One of the things I love about blogging, and about the Internet in general, is
-that it makes the world much smaller. I've met so many people via my blog, it
+that it makes the world much smaller. I&rsquo;ve met so many people via my blog, it
 makes all the work pay off. A good example of a blog introducing two people
 just happened the other day.
 <a href="http://thatlinuxguy.wordpress.com/about/">Andrew</a> is an aspiring sysadmin who
-is moving soon, and wanted to ask me some questions regarding how to "break
-in" to a career in systems/network administration. In my response, I asked if
+is moving soon, and wanted to ask me some questions regarding how to &ldquo;break
+in&rdquo; to a career in systems/network administration. In my response, I asked if
 he would mind if I quote our conversation and post it up on my blog, so that
 he could ask many of us the same questions at once. He agreed emphatically.
-So, click through, read Andrew's questions, and comment away -- what else are
+So, click through, read Andrew&rsquo;s questions, and comment away &ndash; what else are
 you doing on a Friday???  Andrew first sent me this email:</p>
 
 <hr />
 
-<p>I've only newly discovered www.planetsysadmin.com and came across your blog. I
-just read your About section and I loved it, as well as the other posts I've
-read from SAJ. I thought you'd be a good person to talk to about this.  The
+<p>I&rsquo;ve only newly discovered www.planetsysadmin.com and came across your blog. I
+just read your About section and I loved it, as well as the other posts I&rsquo;ve
+read from SAJ. I thought you&rsquo;d be a good person to talk to about this.  The
 purpose of this email is to ask for a bit of advice from someone having
 traveled down the same road I hope to. I first discovered Linux about late
 2005 and played around with it, but never got around to seriously using it
-until about mid 2006. I've been a Debian (and Ubuntu) Linux user ever since
-(as well as casually seeing what's new with OpenSolaris). Around the same
+until about mid 2006. I&rsquo;ve been a Debian (and Ubuntu) Linux user ever since
+(as well as casually seeing what&rsquo;s new with OpenSolaris). Around the same
 time, I discovered a love for networking, despite not knowing much about it.
-Long story short, I've been wanting to start a career as a Linux/UNIX Network
-Administrator since then. I've come a long way since then, but I've still got
-a long way to go I'm sure.  My girlfriend and I are moving out of Michigan to
+Long story short, I&rsquo;ve been wanting to start a career as a Linux/UNIX Network
+Administrator since then. I&rsquo;ve come a long way since then, but I&rsquo;ve still got
+a long way to go I&rsquo;m sure.  My girlfriend and I are moving out of Michigan to
 either Gainesville Florida, or Santa Rosa California. No matter where we move,
-I'm looking to break into the IT sector and actually starting my career.
-Thanks to an unfortunate niche I fall into with the US's student Financial Aid
-system, I can't really start attending college until next fall '10, so I've no
-college under my belt, and the bulk of my tech knowledge is self-taught. I'll
-be taking my Network+ before we move, so that's the only real credential I'll
+I&rsquo;m looking to break into the IT sector and actually starting my career.
+Thanks to an unfortunate niche I fall into with the US&rsquo;s student Financial Aid
+system, I can&rsquo;t really start attending college until next fall &lsquo;10, so I&rsquo;ve no
+college under my belt, and the bulk of my tech knowledge is self-taught. I&rsquo;ll
+be taking my Network+ before we move, so that&rsquo;s the only real credential I&rsquo;ll
 have to put on my resume.  My real question is, what advice would you give
-someone looking to get into this type of position? I've done my homework, and
-I've read a few books on both the technical and non-technical side of the job.
-I feel I know enough about what a SysAdmin actually does, and I haven't been
+someone looking to get into this type of position? I&rsquo;ve done my homework, and
+I&rsquo;ve read a few books on both the technical and non-technical side of the job.
+I feel I know enough about what a SysAdmin actually does, and I haven&rsquo;t been
 scared off by any of it. In fact, it sounds absolutely awesome. I figured I
 could get more by asking someone who does this for a living as opposed to some
-books and a ton of web-sites. I can't seem to get my fill of learning and
+books and a ton of web-sites. I can&rsquo;t seem to get my fill of learning and
 hearing about the job, so if you have anything to share, I encourage you to
 ramble.</p>
 
@@ -93,27 +93,27 @@ ramble.</p>
 
 <hr />
 
-<p>... Unfortunately, like many careers, "breaking in" to the market is often the
+<p>&hellip; Unfortunately, like many careers, &ldquo;breaking in&rdquo; to the market is often the
 hardest step. I might suggest trying to get a helpdesk/support job to start
-out with. Often times, finding a local ISP is a good place to start - that's
+out with. Often times, finding a local ISP is a good place to start - that&rsquo;s
 where I started. Since they are usually small, you can often get promoted
 quickly if you show potential. Most often, they are <em>nix shops, and have a
 heavy focus on TCP/IP network troubleshooting. Unfortunately, the smaller mom
-and pop ISP's are a dying breed since the cable and phone companies tend to
-buy them out. Usually, if you can find them, they are operating wireless ISP's
-now. If you can't find a suitable job there, look for anything as a junior
+and pop ISP&rsquo;s are a dying breed since the cable and phone companies tend to
+buy them out. Usually, if you can find them, they are operating wireless ISP&rsquo;s
+now. If you can&rsquo;t find a suitable job there, look for anything as a junior
 sysadmin.  In my opinion, the most important skill a sysadmin has is his
-ability to solve problems. Memorization can only get you so far - there's too
+ability to solve problems. Memorization can only get you so far - there&rsquo;s too
 much information out there to memorize it all. Having the ability to
 troubleshoot a problem and quickly isolate it down to a specific subsystem is
 of the utmost importance.  In my experience, something that often sets apart
 </em>nix sysadmins from Windows sysadmins is their ability to build scripts to
-automate their jobs. If you haven't already, pick up a book on shell
-scripting, and start learning how to write shell scripts if you haven't
+automate their jobs. If you haven&rsquo;t already, pick up a book on shell
+scripting, and start learning how to write shell scripts if you haven&rsquo;t
 already.  To me, the most important personality traits are: 1) An insatiable
 thirst for knowledge, and 2) Patience. It sounds like you already have the
 first covered. Patience is required because computers are stubborn, and if you
-don't want to burn out, you have to keep your cool. ...</p>
+don&rsquo;t want to burn out, you have to keep your cool. &hellip;</p>
 
 <hr />
 
@@ -121,10 +121,10 @@ don't want to burn out, you have to keep your cool. ...</p>
 
 <hr />
 
-<p>... I really liked the tip about looking for smaller ISPs. When I was working
+<p>&hellip; I really liked the tip about looking for smaller ISPs. When I was working
 for PC Club computers (not sure if you heard of them or not), the tech I
 replaced took a job for Sonic.net, a local ISP for the northern California
-area. Checking the Bay Area's Craigslist, I see two job postings from Sonic
+area. Checking the Bay Area&rsquo;s Craigslist, I see two job postings from Sonic
 looking for what seem to be basic Network tech skills (I should be a shoe-in
 if I pass my Network+). The Bay Area is also the only place out of Metro
 Detroit and Central Florida that have job offers looking for OSX server
@@ -132,38 +132,38 @@ skills. A few are asking for ACSA certs. In either area, Helpdesk jobs are
 relatively easy to find and hopefully even easier to hire into. Actually now
 that I think about it, I remember all this buzz on CL about a MySQL developer
 job paying $11/hr in the Greater Detroit area.  As far as skills go, purely
-for learning, I've been trying to setup an overkill home network to hone my
+for learning, I&rsquo;ve been trying to setup an overkill home network to hone my
 skills using services like Apache, BIND, Postfix, MySQL, monitoring, etc.
 However, right now, my network consists of one machine; mine. A VirtualBox VM
-is my server, handling LDAP, DHCP, and DNS services. I'm trying to figure out
+is my server, handling LDAP, DHCP, and DNS services. I&rsquo;m trying to figure out
 ways to incorporate other popular services like MySQL, Postfix, and Apache, as
 well as monitoring. I know that shell scripting is a desired skill by many,
 but is there really a difference between knowing BASH scripts vs Python or
-Perl? I've never had much of an aptitude for programming. I tried reading a
-beginner's type guide to C++, but I got lost after the introductory paragraph.
-I've always had an interest in Python and Java, but not for any particular
-reason.  For a few years now, I've been checking out job listings and seeing
+Perl? I&rsquo;ve never had much of an aptitude for programming. I tried reading a
+beginner&rsquo;s type guide to C++, but I got lost after the introductory paragraph.
+I&rsquo;ve always had an interest in Python and Java, but not for any particular
+reason.  For a few years now, I&rsquo;ve been checking out job listings and seeing
 what a lot of these employers are looking for. It seems that a lot of them
 want very specialized people, while some are looking for generalists.
-Generally, what I've seen is that you pretty much can't go wrong with
+Generally, what I&rsquo;ve seen is that you pretty much can&rsquo;t go wrong with
 Microsoft, Cisco, and VMWare knowledge, as well as Blackberry Enterprise
 server experience. Not to mention Linux knowledge. I was studying for the CCNA
 exam, but too much material and not enough time before we move to really take
-it all in. The Network+ is much more general and easier.  One of the ways I've
+it all in. The Network+ is much more general and easier.  One of the ways I&rsquo;ve
 been trying to hone my skills aside from making my own network to test things
-out on is writing. I've always been fairly good at writing reports and such
-for school, so this comes pretty easily to me. Over the last few years, I've
+out on is writing. I&rsquo;ve always been fairly good at writing reports and such
+for school, so this comes pretty easily to me. Over the last few years, I&rsquo;ve
 found lots of great sources for Linux info, from what Linux is to how to more
 advanced topics. I have a blog on Wordpress that needs more attention from me,
-but I've basically gone back to square one and started writing how-to articles
+but I&rsquo;ve basically gone back to square one and started writing how-to articles
 teaching people in my shoes (future SysAdmins looking for easy to read
 learning material) things like what UNIX is, Open Source licensing, what Linux
-is, and I'm currently going through a series of articles teaching people how
-to use the shell. After going through shell basics, I'm working on a series of
-networking tutorials that sit around the Network+ level. I've actually had my
-blog linked to on sites like lxer.com and LinuxToday.com. It's not near where
+is, and I&rsquo;m currently going through a series of articles teaching people how
+to use the shell. After going through shell basics, I&rsquo;m working on a series of
+networking tutorials that sit around the Network+ level. I&rsquo;ve actually had my
+blog linked to on sites like lxer.com and LinuxToday.com. It&rsquo;s not near where
 you guys on PlanetSysAdmin are at, but I hope to make it that grade of
-material some day. The site is thatLinuxguy.wordpress.com ...</p>
+material some day. The site is thatLinuxguy.wordpress.com &hellip;</p>
 
 <hr />
 

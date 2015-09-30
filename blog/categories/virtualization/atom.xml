@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Virtualization | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: virtualization | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/virtualization/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -25,52 +25,52 @@ talking to a co-worker (whom I converted to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> as
 well) about how I would pay double the amount to keep my
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
-now that I know how much I use it. Don't tell them that, they're cheap :) If
-you find this article helpful (or my article about <a href="http://sysadminsjourney.com/content/2008/11/26/bringing-your-linode-%0Ahome-you">moving VM's to and from
+now that I know how much I use it. Don&rsquo;t tell them that, they&rsquo;re cheap :) If
+you find this article helpful (or my article about <a href="http://sysadminsjourney.com/content/2008/11/26/bringing-your-linode-%0Ahome-you">moving VM&rsquo;s to and from
 Linode</a>), please consider clicking one of the links in this article to sign
 up for a
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> -
-if you sign up for 90 days, I'll get $20 credited to my account. I was setting
+if you sign up for 90 days, I&rsquo;ll get $20 credited to my account. I was setting
 up a second
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 that was to be a testing ground for some
 <a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>
-I'm working on. The new
+I&rsquo;m working on. The new
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 will eventually replace my existing one. For whatever reason, the most recent
-version of CentOS they had available was 5.3. Not a big deal, I can 'yum
-upgrade' up to 5.4 after installation. Well, after doing so, I found that a
-lot of features that I wanted had been stripped out. In Linode's defense, it's
+version of CentOS they had available was 5.3. Not a big deal, I can &lsquo;yum
+upgrade&rsquo; up to 5.4 after installation. Well, after doing so, I found that a
+lot of features that I wanted had been stripped out. In Linode&rsquo;s defense, it&rsquo;s
 in their best interest to offer very stripped down images for their customers.
-The one feature I wanted that I couldn't get enabled was SELinux, and simply
-installing the packages still wouldn't let me use 'setenforce 1' to get it
-turned on. My best guess as to why is that the Linode kernel didn't support
-it, but I honestly didn't troubleshoot it too much. I really wanted root LVM
+The one feature I wanted that I couldn&rsquo;t get enabled was SELinux, and simply
+installing the packages still wouldn&rsquo;t let me use &lsquo;setenforce 1&rsquo; to get it
+turned on. My best guess as to why is that the Linode kernel didn&rsquo;t support
+it, but I honestly didn&rsquo;t troubleshoot it too much. I really wanted root LVM
 capabilities as well, so I decided that a full-on anaconda based installation
-was the way to go. Plus, I couldn't find anything in the forums about it, so
+was the way to go. Plus, I couldn&rsquo;t find anything in the forums about it, so
 there was the lure of being the first to do it ;-) Well, thanks to the
 flexibility offered by
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>,
 not only can you do a anaconda-based installation (with optional Kickstart),
-but you can do so using the GUI over VNC if you're so inclined!</p>
+but you can do so using the GUI over VNC if you&rsquo;re so inclined!</p>
 
 <h3>Step 1: Setup Finnix</h3>
 
-<p>Finnix is the distro of Linode's choice for 'rescue' operations on your
-server. Think of it as a Swiss Army knife - it's a very powerful tool that
+<p>Finnix is the distro of Linode&rsquo;s choice for &lsquo;rescue&rsquo; operations on your
+server. Think of it as a Swiss Army knife - it&rsquo;s a very powerful tool that
 takes very little setup. For more on Finnix, checkout the <a href="http://library.linode.com/troubleshooting/finnix-recovery">Linode Library
 article</a>. First, we
 need to setup a very small, 20MB ext3 disk that will house our installation
 kernel and initrd. Set up another ext3 disk of 100MB to be mounted at /boot
 for PV-GRUB. Finally, setup your raw disk that will be used for the OS
-installation. Since we'll be using LVM, you can easily add to and resize your
-disk later, so don't overdo it. I went with 5GB for my root disk. If you're
-following along, here's what you should have: <img src="/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on "Create a new
-configuration profile", and type "Finnix Rescue" for the label. For the
-kernel, select "Recovery - Finnix (kernel)". For /dev/xvda, select the
-"Recovery - Finnix (iso)". For /dev/xvdb, select the "Centos 5.4 Install
-Disk". For uncompressed initrd image, select "Recovery - Finnix (initrd).
-Leave the other settings at defaults, and save the profile. Here's what it
+installation. Since we&rsquo;ll be using LVM, you can easily add to and resize your
+disk later, so don&rsquo;t overdo it. I went with 5GB for my root disk. If you&rsquo;re
+following along, here&rsquo;s what you should have: <img src="/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &ldquo;Create a new
+configuration profile&rdquo;, and type &ldquo;Finnix Rescue&rdquo; for the label. For the
+kernel, select &ldquo;Recovery - Finnix (kernel)&rdquo;. For /dev/xvda, select the
+&ldquo;Recovery - Finnix (iso)&rdquo;. For /dev/xvdb, select the &ldquo;Centos 5.4 Install
+Disk&rdquo;. For uncompressed initrd image, select &ldquo;Recovery - Finnix (initrd).
+Leave the other settings at defaults, and save the profile. Here&rsquo;s what it
 should look like: <img src="/assets/images/linode-finnix.png" alt="" /></p>
 
 <h3>Step 2: Upload the Xen-enabled Kernel and Initrd from the DVD</h3>
@@ -97,17 +97,17 @@ control panel.</p>
 
 <h3>Step 3: Setup the CentOS configuration profile</h3>
 
-<p>Create a new profile, and name it CentOS 5.4. For the kernel, select "pv-grub-
-x86_32". For /dev/xvda, select "CentOS 5.4 PV-GRUB Boot". For /dev/xvdb choose
-"CentOS 5.4 OS Disk". For /dev/xvdh, select our "CentOS 5.4 Install Disk".
-Point the root device to a custom location: "/dev/mapper/VolGroup00-LogVol00".
-Leave the rest as defaults, here's a screenshot: <img src="/assets/images/linode-%0Acentos.png" alt="" /></p>
+<p>Create a new profile, and name it CentOS 5.4. For the kernel, select &ldquo;pv-grub-
+x86_32&rdquo;. For /dev/xvda, select &ldquo;CentOS 5.4 PV-GRUB Boot&rdquo;. For /dev/xvdb choose
+&ldquo;CentOS 5.4 OS Disk&rdquo;. For /dev/xvdh, select our &ldquo;CentOS 5.4 Install Disk&rdquo;.
+Point the root device to a custom location: &ldquo;/dev/mapper/VolGroup00-LogVol00&rdquo;.
+Leave the rest as defaults, here&rsquo;s a screenshot: <img src="/assets/images/linode-%0Acentos.png" alt="" /></p>
 
 <h3>Step 4: Boot the CentOS configuration profile and start the installation</h3>
 
-<p>Save the profile, and boot it. Note that it won't boot automatically, we have
-to point GRUB in the right direction first. You'll be greeted by a scary-
-looking 'grubdom>' prompt. Now, we need to tell grub to boot our install
+<p>Save the profile, and boot it. Note that it won&rsquo;t boot automatically, we have
+to point GRUB in the right direction first. You&rsquo;ll be greeted by a scary-
+looking &lsquo;grubdom>&rsquo; prompt. Now, we need to tell grub to boot our install
 kernel and initrd:</p>
 
 <pre><code>root (hd2)
@@ -117,28 +117,28 @@ boot
 </code></pre>
 
 <p>Note that if you want to do a kickstart install, you would append
-ks=http://my.com/this.ks to the kernel line above. More on this later. Once
-the kernel loads, you'll be presented with the familiar anaconda text-based
+ks=<a href="http://my.com/this.ks">http://my.com/this.ks</a> to the kernel line above. More on this later. Once
+the kernel loads, you&rsquo;ll be presented with the familiar anaconda text-based
 installer. Choose your language, and your installation type. I prefer HTTP
 from a mirror. If you choose to do the same, use the mirror hostname for the
 Web site name, and the path to the directory that contains all the release
-notes -- usually it's /centos/5.4/os/i386/. Anaconda will fetch the stage2
-image, then launch the installer. Here's where it gets cool - it will give you
-a choice to "Start VNC". If you choose this option, you can connect to your
+notes &ndash; usually it&rsquo;s /centos/5.4/os/i386/. Anaconda will fetch the stage2
+image, then launch the installer. Here&rsquo;s where it gets cool - it will give you
+a choice to &ldquo;Start VNC&rdquo;. If you choose this option, you can connect to your
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 via VNC (note it launches on display 1, not 0), and complete the installation
 via a GUI. Install as you would any other CentOS installation. <strong>Make note of
 where your root directory is at.</strong> The installer may complain about your
 /dev/xvdh being a loop device, tell anaconda to ignore it. Exclude /dev/xvda
-from any partitioning, we'll set that up manually later.</p>
+from any partitioning, we&rsquo;ll set that up manually later.</p>
 
 <h3>Step 5: Modify the CentOS configuration profile and start the operating</h3>
 
 <p>system</p>
 
-<p>Once you click the "Reboot" button on the installer, you'll be disconnected
+<p>Once you click the &ldquo;Reboot&rdquo; button on the installer, you&rsquo;ll be disconnected
 from VNC. Your machine will be restarted, but it will stick at the grubdom
-prompt again - that's okay. We'll be stuck at the grubdom> prompt one more
+prompt again - that&rsquo;s okay. We&rsquo;ll be stuck at the grubdom> prompt one more
 time - use this to tell it to boot CentOS using the boot partition the
 installer setup for us:</p>
 
@@ -150,10 +150,10 @@ grubdom&gt; boot
 
 <p>You will then boot into CentOS - exit the system settings GUI - you can run it
 again later by running system-config-securitylevel-tui. Now we need to setup
-our boot disk so that pv-grub knows how to boot our kernel so we're not
+our boot disk so that pv-grub knows how to boot our kernel so we&rsquo;re not
 consistently prompted upon reboot.
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
-uses PV-GRUB to boot our kernel, and it's looking for a 'boot' directory
+uses PV-GRUB to boot our kernel, and it&rsquo;s looking for a &lsquo;boot&rsquo; directory
 directly on /dev/xvda. For more details, <a href="http://www.linode.com/wiki/index.php/PV-GRUB#Partitioning">see the Linode
 Wiki</a>. Run this as
 root, and make sure your block devices are aligned with mine before
@@ -172,7 +172,7 @@ e2label /dev/xvdb1 oldboot
 e2label /dev/xvda /boot
 </code></pre>
 
-<p>That's it - reboot, and you should be up and running! You can create a LVM
+<p>That&rsquo;s it - reboot, and you should be up and running! You can create a LVM
 physical volume out of the old boot partition on /dev/xvdb1, or just leave it
 around unused.</p>
 
@@ -184,10 +184,10 @@ and 3 above, but on step 4, replace the kernel line with this:</p>
 <pre><code>kernel (hd2)/vmlinuz ks=http://www.sysadminsjourney.com/assets/files/linode-minimal.ks
 </code></pre>
 
-<p>That's it! The kickstart file handles partitioning, and setting up the right
-boot partition, as well as disabling unneeded services that you don't need for
+<p>That&rsquo;s it! The kickstart file handles partitioning, and setting up the right
+boot partition, as well as disabling unneeded services that you don&rsquo;t need for
 a Linode. Make sure you check out the file
-http://www.sysadminsjourney.com/assets/files/linode-minimal.ks - your root password is there, change it immediately! Stay
+<a href="http://www.sysadminsjourney.com/assets/files/linode-minimal.ks">http://www.sysadminsjourney.com/assets/files/linode-minimal.ks</a> - your root password is there, change it immediately! Stay
 tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>!</p>
 ]]></content>
   </entry>
@@ -278,7 +278,7 @@ extra = "xencons=tty"
     <link href="http://sysadminsjourney.com/content/2008/09/10/virtualbox-20-quick-impressions"/>
     <updated>2008-09-10T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2008/09/10/virtualbox-2-0-quick-impressions</id>
-    <content type="html"><![CDATA[<p>I'm not new to the virtualization scene, but I'm no expert either -- I've been
+    <content type="html"><![CDATA[<p>I&rsquo;m not new to the virtualization scene, but I&rsquo;m no expert either &ndash; I&rsquo;ve been
 using <a href="http://www.vmware.com">VMWare</a> Workstation since 1.0,
 <a href="http://www.vmware.com">VMWare</a> Server since 1.0, and
 <a href="http://www.xensource.org">Xen</a> since around 2.0. Well, I needed a Windows XP
@@ -295,14 +295,14 @@ prefer.</p>
 
 <p>Not much to say here. I clicked a link on <a href="http://www.virtualbox.org/wiki/Downloads">the download
 page</a>, GDebi popped up, and I
-installed the deb. Can't get much easier!</p>
+installed the deb. Can&rsquo;t get much easier!</p>
 
 <h3>Guest OS Installation</h3>
 
 <p>Anyone familiar with VMWare workstation should feel right at home here. Fire
-up the gui, click 'New', create a new Windows XP guest machine. I accepted the
-defaults of 192MB RAM and 10GB disk. Now, it's been a really long time since
-I've installed Windows XP, but I swear that the installation went faster from
+up the gui, click &lsquo;New&rsquo;, create a new Windows XP guest machine. I accepted the
+defaults of 192MB RAM and 10GB disk. Now, it&rsquo;s been a really long time since
+I&rsquo;ve installed Windows XP, but I swear that the installation went faster from
 within VirtualBox than natively. No metrics to back that up, just a gut
 feeling.</p>
 
@@ -315,24 +315,24 @@ The next day, everything had worked as it should have.</p>
 <h3>Performance</h3>
 
 <p>The changelog states that numerous performance improvements have been made
-since 1.0, but since I don't have past experience, I can't speak to how much
+since 1.0, but since I don&rsquo;t have past experience, I can&rsquo;t speak to how much
 better it performs. I can tell you that running Windows XP as a guest under
 Virtualbox 2.0 did not feel any faster, nor any slower that running Windows XP
 as a guest under VMWare Workstation on the same laptop. While installing SP3
 for Windows XP in the guest, I noticed fairly significant host responsiveness
 degradation. However, my laptop still has a PATA drive in it, and my XP VM was
-using the "hard disk as a file" method instead of a dedicated partition. My
+using the &ldquo;hard disk as a file&rdquo; method instead of a dedicated partition. My
 hunch is that support for <a href="http://en.wikipedia.org/wiki/NCQ">NCQ</a> and
 dedicated partitions helps this quite a bit. Also, when using the XP VM under
-normal conditions that didn't write to the disk so extensively, the host
+normal conditions that didn&rsquo;t write to the disk so extensively, the host
 machine was still very responsive.</p>
 
 <h3>Hardware Support</h3>
 
-<p>Below is the list of what I've tested under my XP VM:</p>
+<p>Below is the list of what I&rsquo;ve tested under my XP VM:</p>
 
 <ul>
-<li><strong>USB:</strong> I'll get to this eventually, but I don't need it yet.</li>
+<li><strong>USB:</strong> I&rsquo;ll get to this eventually, but I don&rsquo;t need it yet.</li>
 <li><strong>Sound:</strong> Worked flawlessly.</li>
 <li><strong>CD/DVD Drive:</strong> No problems here either.</li>
 </ul>
@@ -342,7 +342,7 @@ machine was still very responsive.</p>
 
 <p>VirtualBox is an impressive product. Consider me a convert from VMWare
 Workstation, VirtualBox does everything I need it to and more, and the cost of
-zero is something VMWare Workstation can't begin to compete with!</p>
+zero is something VMWare Workstation can&rsquo;t begin to compete with!</p>
 ]]></content>
   </entry>
   
@@ -364,23 +364,17 @@ could use about anything you wanted to. I never needed to use their
 support, their control panel worked great, and I never had any
 issues with billing. There were two drawbacks, one minor, the other
 major:
-1.  The box was firewalled to death. I'm all for firewalls, but I</p>
-
-<pre><code>like to be in control of it. Not only were inbound ports blocked
-(which is a good thing), but all outbound access was blocked as
-well. This made hard things impossible, and easy things hard. For
-example, adding a simple RSS widget to your page hosted on Aplus
-just will not work.
-</code></pre>
-
-<ol>
-<li>The particular box I was on was severely over-sold. I have no
-idea how many shared accounts there were on the box, but there were
-times where my simple little wordpress blog was completely
-unavailable. $12 a month is cheap, but I at least expect to be able
-to render pages!</li>
-</ol>
-
+1.  The box was firewalled to death. I&rsquo;m all for firewalls, but I
+    like to be in control of it. Not only were inbound ports blocked
+    (which is a good thing), but all outbound access was blocked as
+    well. This made hard things impossible, and easy things hard. For
+    example, adding a simple RSS widget to your page hosted on Aplus
+    just will not work.
+2.  The particular box I was on was severely over-sold. I have no
+    idea how many shared accounts there were on the box, but there were
+    times where my simple little wordpress blog was completely
+    unavailable. $12 a month is cheap, but I at least expect to be able
+    to render pages!</p>
 
 <p>After doing a bunch of research, my choice for a new hosting
 provider was down to
@@ -389,7 +383,7 @@ and <a href="http://www.slicehost.com" title="SliceHost">SliceHost</a>. In the e
 I settled on
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 because I was reading some grumblings that SliceHost was having
-some growing pains, and I couldn't find any negatives to
+some growing pains, and I couldn&rsquo;t find any negatives to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>.
 So, at 10:57pm on July 30th, I started the sign up process for a
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
@@ -399,43 +393,37 @@ July 31st, I had moved my blog from Aplus to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 without any hitches. First, let me tell you what
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
-is and isn't.
--   <strong>Linode is</strong>a provider of Xen-based virtualized hosts. This</p>
-
-<pre><code>means you get to pick which distribution you want, and you get your
-own root account with which you can do what you feel like.
-</code></pre>
-
-<ul>
-<li><strong>Linode provides</strong>a DNS Manager included with all their plans
-that allows you have full control over any number of domains. I had
-no idea this existed until I signed up, and it was a great little
-side benefit. I was able to cancel my DNS service at a registrar
-that I was paying $15 a year for.</li>
-<li><strong>Linode provides</strong>you with a Xen instance with 4 cores of Xeon
-for CPU, and a configurable amount of RAM, bandwidth, and storage.</li>
-<li><strong>Linode provides</strong>a out-of-band management tool named lish
-(LInode SHell) which gives you console level access to your
-server.  There is also an AJAX web-based console interface
-available.</li>
-<li><strong>Linode provides</strong>you with everything you need to build your
-own server. You may do with this server what you like, provided
-it's for law-abiding activities. You have the ability to create
-your own partitions, upgrade your kernel, install packages,
-whatever!</li>
-<li><strong>Linode provides</strong>you with more than enough rope with which
-you can hang yourself! This is a logical extension of the above
-point. If you have root, you can most certainly do a 'rm -rf /' and
-no one will stop to ask you if you're sure or not.</li>
-<li><strong>Linode is not</strong>your run-of-the-mill webhoster. If you want to
-run your own LAMP stack, you are more than welcome to do so.
-However, <strong>you</strong>are responsible for the setup and maintanence of
-the entire stack. There's no cute little control panel button you
-click to setup a blog. If you don't know Linux, and don't want to
-learn how to do these sort of things, you're better off with a
-provider such as Aplus.net.</li>
-</ul>
-
+is and isn&rsquo;t.
+-   <strong>Linode is</strong>a provider of Xen-based virtualized hosts. This
+    means you get to pick which distribution you want, and you get your
+    own root account with which you can do what you feel like.
+-   <strong>Linode provides</strong>a DNS Manager included with all their plans
+    that allows you have full control over any number of domains. I had
+    no idea this existed until I signed up, and it was a great little
+    side benefit. I was able to cancel my DNS service at a registrar
+    that I was paying $15 a year for.
+-   <strong>Linode provides</strong>you with a Xen instance with 4 cores of Xeon
+    for CPU, and a configurable amount of RAM, bandwidth, and storage.
+-   <strong>Linode provides</strong>a out-of-band management tool named lish
+    (LInode SHell) which gives you console level access to your
+    server.  There is also an AJAX web-based console interface
+    available.
+-   <strong>Linode provides</strong>you with everything you need to build your
+    own server. You may do with this server what you like, provided
+    it&rsquo;s for law-abiding activities. You have the ability to create
+    your own partitions, upgrade your kernel, install packages,
+    whatever!
+-   <strong>Linode provides</strong>you with more than enough rope with which
+    you can hang yourself! This is a logical extension of the above
+    point. If you have root, you can most certainly do a &lsquo;rm -rf /&rsquo; and
+    no one will stop to ask you if you&rsquo;re sure or not.
+-   <strong>Linode is not</strong>your run-of-the-mill webhoster. If you want to
+    run your own LAMP stack, you are more than welcome to do so.
+    However, <strong>you</strong>are responsible for the setup and maintanence of
+    the entire stack. There&rsquo;s no cute little control panel button you
+    click to setup a blog. If you don&rsquo;t know Linux, and don&rsquo;t want to
+    learn how to do these sort of things, you&rsquo;re better off with a
+    provider such as Aplus.net.</p>
 
 <p>After signing up, you get to pick which data center you want your
 server to be hosted in.  Here are their current datacenters:
@@ -446,33 +434,27 @@ server to be hosted in.  Here are their current datacenters:
 
 <p>You can view what servers are available in what datacenters
 <a href="http://www.linode.com/avail.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode Datacenter Availability">here</a>.
-Here are some of Linode's support options:
--   A quick</p>
-
-<pre><code>[FAQ](http://www.linode.com/faq.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df "FAQ")
-</code></pre>
-
-<ul>
-<li>A
-<a href="http://www.linode.com/wiki/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Wiki">Wiki</a></li>
-<li>A public
-<a href="http://www.linode.com/forums/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">support forum</a>
-which employees take part in regularly</li>
-<li>An
-<a href="http://www.linode.com/irc/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">IRC channel</a></li>
-<li>A support ticket system for active customers</li>
-<li>There is a phone number posted on their site, but I don't think
-it's intended to be used for support issues.</li>
-</ul>
-
+Here are some of Linode&rsquo;s support options:
+-   A quick
+    <a href="http://www.linode.com/faq.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="FAQ">FAQ</a>
+-   A
+    <a href="http://www.linode.com/wiki/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Wiki">Wiki</a>
+-   A public
+    <a href="http://www.linode.com/forums/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">support forum</a>
+    which employees take part in regularly
+-   An
+    <a href="http://www.linode.com/irc/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">IRC channel</a>
+-   A support ticket system for active customers
+-   There is a phone number posted on their site, but I don&rsquo;t think
+    it&rsquo;s intended to be used for support issues.</p>
 
 <p>After just two days of running my own
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>,
-I must say that I'm thoroughly impressed. Uptime is 100%, and I
-haven't needed support for anything at all. My blog runs as it
-should - and if it didn't it would be my fault for not setting it
+I must say that I&rsquo;m thoroughly impressed. Uptime is 100%, and I
+haven&rsquo;t needed support for anything at all. My blog runs as it
+should - and if it didn&rsquo;t it would be my fault for not setting it
 up properly. I will update this post in the future with more data
-as I learn more about the service. Also, if you'd like to give
+as I learn more about the service. Also, if you&rsquo;d like to give
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 a try and have enjoyed this post, consider visiting their site by
 clicking on any of the

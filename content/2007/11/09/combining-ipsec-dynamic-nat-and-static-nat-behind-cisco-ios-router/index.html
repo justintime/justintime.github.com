@@ -5,13 +5,13 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Combining IPSEC, Dynamic NAT, and Static NAT behind a Cisco IOS Router - SysAdmin's Journey</title>
+  <title>Combining IPSEC, Dynamic NAT, and Static NAT Behind a Cisco IOS Router - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
   <meta name="description" content="Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
-out Cisco&#8217;s article on how to do it first. If that
-doesn&#8217; &hellip;">
+out Cisco&rsquo;s article on how to do it first. If that
+doesn&rsquo; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -23,10 +23,11 @@ doesn&#8217; &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ doesn&#8217; &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ doesn&#8217; &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Combining IPSEC, Dynamic NAT, and Static NAT Behind a Cisco IOS Router</h1>
     
     
@@ -94,14 +91,7 @@ doesn&#8217; &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2007-11-09T00:00:00-06:00" pubdate data-updated="true">Nov 9<span>th</span>, 2007</time>
+<time class='entry-date' datetime='2007-11-09T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -109,25 +99,25 @@ doesn&#8217; &hellip;">
 
 
 <div class="entry-content"><p>Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
-out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&#8217;s article on how to do it</a> first. If that
-doesn&#8217;t work and you&#8217;re ready to drop kick the router out of the datacenter
+out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&rsquo;s article on how to do it</a> first. If that
+doesn&rsquo;t work and you&rsquo;re ready to drop kick the router out of the datacenter
 like I was, put away your black belt for a few minutes, and read about how I
-worked around a couple of bugs. Let&#8217;s define our problem first.</p>
+worked around a couple of bugs. Let&rsquo;s define our problem first.</p>
 
 <ul>
 <li>You have two subnets connected via IPSEC VPN - for the purposes of this article, 192.168.10.0/24 and 192.168.11.0/24. We assume the VPN is already up and functional.</li>
 <li>You want any host with an IP in the 192.168.11.0/24 subnet to have access to the Internet as well as access to the hosts on the other side of the IPSEC tunnel.</li>
-<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&#8217;d IP address when accessing the Internet - in this case, 1.1.1.1.
-It took me a couple days, and I still think there&#8217;s a bug in there somewhere,
+<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&rsquo;d IP address when accessing the Internet - in this case, 1.1.1.1.
+It took me a couple days, and I still think there&rsquo;s a bug in there somewhere,
 but I did finally get it to work. The IOS I was using was 12.4(17). Now,
-here&#8217;s my personal take on what I think happens that causes things to break.
-Again, I worked on this for 2 days straight, so I&#8217;m a little blurry on
-everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&#8217;s artic
+here&rsquo;s my personal take on what I think happens that causes things to break.
+Again, I worked on this for 2 days straight, so I&rsquo;m a little blurry on
+everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&rsquo;s artic
 le</a>, you can get these results by simply using route-maps on your static NAT commands. Almost, but not really. I found two other
-requirements had to be in place before the NAT&#8217;s would work as they were
+requirements had to be in place before the NAT&rsquo;s would work as they were
 supposed to:</p></li>
-<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&#8217;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
-<li><p>Once you use a route-map in your static NAT&#8217;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&#8217;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
+<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&rsquo;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
+<li><p>Once you use a route-map in your static NAT&rsquo;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&rsquo;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
 Step One: Configure Dynamic NAT We first need to setup an access list that
 will:</p>
 
@@ -162,9 +152,9 @@ will:</p>
 on the 192.168.10.0 subnet. Step Two: Setup Static NAT So, right now,
 192.168.11.5 can access hosts across the tunnel, but not access anyplace on
 the Internet. All other hosts on the 192.168.11.0/24 subnet can access both.
-Again, according to the Cisco article above, we shouldn&#8217;t have to do this, but
-I did. Since we have excluded our 192.168.11.5 host from being NAT&#8217;d at all,
-we need to craft a route-map for him to be static NAT&#8217;d, but not NAT&#8217;d when
+Again, according to the Cisco article above, we shouldn&rsquo;t have to do this, but
+I did. Since we have excluded our 192.168.11.5 host from being NAT&rsquo;d at all,
+we need to craft a route-map for him to be static NAT&rsquo;d, but not NAT&rsquo;d when
 accessing the remote VPN hosts. This boils down to creating an ACL identical
 to the one above minus one line:</p>
 
@@ -185,13 +175,13 @@ to the one above minus one line:</p>
 </code></pre>
 
 <p>Finally, all your NAT rules should be working perfectly now. In order to add
-new static NAT&#8217;s, you simply need to add the local IP address to the top of
+new static NAT&rsquo;s, you simply need to add the local IP address to the top of
 the NoNat ACL, and then create a new static NAT rule the points to the same
 route-map. Do not use a different route-map, or you will run into the bug
-above. Let me re-iterate that Cisco&#8217;s article above is cleaner, and that I
+above. Let me re-iterate that Cisco&rsquo;s article above is cleaner, and that I
 tried other cleaner ways of implementing this setup. If you have the time, try
-to get your setup working using the article above. However, if you can&#8217;t get
-it to work, try my way and see if you get the results you&#8217;re looking for.</p>
+to get your setup working using the article above. However, if you can&rsquo;t get
+it to work, try my way and see if you get the results you&rsquo;re looking for.</p>
 </div>
 
 
@@ -207,19 +197,12 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2007-11-09T00:00:00-06:00" pubdate data-updated="true">Nov 9<span>th</span>, 2007</time>
+<time class='entry-date' datetime='2007-11-09T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/cisco/'>Cisco</a>, <a class='category' href='/blog/categories/networking/'>Networking</a>, <a class='category' href='/blog/categories/vpn/'>VPN</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/cisco/'>cisco</a>, <a class='category' href='/blog/categories/networking/'>networking</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/vpn/'>vpn</a>
   
 </span>
 
@@ -228,7 +211,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router" >Tweet</a>
   
   
   
@@ -256,20 +239,30 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -277,7 +270,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -292,7 +285,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -340,7 +333,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -358,7 +351,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -374,7 +367,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

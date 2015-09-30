@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>LiveUpgrade from Solaris 9 to Solaris 10 - SysAdmin's Journey</title>
+  <title>LiveUpgrade From Solaris 9 to Solaris 10 - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="Here&#8217;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
+  <meta name="description" content="Here&rsquo;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
 10 using a spare disk. No data is ever deleted, and to roll back &hellip;">
   
 
@@ -22,10 +22,11 @@
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">LiveUpgrade From Solaris 9 to Solaris 10</h1>
     
     
@@ -93,23 +90,16 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-05-25T00:00:00-05:00" pubdate data-updated="true">May 25<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-05-25T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>Here&#8217;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
+<div class="entry-content"><p>Here&rsquo;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
 10 using a spare disk. No data is ever deleted, and to roll back to Solaris 9,
-all you need is one command and a reboot.  Let&#8217;s continue on from the example
+all you need is one command and a reboot.  Let&rsquo;s continue on from the example
 in <a href="http://www.sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1%0A-root-volume-solaris">Unmirroring a RAID 1 Root Volume on
 Solaris</a> - we have two disks, c1t0d0 and c1t1d0. c1t0d0 is our
 Solaris 9 disk, c1t1d0 is our spare.</p>
@@ -117,7 +107,7 @@ Solaris 9 disk, c1t1d0 is our spare.</p>
 <h3>Phase One: Prepare the Solaris 9 environment</h3>
 
 <p>First, we need to prepare the Solaris 9 environment with some packages and
-patches. First, check out <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-61-206844-1">Sun&#8217;s InfoDoc
+patches. First, check out <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-61-206844-1">Sun&rsquo;s InfoDoc
 206844</a> and
 make sure you have all of the patches required installed. Next, for
 LiveUpgrade to work properly, you need to install the LiveUpgrade packages
@@ -127,14 +117,14 @@ existing packages:</p>
 <pre><code>pkgrm SUNWlucfg SUNWluu SUNWlur
 </code></pre>
 
-<p>Then, install the new packages from your Solaris 10 media (if you&#8217;re using
-CD&#8217;s, it&#8217;s on disc 2):</p>
+<p>Then, install the new packages from your Solaris 10 media (if you&rsquo;re using
+CD&rsquo;s, it&rsquo;s on disc 2):</p>
 
 <pre><code>cd $SOLARIS10MEDIA/Solaris_10/Tools/Installers
 ./liveupgrade20
 </code></pre>
 
-<p>Next, let&#8217;s copy the disk label from c1t0d0 over to c1t1d0 giving us the exact
+<p>Next, let&rsquo;s copy the disk label from c1t0d0 over to c1t1d0 giving us the exact
 same disk layout on the new disk as the old disk:</p>
 
 <pre><code>prtvtoc /dev/rdsk/c1t0d0s2 | fmthard -s - /dev/rdsk/c1t1d0s2
@@ -145,11 +135,11 @@ we need to create our boot environment.</p>
 
 <h3>Phase Two: Create the New Boot Environment</h3>
 
-<p>First, let&#8217;s make some assumptions. Since we&#8217;re upgrading from Solaris 9 to
-Solaris 10, we&#8217;ll be upgrading from UFS to UFS file systems. Also, since we
+<p>First, let&rsquo;s make some assumptions. Since we&rsquo;re upgrading from Solaris 9 to
+Solaris 10, we&rsquo;ll be upgrading from UFS to UFS file systems. Also, since we
 are upgrading from one disk to another, we will copy all filesystems from
 c1t0d0 to c1t1d0 - no filesystems will be shared. In order to create our new
-boot environment, we will use the &#8216;lucreate&#8217; command. Let&#8217;s define some
+boot environment, we will use the &lsquo;lucreate&rsquo; command. Let&rsquo;s define some
 variables:</p>
 
 <p><strong>Flag</strong>
@@ -160,14 +150,14 @@ Sets the current boot environment name to this name. In this example, we use
 Solaris9</p>
 
 <p>-n
-Sets the newly created environment&#8217;s name to this name. In this example, we
+Sets the newly created environment&rsquo;s name to this name. In this example, we
 use Solaris10</p>
 
 <p>-m
 The -m option is the most critical part of the lucreate command. It specifies
 the filesystems in the new environment. To create more than one filesystem,
 you use the -m flag more than once. By using different variations on the -m
-flag, you can reorganize, resize, and merge filesystems, but that&#8217;s beyond the
+flag, you can reorganize, resize, and merge filesystems, but that&rsquo;s beyond the
 scope of this article. The value to the -m flag is:
 <em>mountpoint:device:fs_options</em>. From the previous example in <a href="http://www.sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1%0A-root-volume-solaris">Unmirroring a
 RAID 1 Root Volume on
@@ -183,15 +173,15 @@ Solaris</a>, we have 5 filesystems: /, /usr/local/, /apps,
 
 <p>Depending on the number and size of files in your source boot environment,
 this may take awhile. The lucreate process gives you output for each step,
-letting you know what it&#8217;s doing.</p>
+letting you know what it&rsquo;s doing.</p>
 
 <h3>Phase Three: Upgrade the New Boot Environment to Solaris 10</h3>
 
 <p>Now that phase two is done, we have a bootable copy of our current Solaris 9
 environment. Now, we need to apply the upgrade to Solaris 10 to our new boot
 environment. For simplicity, I have an exported Solaris 10 install DVD
-extracted on another server that I use the automounter to access. Now, we&#8217;ll
-run the &#8216;luupgrade&#8217; command and tell it to install the upgrade to the new boot
+extracted on another server that I use the automounter to access. Now, we&rsquo;ll
+run the &lsquo;luupgrade&rsquo; command and tell it to install the upgrade to the new boot
 environment we just created:</p>
 
 <pre><code>luupgrade -u -n Solaris10 -s /net/install.mydomain.com/export/jumpstart/install/sparc_10
@@ -207,7 +197,7 @@ environment with the upgrade to Solaris 10 within it. To boot into that
 environment, we need to mark it as active, and reboot. These instructions
 cover SPARC machines, for x86/x64, see the Sun documents referred in the
 summary of this article - there are a couple of differences. To make our new
-boot environment active, we&#8217;ll use the &#8216;luactivate&#8217; command:</p>
+boot environment active, we&rsquo;ll use the &lsquo;luactivate&rsquo; command:</p>
 
 <pre><code>luactivate Solaris10
 init 6
@@ -215,10 +205,10 @@ init 6
 
 <p>Tricky, huh? ;-) Should something not go completely right during the upgrade,
 you can roll back to your previous boot environment simply by specifying
-&#8216;Solaris9&#8217; for &#8216;Solaris10&#8217; in the above &#8216;luactivate&#8217; command. If something
-really went wrong with the upgrade, and you didn&#8217;t boot successfully, don&#8217;t
-worry. The &#8216;luactivate&#8217; command above should have given you some output that
-you should copy/paste someplace. Here&#8217;s an example:</p>
+&lsquo;Solaris9&rsquo; for &lsquo;Solaris10&rsquo; in the above &lsquo;luactivate&rsquo; command. If something
+really went wrong with the upgrade, and you didn&rsquo;t boot successfully, don&rsquo;t
+worry. The &lsquo;luactivate&rsquo; command above should have given you some output that
+you should copy/paste someplace. Here&rsquo;s an example:</p>
 
 <pre><code>In case of a failure while booting to the target BE, the following process 
 needs to be followed to fallback to the currently working boot environment:
@@ -234,15 +224,15 @@ needs to be followed to fallback to the currently working boot environment:
      boot
 </code></pre>
 
-<p>If that doesn&#8217;t do it, see the Sun docs in the summary of this article, they
+<p>If that doesn&rsquo;t do it, see the Sun docs in the summary of this article, they
 will coach you through booting off the CD/DVD and reactivating the old
 environment.</p>
 
 <h3>Summary</h3>
 
 <p>As an admin coming from Linux, the LiveUpgrade suite is a breath of fresh air
-for giving you an easy upgrade path that&#8217;s just as easy to undo as it is to
-do. We&#8217;ve only begun to scratch the surface of what you can do with
+for giving you an easy upgrade path that&rsquo;s just as easy to undo as it is to
+do. We&rsquo;ve only begun to scratch the surface of what you can do with
 LiveUpgrade. You can use it to migrate from a UFS root to a ZFS root, use it
 to install and test patches, install Flash Archives with it, reconfigure and
 resize partitions, and on and on. For a much more comprehensive look into what
@@ -264,19 +254,12 @@ release is for Solaris 5/09</a>.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-05-25T00:00:00-05:00" pubdate data-updated="true">May 25<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-05-25T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -285,7 +268,7 @@ release is for Solaris 5/09</a>.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" >Tweet</a>
   
   
   
@@ -313,20 +296,30 @@ release is for Solaris 5/09</a>.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -334,7 +327,7 @@ release is for Solaris 5/09</a>.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -349,7 +342,7 @@ release is for Solaris 5/09</a>.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -397,7 +390,7 @@ release is for Solaris 5/09</a>.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -415,7 +408,7 @@ release is for Solaris 5/09</a>.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -431,7 +424,7 @@ release is for Solaris 5/09</a>.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

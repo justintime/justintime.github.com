@@ -10,7 +10,7 @@
 
   
   <meta name="description" content="StackScripts are a relatively new offering from Linode that allow users to
-build their own installation script by &#8220;stacking&#8221; previously &hellip;">
+build their own installation script by &ldquo;stacking&rdquo; previously &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,10 +22,11 @@ build their own installation script by &#8220;stacking&#8221; previously &hellip
   <link rel="canonical" href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ build their own installation script by &#8220;stacking&#8221; previously &hellip
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ build their own installation script by &#8220;stacking&#8221; previously &hellip
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)</h1>
     
     
@@ -93,14 +90,7 @@ build their own installation script by &#8220;stacking&#8221; previously &hellip
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-02-24T00:00:00-06:00" pubdate data-updated="true">Feb 24<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-02-24T00:00:00-06:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -108,39 +98,39 @@ build their own installation script by &#8220;stacking&#8221; previously &hellip
 
 
 <div class="entry-content"><p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
-build their own installation script by &#8220;stacking&#8221; previously existing scripts
+build their own installation script by &ldquo;stacking&rdquo; previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
 yourself, or publish it for the world to use. Deploying a distribution with a
 StackScript takes only about 5 minutes, afterwards you have a fully configured
-system with applications up and running. Here&#8217;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
+system with applications up and running. Here&rsquo;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
 StackScript for RH Derivatives</a> deployment just
 before launch: <img src="/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
-appear to prefer Ubuntu, and there&#8217;s good reason &#8211; it&#8217;s a great distribution.
+appear to prefer Ubuntu, and there&rsquo;s good reason &ndash; it&rsquo;s a great distribution.
 I run it on all my laptops and most of my desktops. However, I personally find
 it a bit too bleeding edge for my servers and prefer CentOS for the server
 room. Currently there are 16 StackScripts available for Ubuntu, with only 3
-available for CentOS. Well, after today, there&#8217;s now 6 for CentOS! After
-clicking the deploy button, you&#8217;ll have the images ready to go in less than a
+available for CentOS. Well, after today, there&rsquo;s now 6 for CentOS! After
+clicking the deploy button, you&rsquo;ll have the images ready to go in less than a
 minute. Boot the config, and the StackScript will run on first boot - when
-it&#8217;s done, you&#8217;ll have a secured and configured LAMP stack,
+it&rsquo;s done, you&rsquo;ll have a secured and configured LAMP stack,
 <a href="http://drupal.org/project/drush">drush</a> install, <a href="http://drupal.org">Drupal</a>
-install, and all updates applied via yum. I&#8217;ve published these StackScripts so
+install, and all updates applied via yum. I&rsquo;ve published these StackScripts so
 that anyone with a
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 can use them with their CentOS and Fedora installations:</p>
 
 <ul>
-<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&#8217;s (of Linode) Bash Library for Ubuntu. You don&#8217;t use this script directly, it&#8217;s strictly for inclusion by other scripts.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&rsquo;s (of Linode) Bash Library for Ubuntu. You don&rsquo;t use this script directly, it&rsquo;s strictly for inclusion by other scripts.</li>
 <li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=162">Drupal Library for RH Derivatives</a></strong>: This library provides two functions, install_drush and install_drupal.</li>
-<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&#8217;ll have a working Drupal installation up and running in about 5 minutes.
-If you use them and find any bugs or have any RH-based StackScripts you&#8217;d like
-made available, post a comment and I&#8217;ll see what I can do. In the interest of
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&rsquo;ll have a working Drupal installation up and running in about 5 minutes.
+If you use them and find any bugs or have any RH-based StackScripts you&rsquo;d like
+made available, post a comment and I&rsquo;ll see what I can do. In the interest of
 full disclosure, the links to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> in
 this article have a referral code in them that will give me $20 credit if you
 sign up and keep your account open for 90 days. If you like these
-StackScripts, please use my links to sign up for a Linode - you&#8217;ll wonder how
+StackScripts, please use my links to sign up for a Linode - you&rsquo;ll wonder how
 you did without one!</li>
 </ul>
 
@@ -159,19 +149,12 @@ you did without one!</li>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-02-24T00:00:00-06:00" pubdate data-updated="true">Feb 24<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-02-24T00:00:00-06:00'><span class='date'><span class='date-month'>Feb</span> <span class='date-day'>24</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/code/'>Code</a>, <a class='category' href='/blog/categories/drupal/'>Drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>, <a class='category' href='/blog/categories/hosting/'>Hosting</a>, <a class='category' href='/blog/categories/linode/'>Linode</a>, <a class='category' href='/blog/categories/redhat/'>RedHat</a>
+    <a class='category' href='/blog/categories/code/'>code</a>, <a class='category' href='/blog/categories/drupal/'>drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>drupal planet</a>, <a class='category' href='/blog/categories/hosting/'>hosting</a>, <a class='category' href='/blog/categories/linode/'>linode</a>, <a class='category' href='/blog/categories/redhat/'>redhat</a>
   
 </span>
 
@@ -180,7 +163,7 @@ you did without one!</li>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal" >Tweet</a>
   
   
   
@@ -208,20 +191,30 @@ you did without one!</li>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -229,7 +222,7 @@ you did without one!</li>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -244,7 +237,7 @@ you did without one!</li>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -292,7 +285,7 @@ you did without one!</li>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -310,7 +303,7 @@ you did without one!</li>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -326,7 +319,7 @@ you did without one!</li>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

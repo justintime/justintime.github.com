@@ -4,7 +4,7 @@
   <title><![CDATA[Category: 400ms average), but on a homepage displaying 25 nodes, that adds | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/400ms-average-but-on-a-homepage-displaying-25-nodes-that-adds/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -23,40 +23,36 @@ shave 7 seconds of PHP execution time time off the homepage load.
 The cause was eventually tracked down to calls out to TinyURL for
 every node being rendered. The core problem came from the
 <a href="http://drupal.org/project/service_links">service links</a> module. We
-were able to fix it by disabling short URL's in the module, but the
+were able to fix it by disabling short URL&rsquo;s in the module, but the
 problem has been addressed in the current pre-release 2.x branch by
 using caching. We might have ended up discovering this by disabling
 module after module one at a time, but that would have taken
-forever. In today's world of API's and social media, it's very
+forever. In today&rsquo;s world of API&rsquo;s and social media, it&rsquo;s very
 common for a module to make calls to outside websites. However,
 care should be taken by the module authors when coding in these
 features. In our example, each call to TinyURL was fairly fast (300
 - 400ms average), but on a homepage displaying 25 nodes, that adds
 over 7 seconds page load time. Think of the impact if TinyURL
 experienced a large slowdown, or even an outage? As far as I know,
-Drupal doesn't give you a way out of the box to track such
+Drupal doesn&rsquo;t give you a way out of the box to track such
 requests. However, using the tcpdump binary which is available on
-virtually all Unix variants, we can see exactly what's happening.
-Note that you need root access to run tcpdump. Let's say that the
+virtually all Unix variants, we can see exactly what&rsquo;s happening.
+Note that you need root access to run tcpdump. Let&rsquo;s say that the
 IP address of your primary interface is 10.0.0.1. By using this
 tcpdump command, we can see all outbound HTTP and HTTPS requests in
-real time:</p>
+real time:
+    tcpdump src host 10.0.0.1 and dst port 80 or dst port 443</p>
 
-<pre><code>tcpdump src host 10.0.0.1 and dst port 80 or dst port 443
-</code></pre>
-
-<p>If you don't get any traffic after a few seconds, go hit your
+<p>If you don&rsquo;t get any traffic after a few seconds, go hit your
 /cron.php page - this should generate some traffic like this for
 you to see:
 Here we can see that our host is making a bunch of outbound
-requests to master.drupal.org. This is because the "Update Status"
+requests to master.drupal.org. This is because the &ldquo;Update Status&rdquo;
 module is checking to see what upgrades are available for us. What
-if you see traffic and don't know what module is causing it? grep
+if you see traffic and don&rsquo;t know what module is causing it? grep
 to the rescue! In order to find out which module was making the
-calls to TinyURL, we ran the following command:</p>
-
-<pre><code>grep -R 'tinyurl.com' /path/to/drupal/sites/all/modules/\*
-</code></pre>
+calls to TinyURL, we ran the following command:
+    grep -R &lsquo;tinyurl.com&rsquo; /path/to/drupal/sites/all/modules/*</p>
 
 <p>This returned one hit, from
 /path/to/drupal/sites/all/modules/service_links/service_links.module.

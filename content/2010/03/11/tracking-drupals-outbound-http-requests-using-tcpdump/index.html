@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Tracking Drupal's Outbound HTTP Requests using tcpdump - SysAdmin's Journey</title>
+  <title>Tracking Drupal's Outbound HTTP Requests Using Tcpdump - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -23,10 +23,11 @@ The cause was &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ The cause was &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ The cause was &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Tracking Drupal's Outbound HTTP Requests Using Tcpdump</h1>
     
     
@@ -94,14 +91,7 @@ The cause was &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-03-11T00:00:00-06:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-03-11T00:00:00-06:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -113,40 +103,36 @@ shave 7 seconds of PHP execution time time off the homepage load.
 The cause was eventually tracked down to calls out to TinyURL for
 every node being rendered. The core problem came from the
 <a href="http://drupal.org/project/service_links">service links</a> module. We
-were able to fix it by disabling short URL&#8217;s in the module, but the
+were able to fix it by disabling short URL&rsquo;s in the module, but the
 problem has been addressed in the current pre-release 2.x branch by
 using caching. We might have ended up discovering this by disabling
 module after module one at a time, but that would have taken
-forever. In today&#8217;s world of API&#8217;s and social media, it&#8217;s very
+forever. In today&rsquo;s world of API&rsquo;s and social media, it&rsquo;s very
 common for a module to make calls to outside websites. However,
 care should be taken by the module authors when coding in these
 features. In our example, each call to TinyURL was fairly fast (300
 - 400ms average), but on a homepage displaying 25 nodes, that adds
 over 7 seconds page load time. Think of the impact if TinyURL
 experienced a large slowdown, or even an outage? As far as I know,
-Drupal doesn&#8217;t give you a way out of the box to track such
+Drupal doesn&rsquo;t give you a way out of the box to track such
 requests. However, using the tcpdump binary which is available on
-virtually all Unix variants, we can see exactly what&#8217;s happening.
-Note that you need root access to run tcpdump. Let&#8217;s say that the
+virtually all Unix variants, we can see exactly what&rsquo;s happening.
+Note that you need root access to run tcpdump. Let&rsquo;s say that the
 IP address of your primary interface is 10.0.0.1. By using this
 tcpdump command, we can see all outbound HTTP and HTTPS requests in
-real time:</p>
+real time:
+    tcpdump src host 10.0.0.1 and dst port 80 or dst port 443</p>
 
-<pre><code>tcpdump src host 10.0.0.1 and dst port 80 or dst port 443
-</code></pre>
-
-<p>If you don&#8217;t get any traffic after a few seconds, go hit your
+<p>If you don&rsquo;t get any traffic after a few seconds, go hit your
 /cron.php page - this should generate some traffic like this for
 you to see:
 Here we can see that our host is making a bunch of outbound
-requests to master.drupal.org. This is because the &#8220;Update Status&#8221;
+requests to master.drupal.org. This is because the &ldquo;Update Status&rdquo;
 module is checking to see what upgrades are available for us. What
-if you see traffic and don&#8217;t know what module is causing it? grep
+if you see traffic and don&rsquo;t know what module is causing it? grep
 to the rescue! In order to find out which module was making the
-calls to TinyURL, we ran the following command:</p>
-
-<pre><code>grep -R 'tinyurl.com' /path/to/drupal/sites/all/modules/\*
-</code></pre>
+calls to TinyURL, we ran the following command:
+    grep -R &lsquo;tinyurl.com&rsquo; /path/to/drupal/sites/all/modules/*</p>
 
 <p>This returned one hit, from
 /path/to/drupal/sites/all/modules/service_links/service_links.module.
@@ -167,19 +153,12 @@ page load time by 7 seconds!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2010-03-11T00:00:00-06:00" pubdate data-updated="true">Mar 11<span>th</span>, 2010</time>
+<time class='entry-date' datetime='2010-03-11T00:00:00-06:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/400ms-average-but-on-a-homepage-displaying-25-nodes-that-adds/'>400ms average), but on a homepage displaying 25 nodes, that adds</a>, <a class='category' href='/blog/categories/drupal/'>Drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>
+    <a class='category' href='/blog/categories/400ms-average-but-on-a-homepage-displaying-25-nodes-that-adds/'>400ms average), but on a homepage displaying 25 nodes, that adds</a>, <a class='category' href='/blog/categories/drupal/'>drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>drupal planet</a>
   
 </span>
 
@@ -188,7 +167,7 @@ page load time by 7 seconds!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/03/11/tracking-drupals-outbound-http-requests-using-tcpdump" >Tweet</a>
   
   
   
@@ -216,20 +195,30 @@ page load time by 7 seconds!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -237,7 +226,7 @@ page load time by 7 seconds!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -252,7 +241,7 @@ page load time by 7 seconds!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -300,7 +289,7 @@ page load time by 7 seconds!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -318,7 +307,7 @@ page load time by 7 seconds!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -334,7 +323,7 @@ page load time by 7 seconds!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

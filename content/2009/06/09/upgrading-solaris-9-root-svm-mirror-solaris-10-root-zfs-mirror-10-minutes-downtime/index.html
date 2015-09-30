@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Upgrading from Solaris 9 with a Root SVM Mirror to Solaris 10 with a Root ZFS Mirror with less than 10 Minutes of Downtime - SysAdmin's Journey</title>
+  <title>Upgrading From Solaris 9 With a Root SVM Mirror to Solaris 10 With a Root ZFS Mirror With Less Than 10 Minutes of Downtime - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -22,10 +22,11 @@ documentation. One of the biggest skill an admin can have is the ability to &hel
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ documentation. One of the biggest skill an admin can have is the ability to &hel
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ documentation. One of the biggest skill an admin can have is the ability to &hel
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Upgrading From Solaris 9 With a Root SVM Mirror to Solaris 10 With a Root ZFS Mirror With Less Than 10 Minutes of Downtime</h1>
     
     
@@ -93,14 +90,7 @@ documentation. One of the biggest skill an admin can have is the ability to &hel
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-09T00:00:00-05:00" pubdate data-updated="true">Jun 9<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-09T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -115,14 +105,14 @@ example is upgrading a server from Solaris 9 with root in an SVM mirror to
 Solaris 10 with a ZFS mirror. Not only is this large task doable, but thanks
 to LiveUpgrade, it can be done with less than 10 minutes of downtime (3
 reboots @ roughly 3 minutes each)!  Part of the beauty of Solaris when
-compared to Linux is the tools made available to the admin. I didn&#8217;t even like
+compared to Linux is the tools made available to the admin. I didn&rsquo;t even like
 working in Solaris until I started learning about zones, ZFS, LiveUpgrade,
-DTrace, etc. Now, on the server-side, I can&#8217;t use it enough. I would be hard-
-pressed to do a similar upgrade with Linux - it&#8217;s almost impossible to do in
+DTrace, etc. Now, on the server-side, I can&rsquo;t use it enough. I would be hard-
+pressed to do a similar upgrade with Linux - it&rsquo;s almost impossible to do in
 10 minutes of downtime on RHEL. Debian might be able to do it, but LiveUpgrade
-gives you the ability to roll back to the previous state, which I don&#8217;t
-believe &#8216;apt-get dist-upgrade&#8217; allows. Anyways, enough evangelism, onto the
-howto! If you&#8217;re <a href="http://feeds.feedburner.com/AUnixSysadminsJourney">subscribed to my RSS
+gives you the ability to roll back to the previous state, which I don&rsquo;t
+believe &lsquo;apt-get dist-upgrade&rsquo; allows. Anyways, enough evangelism, onto the
+howto! If you&rsquo;re <a href="http://feeds.feedburner.com/AUnixSysadminsJourney">subscribed to my RSS
 feed</a> you may not even have
 noticed, but all of the steps have been already laid out over the past few
 posts. All that remains is to put them back together into one big chain of
@@ -157,7 +147,7 @@ subtasks.</p>
 <ul>
 <li><strong>Total Downtime:</strong> None</li>
 <li><strong>Link to Article:</strong> <a href="/content/2009/06/03/adding-2nd-disk-zfs-root-pool">Adding a 2nd Disk to a ZFS Root Pool</a>
-We&#8217;ve taken a large behemoth of a task that sounds like a large amount of
+We&rsquo;ve taken a large behemoth of a task that sounds like a large amount of
 downtime would have been incurred, and broken it down into smaller, more
 manageable substeps. As an added bonus, using Solaris technologies, downtime
 is kept to a minimum!</li>
@@ -178,19 +168,12 @@ is kept to a minimum!</li>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-06-09T00:00:00-05:00" pubdate data-updated="true">Jun 9<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-06-09T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -199,7 +182,7 @@ is kept to a minimum!</li>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" >Tweet</a>
   
   
   
@@ -227,20 +210,30 @@ is kept to a minimum!</li>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -248,7 +241,7 @@ is kept to a minimum!</li>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -263,7 +256,7 @@ is kept to a minimum!</li>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -311,7 +304,7 @@ is kept to a minimum!</li>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -329,7 +322,7 @@ is kept to a minimum!</li>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -345,7 +338,7 @@ is kept to a minimum!</li>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

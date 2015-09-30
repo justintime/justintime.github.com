@@ -9,8 +9,8 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="CruiseControl and I have never really gotten along. When you&#8217;re a Java shop,
-you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
+  <meta name="description" content="CruiseControl and I have never really gotten along. When you&rsquo;re a Java shop,
+you have to use continuous integration. In fact, if you&rsquo;re a &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -22,10 +22,11 @@ you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Hudson > (CruiseControl * 2)</h1>
     
     
@@ -93,53 +90,46 @@ you have to use continuous integration. In fact, if you&#8217;re a &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-13T00:00:00-05:00" pubdate data-updated="true">Aug 13<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-13T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&#8217;re a Java shop,
-you have to use continuous integration. In fact, if you&#8217;re a code shop, you
+<div class="entry-content"><p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&rsquo;re a Java shop,
+you have to use continuous integration. In fact, if you&rsquo;re a code shop, you
 need CI. For the longest time, CruiseControl was the only kid on the block.
-I&#8217;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
-didn&#8217;t take the time to try it. Why not? Well, because CI is hard, and it
-takes forever to get setup right &#8211; I didn&#8217;t want to have to re-invest all
-that time. Man, if only I&#8217;d known how wrong I was.</p>
+I&rsquo;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
+didn&rsquo;t take the time to try it. Why not? Well, because CI is hard, and it
+takes forever to get setup right &ndash; I didn&rsquo;t want to have to re-invest all
+that time. Man, if only I&rsquo;d known how wrong I was.</p>
 
-<p>Everyone&#8217;s gripe with CruiseControl was that you had to edit XML files to make
-the configuration. Well, I don&#8217;t mind XML, and it&#8217;s often pretty good at
+<p>Everyone&rsquo;s gripe with CruiseControl was that you had to edit XML files to make
+the configuration. Well, I don&rsquo;t mind XML, and it&rsquo;s often pretty good at
 config files. But CruiseControl was always quirky. Switching from CVS to SVN?
-A day&#8217;s worth of work. Adding a new build? At least an hour or two. Little
-things: CruiseControl would freak out and die if you didn&#8217;t do the initial
+A day&rsquo;s worth of work. Adding a new build? At least an hour or two. Little
+things: CruiseControl would freak out and die if you didn&rsquo;t do the initial
 checkout from CVS/SVN - CruiseControl only does updates, not checkouts. We
-often joke how the developers that write CruiseControl favorite motto was &#8220;let
-the sucker sysadmin deal with it&#8221;.</p>
+often joke how the developers that write CruiseControl favorite motto was &ldquo;let
+the sucker sysadmin deal with it&rdquo;.</p>
 
 <p>So, I downloaded Hudson, and in less than 10 minutes I had everything that was
-being done in CruiseControl working in Hudson. And, I&#8217;m being honest here, I
+being done in CruiseControl working in Hudson. And, I&rsquo;m being honest here, I
 actually smiled a few times to myself when setting it up! It took another 20
 minutes, and I have authentication working against our LDAP server, which I
 never had working in CruiseControl.</p>
 
-<p>If you&#8217;re running CruiseControl now, drop everything, do yourself a favor, and
-go try Hudson. If it doesn&#8217;t do what you want, it has plugins that do. It has
-API&#8217;s for XML, JSON, and Python, and the XML implementation has full XPATH
+<p>If you&rsquo;re running CruiseControl now, drop everything, do yourself a favor, and
+go try Hudson. If it doesn&rsquo;t do what you want, it has plugins that do. It has
+API&rsquo;s for XML, JSON, and Python, and the XML implementation has full XPATH
 support. Every field in the web interface has inline help that is actually
-helpful. Having different projects use different Java&#8217;s and Ant&#8217;s are a click
+helpful. Having different projects use different Java&rsquo;s and Ant&rsquo;s are a click
 away. You can build multiple projects at once, create build dependencies, and
 even have distributed builds run amongst multiple machines.</p>
 
-<p>Please, I&#8217;m begging you. Give Hudson a try, and get back some of your life
-from CruiseControl! If you&#8217;re not running CruiseControl or Hudson, then you
+<p>Please, I&rsquo;m begging you. Give Hudson a try, and get back some of your life
+from CruiseControl! If you&rsquo;re not running CruiseControl or Hudson, then you
 probably should be.</p>
 </div>
 
@@ -156,19 +146,12 @@ probably should be.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-08-13T00:00:00-05:00" pubdate data-updated="true">Aug 13<span>th</span>, 2009</time>
+<time class='entry-date' datetime='2009-08-13T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -177,7 +160,7 @@ probably should be.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2" >Tweet</a>
   
   
   
@@ -205,20 +188,30 @@ probably should be.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -226,7 +219,7 @@ probably should be.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -241,7 +234,7 @@ probably should be.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -289,7 +282,7 @@ probably should be.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -307,7 +300,7 @@ probably should be.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -323,7 +316,7 @@ probably should be.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

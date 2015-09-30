@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Use LVM on an installation of Ubuntu - SysAdmin's Journey</title>
+  <title>Use LVM on an Installation of Ubuntu - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -22,10 +22,11 @@ whatever reason, Ubuntu has been slow at adopting support for LVM at &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ whatever reason, Ubuntu has been slow at adopting support for LVM at &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ whatever reason, Ubuntu has been slow at adopting support for LVM at &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Use LVM on an Installation of Ubuntu</h1>
     
     
@@ -93,14 +90,7 @@ whatever reason, Ubuntu has been slow at adopting support for LVM at &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-12-16T00:00:00-06:00" pubdate data-updated="true">Dec 16<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-12-16T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -109,13 +99,13 @@ whatever reason, Ubuntu has been slow at adopting support for LVM at &hellip;">
 
 <div class="entry-content"><p>RHEL/CentOS has had support for LVM in setup for quite some time now, but for
 whatever reason, Ubuntu has been slow at adopting support for LVM at
-installation. Usually, I just grumble and move on with ext3 &#8211; not today.
-Convinced that I couldn&#8217;t be the only person wanting LVM support, I set out to
-do just that. Luckily, it wasn&#8217;t hard at all! As of Intrepid (8.10), the
+installation. Usually, I just grumble and move on with ext3 &ndash; not today.
+Convinced that I couldn&rsquo;t be the only person wanting LVM support, I set out to
+do just that. Luckily, it wasn&rsquo;t hard at all! As of Intrepid (8.10), the
 installer has basic support for LVM in the disk partitioner part of the
-installation. It&#8217;s not pretty, but it works. The key is that the LVM binaries
-aren&#8217;t installed into the image, so the installer won&#8217;t detect the presence of
-the LVM PV&#8217;s, VG&#8217;s, and LV&#8217;s. Here&#8217;s how to a) create a new LVM setup during
+installation. It&rsquo;s not pretty, but it works. The key is that the LVM binaries
+aren&rsquo;t installed into the image, so the installer won&rsquo;t detect the presence of
+the LVM PV&rsquo;s, VG&rsquo;s, and LV&rsquo;s. Here&rsquo;s how to a) create a new LVM setup during
 installation, and b) how to use an existing LVM setup during installation.</p>
 
 <h3>Pre-installation Common Steps</h3>
@@ -124,29 +114,29 @@ installation, and b) how to use an existing LVM setup during installation.</p>
 
 <ul>
 <li>Boot into the Live CD mode - not the direct installation.</li>
-<li>Once you&#8217;re looking at your desktop, we need to install LVM. Hit <strong>Alt+F2</strong>, and type in <strong>gnome-terminal</strong>, hit the <strong>OK</strong> button.</li>
-<li>At the terminal, type <strong>sudo apt-get install lvm2</strong>. Note that this installs the binaries into the ramdisk, not your final installation. We&#8217;ll need to install LVM to the hard drive later.</li>
+<li>Once you&rsquo;re looking at your desktop, we need to install LVM. Hit <strong>Alt+F2</strong>, and type in <strong>gnome-terminal</strong>, hit the <strong>OK</strong> button.</li>
+<li>At the terminal, type <strong>sudo apt-get install lvm2</strong>. Note that this installs the binaries into the ramdisk, not your final installation. We&rsquo;ll need to install LVM to the hard drive later.</li>
 <li>Once installed, we need to load the device mapper module into the kernel: <strong>sudo modprobe dm-mod</strong>
-If you&#8217;re setting up LVM from scratch, continue with <strong>New LVM Setup</strong> below.
+If you&rsquo;re setting up LVM from scratch, continue with <strong>New LVM Setup</strong> below.
 Otherwise, skip to <strong>Use an Existing LVM Setup</strong> further down.</li>
 </ul>
 
 
 <h3>New LVM Setup</h3>
 
-<p>Creating LVM setups from scratch is not a &#8220;cookie cutter&#8221; operation,
-everyone&#8217;s setup will be different. If you&#8217;re trying to do LVM on
-installation, you likely already know what you&#8217;re doing here. However, your
+<p>Creating LVM setups from scratch is not a &ldquo;cookie cutter&rdquo; operation,
+everyone&rsquo;s setup will be different. If you&rsquo;re trying to do LVM on
+installation, you likely already know what you&rsquo;re doing here. However, your
 general steps should be something like:</p>
 
 <ul>
 <li>Use <strong>sudo fdisk /dev/sda</strong> to setup your Linux boot partition and LVM (type 8e) partition(s)</li>
 <li>Update the kernel with the new partitions by running <strong>sudo partprobe</strong>.</li>
 <li>I recommend using ext2 on your boot partition. If boot will reside on partition 1, then do a <strong>sudo mkfs.ext2 /dev/sda1</strong> to format the partition with Ext2.</li>
-<li>Create the physical volume(s) (PV&#8217;s) on the partitions of type 8e by using <strong>sudo pvcreate /dev/sdaN</strong>.</li>
+<li>Create the physical volume(s) (PV&rsquo;s) on the partitions of type 8e by using <strong>sudo pvcreate /dev/sdaN</strong>.</li>
 <li>Create a volume group (VG): <strong>sudo vgcreate MyLVMVG /dev/sdaN</strong></li>
-<li>Create logical volumes (LV&#8217;s) within the group: <strong>sudo lvcreate -n root -L 5G MyLVMVG &amp;&amp; sudo lvcreate -n swap -L 1G MyLVMVG</strong></li>
-<li>Last, we need to put filesystems on the LV&#8217;s. <strong>sudo mkfs.ext3 /dev/MyLVMVG/root &amp;&amp; mkfs.swap /dev/MyLVMVG/swap</strong>
+<li>Create logical volumes (LV&rsquo;s) within the group: <strong>sudo lvcreate -n root -L 5G MyLVMVG &amp;&amp; sudo lvcreate -n swap -L 1G MyLVMVG</strong></li>
+<li>Last, we need to put filesystems on the LV&rsquo;s. <strong>sudo mkfs.ext3 /dev/MyLVMVG/root &amp;&amp; mkfs.swap /dev/MyLVMVG/swap</strong>
 Skip the next section and continue on to <strong>Post-configuration Common Steps</strong>.</li>
 </ul>
 
@@ -154,16 +144,16 @@ Skip the next section and continue on to <strong>Post-configuration Common Steps
 <h3>Use an Existing LVM Setup</h3>
 
 <p>In my personal case, I was replacing CentOS with Ubuntu. I like CentOS for
-it&#8217;s stability, but my laptop needs a more bleeding edge in order to run the
+it&rsquo;s stability, but my laptop needs a more bleeding edge in order to run the
 way I want it. I had setup an efficient LVM configuration already, I just
-wanted to reformat it during installation and use what I already had. Here&#8217;s
+wanted to reformat it during installation and use what I already had. Here&rsquo;s
 what you need to do:</p>
 
 <ul>
-<li>If you don&#8217;t already know it, we need the volume group (VG) names from our current setup. You can obtain that by running <strong>sudo vgscan | grep Found</strong>. In cases where CentOS/RHEL did the setup, you&#8217;ll likely have a VG name of VolGroup00.</li>
-<li>We need to tell the running kernel to scan for and activate the current logical volumes (LV&#8217;s). Using the VG from above, run <strong>sudo lvchange -ay VolGroup00</strong></li>
-<li>At this point, your LV&#8217;s should be found and available to the kernel. You can verify this by running <strong>sudo lvdisplay | grep &#8220;LV NAME\|LV Status&#8221;</strong>
-At this point, your LV&#8217;s will be visible to the installer. Continue on to
+<li>If you don&rsquo;t already know it, we need the volume group (VG) names from our current setup. You can obtain that by running <strong>sudo vgscan | grep Found</strong>. In cases where CentOS/RHEL did the setup, you&rsquo;ll likely have a VG name of VolGroup00.</li>
+<li>We need to tell the running kernel to scan for and activate the current logical volumes (LV&rsquo;s). Using the VG from above, run <strong>sudo lvchange -ay VolGroup00</strong></li>
+<li>At this point, your LV&rsquo;s should be found and available to the kernel. You can verify this by running <strong>sudo lvdisplay | grep &ldquo;LV NAME|LV Status&rdquo;</strong>
+At this point, your LV&rsquo;s will be visible to the installer. Continue on to
 <strong>Post-configuration Common Steps</strong> below.</li>
 </ul>
 
@@ -174,53 +164,47 @@ At this point, your LV&#8217;s will be visible to the installer. Continue on to
 can type <strong>ubiquity</strong> in your already open terminal. Continue through the
 installer as normal, but make sure you select the <strong>Manual</strong> radio button on
 the <strong>Prepare Disk Space</strong> panel of the installer. When you click the
-<strong>Forward</strong> button, you&#8217;ll be presented with a list of devices that includes
+<strong>Forward</strong> button, you&rsquo;ll be presented with a list of devices that includes
 your /dev/mapper/VG/LV entries. Go ahead and click on each one, click the
 <strong>Edit Partition</strong> button, and set the mountpoint. <strong>Write down or memorize
-what LV&#8217;s are mounted where, and which partition is your boot partition</strong> &#8211;
-you&#8217;ll need it later. Format them if you used an existing setup. Continue
+what LV&rsquo;s are mounted where, and which partition is your boot partition</strong> &ndash;
+you&rsquo;ll need it later. Format them if you used an existing setup. Continue
 through the installer just as you normally would, <strong>but make sure to click
-&#8220;Continue using the liveCD&#8221; at the end of installation!</strong> Failure to do so
-will give you a system that won&#8217;t boot. Here&#8217;s the only tricky part &#8211; we need
+&ldquo;Continue using the liveCD&rdquo; at the end of installation!</strong> Failure to do so
+will give you a system that won&rsquo;t boot. Here&rsquo;s the only tricky part &ndash; we need
 to mount our partitions that we installed to, and install LVM into it. Since
-you wrote down everything above, it&#8217;s not hard. First, we need to make a
+you wrote down everything above, it&rsquo;s not hard. First, we need to make a
 mountpoint, and mount our root LV to it:</p>
 
-<div>
-  <pre><code class='bash'>sudo su - mkdir /mnt/chroot/
-mount /dev/VolGroup00/root /mnt/chroot</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo su - mkdir /mnt/chroot/
+mount /dev/VolGroup00/root /mnt/chroot</code></pre></div>
 
 
 <p>Now,
 everyone will need to do this for the /boot partition, but you may need to
 mount /var, /home/, etc., if you created separate mount points for them.
-Here&#8217;s what I had to do in my particular setup:</p>
+Here&rsquo;s what I had to do in my particular setup:</p>
 
-<div>
-  <pre><code class='bash'>mount /dev/VolGroup00/home /mnt/chroot/home
-mount /dev/sda3 /mnt/chroot/boot</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mount /dev/VolGroup00/home /mnt/chroot/home
+mount /dev/sda3 /mnt/chroot/boot</code></pre></div>
 
 
 <p>Now, we need to chroot into our environment, and install LVM.</p>
 
-<div>
-  <pre><code class='bash'>chroot /mnt/chroot apt-get update apt-get install lvm2
-exit</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">chroot /mnt/chroot apt-get update apt-get install lvm2
+<span class="nb">exit</span></code></pre></div>
 
 
 <p>At this point, you can restart the system by clicking
-System->Shut Down->Restart. If you&#8217;re paranoid you can unmount the partitions,
+System->Shut Down->Restart. If you&rsquo;re paranoid you can unmount the partitions,
 but the live cd will do that for you.</p>
 
 <h3>Conclusion</h3>
 
-<p>While it&#8217;s not that hard to use LVM during installation of Ubuntu, it&#8217;s still
+<p>While it&rsquo;s not that hard to use LVM during installation of Ubuntu, it&rsquo;s still
 harder than it should be. It looks like something the Ubuntu devs are working
 on, as the ubiquity installer already has rudimentary support for it. Maybe
-9.04 will have it &#8211; if not, check back here for a post on how to do it there
+9.04 will have it &ndash; if not, check back here for a post on how to do it there
 too!</p>
 </div>
 
@@ -237,19 +221,12 @@ too!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-12-16T00:00:00-06:00" pubdate data-updated="true">Dec 16<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-12-16T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a>
   
 </span>
 
@@ -258,7 +235,7 @@ too!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/12/16/use-lvm-installation-ubuntu" >Tweet</a>
   
   
   
@@ -286,20 +263,30 @@ too!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -307,7 +294,7 @@ too!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -322,7 +309,7 @@ too!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -370,7 +357,7 @@ too!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -388,7 +375,7 @@ too!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -404,7 +391,7 @@ too!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

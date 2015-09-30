@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Code | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: code | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/code/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -18,23 +18,23 @@
     <link href="http://sysadminsjourney.com/content/2010/07/14/case-study-migrating-xml-drupal-using-migrate"/>
     <updated>2010-07-14T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2010/07/14/case-study-in-migrating-xml-to-drupal-using-migrate</id>
-    <content type="html"><![CDATA[<p>Sorry for the lack of posts as of late -- a massive upgrade operation at
-$DAYJOB has had me out of commission for a few weeks. Also, I've had the great
+    <content type="html"><![CDATA[<p>Sorry for the lack of posts as of late &ndash; a massive upgrade operation at
+$DAYJOB has had me out of commission for a few weeks. Also, I&rsquo;ve had the great
 fortune to be able to be part of a migration to Drupal which exposed me to
-<a href="http://drupal.org/project/migrate">migrate</a> and friends. Yes, I said "great
-fortune" in the same sentence with "migration" without using a negative -
-that's just how awesome this module is. My first impression when looking at
-the documentation for migrate was that it didn't seem complete. While it's
-true that the documentation could be better (what module couldn't use better
+<a href="http://drupal.org/project/migrate">migrate</a> and friends. Yes, I said &ldquo;great
+fortune&rdquo; in the same sentence with &ldquo;migration&rdquo; without using a negative -
+that&rsquo;s just how awesome this module is. My first impression when looking at
+the documentation for migrate was that it didn&rsquo;t seem complete. While it&rsquo;s
+true that the documentation could be better (what module couldn&rsquo;t use better
 documentation?), the problem is that no two migrations are alike. Because of
 this, the best documentation is not going to be written by the module authors,
 it will be written by the module <em>users</em> - they are the ones that come up with
 the recipies to fill the cookbook. There are several good reasons why there
-aren't many recipes available:</p>
+aren&rsquo;t many recipes available:</p>
 
 <ul>
-<li>Developers don't like doing migrations. It can be painful, and often takes quite a bit of time.</li>
-<li>Users don't like migrations. They see a migration of data as something easily done, and they often get sticker shock when presented with estimates for a large migration.</li>
+<li>Developers don&rsquo;t like doing migrations. It can be painful, and often takes quite a bit of time.</li>
+<li>Users don&rsquo;t like migrations. They see a migration of data as something easily done, and they often get sticker shock when presented with estimates for a large migration.</li>
 <li>Migration code is written in a flurry before the site is active. Right before launch, development crescendos, and then is often never used again (because no two migrations are the same).
 This being my first migration, I vowed that I would document my experience,
 because I learned so much from it. In this particular migration, we had to
@@ -48,15 +48,15 @@ have to do this via the hooks that the migrate module provides. In my case,
 there were a few cases where doing the data munging in the command line script
 was much easier than doing it within the hooks. The problem with making
 transformations within the command line script is that with every change, I
-had to re-run the script. This wasn't a big deal, as the XML to MySQL script
+had to re-run the script. This wasn&rsquo;t a big deal, as the XML to MySQL script
 took around 15 seconds to complete. I also quickly discovered that if you have
-less than 10 entities of one type (Story content type, user, etc), it's
+less than 10 entities of one type (Story content type, user, etc), it&rsquo;s
 usually better to just hand-migrate them. The most straight-forward migration
-will take 1 hour at a minimum to setup and test -- if it will take less than
+will take 1 hour at a minimum to setup and test &ndash; if it will take less than
 that to copy/paste, save your time and do it the less sexy way. Since we had
 to transform the XML into MySQL tables, and there was a lot of data in the XML
-that we didn't need, I decided the best way to dynamically change what we
-import and what we didn't was by using hook_install() and Drupal's DB schema
+that we didn&rsquo;t need, I decided the best way to dynamically change what we
+import and what we didn&rsquo;t was by using hook_install() and Drupal&rsquo;s DB schema
 API. By naming the MySQL table columns the same as the XML attributes, we can
 add and remove data to be transformed quite easily. Lastly, I need to re-
 iterate that this was my first migration. What I describe here works for me,
@@ -68,11 +68,11 @@ that first. Let me know any suggestions you may have in the comments.</li>
 
 <h2>Install Module Dependencies</h2>
 
-<p>The first step is to install module dependencies. You'll need
+<p>The first step is to install module dependencies. You&rsquo;ll need
 <a href="http://drupal.org/project/views">Views</a>,
-<a href="http://drupal.org/project/schema">Schema</a>, <a href="http://drupal.org/project/tw">Table Wizard(tw)</a>. You'll also want to install
+<a href="http://drupal.org/project/schema">Schema</a>, <a href="http://drupal.org/project/tw">Table Wizard(tw)</a>. You&rsquo;ll also want to install
 <a href="http://drupal.org/project/migrate">Migrate</a>, and <a href="http://drupal.org/project/migrate_extras">Migrate Extras</a> if you want to do any work
-with CCK fields. I must admit that I hadn't seen Table Wizard before this
+with CCK fields. I must admit that I hadn&rsquo;t seen Table Wizard before this
 project, but it will always be present in my dev installs from here out. If
 you find yourself using SQLYog, PHPMyAdmin, or some other tool to simply look
 at data in the database, be sure to check it out.</p>
@@ -80,139 +80,130 @@ at data in the database, be sure to check it out.</p>
 <h2>Create Our Custom Module</h2>
 
 <p>As I mentioned above, we are relying on the Drupal Schema API to make a lot of
-this easy, so let's make a custom module that sets up our schemas for us.
-We'll call this module my_import. Create a new directory in your modules
+this easy, so let&rsquo;s make a custom module that sets up our schemas for us.
+We&rsquo;ll call this module my_import. Create a new directory in your modules
 directory, and name it my_import. First, create my_import.info with this
 inside:
-<div>
-  <pre><code class='ini'>name = My Import
-description = &quot;An import module.&quot;
-core = 6.x
-dependencies[] = migrate
-dependencies[] = migrate_extras
-dependencies[] = content
-dependencies[] = path_redirect
-package = Database</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><code class="language-ini" data-lang="ini"><span class="na">name</span> <span class="o">=</span> <span class="s">My Import</span>
+<span class="na">description</span> <span class="o">=</span> <span class="s">&amp;ldquo;An import module.&amp;rdquo;</span>
+<span class="na">core</span> <span class="o">=</span> <span class="s">6.x</span>
+<span class="na">dependencies[]</span> <span class="o">=</span> <span class="s">migrate</span>
+<span class="na">dependencies[]</span> <span class="o">=</span> <span class="s">migrate_extras</span>
+<span class="na">dependencies[]</span> <span class="o">=</span> <span class="s">content</span>
+<span class="na">dependencies[]</span> <span class="o">=</span> <span class="s">path_redirect</span>
+<span class="na">package</span> <span class="o">=</span> <span class="s">Database</span></code></pre></div></p>
 
-<p>Nothing too wild here, just requiring some modules that we'll
+<p>Nothing too wild here, just requiring some modules that we&rsquo;ll
 be using later. Now, create my_import.install in the same directory with this
 inside:
-<div>
-  <pre><code class='php'>&amp;lt;?php
-function my_import_schema() {
-  $schema = array();&lt;/p&gt;
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">function my_import_schema() {</span>
+<span class="x">  $schema = array();&lt;/p&gt;</span>
 
-&lt;p&gt;  $schema['clickability_articles'] = array(&lt;/p&gt;
+<span class="x">&lt;p&gt;  $schema[&amp;lsquo;clickability_articles&amp;rsquo;] = array(</span>
+<span class="x">    &amp;lsquo;fields&amp;rsquo; =&gt; array(</span>
+<span class="x">      &amp;lsquo;id&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;int&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article ID&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;createDate&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;datetime&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article creation date.&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;editDate&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;datetime&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article edit date&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;title&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article title&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;author&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability content author (optional)&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;articleauthor&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article author&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;summary&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article short summary&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;body&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;size&amp;rsquo; =&gt; &amp;lsquo;big&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article body&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;placement&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article related article placement lists&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;thumbnail&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article thumbnail&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;image&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        // @todo: Some articles do not have an image, but we require Master Image to be set.</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article image&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;image2&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article image page 2&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;image3&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article image page 3&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;master_image_byline_title&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article image page 7&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;tags&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; FALSE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article image page 7&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;status&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability article status&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      &amp;lsquo;websitePlacements&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;text&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;not null&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">        &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Clickability book review status&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">      ),</span>
+<span class="x">    &amp;lsquo;primary key&amp;rsquo; =&gt; array(&amp;lsquo;id&amp;rsquo;),</span>
+<span class="x">  );</span>
+<span class="x">  return $schema;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;'fields' =&amp;gt; array(
-  'id' =&amp;gt; array(
-    'type' =&amp;gt; 'int',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article ID'),
-  ),
-  'createDate' =&amp;gt; array(
-    'type' =&amp;gt; 'datetime',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article creation date.'),
-  ),
-  'editDate' =&amp;gt; array(
-    'type' =&amp;gt; 'datetime',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article edit date'),
-  ),
-  'title' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article title'),
-  ),
-  'author' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability content author (optional)'),
-  ),
-  'articleauthor' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article author'),
-  ),
-  'summary' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article short summary'),
-  ),
-  'body' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'size' =&amp;gt; 'big',
-    'description' =&amp;gt; t('Clickability article body'),
-  ),
-  'placement' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article related article placement lists'),
-  ),
-  'thumbnail' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article thumbnail'),
-  ),
-  'image' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    // @todo: Some articles do not have an image, but we require Master Image to be set.
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article image'),
-  ),
-  'image2' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article image page 2'),
-  ),
-  'image3' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article image page 3'),
-  ),
-  'master_image_byline_title' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article image page 7'),
-  ),
-  'tags' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; FALSE,
-    'description' =&amp;gt; t('Clickability article image page 7'),
-  ),
-  'status' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability article status'),
-  ),
-  'websitePlacements' =&amp;gt; array(
-    'type' =&amp;gt; 'text',
-    'not null' =&amp;gt; TRUE,
-    'description' =&amp;gt; t('Clickability book review status'),
-  ),
-  ),
-'primary key' =&amp;gt; array('id'),
-&lt;/code&gt;&lt;/pre&gt;
+<span class="x">&lt;p&gt;function my_import_install() {</span>
+<span class="x">  $ret = drupal_install_schema(&amp;lsquo;my_import&amp;rsquo;);</span>
+<span class="x">  return $ret;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;p&gt;  );
-  return $schema;
-}&lt;/p&gt;
-
-&lt;p&gt;function my_import_install() {
-  $ret = drupal_install_schema('my_import');
-  return $ret;
-}&lt;/p&gt;
-
-&lt;p&gt;function my_import_uninstall() {
-  $ret = drupal_uninstall_schema('my_import');
-  return $ret;
-}</code></pre>
-</div>
-</p>
+<span class="x">&lt;p&gt;function my_import_uninstall() {</span>
+<span class="x">  $ret = drupal_uninstall_schema(&amp;lsquo;my_import&amp;rsquo;);</span>
+<span class="x">  return $ret;</span>
+<span class="x">}</span></code></pre></div></p>
 
 <p>When I created the schema, I took care to make sure
 that the column names in my table exactly matched the attributes and elements
@@ -226,320 +217,279 @@ hook_uninstall() functions simply add and remove the tables.</p>
 
 <p>Create the file myimport.php in your module directory, and paste in the
 following:
-<div>
-  <pre><code class='php'>&lt;/p&gt;
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&lt;/p&gt;</span>
 
-&lt;h1&gt;!/usr/bin/php&lt;/h1&gt;
+<span class="x">&lt;h1&gt;!/usr/bin/php&lt;/h1&gt;</span>
 
-&lt;p&gt;&amp;lt;?php
-// get the path to our XML file
-$args = getopt(&quot;f:&quot;);&lt;/p&gt;
+<span class="x">&lt;p&gt;&amp;lt;?php</span>
+<span class="x">// get the path to our XML file</span>
+<span class="x">$args = getopt(&amp;ldquo;f:&amp;rdquo;);&lt;/p&gt;</span>
 
-&lt;p&gt;// Bootstrap Drupal
-require_once './includes/bootstrap.inc';
-drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);&lt;/p&gt;
+<span class="x">&lt;p&gt;// Bootstrap Drupal</span>
+<span class="x">require_once &amp;lsquo;./includes/bootstrap.inc&amp;rsquo;;</span>
+<span class="x">drupal_bootstrap(DRUPAL_BOOTSTRAP_FULL);&lt;/p&gt;</span>
 
-&lt;p&gt;// Make sure my_import is enabled
-if (!module_exists('my_import')) {
-  echo &quot;I need the my_import module enabled!  Exiting.\n&quot;;
-  exit(1);
-}&lt;/p&gt;
+<span class="x">&lt;p&gt;// Make sure my_import is enabled</span>
+<span class="x">if (!module_exists(&amp;lsquo;my_import&amp;rsquo;)) {</span>
+<span class="x">  echo &amp;ldquo;I need the my_import module enabled!  Exiting.\n&amp;rdquo;;</span>
+<span class="x">  exit(1);</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;p&gt;/&lt;em&gt;
- * Make sure our media directory exists.
- * We will import from this directory into whatever directory filefield is configured for
- * so we should remove this dir when done with the migration.
- &lt;/em&gt;/
-$media_dir = file_directory_path() .'/migrated';
-echo &quot;Media dir = $media_dir\n&quot;;
-if (! is_dir($media_dir)) {
-  mkdir($media_dir);
-}&lt;/p&gt;
+<span class="x">&lt;p&gt;/&lt;em&gt;</span>
+<span class="x"> * Make sure our media directory exists.</span>
+<span class="x"> * We will import from this directory into whatever directory filefield is configured for</span>
+<span class="x"> * so we should remove this dir when done with the migration.</span>
+<span class="x"> &lt;/em&gt;/</span>
+<span class="x">$media_dir = file_directory_path() .&amp;lsquo;/migrated&amp;rsquo;;</span>
+<span class="x">echo &amp;ldquo;Media dir = $media_dir\n&amp;rdquo;;</span>
+<span class="x">if (! is_dir($media_dir)) {</span>
+<span class="x">  mkdir($media_dir);</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;p&gt;// Slurp in our XML file.  If your XML file is huge, watch your PHP memory limits
-$xml = simplexml_load_file($args['f']);
-echo &quot;XML Loaded.\n&quot;;&lt;/p&gt;
+<span class="x">&lt;p&gt;// Slurp in our XML file.  If your XML file is huge, watch your PHP memory limits</span>
+<span class="x">$xml = simplexml_load_file($args[&amp;lsquo;f&amp;rsquo;]);</span>
+<span class="x">echo &amp;ldquo;XML Loaded.\n&amp;rdquo;;&lt;/p&gt;</span>
 
-&lt;p&gt;$rowcount = 0;
-// Here we iterate over each child of the root of the XML, which in our case is a Article
-foreach ($xml-&gt;children() as $content) {
-  // Setup our $obj object which represents a row in the DB, and use some caching to
-  // not abuse drupal_get_schema().
-  $obj = new stdClass;
-  static $schema = array();&lt;/p&gt;
+<span class="x">&lt;p&gt;$rowcount = 0;</span>
+<span class="x">// Here we iterate over each child of the root of the XML, which in our case is a Article</span>
+<span class="x">foreach ($xml-&gt;children() as $content) {</span>
+<span class="x">  // Setup our $obj object which represents a row in the DB, and use some caching to</span>
+<span class="x">  // not abuse drupal_get_schema().</span>
+<span class="x">  $obj = new stdClass;</span>
+<span class="x">  static $schema = array();&lt;/p&gt;</span>
 
-&lt;p&gt;  // Dereference our child from the parent $xml, or xpath performance sucks hard
-  $content = simplexml_load_string($content-&gt;asXML());&lt;/p&gt;
+<span class="x">&lt;p&gt;  // Dereference our child from the parent $xml, or xpath performance sucks hard</span>
+<span class="x">  $content = simplexml_load_string($content-&gt;asXML());&lt;/p&gt;</span>
 
-&lt;p&gt;  $table = NULL;
-  $content_type = NULL;
-  switch((string) $content['type']) {&lt;/p&gt;
+<span class="x">&lt;p&gt;  $table = NULL;</span>
+<span class="x">  $content_type = NULL;</span>
+<span class="x">  switch((string) $content[&amp;lsquo;type&amp;rsquo;]) {</span>
+<span class="x">    // Add more case statements for more content types as needed</span>
+<span class="x">    case &amp;lsquo;Article&amp;rsquo;:</span>
+<span class="x">      $table = &amp;lsquo;clickability_articles&amp;rsquo;;</span>
+<span class="x">      $content_type = &amp;lsquo;article&amp;rsquo;;</span>
+<span class="x">      break;</span>
+<span class="x">    // All cases below are silently ignored - we are not importing them</span>
+<span class="x">    case &amp;lsquo;Book Reviews&amp;rsquo;:</span>
+<span class="x">    case &amp;lsquo;Blog Topic&amp;rsquo;:</span>
+<span class="x">    case &amp;lsquo;Event&amp;rsquo;:</span>
+<span class="x">    case &amp;lsquo;Job&amp;rsquo;:</span>
+<span class="x">      // Ignored</span>
+<span class="x">      break;</span>
+<span class="x">    default:</span>
+<span class="x">      // Any content type not accounted for gets reported</span>
+<span class="x">      echo &amp;ldquo;Warning: unknown content of type &amp;rdquo;. $content[&amp;lsquo;type&amp;rsquo;] .&amp;ldquo;\n&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (isset($table)) {</span>
+<span class="x">    if (! isset($schema[$table])) {</span>
+<span class="x">      // Get the table schema from Drupal</span>
+<span class="x">      $schema[$table] = drupal_get_schema($table);</span>
+<span class="x">      // On first run, truncate the table</span>
+<span class="x">      $sql = &amp;ldquo;truncate table {$table}&amp;rdquo;;</span>
+<span class="x">      db_query($sql);</span>
+<span class="x">      echo &amp;ldquo;$table truncated.\n&amp;rdquo;;</span>
+<span class="x">    }</span>
+<span class="x">    // This function does the heavy lifting, creating the $obj object from the XML data</span>
+<span class="x">    $obj = xml2object($content, $schema[$table], $content[&amp;lsquo;type&amp;rsquo;]);</span>
+<span class="x">    // There are some cases where $obj is intentionally null, only write to the db if not null</span>
+<span class="x">    if ($obj) {</span>
+<span class="x">      $ret = drupal_write_record($table, $obj);</span>
+<span class="x">      if ($ret) {</span>
+<span class="x">        $rowcount++;</span>
+<span class="x">      }</span>
+<span class="x">    }</span>
+<span class="x">  }</span>
+<span class="x">}</span>
+<span class="x">echo &amp;ldquo;Inserted $rowcount rows.\n&amp;rdquo;;&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;// Add more case statements for more content types as needed
-case 'Article':
-  $table = 'clickability_articles';
-  $content_type = 'article';
-  break;
-// All cases below are silently ignored - we are not importing them
-case 'Book Reviews':
-case 'Blog Topic':
-case 'Event':
-case 'Job': 
-  // Ignored
-  break;
-default:
-  // Any content type not accounted for gets reported
-  echo &quot;Warning: unknown content of type &quot;. $content['type'] .&quot;\n&quot;;
-&lt;/code&gt;&lt;/pre&gt;
+<span class="x">&lt;p&gt;function xml2object($xml, $tableschema, $content_type) {&lt;/p&gt;</span>
 
-&lt;p&gt;  }
-  if (isset($table)) {&lt;/p&gt;
+<span class="x">&lt;p&gt;  global $media_dir;</span>
+<span class="x">  $obj = new stdClass;</span>
+<span class="x">  // Our main iterator is the column names in the table</span>
+<span class="x">  foreach (array_keys($tableschema[&amp;lsquo;fields&amp;rsquo;]) as $field) {</span>
+<span class="x">    switch($field) {</span>
+<span class="x">      case &amp;lsquo;master_image_byline_title&amp;rsquo;:</span>
+<span class="x">        // This field is populated when we work with the images later on</span>
+<span class="x">        break;</span>
+<span class="x">      case &amp;lsquo;id&amp;rsquo;:</span>
+<span class="x">        $obj-&gt;$field = $xml[$field];</span>
+<span class="x">        break;</span>
+<span class="x">      case &amp;lsquo;status&amp;rsquo;:</span>
+<span class="x">        $obj-&gt;$field = (string)$xml-&gt;$field;</span>
+<span class="x">        break;</span>
+<span class="x">      // A Clickability placement roughly corresponds to a Drupal term</span>
+<span class="x">      case &amp;lsquo;placement&amp;rsquo;:</span>
+<span class="x">        $element =  array_pop($xml-&gt;xpath(&amp;ldquo;//field[@name=&amp;lsquo;$field&amp;rsquo;]&amp;rdquo;));</span>
+<span class="x">        $obj-&gt;$field = (string)$element-&gt;row-&gt;value;</span>
+<span class="x">        $obj-&gt;$field = map_taxonomy($obj-&gt;$field, $content_type);</span>
+<span class="x">        break;</span>
+<span class="x">      case &amp;lsquo;author&amp;rsquo;:</span>
+<span class="x">        $element =  array_pop($xml-&gt;xpath(&amp;ldquo;//field[@name=&amp;lsquo;$field&amp;rsquo;]&amp;rdquo;));</span>
+<span class="x">        $obj-&gt;$field = (string)$element-&gt;value;</span>
+<span class="x">        break;</span>
+<span class="x">      case &amp;lsquo;image2&amp;rsquo;:</span>
+<span class="x">      case &amp;lsquo;image3&amp;rsquo;:</span>
+<span class="x">        // Combine image2 and image3 elements in Clickability into our multivalue filefield as csv</span>
+<span class="x">        if ($content_type == &amp;ldquo;Article&amp;rdquo;) {</span>
+<span class="x">          $mediaplacement = array_pop($xml-&gt;xpath(&amp;ldquo;//mediaPlacement[@name=&amp;lsquo;$field&amp;rsquo;]&amp;rdquo;));</span>
+<span class="x">          // migrate module requires full path to filefield source</span>
+<span class="x">          $obj-&gt;$field = getcwd() .&amp;lsquo;/&amp;rsquo;. $media_dir .&amp;lsquo;/&amp;rsquo;. (string)$mediaplacement-&gt;media-&gt;path;</span>
+<span class="x">          if (substr($obj-&gt;$field, -1, 1) == &amp;lsquo;/&amp;rsquo;)  {</span>
+<span class="x">            $obj-&gt;$field = NULL;</span>
+<span class="x">          }</span>
+<span class="x">          else {</span>
+<span class="x">            if (!empty($obj-&gt;image)) {</span>
+<span class="x">              $obj-&gt;image .= &amp;ldquo;,&amp;rdquo;;</span>
+<span class="x">            }</span>
+<span class="x">            $obj-&gt;image .= $obj-&gt;$field;</span>
+<span class="x">          }</span>
+<span class="x">        }</span>
+<span class="x">        break;</span>
+<span class="x">      case &amp;lsquo;thumbnail&amp;rsquo;:</span>
+<span class="x">      case &amp;lsquo;image&amp;rsquo;:</span>
+<span class="x">        $mediaplacement = array_pop($xml-&gt;xpath(&amp;ldquo;//mediaPlacement[@name=&amp;lsquo;$field&amp;rsquo;]&amp;rdquo;));</span>
+<span class="x">        // migrate module requires full path to filefield source</span>
+<span class="x">        $obj-&gt;$field = getcwd() .&amp;lsquo;/&amp;rsquo;. $media_dir .&amp;lsquo;/&amp;rsquo;. (string)$mediaplacement-&gt;media-&gt;path;</span>
+<span class="x">        // Check the schema.  If the field is required, then fill in a default, otherwise wipe it</span>
+<span class="x">        $required = $tableschema[&amp;lsquo;fields&amp;rsquo;][$field][&amp;lsquo;not null&amp;rsquo;];</span>
+<span class="x">        // If the file path ends in a /, then the XML did not have an image for this article</span>
+<span class="x">        // &amp;ndash; if we require one, make a default</span>
+<span class="x">        if (substr($obj-&gt;$field, -1, 1) == &amp;lsquo;/&amp;rsquo;)  {</span>
+<span class="x">          if ($required) {</span>
+<span class="x">            echo &amp;ldquo;$content_type with ID of &amp;rdquo;. $obj-&gt;id .&amp;ldquo; does not have a $field.  Adding test.gif.\n&amp;rdquo;;</span>
+<span class="x">            $obj-&gt;$field .= &amp;ldquo;test.gif&amp;rdquo;;</span>
+<span class="x">            touch($obj-&gt;$field);</span>
+<span class="x">          }</span>
+<span class="x">          else {</span>
+<span class="x">            // NOTE: We need this patch for this to work: &lt;a href=&quot;http://drupal.org/node/780920&quot;&gt;http://drupal.org/node/780920&lt;/a&gt;</span>
+<span class="x">            $obj-&gt;$field = NULL;</span>
+<span class="x">          }</span>
+<span class="x">        }</span>
+<span class="x">        else {</span>
+<span class="x">          // Transfer the caption on the image in the XML to the CCK byline accreditation</span>
+<span class="x">          $obj-&gt;master_image_byline_title = (string)$mediaplacement-&gt;caption;</span>
+<span class="x">          // See if the file exists on the filesystem</span>
+<span class="x">          if (! file_exists($obj-&gt;$field)) {</span>
+<span class="x">            // Nope, let&amp;rsquo;s fill it in with our default image</span>
+<span class="x">            echo $obj-&gt;$field .&amp;ldquo; does not exist, replacing with test.gif.\n&amp;rdquo;;</span>
+<span class="x">            $obj-&gt;$field = preg_replace(&amp;lsquo;#^(.&lt;em&gt;)/(.&lt;/em&gt;)$#&amp;rsquo;, &amp;lsquo;\1/test.gif&amp;rsquo;, $obj-&gt;$field);</span>
+<span class="x">          }&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;if (! isset($schema[$table])) {
-  // Get the table schema from Drupal
-  $schema[$table] = drupal_get_schema($table);
-  // On first run, truncate the table
-  $sql = &quot;truncate table {$table}&quot;;
-  db_query($sql);
-  echo &quot;$table truncated.\n&quot;;
-}
-// This function does the heavy lifting, creating the $obj object from the XML data
-$obj = xml2object($content, $schema[$table], $content['type']); 
-// There are some cases where $obj is intentionally null, only write to the db if not null
-if ($obj) {
-  $ret = drupal_write_record($table, $obj);
-  if ($ret) {
-    $rowcount++;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
+<span class="x">&lt;pre&gt;&lt;code&gt;      // Replace .bmp with .jpg</span>
+<span class="x">      $jpg = preg_replace(&#39;/\.bmp$/&#39;, &#39;.jpg&#39;, $obj-&amp;gt;$field);</span>
+<span class="x">      if ($jpg != $obj-&amp;gt;$field) {</span>
+<span class="x">        if (file_exists($jpg)) {</span>
+<span class="x">          $obj-&amp;gt;$field = $jpg;</span>
+<span class="x">        }</span>
+<span class="x">        else {</span>
+<span class="x">          // Tell the user what to do to create the image and exit.</span>
+<span class="x">          echo &quot;ID &quot;. $obj-&amp;gt;id .&quot; has a image of type bmp, and no jpg found on the file system.\n&quot;;</span>
+<span class="x">          echo &quot;Create them by running &#39;mogrify -format jpg /path/to/*.bmp&#39; and re-run this script.\n&quot;;</span>
+<span class="x">          exit(1);</span>
+<span class="x">        }</span>
 
-&lt;p&gt;  }
-}
-echo &quot;Inserted $rowcount rows.\n&quot;;&lt;/p&gt;
+<span class="x">      }</span>
+<span class="x">    }</span>
+<span class="x">    break;</span>
+<span class="x">  // Any DB column not explicity defined above maps cleanly with the code below</span>
+<span class="x">  default:</span>
+<span class="x">    $obj-&amp;gt;$field = (string)array_pop($xml-&amp;gt;xpath(&quot;//field[@name=&#39;$field&#39;]&quot;));</span>
+<span class="x">    break;</span>
+<span class="x">}</span>
+<span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
 
-&lt;p&gt;function xml2object($xml, $tableschema, $content_type) {&lt;/p&gt;
+<span class="x">&lt;p&gt;  }&lt;/p&gt;</span>
 
-&lt;p&gt;  global $media_dir;
-  $obj = new stdClass;
-  // Our main iterator is the column names in the table
-  foreach (array_keys($tableschema['fields']) as $field) {&lt;/p&gt;
+<span class="x">&lt;p&gt;  // We assume it does not need imported until we prove otherwise</span>
+<span class="x">  $needs_imported = FALSE;</span>
+<span class="x">  $tags = array();</span>
+<span class="x">  $websitePlacements = array();</span>
+<span class="x">  foreach ($xml-&gt;xpath(&amp;ldquo;//websitePlacement&amp;rdquo;) as $websitePlacement) {</span>
+<span class="x">    // Only if the XML says the domain is www.newdomain.com do we need to import</span>
+<span class="x">    if ($websitePlacement-&gt;domain == &amp;lsquo;www.newdomain.com&amp;rsquo;) {</span>
+<span class="x">      $needs_imported = TRUE;&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;switch($field) {
-  case 'master_image_byline_title':
-    // This field is populated when we work with the images later on
-    break;
-  case 'id':
-    $obj-&amp;gt;$field = $xml[$field];
-    break;
-  case 'status':
-    $obj-&amp;gt;$field = (string)$xml-&amp;gt;$field;
-    break;
-  // A Clickability placement roughly corresponds to a Drupal term
-  case 'placement':
-    $element =  array_pop($xml-&amp;gt;xpath(&quot;//field[@name='$field']&quot;));
-    $obj-&amp;gt;$field = (string)$element-&amp;gt;row-&amp;gt;value;
-    $obj-&amp;gt;$field = map_taxonomy($obj-&amp;gt;$field, $content_type);
-    break;
-  case 'author':
-    $element =  array_pop($xml-&amp;gt;xpath(&quot;//field[@name='$field']&quot;));
-    $obj-&amp;gt;$field = (string)$element-&amp;gt;value;
-    break;
-  case 'image2':
-  case 'image3':
-    // Combine image2 and image3 elements in Clickability into our multivalue filefield as csv
-    if ($content_type == &quot;Article&quot;) {
-      $mediaplacement = array_pop($xml-&amp;gt;xpath(&quot;//mediaPlacement[@name='$field']&quot;));
-      // migrate module requires full path to filefield source
-      $obj-&amp;gt;$field = getcwd() .'/'. $media_dir .'/'. (string)$mediaplacement-&amp;gt;media-&amp;gt;path;
-      if (substr($obj-&amp;gt;$field, -1, 1) == '/')  {
-        $obj-&amp;gt;$field = NULL;
-      }
-      else {
-        if (!empty($obj-&amp;gt;image)) {
-          $obj-&amp;gt;image .= &quot;,&quot;;
-        }
-        $obj-&amp;gt;image .= $obj-&amp;gt;$field;
-      }
-    }
-    break;
-  case 'thumbnail':
-  case 'image':
-    $mediaplacement = array_pop($xml-&amp;gt;xpath(&quot;//mediaPlacement[@name='$field']&quot;));
-    // migrate module requires full path to filefield source
-    $obj-&amp;gt;$field = getcwd() .'/'. $media_dir .'/'. (string)$mediaplacement-&amp;gt;media-&amp;gt;path;
-    // Check the schema.  If the field is required, then fill in a default, otherwise wipe it
-    $required = $tableschema['fields'][$field]['not null'];
-    // If the file path ends in a /, then the XML did not have an image for this article
-    // -- if we require one, make a default
-    if (substr($obj-&amp;gt;$field, -1, 1) == '/')  {
-      if ($required) {
-        echo &quot;$content_type with ID of &quot;. $obj-&amp;gt;id .&quot; does not have a $field.  Adding test.gif.\n&quot;;
-        $obj-&amp;gt;$field .= &quot;test.gif&quot;;
-        touch($obj-&amp;gt;$field);
-      }
-      else {
-        // NOTE: We need this patch for this to work: http://drupal.org/node/780920
-        $obj-&amp;gt;$field = NULL;
-      }
-    }
-    else {
-      // Transfer the caption on the image in the XML to the CCK byline accreditation
-      $obj-&amp;gt;master_image_byline_title = (string)$mediaplacement-&amp;gt;caption;
-      // See if the file exists on the filesystem
-      if (! file_exists($obj-&amp;gt;$field)) {
-        // Nope, let's fill it in with our default image
-        echo $obj-&amp;gt;$field .&quot; does not exist, replacing with test.gif.\n&quot;;
-        $obj-&amp;gt;$field = preg_replace('#^(.*)/(.*)$#', '\1/test.gif', $obj-&amp;gt;$field);
-      }
+<span class="x">&lt;pre&gt;&lt;code&gt;  // Convert the old &quot;sections&quot; into tag taxonomy</span>
+<span class="x">  $tags[] = substr($section, 1, strlen($section));</span>
 
-      // Replace .bmp with .jpg
-      $jpg = preg_replace('/\.bmp$/', '.jpg', $obj-&amp;gt;$field);
-      if ($jpg != $obj-&amp;gt;$field) {
-        if (file_exists($jpg)) {
-          $obj-&amp;gt;$field = $jpg;
-        }
-        else {
-          // Tell the user what to do to create the image and exit.
-          echo &quot;ID &quot;. $obj-&amp;gt;id .&quot; has a image of type bmp, and no jpg found on the file system.\n&quot;;
-          echo &quot;Create them by running 'mogrify -format jpg /path/to/*.bmp' and re-run this script.\n&quot;;
-          exit(1);
-        }
+<span class="x">  // Grab the old URLs from websitePlacement, and place them on an array</span>
+<span class="x">  $section = (string)$websitePlacement-&amp;gt;section;</span>
+<span class="x">  $oldurl = $section .&#39;/&#39;. $obj-&amp;gt;id .&#39;.html&#39;;</span>
+<span class="x">  $websitePlacements[] = $oldurl;</span>
 
-      }
-    }
-    break;
-  // Any DB column not explicity defined above maps cleanly with the code below
-  default:
-    $obj-&amp;gt;$field = (string)array_pop($xml-&amp;gt;xpath(&quot;//field[@name='$field']&quot;));
-    break;
-}
-&lt;/code&gt;&lt;/pre&gt;
+<span class="x">  // If we do not have a placement yet, we try to set some form of taxonomy</span>
+<span class="x">  if (! isset($obj-&amp;gt;placement)) {</span>
+<span class="x">    $taxo = map_taxonomy($section, $content_type);</span>
+<span class="x">    // NOTE: We need this patch for this to work: http://drupal.org/node/780920</span>
+<span class="x">    $obj-&amp;gt;placement = $taxo;</span>
+<span class="x">  }</span>
+<span class="x">  // If the XML did not explicity tell us the createDate, we use the start date from the webSitePlacement</span>
+<span class="x">  if (empty($obj-&amp;gt;createDate)) {</span>
+<span class="x">    $date = (string)$websitePlacement-&amp;gt;startDate;</span>
+<span class="x">    $obj-&amp;gt;createDate = substr($date, 0, strlen($date) -4);</span>
+<span class="x">    $obj-&amp;gt;editDate = $obj-&amp;gt;createDate;</span>
+<span class="x">  }</span>
+<span class="x">}    </span>
+<span class="x">&lt;/code&gt;&lt;/pre&gt;</span>
 
-&lt;p&gt;  }&lt;/p&gt;
+<span class="x">&lt;p&gt;  }</span>
+<span class="x">  $obj-&gt;websitePlacements = implode(&amp;lsquo;,&amp;rsquo;, $websitePlacements);</span>
+<span class="x">  $obj-&gt;tags = implode(&amp;lsquo;,&amp;rsquo;, $tags);&lt;/p&gt;</span>
 
-&lt;p&gt;  // We assume it does not need imported until we prove otherwise
-  $needs_imported = FALSE;
-  $tags = array();
-  $websitePlacements = array();
-  foreach ($xml-&gt;xpath(&quot;//websitePlacement&quot;) as $websitePlacement) {&lt;/p&gt;
+<span class="x">&lt;p&gt;  // Return the object only if we need it imported</span>
+<span class="x">  return $needs_imported ? $obj : NULL;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;// Only if the XML says the domain is www.newdomain.com do we need to import
-if ($websitePlacement-&amp;gt;domain == 'www.newdomain.com') {
-  $needs_imported = TRUE;
+<span class="x">&lt;p&gt;function map_taxonomy($oldtext, $content_type) {</span>
+<span class="x">  // Simple maps of Clickability placements to Drupal terms</span>
+<span class="x">  if ($content_type == &amp;lsquo;Job&amp;rsquo;) {</span>
+<span class="x">    return NULL;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/building/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Green Building&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/(clean|energy)/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Clean Energy&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/financ/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Finance&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/food/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Food &amp;amp; Farms&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/marketing/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Green Marketing&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/recycled/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Recycled Markets&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/technol/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Technology&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/leaders/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Business Leaders&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  if (preg_match(&amp;lsquo;/transportation/i&amp;rsquo;, $oldtext)) {</span>
+<span class="x">    return &amp;ldquo;Transportation&amp;rdquo;;</span>
+<span class="x">  }</span>
+<span class="x">  return NULL;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-  // Convert the old &quot;sections&quot; into tag taxonomy
-  $tags[] = substr($section, 1, strlen($section));
+<span class="x">&lt;p&gt;?&gt;</span></code></pre></div></p>
 
-  // Grab the old URLs from websitePlacement, and place them on an array
-  $section = (string)$websitePlacement-&amp;gt;section;
-  $oldurl = $section .'/'. $obj-&amp;gt;id .'.html';
-  $websitePlacements[] = $oldurl;
-
-  // If we do not have a placement yet, we try to set some form of taxonomy
-  if (! isset($obj-&amp;gt;placement)) {
-    $taxo = map_taxonomy($section, $content_type);
-    // NOTE: We need this patch for this to work: http://drupal.org/node/780920
-    $obj-&amp;gt;placement = $taxo;
-  }
-  // If the XML did not explicity tell us the createDate, we use the start date from the webSitePlacement
-  if (empty($obj-&amp;gt;createDate)) {
-    $date = (string)$websitePlacement-&amp;gt;startDate;
-    $obj-&amp;gt;createDate = substr($date, 0, strlen($date) -4);
-    $obj-&amp;gt;editDate = $obj-&amp;gt;createDate;
-  }
-}    
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  $obj-&gt;websitePlacements = implode(',', $websitePlacements);
-  $obj-&gt;tags = implode(',', $tags);&lt;/p&gt;
-
-&lt;p&gt;  // Return the object only if we need it imported
-  return $needs_imported ? $obj : NULL;
-}&lt;/p&gt;
-
-&lt;p&gt;function map_taxonomy($oldtext, $content_type) {
-  // Simple maps of Clickability placements to Drupal terms
-  if ($content_type == 'Job') {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return NULL;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/building/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Green Building&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/(clean|energy)/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Clean Energy&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/financ/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Finance&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/food/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Food &amp;amp; Farms&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/marketing/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Green Marketing&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/recycled/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Recycled Markets&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/technol/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Technology&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/leaders/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Business Leaders&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  if (preg_match('/transportation/i', $oldtext)) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;return &quot;Transportation&quot;;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  return NULL;
-}&lt;/p&gt;
-
-&lt;p&gt;?&gt;</code></pre>
-</div>
-</p>
-
-<p>Wow, that's a lot of code. I've commented
-it pretty heavily, but here's the "40,000 foot view" of what's going on:</p>
+<p>Wow, that&rsquo;s a lot of code. I&rsquo;ve commented
+it pretty heavily, but here&rsquo;s the &ldquo;40,000 foot view&rdquo; of what&rsquo;s going on:</p>
 
 <ul>
 <li><strong>Lines 1-26:</strong> Nothing too fancy here. I should note that the script expects to be executed from your Drupal root directory. It grabs the path to the XML file from the command line and does some sanity checking.</li>
-<li><strong>Lines 28-30:</strong> Here we use PHP's <a href="http://php.net/manual/en/book.simplexml.php">SimpleXML API</a> to load the entire XML file into an object. If you have a huge XML file and/or small PHP memory limits, you will likely have to use XML Parser or another library. The power and convenience of SimpleXML is a pretty convincing argument to temporarily upping your memory limits in this case.</li>
+<li><strong>Lines 28-30:</strong> Here we use PHP&rsquo;s <a href="http://php.net/manual/en/book.simplexml.php">SimpleXML API</a> to load the entire XML file into an object. If you have a huge XML file and/or small PHP memory limits, you will likely have to use XML Parser or another library. The power and convenience of SimpleXML is a pretty convincing argument to temporarily upping your memory limits in this case.</li>
 <li><strong>Lines 34-82:</strong> This is the main loop which iterates over each Article in the XML file. By looking at the content type in the XML record, we determine what table and content type to use for Drupal. The first time a schema is loaded, we truncate the table in the database. Once we determine some metadata about the record, we call xml2object() on line 72 which does most of the work for us. Once we have an object, we store it to the database.</li>
-<li><strong>Lines 84-222:</strong> Here we have the xml2object() function, and yes, it's way too long and should be broken up. But hey, it's migration code, who else will ever see it??? We'll break it down more below.</li>
-<li><strong>Lines 89-182:</strong> This code runs a for loop around each column in the table. Since we're using the Schema API here, we can safely assume that the column order specified in our install file will be duplicated when we fetch it in our script. For each column type in the table, it attempts to pull the data needed from the XML record, transform it if necessary, and store it in our $obj object. Read the code for details on what is happening to each field on the way in.</li>
+<li><strong>Lines 84-222:</strong> Here we have the xml2object() function, and yes, it&rsquo;s way too long and should be broken up. But hey, it&rsquo;s migration code, who else will ever see it??? We&rsquo;ll break it down more below.</li>
+<li><strong>Lines 89-182:</strong> This code runs a for loop around each column in the table. Since we&rsquo;re using the Schema API here, we can safely assume that the column order specified in our install file will be duplicated when we fetch it in our script. For each column type in the table, it attempts to pull the data needed from the XML record, transform it if necessary, and store it in our $obj object. Read the code for details on what is happening to each field on the way in.</li>
 <li><strong>Lines 184-218:</strong> Now that we have iterated over all the fields in the schema, we can use the data stored in $obj to calculate other fields we need. Again, read the code for details, but here we are setting taxonomy terms, URLs for use with path_redirect, and filling in other data that may have been missing from the XML.</li>
 <li><strong>Lines 224-257:</strong> Is a simple example on how to statically map some data in the XML to return taxonomy terms in Drupal
-Now that we've got that out of the way, let's create our module file.</li>
+Now that we&rsquo;ve got that out of the way, let&rsquo;s create our module file.</li>
 </ul>
 
 
@@ -551,180 +501,140 @@ migrate modules hooks. You might ask, why not deal with everything in the
 command line script? There are two primary reasons why:</p>
 
 <ol>
-<li>You may come across a condition where you need the nid of the node (i.e. create path redirects), or otherwise interact with the $node object. You can only get this information from implementing migrate's hooks.</li>
-<li>While I personally found it easier to manipulate taxonomy terms via the command line script and then rely upon the out-of-the-box code supplied with migrate to setup the node for me, this has a drawback. Any time you change the command line script, you must "clear" your imported data, re-run the command line script, and re-import your data using the migrate module. If you make changes to your module, you only have two steps to test (clear and re-import).
+<li>You may come across a condition where you need the nid of the node (i.e. create path redirects), or otherwise interact with the $node object. You can only get this information from implementing migrate&rsquo;s hooks.</li>
+<li>While I personally found it easier to manipulate taxonomy terms via the command line script and then rely upon the out-of-the-box code supplied with migrate to setup the node for me, this has a drawback. Any time you change the command line script, you must &ldquo;clear&rdquo; your imported data, re-run the command line script, and re-import your data using the migrate module. If you make changes to your module, you only have two steps to test (clear and re-import).
 Paste this code into my_import.module:
-<div>
-  <pre><code class='php'>&amp;lt;?php
-define(NUM_PARAGRAPHS_PER_PAGE, 6);&lt;/li&gt;
-&lt;/ol&gt;
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">define(NUM_PARAGRAPHS_PER_PAGE, 6);&lt;/li&gt;</span>
+<span class="x">&lt;/ol&gt;</span>
 
 
-&lt;p&gt;function my_import_migrate_prepare_user(&amp;amp;$user, $tblinfo, $row) {
-  // Randomly assign passwords to users, forcing them to reset their password
-  $errors = array();
-  $user['pass'] = preg_replace(&quot;/([0-9])/e&quot;,&quot;chr((\1+112))&quot;,rand(100000,999999));
-  return $errors;
-}&lt;/p&gt;
+<span class="x">&lt;p&gt;function my_import_migrate_prepare_user(&amp;amp;$user, $tblinfo, $row) {</span>
+<span class="x">  // Randomly assign passwords to users, forcing them to reset their password</span>
+<span class="x">  $errors = array();</span>
+<span class="x">  $user[&amp;lsquo;pass&amp;rsquo;] = preg_replace(&amp;ldquo;/([0-9])/e&amp;rdquo;,&amp;ldquo;chr((\1+112))&amp;rdquo;,rand(100000,999999));</span>
+<span class="x">  return $errors;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;p&gt;function my_import_migrate_prepare_node(&amp;amp;$node, $tblinfo, $row) {
-  $errors = array();
-  // In Clickability, there were multiple states that represented &quot;Published&quot;, here we map them.
-  $status = $tblinfo-&gt;view_name .'_status';
-  switch($row-&gt;$status) {&lt;/p&gt;
+<span class="x">&lt;p&gt;function my_import_migrate_prepare_node(&amp;amp;$node, $tblinfo, $row) {</span>
+<span class="x">  $errors = array();</span>
+<span class="x">  // In Clickability, there were multiple states that represented &amp;ldquo;Published&amp;rdquo;, here we map them.</span>
+<span class="x">  $status = $tblinfo-&gt;view_name .&amp;lsquo;_status&amp;rsquo;;</span>
+<span class="x">  switch($row-&gt;$status) {</span>
+<span class="x">    case &amp;lsquo;live&amp;rsquo;:</span>
+<span class="x">    case &amp;lsquo;APPROVED&amp;rsquo;:</span>
+<span class="x">      $node-&gt;status = 1;</span>
+<span class="x">      break;</span>
+<span class="x">    default:</span>
+<span class="x">      $node-&gt;status = 0;</span>
+<span class="x">      break;</span>
+<span class="x">  }&lt;/p&gt;</span>
 
-&lt;pre&gt;&lt;code&gt;case 'live':
-case 'APPROVED':
-  $node-&amp;gt;status = 1;
-  break;
-default:
-  $node-&amp;gt;status = 0;
-  break;
-&lt;/code&gt;&lt;/pre&gt;
+<span class="x">&lt;p&gt;  if ($node-&gt;type == &amp;lsquo;article&amp;rsquo;) {</span>
+<span class="x">    // Paginate articles by inserting a pagebreak tag every 6th paragraph to emulate Clickability&amp;rsquo;s pagination</span>
+<span class="x">    $paragraphs = preg_split(&amp;lsquo;#&lt;br /&gt;\s*&lt;br /&gt;#s&amp;rsquo;, $node-&gt;body);</span>
+<span class="x">    if (count($paragraphs) &gt; NUM_PARAGRAPHS_PER_PAGE) {</span>
+<span class="x">      $node-&gt;body = &amp;lsquo;&amp;rsquo;;</span>
+<span class="x">      $i = 1;</span>
+<span class="x">      foreach ($paragraphs as $paragraph) {</span>
+<span class="x">        if (($i % NUM_PARAGRAPHS_PER_PAGE) == 0) {</span>
+<span class="x">          $node-&gt;body .= $paragraph . &amp;ldquo;\n[pagebreak]\n&amp;rdquo;;</span>
+<span class="x">        }</span>
+<span class="x">        else {</span>
+<span class="x">          $node-&gt;body .= $paragraph .&amp;ldquo;&lt;br /&gt;\n&lt;br /&gt;\n&amp;rdquo;;</span>
+<span class="x">        }</span>
+<span class="x">        $i++;</span>
+<span class="x">      }</span>
+<span class="x">    }&lt;/p&gt;</span>
 
-&lt;p&gt;  }&lt;/p&gt;
+<span class="x">&lt;p&gt;  }</span>
+<span class="x">  return $errors;</span>
+<span class="x">}&lt;/p&gt;</span>
 
-&lt;p&gt;  if ($node-&gt;type == 'article') {&lt;/p&gt;
+<span class="x">&lt;p&gt;function my_import_migrate_complete_node(&amp;amp;$node, $tblinfo, $row) {</span>
+<span class="x">  $errors = array();</span>
+<span class="x">  // Create redirects for old URLs</span>
+<span class="x">  $field = $tblinfo-&gt;view_name .&amp;lsquo;_websitePlacements&amp;rsquo;;</span>
+<span class="x">  foreach(explode(&amp;lsquo;,&amp;rsquo;, $row-&gt;$field) as $oldurl) {</span>
+<span class="x">    // Delete any old redirects</span>
+<span class="x">    if (substr($oldurl,0,1) == &amp;lsquo;/&amp;rsquo;) {</span>
+<span class="x">      $oldurl = substr($oldurl,1);</span>
+<span class="x">    }</span>
+<span class="x">    path_redirect_delete(array(&amp;lsquo;source&amp;rsquo; =&gt; $oldurl));</span>
+<span class="x">    $redirect = array(</span>
+<span class="x">      &amp;lsquo;source&amp;rsquo; =&gt; $oldurl,</span>
+<span class="x">      &amp;lsquo;redirect&amp;rsquo; =&gt; &amp;lsquo;/node/&amp;rsquo;. $node-&gt;nid,</span>
+<span class="x">      &amp;lsquo;type&amp;rsquo; =&gt; 301,</span>
+<span class="x">    );</span>
+<span class="x">    path_redirect_save($redirect);</span>
+<span class="x">  }</span>
+<span class="x">  return $errors;</span>
+<span class="x">}</span></code></pre></div></p>
 
-&lt;pre&gt;&lt;code&gt;// Paginate articles by inserting a pagebreak tag every 6th paragraph to emulate Clickability's pagination
-$paragraphs = preg_split('#&amp;lt;br /&amp;gt;\s*&amp;lt;br /&amp;gt;#s', $node-&amp;gt;body);
-if (count($paragraphs) &amp;gt; NUM_PARAGRAPHS_PER_PAGE) {
-  $node-&amp;gt;body = '';
-  $i = 1;
-  foreach ($paragraphs as $paragraph) {
-    if (($i % NUM_PARAGRAPHS_PER_PAGE) == 0) {
-      $node-&amp;gt;body .= $paragraph . &quot;\n[pagebreak]\n&quot;;
-    }
-    else {
-      $node-&amp;gt;body .= $paragraph .&quot;&amp;lt;br /&amp;gt;\n&amp;lt;br /&amp;gt;\n&quot;;
-    }
-    $i++;
-  }
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  return $errors;
-}&lt;/p&gt;
-
-&lt;p&gt;function my_import_migrate_complete_node(&amp;amp;$node, $tblinfo, $row) {
-  $errors = array();
-  // Create redirects for old URLs
-  $field = $tblinfo-&gt;view_name .'_websitePlacements';
-  foreach(explode(',', $row-&gt;$field) as $oldurl) {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;// Delete any old redirects
-if (substr($oldurl,0,1) == '/') {
-  $oldurl = substr($oldurl,1);
-}
-path_redirect_delete(array('source' =&amp;gt; $oldurl));
-$redirect = array(
-  'source' =&amp;gt; $oldurl,
-  'redirect' =&amp;gt; '/node/'. $node-&amp;gt;nid,
-  'type' =&amp;gt; 301,
-);
-path_redirect_save($redirect);
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  return $errors;
-}</code></pre>
-</div>
-</p>
-
-<p>Here's the high-level breakdown, check the code+comments for
+<p>Here&rsquo;s the high-level breakdown, check the code+comments for
 the details.</p>
 
 <ul>
 <li><strong>Lines 5-10:</strong> Just a quick example of how to set a random password on any user that is imported.</li>
-<li><strong>Lines 12-24:</strong> hook_migrate_prepare_node() is executed before the node has been saved to the database, and should be where the majority of your code is at. These lines set any article with a status of 'live' or 'APPROVED' to published in Drupal.</li>
+<li><strong>Lines 12-24:</strong> hook_migrate_prepare_node() is executed before the node has been saved to the database, and should be where the majority of your code is at. These lines set any article with a status of &lsquo;live&rsquo; or &lsquo;APPROVED&rsquo; to published in Drupal.</li>
 <li><strong>Lines 26-41:</strong> This code uses some regex magic to create a pagebreak every 6th paragraph. This is what Clickability did, and the client wanted to keep this on their migrated articles.</li>
-<li><strong>Lines 47-65:</strong> hook_migrate_complete_node() is called after the node has been saved to the database, and it has a nid at this point. The client wished to migrate their old URL's to Drupal -- in order to do that we must have the nid to know where to redirect to.</li>
+<li><strong>Lines 47-65:</strong> hook_migrate_complete_node() is called after the node has been saved to the database, and it has a nid at this point. The client wished to migrate their old URL&rsquo;s to Drupal &ndash; in order to do that we must have the nid to know where to redirect to.</li>
 </ul>
 
 
 <h2>Create sample XML</h2>
 
-<p>Finally, let's create some sample data so we can see how this all meshes
+<p>Finally, let&rsquo;s create some sample data so we can see how this all meshes
 together. Create the file content.xml in your module directory, and paste this
 in it:
-<div>
-  <pre><code class='xml'>&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;cmPublishImport&gt;
-  &lt;content type=&quot;Article&quot; id=&quot;7241321&quot;&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;field name=&quot;title&quot;&amp;gt;&amp;lt;![CDATA[Donec risus purus]]&amp;gt;&amp;lt;/field&amp;gt;
-&amp;lt;field name=&quot;author&quot;&amp;gt;
-  &amp;lt;value&amp;gt;&amp;lt;![CDATA[Me]]&amp;gt;&amp;lt;/value&amp;gt;
-&amp;lt;/field&amp;gt;
-&amp;lt;field name=&quot;articleauthor&quot;&amp;gt;&amp;lt;![CDATA[Me]]&amp;gt;&amp;lt;/field&amp;gt;
-&amp;lt;field name=&quot;date&quot;&amp;gt;&amp;lt;![CDATA[2007-04-29]]&amp;gt;&amp;lt;/field&amp;gt;
-&amp;lt;field name=&quot;summary&quot;&amp;gt;&amp;lt;![CDATA[Donec risus purus]]&amp;gt;&amp;lt;/field&amp;gt;
-&amp;lt;field name=&quot;body&quot;&amp;gt;&amp;lt;![CDATA[Donec risus purus, euismod eu volutpat ac, pharetra non nulla. Vestibulum quis neque lacus. Donec sit amet tortor nisi. Nam et lectus nec turpis consequat rhoncus. Proin porttitor, quam nec faucibus pulvinar, arcu magna facilisis erat, eu imperdiet risus tortor ac quam. Praesent non justo ac nisl ultricies condimentum a eget arcu. Nam in mi est. Donec risus orci, imperdiet ut tempus et, pulvinar nec diam. Donec eleifend pulvinar aliquam. Nulla faucibus turpis nec neque scelerisque convallis. Fusce gravida pulvinar quam, sit amet faucibus risus sodales ornare. Nullam arcu risus, lacinia vel faucibus at, auctor eget diam. Quisque a neque ac tellus bibendum luctus fringilla in lacus. Praesent id nunc eu dolor adipiscing consequat vel eget leo. Donec velit mi, pharetra quis tincidunt id, laoreet et dolor. Vestibulum fringilla rutrum arcu at accumsan.&amp;lt;br/&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Cras pellentesque sagittis mi. Pellentesque cursus nisl id nunc suscipit luctus. Duis pellentesque rhoncus sodales. Nullam dictum augue ac diam fermentum vel feugiat mauris euismod. Mauris nec metus eu sem tristique euismod. Etiam lorem est, accumsan vitae bibendum sit amet, tempus sit amet urna. Nullam lobortis adipiscing convallis. Nullam scelerisque sagittis tellus vitae interdum. Integer eget interdum nunc. Nam ligula orci, bibendum ac mattis eget, mollis at massa.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Vestibulum sodales elit vel est feugiat vitae dapibus erat ultricies. Proin auctor quam sit amet nisi aliquet pharetra. Curabitur tristique quam vel tortor gravida scelerisque. Morbi laoreet aliquet mi, sed imperdiet mauris mattis et. Praesent non quam nec lorem dapibus semper. Quisque vulputate neque et turpis placerat bibendum. Phasellus suscipit urna eget augue ullamcorper ultricies. Curabitur hendrerit dui sit amet elit elementum nec venenatis orci tempor. Fusce semper vestibulum odio vitae porta. Mauris non tellus non mi hendrerit suscipit in sed ante. Donec arcu neque, tristique ut elementum sed, suscipit at leo. Curabitur eget enim quis leo scelerisque laoreet et eget augue. Fusce posuere est ac felis fringilla consectetur. Nulla elit magna, pharetra sit amet tincidunt sed, tristique sed mi. Nam iaculis, elit sit amet condimentum blandit, massa neque pharetra justo, non ornare ligula ante non leo. Praesent ullamcorper suscipit tempus. In varius, neque eget volutpat posuere, velit odio luctus turpis, ac varius nulla erat sit amet justo. Quisque convallis mollis pharetra. Aliquam porta dolor quis nunc tempor vitae pharetra lectus ultricies. Fusce egestas sagittis sapien, sit amet pharetra sem ullamcorper a.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Ut dui tortor, porta eu ultrices sed, interdum vitae lectus. Integer facilisis velit sit amet dui ultricies lobortis. Fusce ut malesuada tellus. Aenean in nibh at lorem iaculis dictum vitae in nulla. Etiam dapibus lacinia eleifend. Aliquam erat volutpat. Nullam sit amet sapien ut risus consequat posuere eu quis quam. In lobortis fringilla felis quis pretium. Suspendisse non nisl libero, non tempor justo. Nunc volutpat nulla vitae lacus tincidunt feugiat congue sapien commodo. Suspendisse venenatis aliquet ante in hendrerit. Sed lectus ligula, gravida id tincidunt et, feugiat non justo.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Sed metus tellus, vestibulum in mollis quis, imperdiet et velit. Praesent suscipit elit et mi rutrum sit amet gravida augue iaculis. Etiam nec tellus nec augue porttitor pharetra. Vivamus feugiat mollis est, eu aliquam neque tempus a. Ut magna mauris, sollicitudin in ornare non, lacinia a lacus. Aenean porttitor magna ac sem ornare pellentesque. Aliquam mattis dolor in metus molestie ut feugiat mi auctor. Etiam laoreet pulvinar ipsum id bibendum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque porttitor convallis lacus, nec pretium leo varius non. Morbi non dapibus diam. Sed nec venenatis diam. Cras mollis porta tempor.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Donec ornare mi sed tellus porta luctus. Nulla euismod venenatis ante, in rhoncus felis ornare non. Cras tempor venenatis est at gravida. Etiam imperdiet dolor vitae ipsum lacinia imperdiet. Maecenas purus lorem, rhoncus non porttitor in, semper nec quam. Integer ullamcorper facilisis ultrices. Vivamus porttitor lacinia augue in venenatis. Quisque interdum euismod tellus, et consectetur nunc dictum sit amet. Maecenas pulvinar placerat mauris, quis auctor purus pellentesque at. Vestibulum vulputate, tellus id eleifend posuere, ligula erat hendrerit orci, nec lobortis tortor sapien ut ligula. Donec id augue leo, non consectetur nisl. In viverra dictum lorem eget blandit. Etiam tempus nisl ac nibh viverra id cursus eros luctus. Duis ut tellus nisi.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam quis justo risus, eget eleifend nibh. Morbi quis dolor nulla, sed cursus metus. Vestibulum vel ipsum non erat tincidunt luctus et eget sapien. Nunc vel justo ante, vel auctor purus. Proin vulputate bibendum placerat. Fusce vel tincidunt nunc. Praesent at eros in dolor faucibus blandit et vitae magna. Fusce arcu nisl, sollicitudin sed accumsan sed, rhoncus at tellus. Ut ut mauris vel ipsum bibendum ullamcorper eget sed neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed dui massa, imperdiet sit amet lacinia id, rutrum sed orci. Proin pharetra risus eu risus gravida convallis id ac mi. Etiam a neque ut lacus convallis accumsan non eget arcu. Sed blandit velit id lectus tincidunt ut aliquet mi egestas. Aliquam cursus odio vitae turpis suscipit mollis et aliquam purus. Suspendisse pretium tincidunt porttitor. Nunc vestibulum, lacus at auctor laoreet, orci lectus volutpat diam, ut mollis risus lectus a ligula.&lt;br/&gt;&lt;/p&gt;
-
-&lt;br/&gt;  
-
-
-&lt;p&gt;Phasellus id urna sit amet elit pretium viverra sit amet eget felis. Maecenas sed arcu sed eros fringilla commodo id non magna. Maecenas urna mauris, cursus vel mattis et, volutpat in purus. Nulla sapien orci, faucibus sed tincidunt tincidunt, tristique id lacus. Nullam tortor libero, porttitor eget faucibus eget, vehicula a enim. Suspendisse malesuada consectetur mattis. Integer dapibus dignissim tempor. In viverra luctus orci sed placerat. Suspendisse aliquam mattis diam mattis dapibus. Aenean suscipit purus eu ipsum dignissim in aliquet urna mollis. Duis nibh magna, fringilla eu ultrices posuere, sodales sed felis. Proin varius dignissim sem a consequat. Pellentesque facilisis felis vel mi malesuada placerat. Curabitur gravida euismod mi in molestie. Vivamus sit amet dui leo. Praesent mi justo, bibendum at rutrum ac, bibendum ut felis. Nullam nec dolor dui, quis imperdiet nulla. Morbi semper pulvinar risus.]]&amp;gt;&lt;/field&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;mediaPlacement name=&quot;image&quot;&amp;gt;
-  &amp;lt;media id=&quot;577286&quot;&amp;gt;
-    &amp;lt;path&amp;gt;images/1.jpg&amp;lt;/path&amp;gt;
-    &amp;lt;caption&amp;gt;&amp;lt;![CDATA[Cows at Three Mile Canyon provide resources such as methane and compost for on-farm operations.]]&amp;gt;&amp;lt;/caption&amp;gt;
-  &amp;lt;/media&amp;gt;
-&amp;lt;/mediaPlacement&amp;gt;
-&amp;lt;status&amp;gt;live&amp;lt;/status&amp;gt;
-&amp;lt;websitePlacement&amp;gt;
-  &amp;lt;domain&amp;gt;www.newdomain.com&amp;lt;/domain&amp;gt;
-  &amp;lt;section&amp;gt;/foodandfarms&amp;lt;/section&amp;gt;
-  &amp;lt;startDate dateFormat=&quot;yyyy-MM-dd HH:mm:ss zzz&quot;&amp;gt;2007-04-29 14:00:00 PDT&amp;lt;/startDate&amp;gt;
-&amp;lt;/websitePlacement&amp;gt;
-&amp;lt;websitePlacement&amp;gt;
-  &amp;lt;domain&amp;gt;www.olddomain.com&amp;lt;/domain&amp;gt;
-  &amp;lt;section&amp;gt;/greenmarketing&amp;lt;/section&amp;gt;
-  &amp;lt;startDate dateFormat=&quot;yyyy-MM-dd HH:mm:ss zzz&quot;&amp;gt;2007-04-29 14:00:00 PDT&amp;lt;/startDate&amp;gt;
-&amp;lt;/websitePlacement&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  &lt;/content&gt;
-&lt;/cmPublishImport&gt;</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="ni">&amp;lt;</span>?xml version=<span class="ni">&amp;ldquo;</span>1.0<span class="ni">&amp;rdquo;</span> encoding=<span class="ni">&amp;ldquo;</span>utf-8<span class="ni">&amp;rdquo;</span>?&gt;
+<span class="nt">&lt;cmPublishImport&gt;</span>
+  <span class="nt">&lt;content</span> <span class="na">type=</span><span class="s">&quot;Article&quot;</span> <span class="na">id=</span><span class="s">&quot;7241321&quot;</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Donec risus purus]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;author&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;value&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Me]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/value&gt;</span>
+    <span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;articleauthor&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Me]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;date&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>![CDATA[2007-04-29]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;summary&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Donec risus purus]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;field</span> <span class="na">name=</span><span class="s">&quot;body&quot;</span><span class="nt">&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Donec risus purus, euismod eu volutpat ac, pharetra non nulla. Vestibulum quis neque lacus. Donec sit amet tortor nisi. Nam et lectus nec turpis consequat rhoncus. Proin porttitor, quam nec faucibus pulvinar, arcu magna facilisis erat, eu imperdiet risus tortor ac quam. Praesent non justo ac nisl ultricies condimentum a eget arcu. Nam in mi est. Donec risus orci, imperdiet ut tempus et, pulvinar nec diam. Donec eleifend pulvinar aliquam. Nulla faucibus turpis nec neque scelerisque convallis. Fusce gravida pulvinar quam, sit amet faucibus risus sodales ornare. Nullam arcu risus, lacinia vel faucibus at, auctor eget diam. Quisque a neque ac tellus bibendum luctus fringilla in lacus. Praesent id nunc eu dolor adipiscing consequat vel eget leo. Donec velit mi, pharetra quis tincidunt id, laoreet et dolor. Vestibulum fringilla rutrum arcu at accumsan.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Cras pellentesque sagittis mi. Pellentesque cursus nisl id nunc suscipit luctus. Duis pellentesque rhoncus sodales. Nullam dictum augue ac diam fermentum vel feugiat mauris euismod. Mauris nec metus eu sem tristique euismod. Etiam lorem est, accumsan vitae bibendum sit amet, tempus sit amet urna. Nullam lobortis adipiscing convallis. Nullam scelerisque sagittis tellus vitae interdum. Integer eget interdum nunc. Nam ligula orci, bibendum ac mattis eget, mollis at massa.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Vestibulum sodales elit vel est feugiat vitae dapibus erat ultricies. Proin auctor quam sit amet nisi aliquet pharetra. Curabitur tristique quam vel tortor gravida scelerisque. Morbi laoreet aliquet mi, sed imperdiet mauris mattis et. Praesent non quam nec lorem dapibus semper. Quisque vulputate neque et turpis placerat bibendum. Phasellus suscipit urna eget augue ullamcorper ultricies. Curabitur hendrerit dui sit amet elit elementum nec venenatis orci tempor. Fusce semper vestibulum odio vitae porta. Mauris non tellus non mi hendrerit suscipit in sed ante. Donec arcu neque, tristique ut elementum sed, suscipit at leo. Curabitur eget enim quis leo scelerisque laoreet et eget augue. Fusce posuere est ac felis fringilla consectetur. Nulla elit magna, pharetra sit amet tincidunt sed, tristique sed mi. Nam iaculis, elit sit amet condimentum blandit, massa neque pharetra justo, non ornare ligula ante non leo. Praesent ullamcorper suscipit tempus. In varius, neque eget volutpat posuere, velit odio luctus turpis, ac varius nulla erat sit amet justo. Quisque convallis mollis pharetra. Aliquam porta dolor quis nunc tempor vitae pharetra lectus ultricies. Fusce egestas sagittis sapien, sit amet pharetra sem ullamcorper a.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Ut dui tortor, porta eu ultrices sed, interdum vitae lectus. Integer facilisis velit sit amet dui ultricies lobortis. Fusce ut malesuada tellus. Aenean in nibh at lorem iaculis dictum vitae in nulla. Etiam dapibus lacinia eleifend. Aliquam erat volutpat. Nullam sit amet sapien ut risus consequat posuere eu quis quam. In lobortis fringilla felis quis pretium. Suspendisse non nisl libero, non tempor justo. Nunc volutpat nulla vitae lacus tincidunt feugiat congue sapien commodo. Suspendisse venenatis aliquet ante in hendrerit. Sed lectus ligula, gravida id tincidunt et, feugiat non justo.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Sed metus tellus, vestibulum in mollis quis, imperdiet et velit. Praesent suscipit elit et mi rutrum sit amet gravida augue iaculis. Etiam nec tellus nec augue porttitor pharetra. Vivamus feugiat mollis est, eu aliquam neque tempus a. Ut magna mauris, sollicitudin in ornare non, lacinia a lacus. Aenean porttitor magna ac sem ornare pellentesque. Aliquam mattis dolor in metus molestie ut feugiat mi auctor. Etiam laoreet pulvinar ipsum id bibendum. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Quisque porttitor convallis lacus, nec pretium leo varius non. Morbi non dapibus diam. Sed nec venenatis diam. Cras mollis porta tempor.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Donec ornare mi sed tellus porta luctus. Nulla euismod venenatis ante, in rhoncus felis ornare non. Cras tempor venenatis est at gravida. Etiam imperdiet dolor vitae ipsum lacinia imperdiet. Maecenas purus lorem, rhoncus non porttitor in, semper nec quam. Integer ullamcorper facilisis ultrices. Vivamus porttitor lacinia augue in venenatis. Quisque interdum euismod tellus, et consectetur nunc dictum sit amet. Maecenas pulvinar placerat mauris, quis auctor purus pellentesque at. Vestibulum vulputate, tellus id eleifend posuere, ligula erat hendrerit orci, nec lobortis tortor sapien ut ligula. Donec id augue leo, non consectetur nisl. In viverra dictum lorem eget blandit. Etiam tempus nisl ac nibh viverra id cursus eros luctus. Duis ut tellus nisi.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aliquam quis justo risus, eget eleifend nibh. Morbi quis dolor nulla, sed cursus metus. Vestibulum vel ipsum non erat tincidunt luctus et eget sapien. Nunc vel justo ante, vel auctor purus. Proin vulputate bibendum placerat. Fusce vel tincidunt nunc. Praesent at eros in dolor faucibus blandit et vitae magna. Fusce arcu nisl, sollicitudin sed accumsan sed, rhoncus at tellus. Ut ut mauris vel ipsum bibendum ullamcorper eget sed neque. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed dui massa, imperdiet sit amet lacinia id, rutrum sed orci. Proin pharetra risus eu risus gravida convallis id ac mi. Etiam a neque ut lacus convallis accumsan non eget arcu. Sed blandit velit id lectus tincidunt ut aliquet mi egestas. Aliquam cursus odio vitae turpis suscipit mollis et aliquam purus. Suspendisse pretium tincidunt porttitor. Nunc vestibulum, lacus at auctor laoreet, orci lectus volutpat diam, ut mollis risus lectus a ligula.<span class="nt">&lt;br/&gt;</span>
+<span class="nt">&lt;br/&gt;&lt;br/&gt;</span>
+Phasellus id urna sit amet elit pretium viverra sit amet eget felis. Maecenas sed arcu sed eros fringilla commodo id non magna. Maecenas urna mauris, cursus vel mattis et, volutpat in purus. Nulla sapien orci, faucibus sed tincidunt tincidunt, tristique id lacus. Nullam tortor libero, porttitor eget faucibus eget, vehicula a enim. Suspendisse malesuada consectetur mattis. Integer dapibus dignissim tempor. In viverra luctus orci sed placerat. Suspendisse aliquam mattis diam mattis dapibus. Aenean suscipit purus eu ipsum dignissim in aliquet urna mollis. Duis nibh magna, fringilla eu ultrices posuere, sodales sed felis. Proin varius dignissim sem a consequat. Pellentesque facilisis felis vel mi malesuada placerat. Curabitur gravida euismod mi in molestie. Vivamus sit amet dui leo. Praesent mi justo, bibendum at rutrum ac, bibendum ut felis. Nullam nec dolor dui, quis imperdiet nulla. Morbi semper pulvinar risus.]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/field&gt;</span>
+    <span class="nt">&lt;mediaPlacement</span> <span class="na">name=</span><span class="s">&quot;image&quot;</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;media</span> <span class="na">id=</span><span class="s">&quot;577286&quot;</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;path&gt;</span>images/1.jpg<span class="nt">&lt;/path&gt;</span>
+        <span class="nt">&lt;caption&gt;</span><span class="ni">&amp;lt;</span>![CDATA[Cows at Three Mile Canyon provide resources such as methane and compost for on-farm operations.]]<span class="ni">&amp;gt;</span><span class="nt">&lt;/caption&gt;</span>
+      <span class="nt">&lt;/media&gt;</span>
+    <span class="nt">&lt;/mediaPlacement&gt;</span>
+    <span class="nt">&lt;status&gt;</span>live<span class="nt">&lt;/status&gt;</span>
+    <span class="nt">&lt;websitePlacement&gt;</span>
+      <span class="nt">&lt;domain&gt;</span>www.newdomain.com<span class="nt">&lt;/domain&gt;</span>
+      <span class="nt">&lt;section&gt;</span>/foodandfarms<span class="nt">&lt;/section&gt;</span>
+      <span class="nt">&lt;startDate</span> <span class="na">dateFormat=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss zzz&quot;</span><span class="nt">&gt;</span>2007-04-29 14:00:00 PDT<span class="nt">&lt;/startDate&gt;</span>
+    <span class="nt">&lt;/websitePlacement&gt;</span>
+    <span class="nt">&lt;websitePlacement&gt;</span>
+      <span class="nt">&lt;domain&gt;</span>www.olddomain.com<span class="nt">&lt;/domain&gt;</span>
+      <span class="nt">&lt;section&gt;</span>/greenmarketing<span class="nt">&lt;/section&gt;</span>
+      <span class="nt">&lt;startDate</span> <span class="na">dateFormat=</span><span class="s">&quot;yyyy-MM-dd HH:mm:ss zzz&quot;</span><span class="nt">&gt;</span>2007-04-29 14:00:00 PDT<span class="nt">&lt;/startDate&gt;</span>
+    <span class="nt">&lt;/websitePlacement&gt;</span>
+  <span class="nt">&lt;/content&gt;</span>
+<span class="nt">&lt;/cmPublishImport&gt;</span></code></pre></div></p>
 
 <h2>Enable the my_import Module and Run the Command Line Script</h2>
 
-<p>Now (finally), it's time for some action. Enable your newly created my_import
+<p>Now (finally), it&rsquo;s time for some action. Enable your newly created my_import
 module, and jump out to the shell. Assuming your Drupal root is at
 /var/www/drupal, cd into that directory. Create the new directory
 sites/default/files/migrated/images, and place a jpg named 1.jpg in that
@@ -734,17 +644,17 @@ directory. Now run the import script:</p>
 </code></pre>
 
 <p>With luck, the script will succeed, and you will have 1 row of data in your
-clickability_articles table! If not, fix the error (if you're using the sample
-data, let me know what went wrong and I'll fix it). Next up, Table Wizard
+clickability_articles table! If not, fix the error (if you&rsquo;re using the sample
+data, let me know what went wrong and I&rsquo;ll fix it). Next up, Table Wizard
 configuration.</p>
 
 <h2>Expose the Table to Table Wizard</h2>
 
 <p>All the hard work is done now - we can use a web UI from here on out. Visit
-/admin/content/tw in your browser, and under the "Add Existing Tables"
+/admin/content/tw in your browser, and under the &ldquo;Add Existing Tables&rdquo;
 fieldset, and select the tables you imported with myimport.php. If your tables
-are huge (50K+ rows), you may want to select "Skip full analysis". Click the
-"Add tables" button. At this point, that's all we need from Table Wizard, but
+are huge (50K+ rows), you may want to select &ldquo;Skip full analysis&rdquo;. Click the
+&ldquo;Add tables&rdquo; button. At this point, that&rsquo;s all we need from Table Wizard, but
 I strongly encourage you click around a bit. The table analysis can tell you
 some handy things about your data.</p>
 
@@ -754,58 +664,58 @@ some handy things about your data.</p>
 Migrate module. Now we need to tell Migrate how to use the view. Visit the
 Migrate settings at /admin/content/migrate/settings. If you can, implement the
 changes it recommends to .htaccess as it will speed up the import
-considerably. Also, make sure to expand the "Migration support implemented in
-the XYZ module" fieldsets and enable the support you need for your import.
-Now, visit the dashboard at /admin/content/migrate. Expand the "Add a content
-set" fieldset, and fill in the values. When choosing the value for "Source
-view from which to import content", scroll down towards the bottom of the
-list. All Table Wizard views are prefixed with "tw: ", so the one we're
-looking for here is "tw: clickability_issues (clickability_issues)". You can
-leave "View arguments" and "Weight" to defaults. The next screen is where the
+considerably. Also, make sure to expand the &ldquo;Migration support implemented in
+the XYZ module&rdquo; fieldsets and enable the support you need for your import.
+Now, visit the dashboard at /admin/content/migrate. Expand the &ldquo;Add a content
+set&rdquo; fieldset, and fill in the values. When choosing the value for &ldquo;Source
+view from which to import content&rdquo;, scroll down towards the bottom of the
+list. All Table Wizard views are prefixed with &ldquo;tw: &rdquo;, so the one we&rsquo;re
+looking for here is &ldquo;tw: clickability_issues (clickability_issues)&rdquo;. You can
+leave &ldquo;View arguments&rdquo; and &ldquo;Weight&rdquo; to defaults. The next screen is where the
 real magic happens. By interrogating the view, Migrate presents you with a map
 fields form that allows us to select our source column from a dropdown to
 assign to various node elements. If you have a setting that should remain
-constant across all imported records ("Node: Input format" is usually a good
+constant across all imported records (&ldquo;Node: Input format&rdquo; is usually a good
 example), you can type in a default value here. The rest should be fairly self
-explanatory. Click "Submit changes", and you'll be taken back to the
+explanatory. Click &ldquo;Submit changes&rdquo;, and you&rsquo;ll be taken back to the
 dashboard.</p>
 
 <h2>Run the Import, Clear the Import, Wash, Rinse, Repeat</h2>
 
 <p>Now, the way I did my testing was to choose one row from the source table to
 import. Grab its primary key and copy it to the clipboard. Check the box under
-"Import" for our content set, then expand the "Execute" fieldset. Paste the ID
-into the "Source IDs:" text field, and click the Run button. With any luck,
+&ldquo;Import&rdquo; for our content set, then expand the &ldquo;Execute&rdquo; fieldset. Paste the ID
+into the &ldquo;Source IDs:&rdquo; text field, and click the Run button. With any luck,
 you will be returned to the dashboard, but the content set will show 1
 imported. Hopefully there will be no errors, but if there are, find and fix
 the problem. You can view the old primary key mapping to the node ID by going
 back to /admin/content/tw and looking for a view named
-migrate_map_si_articles. This table is created by the Migrate module -- it
+migrate_map_si_articles. This table is created by the Migrate module &ndash; it
 uses this table to track what has been imported, and what NID the imported
 nodes have. Grab that nid, and load up /node/[nid]. If it looks good, then we
 can to a bigger import. Go back to the Migrate dashboard, and this time click
-the "Clear" checkbox next to the content set. Expand "Execute", make sure all
-fields are blank, and click the Run button. This process will "unimport" the
+the &ldquo;Clear&rdquo; checkbox next to the content set. Expand &ldquo;Execute&rdquo;, make sure all
+fields are blank, and click the Run button. This process will &ldquo;unimport&rdquo; the
 row we just imported. Now, depending on your row count, you may want to import
 all rows and see what happens. Since I was dealing with thousands of nodes, I
 did an import of just 100 nodes to make sure things were okay. To do this,
-instead of specifying "Source IDs", place the number 100 in "Sample Size", and
+instead of specifying &ldquo;Source IDs&rdquo;, place the number 100 in &ldquo;Sample Size&rdquo;, and
 click Run. To import everything, leave all fields blank. The power to quickly
 and easily remove all changes made by the migrate module is huge. Because of
-this "safety net", it lets you work on the import within the same development
-sandbox as your designers and themers. They'll appreciate having something
-other than "Lorem Ipsum" to look at!</p>
+this &ldquo;safety net&rdquo;, it lets you work on the import within the same development
+sandbox as your designers and themers. They&rsquo;ll appreciate having something
+other than &ldquo;Lorem Ipsum&rdquo; to look at!</p>
 
 <h2>Run to the Nearest Pub and Celebrate the Completion of Your Migration</h2>
 
-<p>If I have to explain this to you, you're in the wrong field of work!</p>
+<p>If I have to explain this to you, you&rsquo;re in the wrong field of work!</p>
 
 <h2>Summary</h2>
 
-<p>This post is my longest to date, and there's a good chance I missed some
+<p>This post is my longest to date, and there&rsquo;s a good chance I missed some
 things. By all means, let me know in the comments if you find any holes and
-I'll get it corrected. I hope this case study helps some other Drupalers out
-there - when I first started this project I couldn't find any examples on how
+I&rsquo;ll get it corrected. I hope this case study helps some other Drupalers out
+there - when I first started this project I couldn&rsquo;t find any examples on how
 to get XML into Drupal using the Migrate module. Now Google has some spider
 food :)</p>
 ]]></content>
@@ -817,39 +727,39 @@ food :)</p>
     <updated>2010-02-24T00:00:00-06:00</updated>
     <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
     <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
-build their own installation script by "stacking" previously existing scripts
+build their own installation script by &ldquo;stacking&rdquo; previously existing scripts
 together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
 yourself, or publish it for the world to use. Deploying a distribution with a
 StackScript takes only about 5 minutes, afterwards you have a fully configured
-system with applications up and running. Here's a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
+system with applications up and running. Here&rsquo;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
 StackScript for RH Derivatives</a> deployment just
 before launch: <img src="/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
-appear to prefer Ubuntu, and there's good reason -- it's a great distribution.
+appear to prefer Ubuntu, and there&rsquo;s good reason &ndash; it&rsquo;s a great distribution.
 I run it on all my laptops and most of my desktops. However, I personally find
 it a bit too bleeding edge for my servers and prefer CentOS for the server
 room. Currently there are 16 StackScripts available for Ubuntu, with only 3
-available for CentOS. Well, after today, there's now 6 for CentOS! After
-clicking the deploy button, you'll have the images ready to go in less than a
+available for CentOS. Well, after today, there&rsquo;s now 6 for CentOS! After
+clicking the deploy button, you&rsquo;ll have the images ready to go in less than a
 minute. Boot the config, and the StackScript will run on first boot - when
-it's done, you'll have a secured and configured LAMP stack,
+it&rsquo;s done, you&rsquo;ll have a secured and configured LAMP stack,
 <a href="http://drupal.org/project/drush">drush</a> install, <a href="http://drupal.org">Drupal</a>
-install, and all updates applied via yum. I've published these StackScripts so
+install, and all updates applied via yum. I&rsquo;ve published these StackScripts so
 that anyone with a
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
 can use them with their CentOS and Fedora installations:</p>
 
 <ul>
-<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker's (of Linode) Bash Library for Ubuntu. You don't use this script directly, it's strictly for inclusion by other scripts.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&rsquo;s (of Linode) Bash Library for Ubuntu. You don&rsquo;t use this script directly, it&rsquo;s strictly for inclusion by other scripts.</li>
 <li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=162">Drupal Library for RH Derivatives</a></strong>: This library provides two functions, install_drush and install_drupal.</li>
-<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you'll have a working Drupal installation up and running in about 5 minutes.
-If you use them and find any bugs or have any RH-based StackScripts you'd like
-made available, post a comment and I'll see what I can do. In the interest of
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&rsquo;ll have a working Drupal installation up and running in about 5 minutes.
+If you use them and find any bugs or have any RH-based StackScripts you&rsquo;d like
+made available, post a comment and I&rsquo;ll see what I can do. In the interest of
 full disclosure, the links to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> in
 this article have a referral code in them that will give me $20 credit if you
 sign up and keep your account open for 90 days. If you like these
-StackScripts, please use my links to sign up for a Linode - you'll wonder how
+StackScripts, please use my links to sign up for a Linode - you&rsquo;ll wonder how
 you did without one!</li>
 </ul>
 
@@ -864,11 +774,11 @@ you did without one!</li>
     <content type="html"><![CDATA[<p>The <a href="http://drupal.org/project/views_bulk_operations">Views Bulk
 Operations</a> module
 (a.k.a. VBO), is a godsend for busy <a href="http://drupal.org">Drupal</a> site
-administrators. Don't just take my word for it -
+administrators. Don&rsquo;t just take my word for it -
 <a href="http://www.lullabot.com">Lullabot</a> wrote a chapter about it in
-<a href="http://oreilly.com/catalog/9780596515805/">O'Reilly's Using Drupal</a>,
-it's included in the <a href="http://openatrium.com/">Open Atrium Drupal
-distribution</a>, and it's even used on
+<a href="http://oreilly.com/catalog/9780596515805/">O'Reilly&rsquo;s Using Drupal</a>,
+it&rsquo;s included in the <a href="http://openatrium.com/">Open Atrium Drupal
+distribution</a>, and it&rsquo;s even used on
 <a href="http://drupal.org/node/520290">Drupal.org</a>! Out of the box, VBO does a
 lot to streamline the things you do everyday, so that you spend less
 time doing them. A perfect example is bulk content moderation - with a
@@ -879,152 +789,128 @@ that you can literally do thousands of these without timing out.</p>
 <p>VBO was
 attractive enough that we decided to offload the bulk/batch operations
 of <a href="http://drupal.org/project/node_gallery">Node Gallery</a> to VBO.
-Integration for the most part was surprisingly easy - VBO "speaks" in
+Integration for the most part was surprisingly easy - VBO &ldquo;speaks&rdquo; in
 Drupal Actions, so by <a href="http://drupal.org/node/172152">writing actions</a>,
 we were writing integration with VBO.</p>
 
-<p>There's one undocumented case
+<p>There&rsquo;s one undocumented case
 where VBO can be used that was critical for us. Most VBO actions you
 will find perform one action to a set of nodes, one at a time. Often
 times, that one action is to set a value of some sort on said nodes. In
 the case of <a href="http://drupal.org/project/node_gallery">Node Gallery</a>, we
 wanted to be able to assign different weight values (used for sorting)
-to a bunch of nodes. The key here is that we aren't assigning a value of
-'2' to all selected node's weight, we want to assign a weight of 2 to
+to a bunch of nodes. The key here is that we aren&rsquo;t assigning a value of
+&lsquo;2&rsquo; to all selected node&rsquo;s weight, we want to assign a weight of 2 to
 node #1, 3 to node #2, 8 to node #3, and so on. While not
-straightforward, it's definitely achievable.</p>
+straightforward, it&rsquo;s definitely achievable.</p>
 
-<p>The general idea we'll be
+<p>The general idea we&rsquo;ll be
 taking is to have VBO display a list of nodes to the admin. The admin
 can place a checkmark next to the nodes that he wishes to change the
-weight on, then select "Change the image's weight" from the action
+weight on, then select &ldquo;Change the image&rsquo;s weight&rdquo; from the action
 dropdown, and click submit. We will then draw a form that includes some
-summary information about the nodes, and a select box with the node's
+summary information about the nodes, and a select box with the node&rsquo;s
 current weight. The admin sets the weight he wants for each node, then
 clicks submit. VBO then takes over, assigning each node the proper
-weight. Let's get into the code - first we implement
+weight. Let&rsquo;s get into the code - first we implement
 hook_action_info(), telling Drupal that we have actions to provide:
-<div>
-  <pre><code class='php'>&amp;lt;?php
-/&lt;em&gt;*
-* Implementation of hook_action_info().
-&lt;/em&gt;/
-function node_gallery_action_info() {
-  return array(&lt;/p&gt;
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">/&lt;em&gt;*</span>
+<span class="x">* Implementation of hook_action_info().</span>
+<span class="x">&lt;/em&gt;/</span>
+<span class="x">function node_gallery_action_info() {</span>
+<span class="x">  return array(</span>
+<span class="x">    &amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo; =&gt; array(</span>
+<span class="x">      &amp;lsquo;description&amp;rsquo; =&gt; t(&amp;lsquo;Change image weight (sort order)&amp;rsquo;),</span>
+<span class="x">      &amp;lsquo;type&amp;rsquo; =&gt; &amp;lsquo;node&amp;rsquo;,</span>
+<span class="x">      &amp;lsquo;behavior&amp;rsquo; =&gt; array(&amp;lsquo;changes_node_property&amp;rsquo;),</span>
+<span class="x">      &amp;lsquo;configurable&amp;rsquo; =&gt; TRUE,</span>
+<span class="x">      &amp;lsquo;hooks&amp;rsquo; =&gt; array(</span>
+<span class="x">        &amp;lsquo;node&amp;rsquo; =&gt; array(&amp;lsquo;presave&amp;rsquo;),</span>
+<span class="x">      ),</span>
+<span class="x">    ),</span>
+<span class="x">  );</span>
+<span class="x">}</span></code></pre></div></p>
 
-&lt;pre&gt;&lt;code&gt;'node_gallery_change_image_weight_action' =&amp;gt; array(
-  'description' =&amp;gt; t('Change image weight (sort order)'),
-  'type' =&amp;gt; 'node',
-  'behavior' =&amp;gt; array('changes_node_property'),
-  'configurable' =&amp;gt; TRUE,
-  'hooks' =&amp;gt; array(
-    'node' =&amp;gt; array('presave'),
-  ),
-),
-&lt;/code&gt;&lt;/pre&gt;
+<p>The only real items of note in the hook above are setting &lsquo;configurable&rsquo;
+to true, and setting &lsquo;behavior&rsquo; to &lsquo;changes_node_property&rsquo;. Setting
+&lsquo;configurable&rsquo; allows us to display a custom form, and setting the
+behavior tells VBO that we&rsquo;ll be modifying the node. In turn, VBO will
+call $node->save on each node after it&rsquo;s been processed. Next, we
+define our configurable action&rsquo;s form function:
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">function node_gallery_change_image_weight_action_form($context = array()) {</span>
+<span class="x">  //We&amp;rsquo;re being called from VBO - we can do extra validation</span>
+<span class="x">  if ($context[&amp;lsquo;view&amp;rsquo;]-&gt;plugin_name == &amp;lsquo;bulk&amp;rsquo;) {</span>
+<span class="x">    //@todo: Add imagefield support in our sort form, and theme it with draggable items</span>
+<span class="x">    $sql = &amp;ldquo;SELECT n.nid, n.title, ngi.weight FROM {node} n &amp;rdquo; .</span>
+<span class="x">            &amp;ldquo;INNER JOIN {node_gallery_images} ngi ON n.nid = ngi.nid &amp;rdquo; .</span>
+<span class="x">            &amp;ldquo;WHERE n.nid IN (&amp;rdquo;. db_placeholders($context[&amp;lsquo;selection&amp;rsquo;]) .&amp;ldquo;)&amp;rdquo;;</span>
+<span class="x">    $result = db_query($sql,$context[&amp;lsquo;selection&amp;rsquo;]);</span>
+<span class="x">    $delta = count($context[&amp;lsquo;selection&amp;rsquo;]) &gt; 20 ? intval(count($context[&amp;lsquo;selection&amp;rsquo;])/2) : 10;</span>
+<span class="x">    $form[&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;][&amp;lsquo;#tree&amp;rsquo;] = TRUE;</span>
+<span class="x">    while ($image = db_fetch_object($result)) {</span>
+<span class="x">      $form[&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;][$image-&gt;nid][&amp;lsquo;title&amp;rsquo;] = array(</span>
+<span class="x">        &amp;lsquo;#type&amp;rsquo; =&gt; &amp;lsquo;item&amp;rsquo;,&lt;br/&gt;</span>
+<span class="x">        &amp;lsquo;#value&amp;rsquo; =&gt; $image-&gt;title,</span>
+<span class="x">      );</span>
+<span class="x">      $form[&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;][$image-&gt;nid][&amp;lsquo;weight&amp;rsquo;] = array(</span>
+<span class="x">        &amp;lsquo;#type&amp;rsquo; =&gt; &amp;lsquo;weight&amp;rsquo;,</span>
+<span class="x">        &amp;lsquo;#title&amp;rsquo; =&gt; t(&amp;lsquo;Weight&amp;rsquo;),</span>
+<span class="x">        &amp;lsquo;#default_value&amp;rsquo; =&gt; $image-&gt;weight,</span>
+<span class="x">        &amp;lsquo;#delta&amp;rsquo; =&gt; $delta,</span>
+<span class="x">      );</span>
+<span class="x">    }</span>
+<span class="x">  }</span>
+<span class="x">  //We&amp;rsquo;re called from a standard advanced action where we assign one weight to all nodes</span>
+<span class="x">  else {</span>
+<span class="x">    $form[&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;] = array(</span>
+<span class="x">      &amp;lsquo;#type&amp;rsquo; =&gt; &amp;lsquo;weight&amp;rsquo;,</span>
+<span class="x">      &amp;lsquo;#title&amp;rsquo; =&gt; t(&amp;lsquo;Weight&amp;rsquo;),</span>
+<span class="x">      &amp;lsquo;#description&amp;rsquo; =&gt; t(&amp;lsquo;When listing images in a gallery, heavier items will sink at the lighter items will be positioned near the top&amp;rsquo;),</span>
+<span class="x">      &amp;lsquo;#delta&amp;rsquo; =&gt; 10,</span>
+<span class="x">    );</span>
+<span class="x">    if (isset($context[&amp;lsquo;imageweight&amp;rsquo;])) {</span>
+<span class="x">      $form[&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;][&amp;lsquo;#default_value&amp;rsquo;] = $context[&amp;lsquo;imageweight&amp;rsquo;];</span>
+<span class="x">    }</span>
+<span class="x">  }</span>
+<span class="x">  return $form;</span>
+<span class="x">}</span></code></pre></div></p>
 
-&lt;p&gt;  );
-}</code></pre>
-</div>
-</p>
-
-<p>The only real items of note in the hook above are setting 'configurable'
-to true, and setting 'behavior' to 'changes_node_property'. Setting
-'configurable' allows us to display a custom form, and setting the
-behavior tells VBO that we'll be modifying the node. In turn, VBO will
-call $node->save on each node after it's been processed. Next, we
-define our configurable action's form function:
-<div>
-  <pre><code class='php'>&amp;lt;?php
-function node_gallery_change_image_weight_action_form($context = array()) {
-  //We're being called from VBO - we can do extra validation
-  if ($context['view']-&gt;plugin_name == 'bulk') {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;//@todo: Add imagefield support in our sort form, and theme it with draggable items
-$sql = &quot;SELECT n.nid, n.title, ngi.weight FROM {node} n &quot; .
-        &quot;INNER JOIN {node_gallery_images} ngi ON n.nid = ngi.nid &quot; .
-        &quot;WHERE n.nid IN (&quot;. db_placeholders($context['selection']) .&quot;)&quot;;
-$result = db_query($sql,$context['selection']);
-$delta = count($context['selection']) &amp;gt; 20 ? intval(count($context['selection'])/2) : 10;
-$form['node_gallery_change_image_weight_action']['#tree'] = TRUE;
-while ($image = db_fetch_object($result)) {
-  $form['node_gallery_change_image_weight_action'][$image-&amp;gt;nid]['title'] = array(
-    '#type' =&amp;gt; 'item',  
-    '#value' =&amp;gt; $image-&amp;gt;title,
-  );
-  $form['node_gallery_change_image_weight_action'][$image-&amp;gt;nid]['weight'] = array(
-    '#type' =&amp;gt; 'weight',
-    '#title' =&amp;gt; t('Weight'),
-    '#default_value' =&amp;gt; $image-&amp;gt;weight,
-    '#delta' =&amp;gt; $delta,
-  );
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  //We're called from a standard advanced action where we assign one weight to all nodes
-  else {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$form['node_gallery_change_image_weight_action'] = array(
-  '#type' =&amp;gt; 'weight',
-  '#title' =&amp;gt; t('Weight'),
-  '#description' =&amp;gt; t('When listing images in a gallery, heavier items will sink at the lighter items will be positioned near the top'),
-  '#delta' =&amp;gt; 10,
-);
-if (isset($context['imageweight'])) {
-  $form['node_gallery_change_image_weight_action']['#default_value'] = $context['imageweight'];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  return $form;
-}</code></pre>
-</div>
-</p>
-
-<p>To define your form function, simply append '_form' to your action name
+<p>To define your form function, simply append &lsquo;_form&rsquo; to your action name
 and you have the function name. Nothing too wild and crazy in the form
-function above, but there's two key points:</p>
+function above, but there&rsquo;s two key points:</p>
 
 <ul>
 <li>Line 3 shows you how you can detect when your function is being
 called from a VBO view.</li>
-<li>When your function is called from VBO, it will pass you the nid's of
-the selected nodes in the array $context['selected']</li>
+<li>When your function is called from VBO, it will pass you the nid&rsquo;s of
+the selected nodes in the array $context[&lsquo;selected&rsquo;]</li>
 </ul>
 
 
 <p>Next, we define our submit function (you can define a validate function
 if needed). Our submit function will pull the important data from the
 submitted form and assemble it into a concise array that our action can
-use. Here's our submit function:
-<div>
-  <pre><code class='php'>&amp;lt;?php
-function node_gallery_change_image_weight_action_submit($form, $form_state) {
-  //We're setting all nodes to the same weight
-  if (is_numeric($form_state['values']['node_gallery_change_image_weight_action'])) {&lt;/p&gt;
+use. Here&rsquo;s our submit function:
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">function node_gallery_change_image_weight_action_submit($form, $form_state) {</span>
+<span class="x">  //We&amp;rsquo;re setting all nodes to the same weight</span>
+<span class="x">  if (is_numeric($form_state[&amp;lsquo;values&amp;rsquo;][&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;])) {</span>
+<span class="x">    $weight = $form_state[&amp;lsquo;values&amp;rsquo;][&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;];</span>
+<span class="x">  }</span>
+<span class="x">  //VBO is passing us a set of nids</span>
+<span class="x">  else {</span>
+<span class="x">    foreach ($form_state[&amp;lsquo;values&amp;rsquo;][&amp;lsquo;node_gallery_change_image_weight_action&amp;rsquo;] as $nid =&gt; $val) {</span>
+<span class="x">      $weight[$nid] = $val[&amp;lsquo;weight&amp;rsquo;];</span>
+<span class="x">    }</span>
+<span class="x">  }</span>
+<span class="x">  return array(&amp;lsquo;imageweight&amp;rsquo; =&gt; $weight);</span>
+<span class="x">}</span></code></pre></div></p>
 
-&lt;pre&gt;&lt;code&gt;$weight = $form_state['values']['node_gallery_change_image_weight_action']; 
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  //VBO is passing us a set of nids
-  else {&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;foreach ($form_state['values']['node_gallery_change_image_weight_action'] as $nid =&amp;gt; $val) {
-  $weight[$nid] = $val['weight'];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-  return array('imageweight' =&gt; $weight);
-}</code></pre>
-</div>
-</p>
-
-<p>The key here is that if we are passed in the "single value" form, we
+<p>The key here is that if we are passed in the &ldquo;single value&rdquo; form, we
 stick the value into the variable $weight as a simple scalar. If we are
-passed in form data from the VBO "multi value" form, then $weight
+passed in form data from the VBO &ldquo;multi value&rdquo; form, then $weight
 becomes an associative array where the key is the nid, and the value is
 the weight for that node.</p>
 
@@ -1032,34 +918,28 @@ the weight for that node.</p>
 action is pretty simple, because it will only be called with one node
 and one value. This is a key thing to remember when writing code for VBO
 - even though you are working with batches of nodes, VBO is essentially
-one big loop around the actions -- it executes the action once for each
+one big loop around the actions &ndash; it executes the action once for each
 node. So, in our action, we simply check to see if the value of the
-$context['imageweight'] index that we passed from our submit function is
+$context[&lsquo;imageweight&rsquo;] index that we passed from our submit function is
 an integer or an array, and perform the correct operation on the node to
-assign it it's new weight. Once this function returns, VBO will call
+assign it it&rsquo;s new weight. Once this function returns, VBO will call
 $node->save for us.
-<div>
-  <pre><code class='php'>&amp;lt;?php
-function node_gallery_change_image_weight_action(&amp;amp;$node, $context = array()) {
-  if (in_array($node-&gt;type, (array)node_gallery_get_types('image'))) {&lt;/p&gt;
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="x">&amp;lt;?php</span>
+<span class="x">function node_gallery_change_image_weight_action(&amp;amp;$node, $context = array()) {</span>
+<span class="x">  if (in_array($node-&gt;type, (array)node_gallery_get_types(&amp;lsquo;image&amp;rsquo;))) {</span>
+<span class="x">    //All nodes are set to the same weight</span>
+<span class="x">    if (is_numeric($context[&amp;lsquo;imageweight&amp;rsquo;])) {</span>
+<span class="x">      $node-&gt;weight = $context[&amp;lsquo;imageweight&amp;rsquo;];</span>
+<span class="x">    }</span>
+<span class="x">    //VBO is sending us a list of nodes to modify with different weights</span>
+<span class="x">    else {</span>
+<span class="x">      $node-&gt;weight = $context[&amp;lsquo;imageweight&amp;rsquo;][$node-&gt;nid];</span>
+<span class="x">    }</span>
+<span class="x">  }</span>
+<span class="x">}</span></code></pre></div></p>
 
-&lt;pre&gt;&lt;code&gt;//All nodes are set to the same weight
-if (is_numeric($context['imageweight'])) {
-  $node-&amp;gt;weight = $context['imageweight'];
-}
-//VBO is sending us a list of nodes to modify with different weights
-else {
-  $node-&amp;gt;weight = $context['imageweight'][$node-&amp;gt;nid];
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  }
-}</code></pre>
-</div>
-</p>
-
-<p>While not always obvious, there's not too many bulk operation conditions
-that VBO can't handle. Hats off to
+<p>While not always obvious, there&rsquo;s not too many bulk operation conditions
+that VBO can&rsquo;t handle. Hats off to
 <a href="http://drupal.org/user/48424">infojunkie</a> for writing such a helpful
 module that is also easily integrated with!</p>
 ]]></content>
@@ -1074,9 +954,9 @@ module that is also easily integrated with!</p>
 PHP</a> - a PHP-to-C++
 converter. While the name is stupid, the idea is not. 100% of their developers
 know PHP, I would guess that less than 5% of them are proficient at C++. So,
-HipHop takes their PHP code, and converts it to compiled C++ -- in turn, they
+HipHop takes their PHP code, and converts it to compiled C++ &ndash; in turn, they
 get a huge boost in performance and get to keep their existing developers.
-HipHop is also it's own webserver too - fun! My first thought was: I wonder
+HipHop is also it&rsquo;s own webserver too - fun! My first thought was: I wonder
 what this could mean for Drupal? Well, <a href="http://fourkitchens.com/authors/david-timothy-strauss">David
 Struass</a>, a maintainer
 of <a href="http://fourkitchens.com/pressflow-makes-drupal-scale">Pressflow (a set of patches for Drupal performance and
@@ -1091,10 +971,10 @@ HipHop-friendly. Exciting times!</p>
     <link href="http://sysadminsjourney.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-ubuntu-910"/>
     <updated>2009-12-21T00:00:00-06:00</updated>
     <id>http://sysadminsjourney.com/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-on-ubuntu-9-10</id>
-    <content type="html"><![CDATA[<p>There's a nasty upstream bug in GTK present in Ubuntu 9.10 that makes Eclipse
-Galileo all but unusable -- specifically it makes clicking many buttons with
+    <content type="html"><![CDATA[<p>There&rsquo;s a nasty upstream bug in GTK present in Ubuntu 9.10 that makes Eclipse
+Galileo all but unusable &ndash; specifically it makes clicking many buttons with
 the mouse just stop working. You can use tab and spacebar to make it work, but
-that's not much of a workaround. All you need to do is set an environment
+that&rsquo;s not much of a workaround. All you need to do is set an environment
 variable before starting Eclipse:</p>
 
 <pre><code>export GDK_NATIVE_WINDOWS=true

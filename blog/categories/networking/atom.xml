@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Networking | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: networking | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/networking/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -18,39 +18,39 @@
     <link href="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux"/>
     <updated>2008-09-06T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-to-linux</id>
-    <content type="html"><![CDATA[<p>I have a love/hate relationship with my phone - an HTC PPC6800. I can't live
+    <content type="html"><![CDATA[<p>I have a love/hate relationship with my phone - an HTC PPC6800. I can&rsquo;t live
 without it - I can check my work email from anywhere, and surf the web. While
-I've tried many PDA's through the years, none of them have stuck, because I
+I&rsquo;ve tried many PDA&rsquo;s through the years, none of them have stuck, because I
 got tired of lugging them around. I <strong>always</strong> have my phone with me, so
 therefore my smartphone has made me much more organized. My wife loves it
-because I can remember all the upcoming appointments. Yet, I hate it. It's UI
+because I can remember all the upcoming appointments. Yet, I hate it. It&rsquo;s UI
 is horrible. It locks up and needs rebooted, and I feel dirty using a M$
 product. Well, I found one more reason to like it. I can tether my Ubuntu
 laptop to my phone and get Internet access from just about anywhere. This
 howto is for Ubuntu, but it should work for any distro that uses bluez-utils.
 Note that I briefly tried to get my laptop tethered via USB, but I found
-several comments that it wouldn't work without a custom kernel module.
+several comments that it wouldn&rsquo;t work without a custom kernel module.
 Bluetooth is easier, works out of the box, and is much cooler besides ;-)
-First things first, let's install the prerequisites:</p>
+First things first, let&rsquo;s install the prerequisites:</p>
 
 <pre><code>sudo apt-get install bluez-utils bluetooth bluez-gnome bluez-hcidump
 </code></pre>
 
 <p>Next, enable the bluetooth applet in Gnome. Navigate to
-"System->Preferences->BlueTooth Preferences". On the "Devices" tab, click
-"Other devices can connect". Now we need to pair your phone to your PC. From
+&ldquo;System->Preferences->BlueTooth Preferences&rdquo;. On the &ldquo;Devices&rdquo; tab, click
+&ldquo;Other devices can connect&rdquo;. Now we need to pair your phone to your PC. From
 your phone, click Start->Settings. Click on the Connections tab, and click the
-Bluetooth icon. Click "Add new device..." and choose the entry for your
+Bluetooth icon. Click &ldquo;Add new device&hellip;&rdquo; and choose the entry for your
 computer from the list. You will be asked for a passcode and when you enter it
 on your phone, the bluetooth applet will pop up saying that your phone is
 trying to connect. Click on the ballon and enter the same passcode.
-Congratulations, you have paired your phone to your PC! Now, let's find the
+Congratulations, you have paired your phone to your PC! Now, let&rsquo;s find the
 hardware address of your phone:</p>
 
 <pre><code>sudo hcitool scan
 </code></pre>
 
-<p>Document the 12 digit hex address somewhere, we'll need it later. Now, open up
+<p>Document the 12 digit hex address somewhere, we&rsquo;ll need it later. Now, open up
 <strong>/etc/default/bluetooth</strong> in your favorite text editor. Find the line that
 states:</p>
 
@@ -73,25 +73,22 @@ states:</p>
  --devup /etc/bluetooth/pan/dev-up --devdown /etc/bluetooth/pan/dev-down"
 </code></pre>
 
-<p>changing the XX's to the hardware address of your phone. Now, let's run the
-following to create the scripts we need: <div>
-  <pre><code class='console'>sudo sh -c
-'mkdir -p /etc/bluetooth/pan &amp;amp;&amp;amp; \ echo &quot;iface bnep0 inet dhcp&quot; &gt;&gt;
-/etc/network/interfaces &amp;amp;&amp;amp; \ for i in up down; do touch
-/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo
-&quot;#!/bin/bash&quot; &gt; /etc/bluetooth/pan/dev-$i echo &quot;/sbin/if$i bnep0&quot; &gt;&gt;
-/etc/bluetooth/pan/dev-$i done &amp;amp;&amp;amp; \ /etc/init.d/networking restart &amp;amp;&amp;amp; \
-/etc/init.d/bluetooth restart'</code></pre>
-</div>
- Finally, on your phone click
-Start->Programs->Internet Sharing. Select "Bluetooth PAN" on the PC Connection
+<p>changing the XX&rsquo;s to the hardware address of your phone. Now, let&rsquo;s run the
+following to create the scripts we need: <div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo sh -c</span>
+<span class="go">&amp;lsquo;mkdir -p /etc/bluetooth/pan &amp;amp;&amp;amp; \ echo &amp;ldquo;iface bnep0 inet dhcp&amp;rdquo; &gt;&gt;</span>
+<span class="go">/etc/network/interfaces &amp;amp;&amp;amp; \ for i in up down; do touch</span>
+<span class="go">/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo</span>
+<span class="go">&amp;ldquo;#!/bin/bash&amp;rdquo; &gt; /etc/bluetooth/pan/dev-$i echo &amp;ldquo;/sbin/if$i bnep0&amp;rdquo; &gt;&gt;</span>
+<span class="go">/etc/bluetooth/pan/dev-$i done &amp;amp;&amp;amp; \ /etc/init.d/networking restart &amp;amp;&amp;amp; \</span>
+<span class="go">/etc/init.d/bluetooth restart&amp;rsquo;</span></code></pre></div> Finally, on your phone click
+Start->Programs->Internet Sharing. Select &ldquo;Bluetooth PAN&rdquo; on the PC Connection
 drop-down, and select the appropriate WAN Network Connection. One more note
-before you're off and surfing the 'net on your tethered phone: your bluetooth
-connection can't be managed by NetworkManager because bluez-utils doesn't make
+before you&rsquo;re off and surfing the &lsquo;net on your tethered phone: your bluetooth
+connection can&rsquo;t be managed by NetworkManager because bluez-utils doesn&rsquo;t make
 use of DBUS. So, in order to use your bluetooth connection, right click on
-your Network Manager icon, and select "Enable Networking" to disable
-NetworkManager. When you're done, right click and reselect "Enable Networking"
-to switch things back. Okay, that's out of the way. Click on "Connect" on your
+your Network Manager icon, and select &ldquo;Enable Networking&rdquo; to disable
+NetworkManager. When you&rsquo;re done, right click and reselect &ldquo;Enable Networking&rdquo;
+to switch things back. Okay, that&rsquo;s out of the way. Click on &ldquo;Connect&rdquo; on your
 phone. As your phone is connecting, your Linux box will see your phone, and
 connect to it. Once the connection is established, your Linux box will get a
 DHCP-assigned IP from your phone. To verify all this, run the following
@@ -100,14 +97,14 @@ command:</p>
 <pre><code>/sbin/ifconfig bnep0
 </code></pre>
 
-<p>You should see the interface, and see that it's been assigned an IP. After you
+<p>You should see the interface, and see that it&rsquo;s been assigned an IP. After you
 have the address, you can freely browse the Internet. To disconnect, simply
-click "Disconnect" on your phone. Don't forget to re-enable networking via
+click &ldquo;Disconnect&rdquo; on your phone. Don&rsquo;t forget to re-enable networking via
 NetworkManager. Props go out to the following places in helping me determine
 how to do this in the first place:</p>
 
 <ul>
-<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812's post in the Ubuntu forums</a></li>
+<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812&rsquo;s post in the Ubuntu forums</a></li>
 <li><a href="http://bluez.sourceforge.net/contrib/HOWTO-PAN">The bluez-utils howto</a></li>
 <li>The pand manpage, because I always RTFM ;-)
 Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
@@ -124,90 +121,67 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
     <content type="html"><![CDATA[<p>I needed to be able to use dnsmasq on my laptop so that I could
 forward corporate hostname requests to our corporate DNS servers,
 but send all other requests to OpenDNS' servers.  Sometimes at a
-hotel, you can't use OpenDNS, so I also wanted to fail back to
+hotel, you can&rsquo;t use OpenDNS, so I also wanted to fail back to
 whatever DNS servers were being sent via DHCP. The trick here is to
 get dhclient to update a file other than /etc/resolv.conf.  You
 tell dhclient to update a file named /etc/resolv.conf.dhclient,
 then point /etc/resolv.conf to use localhost.  Finally, tell
-dnsmasq to use /etc/resolv.conf.dhclient as its source.  Here's how
+dnsmasq to use /etc/resolv.conf.dhclient as its source.  Here&rsquo;s how
 I did that on Ubuntu 8.04: First, install dnsmasq:
-<div>
-  <pre><code class='console'>sudo apt-get install dnsmasq resolvconf</code></pre>
-</div>
-</p>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo apt-get install dnsmasq resolvconf</span></code></pre></div></p>
 
-<p>Next, set the following in /etc/dnsmasq.conf:</p>
+<p>Next, set the following in /etc/dnsmasq.conf:
+    &hellip;
+    resolv-file=/etc/resolv.conf.dhclient
+    server=/mycorp.com/10.253.10.83
+    &hellip;</p>
 
-<pre><code>...
-resolv-file=/etc/resolv.conf.dhclient
-server=/mycorp.com/10.253.10.83
-...
-</code></pre>
-
-<p>Then restart dnsmasq:</p>
-
-<pre><code>sudo /etc/init.d/dnsmasq restart
-</code></pre>
+<p>Then restart dnsmasq:
+    sudo /etc/init.d/dnsmasq restart</p>
 
 <p>Now, configure your local machine to use a hardcoded  DNS server of
 127.0.0.1.  I use NetworkManager, so I left click on the NM icon,
-and select "Manual configuration...".  Click the DNS tab, then
-click the unlock button.  Remove any existing servers in "DNS
-Servers", then add 127.0.0.1.  Optionally, add any search domains
+and select &ldquo;Manual configuration&hellip;&rdquo;.  Click the DNS tab, then
+click the unlock button.  Remove any existing servers in &ldquo;DNS
+Servers&rdquo;, then add 127.0.0.1.  Optionally, add any search domains
 you might want to use. Now, we need to tell dhclient to a) prepend
 OpenDNS' servers to the nameserver list, and b) write the DNS
 config to /etc/resolv.conf.dhclient instead of /etc/resolv.conf. 
-First, edit /etc/dhcp3/dhclient.conf, and add the line:</p>
+First, edit /etc/dhcp3/dhclient.conf, and add the line:
+    prepend domain-name-servers 208.67.222.222, 208.67.220.220;</p>
 
-<pre><code>prepend domain-name-servers 208.67.222.222, 208.67.220.220;
-</code></pre>
-
-<p>Now, for the part that I couldn't find using Google.  Let's tell
+<p>Now, for the part that I couldn&rsquo;t find using Google.  Let&rsquo;s tell
 dhclient to update a different file:
-<div>
-  <pre><code class='console'>sudo cat   &gt; /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq &amp;lt;&amp;lt;EOD&lt;/p&gt;
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo cat   &gt; /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq &amp;lt;&amp;lt;EOD&lt;/p&gt;</span>
 
-&lt;h1&gt;!/bin/sh&lt;/h1&gt;
+<span class="go">&lt;h1&gt;!/bin/sh&lt;/h1&gt;</span>
 
-&lt;p&gt;CUSTOM_RESOLV_CONF=/etc/resolv.conf.dhclient&lt;/p&gt;
+<span class="go">&lt;p&gt;CUSTOM_RESOLV_CONF=/etc/resolv.conf.dhclient&lt;/p&gt;</span>
 
-&lt;p&gt;make_resolv_conf() {
-  if [ -n &quot;$new_domain_name_servers&quot; ]; then&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;/bin/rm $CUSTOM_RESOLV_CONF
-[ -n &quot;$new_domain_name&quot; ] &amp;amp;&amp;amp; echo search $new_domain_name &amp;gt;$CUSTOM_RESOLV_CONF
-for nameserver in $new_domain_name_servers; do
-  echo nameserver $nameserver &amp;gt;&amp;gt; $CUSTOM_RESOLV_CONF
-done
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;  fi
-}
-EOD</code></pre>
-</div>
-
-Now, set it to be executable:</p>
-
-<pre><code>sudo chmod 755 /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq
-</code></pre>
+<span class="go">&lt;p&gt;make_resolv_conf() {</span>
+<span class="go">  if [ -n &amp;ldquo;$new_domain_name_servers&amp;rdquo; ]; then</span>
+<span class="go">    /bin/rm $CUSTOM_RESOLV_CONF</span>
+<span class="go">    [ -n &amp;ldquo;$new_domain_name&amp;rdquo; ] &amp;amp;&amp;amp; echo search $new_domain_name &gt;$CUSTOM_RESOLV_CONF</span>
+<span class="go">    for nameserver in $new_domain_name_servers; do</span>
+<span class="go">      echo nameserver $nameserver &gt;&gt; $CUSTOM_RESOLV_CONF</span>
+<span class="go">    done</span>
+<span class="go">  fi</span>
+<span class="go">}</span>
+<span class="go">EOD</span></code></pre></div>
+Now, set it to be executable:
+    sudo chmod 755 /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq</p>
 
 <p>Now, reboot.  When you reboot, you should have the following setup:
-1.  When you get a DHCP lease, the new DNS config will be written</p>
-
-<pre><code>to /etc/resolv.conf.dhclient
-</code></pre>
-
-<ol>
-<li>This file will first contain the two OpenDNS servers, then
-whatever the ISP/Router sends as nameservers</li>
-<li>/etc/resolv.conf will point to localhost and should never
-change.</li>
-<li>Any requests for mycorp.com will go to the 10.x nameservers
-above</li>
-<li>Any requests for any other domains will first be tried through
-OpenDNS, then through the ISP's/Router's nameservers.</li>
-</ol>
-
+1.  When you get a DHCP lease, the new DNS config will be written
+    to /etc/resolv.conf.dhclient
+2.  This file will first contain the two OpenDNS servers, then
+    whatever the ISP/Router sends as nameservers
+3.  /etc/resolv.conf will point to localhost and should never
+    change.
+4.  Any requests for mycorp.com will go to the 10.x nameservers
+    above
+5.  Any requests for any other domains will first be tried through
+    OpenDNS, then through the ISP&rsquo;s/Router&rsquo;s nameservers.</p>
 
 <p>Hope this helps you as much as it helped me!</p>
 ]]></content>
@@ -288,30 +262,24 @@ default              192.168.30.1           UG      1        112
     <updated>2008-05-08T00:00:00-05:00</updated>
     <id>http://sysadminsjourney.com/content/2008/05/08/forcing-nic-speed-and-duplex-on-solaris-10</id>
     <content type="html"><![CDATA[<p>There are two ways to force duplex &amp; speed on a Solaris 10 box - via the
-driver, and via ndd. First, via the driver: <div>
-  <pre><code class='console'># cat
-&amp;lt;&lt;EOD &gt; /platform/&lt;code&gt;uname -i&lt;/code&gt;/kernel/drv/bge.conf adv_autoneg_cap=0
-adv_1000fdx_cap=0 adv_1000hdx_cap=0 adv_100fdx_cap=1 adv_100hdx_cap=0
-adv_10fdx_cap=0 adv_10hdx_cap=0; EOD</code></pre>
-</div>
- Note that this sets
+driver, and via ndd. First, via the driver: <div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> cat
+<span class="go">&amp;lt;&lt;EOD &gt; /platform/&lt;code&gt;uname -i&lt;/code&gt;/kernel/drv/bge.conf adv_autoneg_cap=0</span>
+<span class="go">adv_1000fdx_cap=0 adv_1000hdx_cap=0 adv_100fdx_cap=1 adv_100hdx_cap=0</span>
+<span class="go">adv_10fdx_cap=0 adv_10hdx_cap=0; EOD</span></code></pre></div> Note that this sets
 all instances of bge to 100Mbit Full Duplex. If you wish to be more selective,
-you can do this: <div>
-  <pre><code class='console'># cat &amp;lt; /etc/init.d/net-tune&lt;/p&gt;
+you can do this: <div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> cat <span class="p">&amp;</span>lt<span class="p">;</span> /etc/init.d/net-tune&lt;/p&gt;
 
-&lt;h1&gt;!/bin/sh # Force to 100FDX NIC=bge for i in 0 1 2 3; do /usr/sbin/ndd -set&lt;/h1&gt;
+<span class="go">&lt;h1&gt;!/bin/sh # Force to 100FDX NIC=bge for i in 0 1 2 3; do /usr/sbin/ndd -set&lt;/h1&gt;</span>
 
-&lt;p&gt;/dev/${NIC}${i} adv_1000fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}
-adv_1000hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_100fdx_cap 1
-/usr/sbin/ndd -set /dev/${NIC}${i} adv_100hdx_cap 0 /usr/sbin/ndd -set
-/dev/${NIC}${i} adv_10fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}
-adv_10hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_autoneg_cap 0 done EOD&lt;/p&gt;
+<span class="go">&lt;p&gt;/dev/${NIC}${i} adv_1000fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}</span>
+<span class="go">adv_1000hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_100fdx_cap 1</span>
+<span class="go">/usr/sbin/ndd -set /dev/${NIC}${i} adv_100hdx_cap 0 /usr/sbin/ndd -set</span>
+<span class="go">/dev/${NIC}${i} adv_10fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}</span>
+<span class="go">adv_10hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_autoneg_cap 0 done EOD&lt;/p&gt;</span>
 
-&lt;h1&gt;chmod 755 /etc/init.d/net-tune # ln -s /etc/init.d/net-tune /etc/rc2.d&lt;/h1&gt;
+<span class="go">&lt;h1&gt;chmod 755 /etc/init.d/net-tune # ln -s /etc/init.d/net-tune /etc/rc2.d&lt;/h1&gt;</span>
 
-&lt;p&gt;/S68net-tune</code></pre>
-</div>
- You have to reboot for the kernel config file
+<span class="go">&lt;p&gt;/S68net-tune</span></code></pre></div> You have to reboot for the kernel config file
 to take effect, but you can run the net-tune script at any time to make it
 work. You can change the 0 1 2 3 in the for do loop above to set the instances
 you need.</p>
@@ -324,25 +292,25 @@ you need.</p>
     <updated>2007-11-09T00:00:00-06:00</updated>
     <id>http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-a-cisco-ios-router</id>
     <content type="html"><![CDATA[<p>Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
-out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco's article on how to do it</a> first. If that
-doesn't work and you're ready to drop kick the router out of the datacenter
+out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&rsquo;s article on how to do it</a> first. If that
+doesn&rsquo;t work and you&rsquo;re ready to drop kick the router out of the datacenter
 like I was, put away your black belt for a few minutes, and read about how I
-worked around a couple of bugs. Let's define our problem first.</p>
+worked around a couple of bugs. Let&rsquo;s define our problem first.</p>
 
 <ul>
 <li>You have two subnets connected via IPSEC VPN - for the purposes of this article, 192.168.10.0/24 and 192.168.11.0/24. We assume the VPN is already up and functional.</li>
 <li>You want any host with an IP in the 192.168.11.0/24 subnet to have access to the Internet as well as access to the hosts on the other side of the IPSEC tunnel.</li>
-<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT'd IP address when accessing the Internet - in this case, 1.1.1.1.
-It took me a couple days, and I still think there's a bug in there somewhere,
+<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&rsquo;d IP address when accessing the Internet - in this case, 1.1.1.1.
+It took me a couple days, and I still think there&rsquo;s a bug in there somewhere,
 but I did finally get it to work. The IOS I was using was 12.4(17). Now,
-here's my personal take on what I think happens that causes things to break.
-Again, I worked on this for 2 days straight, so I'm a little blurry on
-everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco's artic
+here&rsquo;s my personal take on what I think happens that causes things to break.
+Again, I worked on this for 2 days straight, so I&rsquo;m a little blurry on
+everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&rsquo;s artic
 le</a>, you can get these results by simply using route-maps on your static NAT commands. Almost, but not really. I found two other
-requirements had to be in place before the NAT's would work as they were
+requirements had to be in place before the NAT&rsquo;s would work as they were
 supposed to:</p></li>
-<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT's with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
-<li><p>Once you use a route-map in your static NAT's, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT'd could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
+<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&rsquo;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
+<li><p>Once you use a route-map in your static NAT&rsquo;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&rsquo;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
 Step One: Configure Dynamic NAT We first need to setup an access list that
 will:</p>
 
@@ -355,15 +323,11 @@ will:</p>
 </ul>
 
 
-<p>```</p>
-
-<pre><code>ip access-list extended NoNat
- deny   ip host 192.168.11.5 any
- deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
- permit ip 192.168.11.0 0.0.0.255 any
+<pre><code>    ip access-list extended NoNat
+     deny   ip host 192.168.11.5 any
+     deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
+     permit ip 192.168.11.0 0.0.0.255 any
 </code></pre>
-
-<p>```</p>
 
 <p>Then, we use this command to setup dynamic NAT:</p>
 
@@ -375,9 +339,9 @@ will:</p>
 on the 192.168.10.0 subnet. Step Two: Setup Static NAT So, right now,
 192.168.11.5 can access hosts across the tunnel, but not access anyplace on
 the Internet. All other hosts on the 192.168.11.0/24 subnet can access both.
-Again, according to the Cisco article above, we shouldn't have to do this, but
-I did. Since we have excluded our 192.168.11.5 host from being NAT'd at all,
-we need to craft a route-map for him to be static NAT'd, but not NAT'd when
+Again, according to the Cisco article above, we shouldn&rsquo;t have to do this, but
+I did. Since we have excluded our 192.168.11.5 host from being NAT&rsquo;d at all,
+we need to craft a route-map for him to be static NAT&rsquo;d, but not NAT&rsquo;d when
 accessing the remote VPN hosts. This boils down to creating an ACL identical
 to the one above minus one line:</p>
 
@@ -398,13 +362,13 @@ to the one above minus one line:</p>
 </code></pre>
 
 <p>Finally, all your NAT rules should be working perfectly now. In order to add
-new static NAT's, you simply need to add the local IP address to the top of
+new static NAT&rsquo;s, you simply need to add the local IP address to the top of
 the NoNat ACL, and then create a new static NAT rule the points to the same
 route-map. Do not use a different route-map, or you will run into the bug
-above. Let me re-iterate that Cisco's article above is cleaner, and that I
+above. Let me re-iterate that Cisco&rsquo;s article above is cleaner, and that I
 tried other cleaner ways of implementing this setup. If you have the time, try
-to get your setup working using the article above. However, if you can't get
-it to work, try my way and see if you get the results you're looking for.</p>
+to get your setup working using the article above. However, if you can&rsquo;t get
+it to work, try my way and see if you get the results you&rsquo;re looking for.</p>
 ]]></content>
   </entry>
   

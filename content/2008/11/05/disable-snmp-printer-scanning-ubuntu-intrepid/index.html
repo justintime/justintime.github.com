@@ -23,10 +23,11 @@ They could tell &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ They could tell &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ They could tell &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Disable SNMP Printer Scanning in Ubuntu Intrepid</h1>
     
     
@@ -94,14 +91,7 @@ They could tell &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-11-05T00:00:00-06:00" pubdate data-updated="true">Nov 5<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-11-05T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -111,7 +101,7 @@ They could tell &hellip;">
 <div class="entry-content"><p>After installing Ubuntu Intrepid on my laptop, I got a nastygram
 from IT saying that my laptop was tripping alerts from their NIDS. 
 They could tell me that it was an outbound SNMP request, but they
-couldn&#8217;t supply the OID or anything.  Setting aside the fact that
+couldn&rsquo;t supply the OID or anything.  Setting aside the fact that
 the NIDS should be configured to disregard SNMP requests for this
 particular OID, I set forth to try and figure out what the heck was
 causing the traffic. After much tcpdumping, I finally found the
@@ -120,12 +110,10 @@ corresponds to a printer name.  At this point, I knew that it was
 coming from CUPS.  Now, one would think that there is a simple
 on/off switch in CUPS that you could use to disable SNMP scanning. 
 Nope!  You can remove the snmp binary from the CUPS distribution,
-but the next time CUPS is installed/upgraded, you&#8217;ll be in the same
-boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:</p>
-
-<pre><code>#Address @LOCAL
-Address 127.0.0.1
-</code></pre>
+but the next time CUPS is installed/upgraded, you&rsquo;ll be in the same
+boat. On a hunch, I edited /etc/cups/snmp.conf to look like so:
+    #Address @LOCAL
+    Address 127.0.0.1</p>
 
 <p>Lo and behold, it worked!  Instead of disabling SNMP scanning, I
 told CUPS to only scan the localhost IP instead of the entire local
@@ -135,14 +123,14 @@ alerts! <strong>Notes</strong> It turns out the snmp auto-detection stuff had
 been removed from previous versions of Ubuntu.  After much
 bemoaning from users, the package maintainers put it back in
 place.  This is why I have the issue on Intrepid and not on
-previous versions. I don&#8217;t really know what the optimal solution is
+previous versions. I don&rsquo;t really know what the optimal solution is
 here.  The fact that my laptop was broadcasting SNMP requests to
 the entire corporate subnet is a little disturbing, if harmless. 
 However I see where it would be nice to have in a SOHO
-environment.  I personally would prefer a &#8220;disabled by default&#8221;
+environment.  I personally would prefer a &ldquo;disabled by default&rdquo;
 approach with a very simple checkbox mechanism to enable it, but
-I&#8217;m certainly biased. Anyways, hope this helps some people out
-there. When I ran into this issue, Google didn&#8217;t have any help for
+I&rsquo;m certainly biased. Anyways, hope this helps some people out
+there. When I ran into this issue, Google didn&rsquo;t have any help for
 me.</p>
 </div>
 
@@ -159,19 +147,12 @@ me.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-11-05T00:00:00-06:00" pubdate data-updated="true">Nov 5<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-11-05T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a>
   
 </span>
 
@@ -180,7 +161,7 @@ me.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/11/05/disable-snmp-printer-scanning-ubuntu-intrepid" >Tweet</a>
   
   
   
@@ -208,20 +189,30 @@ me.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -229,7 +220,7 @@ me.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -244,7 +235,7 @@ me.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -292,7 +283,7 @@ me.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -310,7 +301,7 @@ me.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -326,7 +317,7 @@ me.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

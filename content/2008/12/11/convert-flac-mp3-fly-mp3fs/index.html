@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Convert FLAC to MP3 on the fly with MP3FS - SysAdmin's Journey</title>
+  <title>Convert FLAC to MP3 on the Fly With MP3FS - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="I refuse to do DRM. If there&#8217;s an album I want, I buy the CD. The first thing
+  <meta name="description" content="I refuse to do DRM. If there&rsquo;s an album I want, I buy the CD. The first thing
 I do after opening a new disc is to rip the disc to
 FLAC. The &hellip;">
   
@@ -23,10 +23,11 @@ FLAC. The &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/12/11/convert-flac-mp3-fly-mp3fs">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ FLAC. The &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ FLAC. The &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Convert FLAC to MP3 on the Fly With MP3FS</h1>
     
     
@@ -94,84 +91,83 @@ FLAC. The &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-12-11T00:00:00-06:00" pubdate data-updated="true">Dec 11<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-12-11T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I refuse to do DRM. If there&#8217;s an album I want, I buy the CD. The first thing
+<div class="entry-content"><p>I refuse to do DRM. If there&rsquo;s an album I want, I buy the CD. The first thing
 I do after opening a new disc is to rip the disc to
 <a href="http://flac.sourceforge.net/">FLAC</a>. The second thing I do is to copy the
-disc so that the loader in my car doesn&#8217;t do permanent damage to the master
+disc so that the loader in my car doesn&rsquo;t do permanent damage to the master
 copy. The third thing I do is to put the album on my MP3 player. Now, my
 player runs <a href="http://www.rockbox.org/">Rockbox</a>, so I <strong>can</strong> play FLAC files,
 but they eat up too much space. However, I hate to keep both an MP3 and a FLAC
 laying around when I only need access to the MP3 once. Enter
 <a href="http://mp3fs.sourceforge.net/">MP3FS</a> - a fuse filesystem that converts FLAC
-to MP3 on the fly.  It&#8217;s a beautiful thing. I keep all my FLAC files on my
+to MP3 on the fly.  It&rsquo;s a beautiful thing. I keep all my FLAC files on my
 NAS, which is exported via NFS to all my systems. On my laptop, I have my FLAC
 export mounted at /mnt/FLAC. I have MP3FS configured to convert /mnt/FLAC, and
-it&#8217;s mounted at ~/MP3. I plug in my MP3 player, and browse all my MP3&#8217;s on
-~/MP3 (they don&#8217;t really exist). When I copy the MP3 from ~/MP3 to my MP3
+it&rsquo;s mounted at ~/MP3. I plug in my MP3 player, and browse all my MP3&rsquo;s on
+~/MP3 (they don&rsquo;t really exist). When I copy the MP3 from ~/MP3 to my MP3
 player, MP3FS transcodes the FLAC files to MP3 on the fly. It even adds ID3
-tags to the MP3! Here&#8217;s how you can setup the same thing.</p>
+tags to the MP3! Here&rsquo;s how you can setup the same thing.</p>
 
 <h3>Download and install MP3FS</h3>
 
-<p>Most distro&#8217;s don&#8217;t include MP3FS as a package, but pretty much any modern
+<p>Most distro&rsquo;s don&rsquo;t include MP3FS as a package, but pretty much any modern
 distro supplies the prerequisite packages. On Ubuntu, run the following to
-satisfy the prerequisites: <div>
-  <pre><code class='bash'>sudo apt-get install build-
-essential fuse fuse-utils liblame-dev libflac-dev libfuse-dev libid3tag0-dev</code></pre>
-</div>
- Next download MP3FS from http://mp3fs.sourceforge.net/,
+satisfy the prerequisites:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo apt-get install build-
+essential fuse fuse-utils liblame-dev libflac-dev libfuse-dev libid3tag0-dev</code></pre></div>
+
+
+<p> Next download MP3FS from <a href="http://mp3fs.sourceforge.net/,">http://mp3fs.sourceforge.net/,</a>
 extract the file, change into the new directory, and do the normal GNU thing:</p>
 
-<div>
-  <pre><code class='bash'>tar -xzvf mp3fs-0.12.tar.gz cd mp3fs-0.12 ./configure
-make sudo make install</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">tar -xzvf mp3fs-0.12.tar.gz <span class="nb">cd </span>mp3fs-0.12 ./configure
+make sudo make install</code></pre></div>
 
 
 <h3>Test</h3>
 
-<p>Before we mount this thing via fstab, we&#8217;ll get it working first. First,
-create the mountpoint - in my example, it&#8217;s ~/MP3. <div>
-  <pre><code class='bash'>mkdir
-~/MP3</code></pre>
-</div>
- Now, if your FLAC files are at /mnt/FLAC, and you
-want 192K MP3&#8217;s, run this command: <div>
-  <pre><code class='bash'>mp3fs /mnt/FLAC/,192
-~/MP3/ -o ro</code></pre>
-</div>
- Now, browse the new MP3 directory using
-Nautilus, ls, or whatever. Cool &#8216;eh? Note the file isn&#8217;t actually transcoded
+<p>Before we mount this thing via fstab, we&rsquo;ll get it working first. First,
+create the mountpoint - in my example, it&rsquo;s ~/MP3.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mkdir
+~/MP3</code></pre></div>
+
+
+<p> Now, if your FLAC files are at /mnt/FLAC, and you
+want 192K MP3&rsquo;s, run this command:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">mp3fs /mnt/FLAC/,192
+~/MP3/ -o ro</code></pre></div>
+
+
+<p> Now, browse the new MP3 directory using
+Nautilus, ls, or whatever. Cool &lsquo;eh? Note the file isn&rsquo;t actually transcoded
 until you try to access the contents of the file. Just doing directory
-listings doesn&#8217;t transcode. Go ahead, pick an MP3 to play in your favorite
-player. You&#8217;ll likely find that transcoding happens pretty quickly.</p>
+listings doesn&rsquo;t transcode. Go ahead, pick an MP3 to play in your favorite
+player. You&rsquo;ll likely find that transcoding happens pretty quickly.</p>
 
 <h3>Set it and forget it</h3>
 
 <p>Now, we can setup this mount in /etc/fstab and configure it to mount on
-bootup, so it&#8217;s there waiting for you all the time. Unmount the directory, add
-the entry to fstab, and mount it. <div>
-  <pre><code class='bash'>sudo umount
-/home/justintime/MP3/ sudo sh -c &quot;umount /home/justintime/MP3; echo
-'mp3fs#/mnt/FLAC,192 /home/justintime/MP3 fuse ro 0 0' &gt;&gt; /etc/fstab&quot; mount
-~/MP3 ls ~/MP3</code></pre>
-</div>
- At this point, you are ready to go. If you
-don&#8217;t like to brag about your uptime, go ahead and reboot and make sure the
+bootup, so it&rsquo;s there waiting for you all the time. Unmount the directory, add
+the entry to fstab, and mount it.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">sudo umount
+/home/justintime/MP3/ sudo sh -c <span class="s2">&quot;umount /home/justintime/MP3; echo</span>
+<span class="s2">&#39;mp3fs#/mnt/FLAC,192 /home/justintime/MP3 fuse ro 0 0&#39; &gt;&gt; /etc/fstab&quot;</span> mount
+~/MP3 ls ~/MP3</code></pre></div>
+
+
+<p> At this point, you are ready to go. If you
+don&rsquo;t like to brag about your uptime, go ahead and reboot and make sure the
 mountpoint is there. Otherwise, trust me ;-) Hope you enjoy MP3FS as much as I
 do!</p>
 </div>
@@ -189,19 +185,12 @@ do!</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-12-11T00:00:00-06:00" pubdate data-updated="true">Dec 11<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-12-11T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -210,7 +199,7 @@ do!</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/12/11/convert-flac-mp3-fly-mp3fs" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/12/11/convert-flac-mp3-fly-mp3fs" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/12/11/convert-flac-mp3-fly-mp3fs" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/12/11/convert-flac-mp3-fly-mp3fs" >Tweet</a>
   
   
   
@@ -238,20 +227,30 @@ do!</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -259,7 +258,7 @@ do!</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -274,7 +273,7 @@ do!</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -322,7 +321,7 @@ do!</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -340,7 +339,7 @@ do!</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -356,7 +355,7 @@ do!</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

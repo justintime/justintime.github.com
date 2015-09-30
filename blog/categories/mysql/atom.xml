@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: MySQL | SysAdmin's Journey]]></title>
+  <title><![CDATA[Category: mysql | SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/blog/categories/mysql/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2013-11-04T16:09:18-06:00</updated>
+  <updated>2015-09-29T22:23:47-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -24,8 +24,7 @@
 <ul><li>The LVM logical volume we want to back up is /dev/VolGroup00/apps</li><li>The LVM snapshot is named appsnap (clever, huh)</li><li>My personal use of snapshots is to replicate my current production LAMP stack to my development machine. You can use snapshots for just about anything - backup with Amanda or Bacula, or hand-rolled rsync/tar backups like mine. Implementation is the same, it's just the rsync command that you might choose to tweak</li></ul>
 
 
-<br><h3>How much space does my snapshot logical volume need?</h3><p>That's a good question, and unfortunately it's one that is answered with another question: "How long will your backup take, and how much writing to your source logical volume will occur during that time?". I would have to assume that 500MB would be good for most setups, but YMMV. In the scripts I present later, our snapshot partition will take whatever is available to the volume group.</p><h3>Step One: Create the snapshot</h3><p>Assuming that your MySQL data files reside on the LVM partition that you're snapshotting, and that you're using the MyISAM table engine, we need to temporarily lock the tables. In my particular setup, creating the snapshot takes less than 2 seconds, so it's no big deal to lock my tables for that long. Thanks to commenter Jay on how to fix my bug! Here's the steps:</p>
-
+<p><br><h3>How much space does my snapshot logical volume need?</h3><p>That&rsquo;s a good question, and unfortunately it&rsquo;s one that is answered with another question: &ldquo;How long will your backup take, and how much writing to your source logical volume will occur during that time?&rdquo;. I would have to assume that 500MB would be good for most setups, but YMMV. In the scripts I present later, our snapshot partition will take whatever is available to the volume group.</p><h3>Step One: Create the snapshot</h3><p>Assuming that your MySQL data files reside on the LVM partition that you&rsquo;re snapshotting, and that you&rsquo;re using the MyISAM table engine, we need to temporarily lock the tables. In my particular setup, creating the snapshot takes less than 2 seconds, so it&rsquo;s no big deal to lock my tables for that long. Thanks to commenter Jay on how to fix my bug! Here&rsquo;s the steps:</p></p>
 
 <pre>TMP_FILE="/tmp/msqlbackup-$$.sql"
 /bin/cat &gt; $TMP_FILE &gt;&gt;EOD
@@ -134,10 +133,7 @@ done
 <ul><li>First, I stop mysqld and httpd on my dev server.</li><li>Next, I ssh to the prod server, and call the script that creates the snapshot.</li><li>With the snapshot mounted at /backups in prod, I rsync the contents of prod back to dev (skipping apache access logs).</li><li>Once the rsync is done, I remove the snapshot on production, and start mysqld and httpd on dev.</li></ul>
 
 
-<br><h3>Conclusion</h3><p>LVM snapshots are easy, fast, and effective ways to take a slice in time. The hardest part of using LVM snapshots is planning ahead and leaving some free space in your volume group for the snapshot logical volume. By utilizing LVM snapshots you can efficiently replicate setups between machines, or get backups of your LAMP stack. Even more important, you can test the restoration process on a daily basis. Your backups are only as good as your restoration procedure!</p>
-
-
-
+<p><br><h3>Conclusion</h3><p>LVM snapshots are easy, fast, and effective ways to take a slice in time. The hardest part of using LVM snapshots is planning ahead and leaving some free space in your volume group for the snapshot logical volume. By utilizing LVM snapshots you can efficiently replicate setups between machines, or get backups of your LAMP stack. Even more important, you can test the restoration process on a daily basis. Your backups are only as good as your restoration procedure!</p></p>
 ]]></content>
   </entry>
   
@@ -153,16 +149,16 @@ done
 
 <p><strong>DISCLAIMER:</strong> I make no guarantees to the effectiveness of this script.  It works for me, and it should work for you, but it is up to you to test it!  Also note, you need to have SSH access and root privileges to your server.</p>
 
-<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp's code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day's state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
+<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp&rsquo;s code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day&rsquo;s state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
 
-<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can't go changing your MySQL db names around very easily, but you can use symbolic links to make your document root's have the same name as your DB.</p>
+<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can&rsquo;t go changing your MySQL db names around very easily, but you can use symbolic links to make your document root&rsquo;s have the same name as your DB.</p>
 
-<p>First, let's setup our hypothetical webapp, which will be a wordpress blog.  We'll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
+<p>First, let&rsquo;s setup our hypothetical webapp, which will be a wordpress blog.  We&rsquo;ll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
 
 <h3>Step One: Backup MySQL</h3>
 
 
-<p>First, let's setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let's create this script, and name it /apps/scripts/backupMySQL.sh:</p>
+<p>First, let&rsquo;s setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let&rsquo;s create this script, and name it /apps/scripts/backupMySQL.sh:</p>
 
 <pre>#!/bin/bash
 
@@ -285,12 +281,12 @@ chmod 700 /apps/scripts/backupMySQL.sh
 
 <p>to make it so only the root user can view the password.</p>
 
-<p>Now, let's test the script.  Jump out to a command prompt, and run '/apps/scripts/backupMySQL.sh MySite_wp'.  Once that's done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
+<p>Now, let&rsquo;s test the script.  Jump out to a command prompt, and run &lsquo;/apps/scripts/backupMySQL.sh MySite_wp&rsquo;.  Once that&rsquo;s done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
 
 <h3>Step Two: Backup the Document Root</h3>
 
 
-<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel's site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
+<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel&rsquo;s site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
 
 <pre>
 #!/bin/bash
@@ -380,12 +376,12 @@ eval $CMD
 </pre>
 
 
-<p>Now, do a 'chmod 755 /apps/scripts/rsyncBackup.sh' and let's test it out.  Run '/apps/scripts/rsyncBackup.sh MySite_wp'.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
+<p>Now, do a &lsquo;chmod 755 /apps/scripts/rsyncBackup.sh&rsquo; and let&rsquo;s test it out.  Run &lsquo;/apps/scripts/rsyncBackup.sh MySite_wp&rsquo;.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
 
 <h3>Step Three: Tie It All Together</h3>
 
 
-<p>Now, for the easy part.  Let's tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
+<p>Now, for the easy part.  Let&rsquo;s tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
 
 <pre>
 #!/bin/bash
@@ -399,7 +395,7 @@ done
 </pre>
 
 
-<p>Now, run 'chmod 755 /etc/cron.daily/backupWebApps.sh', and you will have a backup of your MySite_wp applicaton!  What's best, is let's say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
+<p>Now, run &lsquo;chmod 755 /etc/cron.daily/backupWebApps.sh&rsquo;, and you will have a backup of your MySite_wp applicaton!  What&rsquo;s best, is let&rsquo;s say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
 
 <pre>
 WEBAPPS=( MySite_wp MySite_Drupal )
@@ -411,7 +407,7 @@ WEBAPPS=( MySite_wp MySite_Drupal )
 <h3>Restoration</h3>
 
 
-<p>Heaven forbid, you've made a critical mistake, installed a bad plugin, or something else that's horribly broken your MySite_wp install.  No fear!  Here's how to restore it.</p>
+<p>Heaven forbid, you&rsquo;ve made a critical mistake, installed a bad plugin, or something else that&rsquo;s horribly broken your MySite_wp install.  No fear!  Here&rsquo;s how to restore it.</p>
 
 <pre>
 mkdir /apps/MySite_wp-broken && mv /apps/MySite_wp/* /apps/MySite_wp-broken/

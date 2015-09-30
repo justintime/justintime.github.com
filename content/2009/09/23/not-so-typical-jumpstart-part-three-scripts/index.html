@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Not So Typical Jumpstart: Part Three - The Scripts - SysAdmin's Journey</title>
+  <title>Not So Typical Jumpstart: Part Three - the Scripts - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="In part two of the series, we left off with a non-working Custom Jumpstart setup. By creating our Jumpstart profile file and a sysidcfg file, we&# &hellip;">
+  <meta name="description" content="In part two of the series, we left off with a non-working Custom Jumpstart setup. By creating our Jumpstart profile file and a sysidcfg file, we& &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -57,9 +58,9 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,10 +80,6 @@
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Not So Typical Jumpstart: Part Three - the Scripts</h1>
     
     
@@ -92,14 +89,7 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-09-23T00:00:00-05:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-09-23T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -107,11 +97,11 @@
 
 
 <div class="entry-content"><p><img align="left" alt="" height="101" hspace="15" src="/assets/images/solaris.gif" width="190"/>
-In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup.  By creating our Jumpstart profile file and a sysidcfg file, we&#8217;ll have a basic, but working Custom Jumpstart.  The profile contains settings specific to the installation, where the sysidcfg file contains settings specific to the machine during and after installation.</p>
+In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup.  By creating our Jumpstart profile file and a sysidcfg file, we&rsquo;ll have a basic, but working Custom Jumpstart.  The profile contains settings specific to the installation, where the sysidcfg file contains settings specific to the machine during and after installation.</p>
 
 <h2>Step One: Create the sysidcfg file</h2>
 
-<p>If you&#8217;ve been following along, we specified the path to web1&#8217;s sysidcfg file when we generated our dhcpd.conf file in <a href="http://www.sysadminsjourney.com/content/2009/09/18/not-so-typical-jumpstart-part-one">part one</a>. Let&#8217;s create this file, so that the installer doesn&#8217;t have to ask us these questions during the installation:</p>
+<p>If you&rsquo;ve been following along, we specified the path to web1&rsquo;s sysidcfg file when we generated our dhcpd.conf file in <a href="http://www.sysadminsjourney.com/content/2009/09/18/not-so-typical-jumpstart-part-one">part one</a>. Let&rsquo;s create this file, so that the installer doesn&rsquo;t have to ask us these questions during the installation:</p>
 
 <pre>
 cd /export/home/jumpstart/configs
@@ -142,14 +132,14 @@ EOD
 
 <ul>
 <li><strong>security_policy=NONE</strong> is relative to the kerberos security settings during installation.</li>
-<li><strong>root_password</strong> the value of root&#8217;s password as written in a real /etc/shadow file.</li>
+<li><strong>root_password</strong> the value of root&rsquo;s password as written in a real /etc/shadow file.</li>
 <li><strong>service_profile=limited_net</strong> - using limited_net disables unnecessary services and restricts others to localhost access only. I recommend this setting for anyone not in a lab environment.</li>
 </ul>
 
 
 <h2>Step Two: Create the profile file</h2>
 
-<p>There&#8217;s a huge amount of operations you can configure via the jumpstart profile - I recommend reading <a href="http://docs.sun.com/app/docs/doc/820-7014/preparecustom-53442?l=en">Sun&#8217;s documentation on creating a Jumpstart profile</a>. I also owe a link to the <a href="http://kdl.nobugware.com/post/2009/07/28/ultimate-solaris-10-jumpstart-profile/">Keep Da Link</a> blog for a nice list of clusters and packages to install. Using this profile below will result in an installation with pretty much every command line tool you would need, minus any X11/Gnome packages. Here&#8217;s the contents of my Jumpstart profile:</p>
+<p>There&rsquo;s a huge amount of operations you can configure via the jumpstart profile - I recommend reading <a href="http://docs.sun.com/app/docs/doc/820-7014/preparecustom-53442?l=en">Sun&rsquo;s documentation on creating a Jumpstart profile</a>. I also owe a link to the <a href="http://kdl.nobugware.com/post/2009/07/28/ultimate-solaris-10-jumpstart-profile/">Keep Da Link</a> blog for a nice list of clusters and packages to install. Using this profile below will result in an installation with pretty much every command line tool you would need, minus any X11/Gnome packages. Here&rsquo;s the contents of my Jumpstart profile:</p>
 
 <pre>
 cat &lt;&lt;EOD &gt; webserver
@@ -242,7 +232,7 @@ EOD
 </pre>
 
 
-<p>After running an install with this profile, you will end up with a ZFS root that contains just under 2GB worth of data. If that&#8217;s not your desired setup, then tweak away!</p>
+<p>After running an install with this profile, you will end up with a ZFS root that contains just under 2GB worth of data. If that&rsquo;s not your desired setup, then tweak away!</p>
 
 <h2>Step Three: Validate the profile file</h2>
 
@@ -258,7 +248,7 @@ The custom JumpStart configuration is ok.
 
 <p>This process validates your config files, and creates a rules.ok file in the root of your config server directory. It is this file that the client loads and parses when starting a Jumpstart installation.</p>
 
-<p>This concludes part three of the series. You should now be able to boot using PXE for X86 or using &#8216;boot net:dhcp - install&#8217; from Sparc, and have a completely automated installation. However, you likely also have a rather vanilla installation which we&#8217;ll remedy in part four of the series.</p>
+<p>This concludes part three of the series. You should now be able to boot using PXE for X86 or using &lsquo;boot net:dhcp - install&rsquo; from Sparc, and have a completely automated installation. However, you likely also have a rather vanilla installation which we&rsquo;ll remedy in part four of the series.</p>
 </div>
 
 
@@ -274,19 +264,12 @@ The custom JumpStart configuration is ok.
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-09-23T00:00:00-05:00" pubdate data-updated="true">Sep 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-09-23T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/jumpstart/'>Jumpstart</a>, <a class='category' href='/blog/categories/solaris/'>Solaris</a>, <a class='category' href='/blog/categories/sun/'>Sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/jumpstart/'>jumpstart</a>, <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -295,7 +278,7 @@ The custom JumpStart configuration is ok.
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts" >Tweet</a>
   
   
   
@@ -323,20 +306,30 @@ The custom JumpStart configuration is ok.
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -344,7 +337,7 @@ The custom JumpStart configuration is ok.
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -359,7 +352,7 @@ The custom JumpStart configuration is ok.
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -407,7 +400,7 @@ The custom JumpStart configuration is ok.
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -425,7 +418,7 @@ The custom JumpStart configuration is ok.
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -441,7 +434,7 @@ The custom JumpStart configuration is ok.
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

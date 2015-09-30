@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Selecting the right CDN for YOUR website - SysAdmin's Journey</title>
+  <title>Selecting the Right CDN for YOUR Website - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
@@ -23,10 +23,11 @@ CDN’s is &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ CDN’s is &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -81,10 +82,6 @@ CDN’s is &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Selecting the Right CDN for YOUR Website</h1>
     
     
@@ -94,14 +91,7 @@ CDN’s is &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2011-04-19T00:00:00-05:00" pubdate data-updated="true">Apr 19<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-04-19T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -154,9 +144,9 @@ request to the origin site. If the image exists at the origin, the edge
 server caches the image locally and serves it to the client from there.
 For example, the CDN host name might be cdn.example.com (which points to
 the edge), and the origin site (my server) would be www.example.com. If
-I point my browser to http://cdn.example.com/logo.gif, and that file
+I point my browser to <a href="http://cdn.example.com/logo.gif,">http://cdn.example.com/logo.gif,</a> and that file
 doesn’t exist at the edge, the CDN will make a request for
-http://www.example.com/logo.gif. If that file exists, it is fetched and
+<a href="http://www.example.com/logo.gif.">http://www.example.com/logo.gif.</a> If that file exists, it is fetched and
 cached. If it doesn’t exist, a 404 is returned to the client. The trade
 off is that you don’t have to pre-seed static content to the CDN, but
 the first user request for a static object takes a bit longer to
@@ -325,795 +315,795 @@ so much better than none at all:</p>
 <table>
 <thead>
 <tr>
-<th align="left">CDN                  </th>
-<th align="left"> US/Non-US    </th>
-<th align="left"> Location                 </th>
-<th align="left"> # of Polls </th>
-<th align="left"> Avg Response Time </th>
-<th align="left"> Max Response Time </th>
-<th align="left"> StdDev</th>
+<th style="text-align:left;">CDN                  </th>
+<th style="text-align:left;"> US/Non-US    </th>
+<th style="text-align:left;"> Location                 </th>
+<th style="text-align:left;"> # of Polls </th>
+<th style="text-align:left;"> Avg Response Time </th>
+<th style="text-align:left;"> Max Response Time </th>
+<th style="text-align:left;"> StdDev</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td align="left">CacheFly             </td>
-<td align="left"> Non-US       </td>
-<td align="left"> Amsterdam 2, Netherlands </td>
-<td align="left"> 289        </td>
-<td align="left"> 68                </td>
-<td align="left"> 4202              </td>
-<td align="left"> 285.98</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Copenhagen, Denmark      </td>
-<td align="left"> 259        </td>
-<td align="left"> 158               </td>
-<td align="left"> 461               </td>
-<td align="left"> 36.02 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Frankfurt, Germany       </td>
-<td align="left"> 287        </td>
-<td align="left"> 41                </td>
-<td align="left"> 567               </td>
-<td align="left"> 32.38 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London 2, UK             </td>
-<td align="left"> 290        </td>
-<td align="left"> 29                </td>
-<td align="left"> 2489              </td>
-<td align="left"> 145.26</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London, UK               </td>
-<td align="left"> 284        </td>
-<td align="left"> 29                </td>
-<td align="left"> 127               </td>
-<td align="left"> 11.30 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Madrid, Spain            </td>
-<td align="left"> 259        </td>
-<td align="left"> 201               </td>
-<td align="left"> 586               </td>
-<td align="left"> 31.36 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Manchester, UK           </td>
-<td align="left"> 281        </td>
-<td align="left"> 129               </td>
-<td align="left"> 1709              </td>
-<td align="left"> 184.87</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Montreal, Canada         </td>
-<td align="left"> 286        </td>
-<td align="left"> 105               </td>
-<td align="left"> 3084              </td>
-<td align="left"> 250.63</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Paris, France            </td>
-<td align="left"> 286        </td>
-<td align="left"> 143               </td>
-<td align="left"> 521               </td>
-<td align="left"> 60.11 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Stockholm, Sweden        </td>
-<td align="left"> 286        </td>
-<td align="left"> 54                </td>
-<td align="left"> 882               </td>
-<td align="left"> 80.88 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> Non-US Total </td>
-<td align="left">                          </td>
-<td align="left"> 2807       </td>
-<td align="left"> 94                </td>
-<td align="left"> 4202              </td>
-<td align="left"> 157.88           </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US           </td>
-<td align="left"> Atlanta, Georgia         </td>
-<td align="left"> 289        </td>
-<td align="left"> 16                </td>
-<td align="left"> 398               </td>
-<td align="left"> 23.52 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Chicago, IL              </td>
-<td align="left"> 288        </td>
-<td align="left"> 56                </td>
-<td align="left"> 2615              </td>
-<td align="left"> 158.33</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 4, TX             </td>
-<td align="left"> 286        </td>
-<td align="left"> 40                </td>
-<td align="left"> 960               </td>
-<td align="left"> 74.61 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 5, TX             </td>
-<td align="left"> 289        </td>
-<td align="left"> 26                </td>
-<td align="left"> 1506              </td>
-<td align="left"> 89.08 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 6, TX             </td>
-<td align="left"> 291        </td>
-<td align="left"> 47                </td>
-<td align="left"> 1473              </td>
-<td align="left"> 132.25</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Denver, CO               </td>
-<td align="left"> 289        </td>
-<td align="left"> 216               </td>
-<td align="left"> 925               </td>
-<td align="left"> 72.18 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Herndon, VA              </td>
-<td align="left"> 288        </td>
-<td align="left"> 473               </td>
-<td align="left"> 3472              </td>
-<td align="left"> 196.13</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Houston 3, TX            </td>
-<td align="left"> 289        </td>
-<td align="left"> 107               </td>
-<td align="left"> 382               </td>
-<td align="left"> 18.15 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Las Vegas, NV            </td>
-<td align="left"> 288        </td>
-<td align="left"> 74                </td>
-<td align="left"> 3044              </td>
-<td align="left"> 180.60</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Los Angeles, CA          </td>
-<td align="left"> 289        </td>
-<td align="left"> 12                </td>
-<td align="left"> 92                </td>
-<td align="left"> 11.52 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> New York, NY             </td>
-<td align="left"> 289        </td>
-<td align="left"> 175               </td>
-<td align="left"> 2571              </td>
-<td align="left"> 152.29</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> San Francisco, CA        </td>
-<td align="left"> 287        </td>
-<td align="left"> 28                </td>
-<td align="left"> 231               </td>
-<td align="left"> 24.17 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Seattle, WA              </td>
-<td align="left"> 288        </td>
-<td align="left"> 174               </td>
-<td align="left"> 1083              </td>
-<td align="left"> 108.41</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Tampa, Florida           </td>
-<td align="left"> 267        </td>
-<td align="left"> 68                </td>
-<td align="left"> 3048              </td>
-<td align="left"> 214.49</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Washington, DC           </td>
-<td align="left"> 286        </td>
-<td align="left"> 163               </td>
-<td align="left"> 1547              </td>
-<td align="left"> 141.67</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US Total     </td>
-<td align="left">                          </td>
-<td align="left"> 4303       </td>
-<td align="left"> 112               </td>
-<td align="left"> 3472              </td>
-<td align="left"> 170.11</td>
-</tr>
-<tr>
-<td align="left">CacheFly Total       </td>
-<td align="left">              </td>
-<td align="left">                          </td>
-<td align="left"> 7110       </td>
-<td align="left"> 105               </td>
-<td align="left"> 4202              </td>
-<td align="left"> 165.61</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left">                          </td>
-<td align="left">            </td>
-<td align="left">                   </td>
-<td align="left">                   </td>
-<td align="left">       </td>
-</tr>
-<tr>
-<td align="left">EdgeCast Small       </td>
-<td align="left"> Non-US       </td>
-<td align="left"> Amsterdam 2, Netherlands </td>
-<td align="left"> 284        </td>
-<td align="left"> 62                </td>
-<td align="left"> 381               </td>
-<td align="left"> 27.49 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Copenhagen, Denmark      </td>
-<td align="left"> 254        </td>
-<td align="left"> 126               </td>
-<td align="left"> 1148              </td>
-<td align="left"> 87.72 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Frankfurt, Germany       </td>
-<td align="left"> 284        </td>
-<td align="left"> 40                </td>
-<td align="left"> 318               </td>
-<td align="left"> 19.05 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London 2, UK             </td>
-<td align="left"> 284        </td>
-<td align="left"> 26                </td>
-<td align="left"> 975               </td>
-<td align="left"> 59.59 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London, UK               </td>
-<td align="left"> 283        </td>
-<td align="left"> 23                </td>
-<td align="left"> 191               </td>
-<td align="left"> 14.38 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Madrid, Spain            </td>
-<td align="left"> 252        </td>
-<td align="left"> 176               </td>
-<td align="left"> 1174              </td>
-<td align="left"> 112.31</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Manchester, UK           </td>
-<td align="left"> 275        </td>
-<td align="left"> 86                </td>
-<td align="left"> 1494              </td>
-<td align="left"> 118.26</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Montreal, Canada         </td>
-<td align="left"> 283        </td>
-<td align="left"> 163               </td>
-<td align="left"> 601               </td>
-<td align="left"> 59.56 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Paris, France            </td>
-<td align="left"> 283        </td>
-<td align="left"> 94                </td>
-<td align="left"> 1537              </td>
-<td align="left"> 140.76</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Stockholm, Sweden        </td>
-<td align="left"> 271        </td>
-<td align="left"> 162               </td>
-<td align="left"> 967               </td>
-<td align="left"> 81.87 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> Non-US Total </td>
-<td align="left">                          </td>
-<td align="left"> 2753       </td>
-<td align="left"> 94                </td>
-<td align="left"> 1537              </td>
-<td align="left"> 99.35            </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US           </td>
-<td align="left"> Atlanta, Georgia         </td>
-<td align="left"> 284        </td>
-<td align="left"> 129               </td>
-<td align="left"> 523               </td>
-<td align="left"> 34.51</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Chicago, IL              </td>
-<td align="left"> 284        </td>
-<td align="left"> 26                </td>
-<td align="left"> 463               </td>
-<td align="left"> 35.86 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 4, TX             </td>
-<td align="left"> 277        </td>
-<td align="left"> 30                </td>
-<td align="left"> 339               </td>
-<td align="left"> 25.79 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 5, TX             </td>
-<td align="left"> 284        </td>
-<td align="left"> 26                </td>
-<td align="left"> 581               </td>
-<td align="left"> 50.32 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 6, TX             </td>
-<td align="left"> 284        </td>
-<td align="left"> 23                </td>
-<td align="left"> 430               </td>
-<td align="left"> 33.68 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Denver, CO               </td>
-<td align="left"> 281        </td>
-<td align="left"> 244               </td>
-<td align="left"> 2169              </td>
-<td align="left"> 150.12</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Herndon, VA              </td>
-<td align="left"> 280        </td>
-<td align="left"> 24                </td>
-<td align="left"> 301               </td>
-<td align="left"> 20.44 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Houston 3, TX            </td>
-<td align="left"> 281        </td>
-<td align="left"> 115               </td>
-<td align="left"> 441               </td>
-<td align="left"> 40.02 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Las Vegas, NV            </td>
-<td align="left"> 281        </td>
-<td align="left"> 56                </td>
-<td align="left"> 559               </td>
-<td align="left"> 34.32 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Los Angeles, CA          </td>
-<td align="left"> 283        </td>
-<td align="left"> 11                </td>
-<td align="left"> 94                </td>
-<td align="left"> 8.45  </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> New York, NY             </td>
-<td align="left"> 284        </td>
-<td align="left"> 72                </td>
-<td align="left"> 1134              </td>
-<td align="left"> 161.16</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> San Francisco, CA        </td>
-<td align="left"> 280        </td>
-<td align="left"> 23                </td>
-<td align="left"> 118               </td>
-<td align="left"> 11.01 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Seattle, WA              </td>
-<td align="left"> 282        </td>
-<td align="left"> 131               </td>
-<td align="left"> 3571              </td>
-<td align="left"> 333.38</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Tampa, Florida           </td>
-<td align="left"> 260        </td>
-<td align="left"> 166               </td>
-<td align="left"> 4977              </td>
-<td align="left"> 303.29</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Washington, DC           </td>
-<td align="left"> 282        </td>
-<td align="left"> 83                </td>
-<td align="left"> 686               </td>
-<td align="left"> 111.97</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US Total     </td>
-<td align="left">                          </td>
-<td align="left"> 4207       </td>
-<td align="left"> 77                </td>
-<td align="left"> 4977              </td>
-<td align="left"> 148.63</td>
-</tr>
-<tr>
-<td align="left">EdgeCast Small Total </td>
-<td align="left">              </td>
-<td align="left">                          </td>
-<td align="left"> 6960       </td>
-<td align="left"> 84                </td>
-<td align="left"> 4977              </td>
-<td align="left"> 131.64</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left">                          </td>
-<td align="left">            </td>
-<td align="left">                   </td>
-<td align="left">                   </td>
-<td align="left">       </td>
-</tr>
-<tr>
-<td align="left">Data Center          </td>
-<td align="left"> Non-US       </td>
-<td align="left"> Amsterdam 2, Netherlands </td>
-<td align="left"> 292        </td>
-<td align="left"> 837               </td>
-<td align="left"> 1344              </td>
-<td align="left"> 35.72 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Copenhagen, Denmark      </td>
-<td align="left"> 262        </td>
-<td align="left"> 990               </td>
-<td align="left"> 4195              </td>
-<td align="left"> 297.90</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Frankfurt, Germany       </td>
-<td align="left"> 291        </td>
-<td align="left"> 867               </td>
-<td align="left"> 1533              </td>
-<td align="left"> 57.14 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London 2, UK             </td>
-<td align="left"> 291        </td>
-<td align="left"> 725               </td>
-<td align="left"> 1065              </td>
-<td align="left"> 25.95 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> London, UK               </td>
-<td align="left"> 290        </td>
-<td align="left"> 811               </td>
-<td align="left"> 1114              </td>
-<td align="left"> 49.50 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Madrid, Spain            </td>
-<td align="left"> 262        </td>
-<td align="left"> 1005              </td>
-<td align="left"> 1765              </td>
-<td align="left"> 75.84 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Manchester, UK           </td>
-<td align="left"> 281        </td>
-<td align="left"> 899               </td>
-<td align="left"> 8928              </td>
-<td align="left"> 580.11</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Montreal, Canada         </td>
-<td align="left"> 291        </td>
-<td align="left"> 342               </td>
-<td align="left"> 412               </td>
-<td align="left"> 11.52 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Paris, France            </td>
-<td align="left"> 293        </td>
-<td align="left"> 1128              </td>
-<td align="left"> 2680              </td>
-<td align="left"> 230.78</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Stockholm, Sweden        </td>
-<td align="left"> 292        </td>
-<td align="left"> 1063              </td>
-<td align="left"> 4056              </td>
-<td align="left"> 367.89</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> Non-US Total </td>
-<td align="left">                          </td>
-<td align="left"> 2845       </td>
-<td align="left"> 864               </td>
-<td align="left"> 8928              </td>
-<td align="left"> 326.71           </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US           </td>
-<td align="left"> Atlanta, Georgia         </td>
-<td align="left"> 291        </td>
-<td align="left"> 316               </td>
-<td align="left"> 1017              </td>
-<td align="left"> 63.48 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Chicago, IL              </td>
-<td align="left"> 290        </td>
-<td align="left"> 170               </td>
-<td align="left"> 253               </td>
-<td align="left"> 7.02  </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 4, TX             </td>
-<td align="left"> 292        </td>
-<td align="left"> 191               </td>
-<td align="left"> 3214              </td>
-<td align="left"> 253.67</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 5, TX             </td>
-<td align="left"> 292        </td>
-<td align="left"> 145               </td>
-<td align="left"> 263               </td>
-<td align="left"> 14.52 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Dallas 6, TX             </td>
-<td align="left"> 291        </td>
-<td align="left"> 147               </td>
-<td align="left"> 358               </td>
-<td align="left"> 22.93 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Denver, CO               </td>
-<td align="left"> 291        </td>
-<td align="left"> 71                </td>
-<td align="left"> 272               </td>
-<td align="left"> 14.63 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Herndon, VA              </td>
-<td align="left"> 293        </td>
-<td align="left"> 316               </td>
-<td align="left"> 487               </td>
-<td align="left"> 15.43 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Houston 3, TX            </td>
-<td align="left"> 293        </td>
-<td align="left"> 177               </td>
-<td align="left"> 372               </td>
-<td align="left"> 19.66 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Las Vegas, NV            </td>
-<td align="left"> 290        </td>
-<td align="left"> 246               </td>
-<td align="left"> 3194              </td>
-<td align="left"> 392.02</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Los Angeles, CA          </td>
-<td align="left"> 291        </td>
-<td align="left"> 303               </td>
-<td align="left"> 1188              </td>
-<td align="left"> 57.60 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> New York, NY             </td>
-<td align="left"> 290        </td>
-<td align="left"> 346               </td>
-<td align="left"> 1120              </td>
-<td align="left"> 123.55</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> San Francisco, CA        </td>
-<td align="left"> 293        </td>
-<td align="left"> 229               </td>
-<td align="left"> 519               </td>
-<td align="left"> 22.28 </td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Seattle, WA              </td>
-<td align="left"> 290        </td>
-<td align="left"> 489               </td>
-<td align="left"> 1078              </td>
-<td align="left"> 170.33</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Tampa, Florida           </td>
-<td align="left"> 270        </td>
-<td align="left"> 331               </td>
-<td align="left"> 4105              </td>
-<td align="left"> 247.99</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left">              </td>
-<td align="left"> Washington, DC           </td>
-<td align="left"> 290        </td>
-<td align="left"> 595               </td>
-<td align="left"> 1511              </td>
-<td align="left"> 235.84</td>
-</tr>
-<tr>
-<td align="left">                     </td>
-<td align="left"> US Total     </td>
-<td align="left">                          </td>
-<td align="left"> 4347       </td>
-<td align="left"> 271               </td>
-<td align="left"> 4105              </td>
-<td align="left"> 208.20</td>
-</tr>
-<tr>
-<td align="left">Data Center Total    </td>
-<td align="left">              </td>
-<td align="left">                          </td>
-<td align="left"> 7192       </td>
-<td align="left"> 506               </td>
-<td align="left"> 8928              </td>
-<td align="left"> 390.52</td>
+<td style="text-align:left;">CacheFly             </td>
+<td style="text-align:left;"> Non-US       </td>
+<td style="text-align:left;"> Amsterdam 2, Netherlands </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 68                </td>
+<td style="text-align:left;"> 4202              </td>
+<td style="text-align:left;"> 285.98</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Copenhagen, Denmark      </td>
+<td style="text-align:left;"> 259        </td>
+<td style="text-align:left;"> 158               </td>
+<td style="text-align:left;"> 461               </td>
+<td style="text-align:left;"> 36.02</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Frankfurt, Germany       </td>
+<td style="text-align:left;"> 287        </td>
+<td style="text-align:left;"> 41                </td>
+<td style="text-align:left;"> 567               </td>
+<td style="text-align:left;"> 32.38</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London 2, UK             </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 29                </td>
+<td style="text-align:left;"> 2489              </td>
+<td style="text-align:left;"> 145.26</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London, UK               </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 29                </td>
+<td style="text-align:left;"> 127               </td>
+<td style="text-align:left;"> 11.30</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Madrid, Spain            </td>
+<td style="text-align:left;"> 259        </td>
+<td style="text-align:left;"> 201               </td>
+<td style="text-align:left;"> 586               </td>
+<td style="text-align:left;"> 31.36</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Manchester, UK           </td>
+<td style="text-align:left;"> 281        </td>
+<td style="text-align:left;"> 129               </td>
+<td style="text-align:left;"> 1709              </td>
+<td style="text-align:left;"> 184.87</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Montreal, Canada         </td>
+<td style="text-align:left;"> 286        </td>
+<td style="text-align:left;"> 105               </td>
+<td style="text-align:left;"> 3084              </td>
+<td style="text-align:left;"> 250.63</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Paris, France            </td>
+<td style="text-align:left;"> 286        </td>
+<td style="text-align:left;"> 143               </td>
+<td style="text-align:left;"> 521               </td>
+<td style="text-align:left;"> 60.11</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Stockholm, Sweden        </td>
+<td style="text-align:left;"> 286        </td>
+<td style="text-align:left;"> 54                </td>
+<td style="text-align:left;"> 882               </td>
+<td style="text-align:left;"> 80.88</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> Non-US Total </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 2807       </td>
+<td style="text-align:left;"> 94                </td>
+<td style="text-align:left;"> 4202              </td>
+<td style="text-align:left;"> 157.88</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US           </td>
+<td style="text-align:left;"> Atlanta, Georgia         </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 16                </td>
+<td style="text-align:left;"> 398               </td>
+<td style="text-align:left;"> 23.52</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Chicago, IL              </td>
+<td style="text-align:left;"> 288        </td>
+<td style="text-align:left;"> 56                </td>
+<td style="text-align:left;"> 2615              </td>
+<td style="text-align:left;"> 158.33</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 4, TX             </td>
+<td style="text-align:left;"> 286        </td>
+<td style="text-align:left;"> 40                </td>
+<td style="text-align:left;"> 960               </td>
+<td style="text-align:left;"> 74.61</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 5, TX             </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 26                </td>
+<td style="text-align:left;"> 1506              </td>
+<td style="text-align:left;"> 89.08</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 6, TX             </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 47                </td>
+<td style="text-align:left;"> 1473              </td>
+<td style="text-align:left;"> 132.25</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Denver, CO               </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 216               </td>
+<td style="text-align:left;"> 925               </td>
+<td style="text-align:left;"> 72.18</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Herndon, VA              </td>
+<td style="text-align:left;"> 288        </td>
+<td style="text-align:left;"> 473               </td>
+<td style="text-align:left;"> 3472              </td>
+<td style="text-align:left;"> 196.13</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Houston 3, TX            </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 107               </td>
+<td style="text-align:left;"> 382               </td>
+<td style="text-align:left;"> 18.15</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Las Vegas, NV            </td>
+<td style="text-align:left;"> 288        </td>
+<td style="text-align:left;"> 74                </td>
+<td style="text-align:left;"> 3044              </td>
+<td style="text-align:left;"> 180.60</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Los Angeles, CA          </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 12                </td>
+<td style="text-align:left;"> 92                </td>
+<td style="text-align:left;"> 11.52</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> New York, NY             </td>
+<td style="text-align:left;"> 289        </td>
+<td style="text-align:left;"> 175               </td>
+<td style="text-align:left;"> 2571              </td>
+<td style="text-align:left;"> 152.29</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> San Francisco, CA        </td>
+<td style="text-align:left;"> 287        </td>
+<td style="text-align:left;"> 28                </td>
+<td style="text-align:left;"> 231               </td>
+<td style="text-align:left;"> 24.17</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Seattle, WA              </td>
+<td style="text-align:left;"> 288        </td>
+<td style="text-align:left;"> 174               </td>
+<td style="text-align:left;"> 1083              </td>
+<td style="text-align:left;"> 108.41</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Tampa, Florida           </td>
+<td style="text-align:left;"> 267        </td>
+<td style="text-align:left;"> 68                </td>
+<td style="text-align:left;"> 3048              </td>
+<td style="text-align:left;"> 214.49</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Washington, DC           </td>
+<td style="text-align:left;"> 286        </td>
+<td style="text-align:left;"> 163               </td>
+<td style="text-align:left;"> 1547              </td>
+<td style="text-align:left;"> 141.67</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US Total     </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 4303       </td>
+<td style="text-align:left;"> 112               </td>
+<td style="text-align:left;"> 3472              </td>
+<td style="text-align:left;"> 170.11</td>
+</tr>
+<tr>
+<td style="text-align:left;">CacheFly Total       </td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 7110       </td>
+<td style="text-align:left;"> 105               </td>
+<td style="text-align:left;"> 4202              </td>
+<td style="text-align:left;"> 165.61</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;">            </td>
+<td style="text-align:left;">                   </td>
+<td style="text-align:left;">                   </td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left;">EdgeCast Small       </td>
+<td style="text-align:left;"> Non-US       </td>
+<td style="text-align:left;"> Amsterdam 2, Netherlands </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 62                </td>
+<td style="text-align:left;"> 381               </td>
+<td style="text-align:left;"> 27.49</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Copenhagen, Denmark      </td>
+<td style="text-align:left;"> 254        </td>
+<td style="text-align:left;"> 126               </td>
+<td style="text-align:left;"> 1148              </td>
+<td style="text-align:left;"> 87.72</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Frankfurt, Germany       </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 40                </td>
+<td style="text-align:left;"> 318               </td>
+<td style="text-align:left;"> 19.05</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London 2, UK             </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 26                </td>
+<td style="text-align:left;"> 975               </td>
+<td style="text-align:left;"> 59.59</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London, UK               </td>
+<td style="text-align:left;"> 283        </td>
+<td style="text-align:left;"> 23                </td>
+<td style="text-align:left;"> 191               </td>
+<td style="text-align:left;"> 14.38</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Madrid, Spain            </td>
+<td style="text-align:left;"> 252        </td>
+<td style="text-align:left;"> 176               </td>
+<td style="text-align:left;"> 1174              </td>
+<td style="text-align:left;"> 112.31</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Manchester, UK           </td>
+<td style="text-align:left;"> 275        </td>
+<td style="text-align:left;"> 86                </td>
+<td style="text-align:left;"> 1494              </td>
+<td style="text-align:left;"> 118.26</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Montreal, Canada         </td>
+<td style="text-align:left;"> 283        </td>
+<td style="text-align:left;"> 163               </td>
+<td style="text-align:left;"> 601               </td>
+<td style="text-align:left;"> 59.56</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Paris, France            </td>
+<td style="text-align:left;"> 283        </td>
+<td style="text-align:left;"> 94                </td>
+<td style="text-align:left;"> 1537              </td>
+<td style="text-align:left;"> 140.76</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Stockholm, Sweden        </td>
+<td style="text-align:left;"> 271        </td>
+<td style="text-align:left;"> 162               </td>
+<td style="text-align:left;"> 967               </td>
+<td style="text-align:left;"> 81.87</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> Non-US Total </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 2753       </td>
+<td style="text-align:left;"> 94                </td>
+<td style="text-align:left;"> 1537              </td>
+<td style="text-align:left;"> 99.35</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US           </td>
+<td style="text-align:left;"> Atlanta, Georgia         </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 129               </td>
+<td style="text-align:left;"> 523               </td>
+<td style="text-align:left;"> 34.51</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Chicago, IL              </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 26                </td>
+<td style="text-align:left;"> 463               </td>
+<td style="text-align:left;"> 35.86</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 4, TX             </td>
+<td style="text-align:left;"> 277        </td>
+<td style="text-align:left;"> 30                </td>
+<td style="text-align:left;"> 339               </td>
+<td style="text-align:left;"> 25.79</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 5, TX             </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 26                </td>
+<td style="text-align:left;"> 581               </td>
+<td style="text-align:left;"> 50.32</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 6, TX             </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 23                </td>
+<td style="text-align:left;"> 430               </td>
+<td style="text-align:left;"> 33.68</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Denver, CO               </td>
+<td style="text-align:left;"> 281        </td>
+<td style="text-align:left;"> 244               </td>
+<td style="text-align:left;"> 2169              </td>
+<td style="text-align:left;"> 150.12</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Herndon, VA              </td>
+<td style="text-align:left;"> 280        </td>
+<td style="text-align:left;"> 24                </td>
+<td style="text-align:left;"> 301               </td>
+<td style="text-align:left;"> 20.44</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Houston 3, TX            </td>
+<td style="text-align:left;"> 281        </td>
+<td style="text-align:left;"> 115               </td>
+<td style="text-align:left;"> 441               </td>
+<td style="text-align:left;"> 40.02</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Las Vegas, NV            </td>
+<td style="text-align:left;"> 281        </td>
+<td style="text-align:left;"> 56                </td>
+<td style="text-align:left;"> 559               </td>
+<td style="text-align:left;"> 34.32</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Los Angeles, CA          </td>
+<td style="text-align:left;"> 283        </td>
+<td style="text-align:left;"> 11                </td>
+<td style="text-align:left;"> 94                </td>
+<td style="text-align:left;"> 8.45</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> New York, NY             </td>
+<td style="text-align:left;"> 284        </td>
+<td style="text-align:left;"> 72                </td>
+<td style="text-align:left;"> 1134              </td>
+<td style="text-align:left;"> 161.16</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> San Francisco, CA        </td>
+<td style="text-align:left;"> 280        </td>
+<td style="text-align:left;"> 23                </td>
+<td style="text-align:left;"> 118               </td>
+<td style="text-align:left;"> 11.01</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Seattle, WA              </td>
+<td style="text-align:left;"> 282        </td>
+<td style="text-align:left;"> 131               </td>
+<td style="text-align:left;"> 3571              </td>
+<td style="text-align:left;"> 333.38</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Tampa, Florida           </td>
+<td style="text-align:left;"> 260        </td>
+<td style="text-align:left;"> 166               </td>
+<td style="text-align:left;"> 4977              </td>
+<td style="text-align:left;"> 303.29</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Washington, DC           </td>
+<td style="text-align:left;"> 282        </td>
+<td style="text-align:left;"> 83                </td>
+<td style="text-align:left;"> 686               </td>
+<td style="text-align:left;"> 111.97</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US Total     </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 4207       </td>
+<td style="text-align:left;"> 77                </td>
+<td style="text-align:left;"> 4977              </td>
+<td style="text-align:left;"> 148.63</td>
+</tr>
+<tr>
+<td style="text-align:left;">EdgeCast Small Total </td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 6960       </td>
+<td style="text-align:left;"> 84                </td>
+<td style="text-align:left;"> 4977              </td>
+<td style="text-align:left;"> 131.64</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;">            </td>
+<td style="text-align:left;">                   </td>
+<td style="text-align:left;">                   </td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left;">Data Center          </td>
+<td style="text-align:left;"> Non-US       </td>
+<td style="text-align:left;"> Amsterdam 2, Netherlands </td>
+<td style="text-align:left;"> 292        </td>
+<td style="text-align:left;"> 837               </td>
+<td style="text-align:left;"> 1344              </td>
+<td style="text-align:left;"> 35.72</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Copenhagen, Denmark      </td>
+<td style="text-align:left;"> 262        </td>
+<td style="text-align:left;"> 990               </td>
+<td style="text-align:left;"> 4195              </td>
+<td style="text-align:left;"> 297.90</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Frankfurt, Germany       </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 867               </td>
+<td style="text-align:left;"> 1533              </td>
+<td style="text-align:left;"> 57.14</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London 2, UK             </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 725               </td>
+<td style="text-align:left;"> 1065              </td>
+<td style="text-align:left;"> 25.95</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> London, UK               </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 811               </td>
+<td style="text-align:left;"> 1114              </td>
+<td style="text-align:left;"> 49.50</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Madrid, Spain            </td>
+<td style="text-align:left;"> 262        </td>
+<td style="text-align:left;"> 1005              </td>
+<td style="text-align:left;"> 1765              </td>
+<td style="text-align:left;"> 75.84</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Manchester, UK           </td>
+<td style="text-align:left;"> 281        </td>
+<td style="text-align:left;"> 899               </td>
+<td style="text-align:left;"> 8928              </td>
+<td style="text-align:left;"> 580.11</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Montreal, Canada         </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 342               </td>
+<td style="text-align:left;"> 412               </td>
+<td style="text-align:left;"> 11.52</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Paris, France            </td>
+<td style="text-align:left;"> 293        </td>
+<td style="text-align:left;"> 1128              </td>
+<td style="text-align:left;"> 2680              </td>
+<td style="text-align:left;"> 230.78</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Stockholm, Sweden        </td>
+<td style="text-align:left;"> 292        </td>
+<td style="text-align:left;"> 1063              </td>
+<td style="text-align:left;"> 4056              </td>
+<td style="text-align:left;"> 367.89</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> Non-US Total </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 2845       </td>
+<td style="text-align:left;"> 864               </td>
+<td style="text-align:left;"> 8928              </td>
+<td style="text-align:left;"> 326.71</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US           </td>
+<td style="text-align:left;"> Atlanta, Georgia         </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 316               </td>
+<td style="text-align:left;"> 1017              </td>
+<td style="text-align:left;"> 63.48</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Chicago, IL              </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 170               </td>
+<td style="text-align:left;"> 253               </td>
+<td style="text-align:left;"> 7.02</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 4, TX             </td>
+<td style="text-align:left;"> 292        </td>
+<td style="text-align:left;"> 191               </td>
+<td style="text-align:left;"> 3214              </td>
+<td style="text-align:left;"> 253.67</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 5, TX             </td>
+<td style="text-align:left;"> 292        </td>
+<td style="text-align:left;"> 145               </td>
+<td style="text-align:left;"> 263               </td>
+<td style="text-align:left;"> 14.52</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Dallas 6, TX             </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 147               </td>
+<td style="text-align:left;"> 358               </td>
+<td style="text-align:left;"> 22.93</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Denver, CO               </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 71                </td>
+<td style="text-align:left;"> 272               </td>
+<td style="text-align:left;"> 14.63</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Herndon, VA              </td>
+<td style="text-align:left;"> 293        </td>
+<td style="text-align:left;"> 316               </td>
+<td style="text-align:left;"> 487               </td>
+<td style="text-align:left;"> 15.43</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Houston 3, TX            </td>
+<td style="text-align:left;"> 293        </td>
+<td style="text-align:left;"> 177               </td>
+<td style="text-align:left;"> 372               </td>
+<td style="text-align:left;"> 19.66</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Las Vegas, NV            </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 246               </td>
+<td style="text-align:left;"> 3194              </td>
+<td style="text-align:left;"> 392.02</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Los Angeles, CA          </td>
+<td style="text-align:left;"> 291        </td>
+<td style="text-align:left;"> 303               </td>
+<td style="text-align:left;"> 1188              </td>
+<td style="text-align:left;"> 57.60</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> New York, NY             </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 346               </td>
+<td style="text-align:left;"> 1120              </td>
+<td style="text-align:left;"> 123.55</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> San Francisco, CA        </td>
+<td style="text-align:left;"> 293        </td>
+<td style="text-align:left;"> 229               </td>
+<td style="text-align:left;"> 519               </td>
+<td style="text-align:left;"> 22.28</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Seattle, WA              </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 489               </td>
+<td style="text-align:left;"> 1078              </td>
+<td style="text-align:left;"> 170.33</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Tampa, Florida           </td>
+<td style="text-align:left;"> 270        </td>
+<td style="text-align:left;"> 331               </td>
+<td style="text-align:left;"> 4105              </td>
+<td style="text-align:left;"> 247.99</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;"> Washington, DC           </td>
+<td style="text-align:left;"> 290        </td>
+<td style="text-align:left;"> 595               </td>
+<td style="text-align:left;"> 1511              </td>
+<td style="text-align:left;"> 235.84</td>
+</tr>
+<tr>
+<td style="text-align:left;"></td>
+<td style="text-align:left;"> US Total     </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 4347       </td>
+<td style="text-align:left;"> 271               </td>
+<td style="text-align:left;"> 4105              </td>
+<td style="text-align:left;"> 208.20</td>
+</tr>
+<tr>
+<td style="text-align:left;">Data Center Total    </td>
+<td style="text-align:left;">              </td>
+<td style="text-align:left;">                          </td>
+<td style="text-align:left;"> 7192       </td>
+<td style="text-align:left;"> 506               </td>
+<td style="text-align:left;"> 8928              </td>
+<td style="text-align:left;"> 390.52</td>
 </tr>
 </tbody>
 </table>
 
 
-<p>&#8230; and to really drive the point home for the PHB&#8217;s, we consolidate the
+<p>&hellip; and to really drive the point home for the PHB&rsquo;s, we consolidate the
 data and give a very telling graph:</p>
 
 <p><img src="/assets/images/cdn.png" alt="" /></p>
@@ -1129,12 +1119,12 @@ way to contact their support department is via email or web-based form.
 Their web interface left a huge amount to be desired, and they have very
 little documentation on how to use it. There is no reporting whatsoever
 – you get raw log files and have to write our own reporting scripts on
-top of that data. I couldn&#8217;t help but wonder about all the “what ifs”.
+top of that data. I couldn&rsquo;t help but wonder about all the “what ifs”.
 What if we get an incorrect image cached and need to have it cleared
 from their network? If we see a DDoS at the CDN, how do we know? These
 and other similiar questions are what ultimately eliminated CacheFly.</p>
 
-<p>In CacheFly&#8217;s defense, I was told that they were working on a complete
+<p>In CacheFly&rsquo;s defense, I was told that they were working on a complete
 refactor of the user interface and was offered a chance to help beta it,
 but I was under time constraints and declined. The issues I had with the
 UI may or may not be present at the time of this writing.</p>
@@ -1142,9 +1132,9 @@ UI may or may not be present at the time of this writing.</p>
 <h3>The winner (for us): EdgeCast</h3>
 
 <p>It will appear when reading this post that I used the process of
-elimination to find the &#8220;lesser of all evils&#8221;, but understand that&#8217;s
-just the writing style I chose to convey the process. It wasn&#8217;t that
-EdgeCast didn&#8217;t lose, it&#8217;s that they won. Here&#8217;s why:</p>
+elimination to find the &ldquo;lesser of all evils&rdquo;, but understand that&rsquo;s
+just the writing style I chose to convey the process. It wasn&rsquo;t that
+EdgeCast didn&rsquo;t lose, it&rsquo;s that they won. Here&rsquo;s why:</p>
 
 <ul>
 <li>EdgeCast is routinely in the top tier of CDN’s in terms of
@@ -1153,7 +1143,7 @@ performance.</li>
 <li>The sales reps care about your business and are willing to work with
 you.</li>
 <li>They offer the most features of any CDN I evaluated. One such
-feature is &#8220;rollover&#8221; where if you don&#8217;t use all your allotted
+feature is &ldquo;rollover&rdquo; where if you don&rsquo;t use all your allotted
 transfer for one month, the remainder gets added to next months
 allotment. This is perfect for a business with holiday traffic
 spikes such as ours.</li>
@@ -1170,29 +1160,29 @@ profitable CDN’s in the market today.</li>
 </ul>
 
 
-<h3>IT&#8217;S NOT THE DESTINATION, IT&#8217;S THE JOURNEY!!!</h3>
+<h3>IT&rsquo;S NOT THE DESTINATION, IT&rsquo;S THE JOURNEY!!!</h3>
 
-<p>Please don&#8217;t read this article and walk away saying &#8220;Justin recommends
-EdgeCast, that&#8217;s who we&#8217;re going with&#8221;. For one, if you&#8217;re letting my
+<p>Please don&rsquo;t read this article and walk away saying &ldquo;Justin recommends
+EdgeCast, that&rsquo;s who we&rsquo;re going with&rdquo;. For one, if you&rsquo;re letting my
 blog posts make business decisions for you instead of doing due
-diligence, then you&#8217;re doing it wrong.</p>
+diligence, then you&rsquo;re doing it wrong.</p>
 
 <p>For our <strong>very specific needs</strong> EdgeCast was the best fit. For your
 needs, you will very possibly arrive at a completely different decision,
-and that&#8217;s great. By all means, blog about it. What I&#8217;m trying to convey
+and that&rsquo;s great. By all means, blog about it. What I&rsquo;m trying to convey
 is that there are a lot of points of comparison when going through your
-evaluation, and not all of them are obvious. It&#8217;s hard to get an
-objective point of view when doing this on your own &#8211; this is my best
+evaluation, and not all of them are obvious. It&rsquo;s hard to get an
+objective point of view when doing this on your own &ndash; this is my best
 attempt at documenting what I came across.</p>
 
-<p>Hopefully if you haven&#8217;t implemented a CDN for your busy sites, this
-post will motivate you to do so. If you&#8217;re unhappy with your current
+<p>Hopefully if you haven&rsquo;t implemented a CDN for your busy sites, this
+post will motivate you to do so. If you&rsquo;re unhappy with your current
 CDN, perhaps this post has given you some insight on how to find a
-replacement. If you&#8217;re happy with your current CDN, please leave
+replacement. If you&rsquo;re happy with your current CDN, please leave
 comments as to why.</p>
 
 <p>Lastly, I was in no way influenced monetarily or otherwise by any
-vendors, and none of the links in this article contain referral ID&#8217;s.
+vendors, and none of the links in this article contain referral ID&rsquo;s.
 This is all my personal opinion and in no way represents the opinion of
 my employers.</p>
 </div>
@@ -1210,19 +1200,12 @@ my employers.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2011-04-19T00:00:00-05:00" pubdate data-updated="true">Apr 19<span>th</span>, 2011</time>
+<time class='entry-date' datetime='2011-04-19T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>19</span><span class='date-suffix'>th</span>, <span class='date-year'>2011</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/drupal-planet/'>Drupal Planet</a>
+    <a class='category' href='/blog/categories/drupal-planet/'>drupal planet</a>
   
 </span>
 
@@ -1231,7 +1214,7 @@ my employers.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2011/04/19/selecting-right-cdn-your-website" >Tweet</a>
   
   
   
@@ -1259,20 +1242,30 @@ my employers.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -1280,7 +1273,7 @@ my employers.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -1295,7 +1288,7 @@ my employers.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -1343,7 +1336,7 @@ my employers.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -1361,7 +1354,7 @@ my employers.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -1377,7 +1370,7 @@ my employers.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

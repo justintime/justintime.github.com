@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Configuring the RSC card on a Sun Fire v490 - SysAdmin's Journey</title>
+  <title>Configuring the RSC Card on a Sun Fire V490 - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="I recently had to setup the RSC card on some v490&#8217;s to enable remote console access. Unfortunately, these cards only do telnet, and not SSH, &hellip;">
+  <meta name="description" content="I recently had to setup the RSC card on some v490&rsquo;s to enable remote console access. Unfortunately, these cards only do telnet, and not SSH, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,10 +21,11 @@
   <link rel="canonical" href="http://sysadminsjourney.com/content/2009/04/23/configuring-rsc-card-sun-fire-v490">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -57,9 +58,9 @@
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -79,10 +80,6 @@
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Configuring the RSC Card on a Sun Fire V490</h1>
     
     
@@ -92,21 +89,14 @@
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-04-23T00:00:00-05:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-04-23T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I recently had to setup the RSC card on some v490&#8217;s to enable remote console access.  Unfortunately, these cards only do telnet, and not SSH, but when you need console access, you have to have it!  If nothing else, at least SSH to a server sitting on the same subnet as the RSC card, then telnet over from there, limiting your exposure.  Follow the jump for a step by step howto on how to configure the RSC.</p>
+<div class="entry-content"><p>I recently had to setup the RSC card on some v490&rsquo;s to enable remote console access.  Unfortunately, these cards only do telnet, and not SSH, but when you need console access, you have to have it!  If nothing else, at least SSH to a server sitting on the same subnet as the RSC card, then telnet over from there, limiting your exposure.  Follow the jump for a step by step howto on how to configure the RSC.</p>
 
 <ul>
 <li>You must first program the card via the operating system.  You can do this via the serial cable or SSH session.  Begin by installing the latest SUNWrsc package.</li></li>
@@ -114,145 +104,139 @@
 </ul>
 
 
-<div>
-  <pre><code class='console'>cd /usr/platform/SUNW,Sun-Fire-V490/rsc/
-./rsc-config</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">cd /usr/platform/SUNW,Sun-Fire-V490/rsc/</span>
+<span class="go">./rsc-config</span></code></pre></div>
 
 
 <p>The following is the output from the rsc-config wizard, adapt it to your own settings:</p>
 
-<div>
-  <pre><code class='console'>Continue with RSC setup (y|n): y
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">Continue with RSC setup (y|n): y</span>
 
-Set RSC date/time now (y|n|?) [y]: y
-Server Hostname [bkeapp1]: 
-Edit customer info field (y|n|?) [n]: 
-Enable RSC Ethernet Interface (y|n|s|?) [n]: y
-   RSC IP Mode (config|dhcp|?) [dhcp]: config
-   RSC IP Address []: 192.168.1.16
-   RSC IP Netmask [255.255.255.0]: 
-   RSC IP Gateway []: 192.168.1.1
-Enable RSC Alerts (y|n|s|?) [n]: y
-   Enable Email Alerts (y|n) [n]: y
-      SMTP Server IP address []: 192.168.1.5
-      Setup Backup SMTP Server (y|n) [n]: n
-      Email address []: me@my.com
-Enable RSC Serial Port Interface (y|n|s|?) [n]: y
-   Serial port baud rate (9600|19200|38400|57600|115200) [9600]: 
-   Serial port data bits (7|8) [8]: 
-   Serial port parity (even|odd|none) [none]: 
-   Serial port stop bits (1|2) [1]: 
-Setup RSC User Account (y|n|?) [y]: y
-   Username []: admin
-   User Permissions (c,u,a,r|none|?) [cuar]: 
-
-
-
-Verifying Selections
-
-
-General Setup
-  Set RSC date now  = y
-  Server Hostname   = serverhostname
-  Set Customer Info = n
-
-  Is this correct (y|n): 
+<span class="go">Set RSC date/time now (y|n|?) [y]: y</span>
+<span class="go">Server Hostname [bkeapp1]: </span>
+<span class="go">Edit customer info field (y|n|?) [n]: </span>
+<span class="go">Enable RSC Ethernet Interface (y|n|s|?) [n]: y</span>
+<span class="go">   RSC IP Mode (config|dhcp|?) [dhcp]: config</span>
+<span class="go">   RSC IP Address []: 192.168.1.16</span>
+<span class="go">   RSC IP Netmask [255.255.255.0]: </span>
+<span class="go">   RSC IP Gateway []: 192.168.1.1</span>
+<span class="go">Enable RSC Alerts (y|n|s|?) [n]: y</span>
+<span class="go">   Enable Email Alerts (y|n) [n]: y</span>
+<span class="go">      SMTP Server IP address []: 192.168.1.5</span>
+<span class="go">      Setup Backup SMTP Server (y|n) [n]: n</span>
+<span class="go">      Email address []: me@my.com</span>
+<span class="go">Enable RSC Serial Port Interface (y|n|s|?) [n]: y</span>
+<span class="go">   Serial port baud rate (9600|19200|38400|57600|115200) [9600]: </span>
+<span class="go">   Serial port data bits (7|8) [8]: </span>
+<span class="go">   Serial port parity (even|odd|none) [none]: </span>
+<span class="go">   Serial port stop bits (1|2) [1]: </span>
+<span class="go">Setup RSC User Account (y|n|?) [y]: y</span>
+<span class="go">   Username []: admin</span>
+<span class="go">   User Permissions (c,u,a,r|none|?) [cuar]: </span>
 
 
 
-Ethernet Setup
-  IP Mode      = config
-  IP Address   = 192.168.1.16
-  IP Netmask   = 255.255.255.0
-  IP Gateway   = 192.168.1.1
-
-  Is this correct (y|n): y
+<span class="go">Verifying Selections</span>
 
 
+<span class="go">General Setup</span>
+<span class="go">  Set RSC date now  = y</span>
+<span class="go">  Server Hostname   = serverhostname</span>
+<span class="go">  Set Customer Info = n</span>
 
-Alert Setup
-  Email Enabled      = y
-  Email Address      = me@my.com
-  SMTP Server        = 192.168.1.5
-
-  Is this correct (y|n): y
-
-
-Serial Port Setup
-  Serial Port Baud      = 9600
-  Serial Port Data Bits = 8
-  Serial Port Parity    = none
-  Serial Port Stop Bits = 1
-
-
-  Is this correct (y|n): y
+<span class="go">  Is this correct (y|n): </span>
 
 
 
-User Setup
-  User Name        = admin
-  User Permissions = cuar
+<span class="go">Ethernet Setup</span>
+<span class="go">  IP Mode      = config</span>
+<span class="go">  IP Address   = 192.168.1.16</span>
+<span class="go">  IP Netmask   = 255.255.255.0</span>
+<span class="go">  IP Gateway   = 192.168.1.1</span>
 
-  Is this correct (y|n): y
+<span class="go">  Is this correct (y|n): y</span>
 
 
 
-This script will now update RSC, continue? (y|n): y
-Updating flash, this takes a few minutes
-........................................
-........................................
-........................................
-........................................
-........................................
-........................................
-........................................
-...........................
-Download completed successfully
+<span class="go">Alert Setup</span>
+<span class="go">  Email Enabled      = y</span>
+<span class="go">  Email Address      = me@my.com</span>
+<span class="go">  SMTP Server        = 192.168.1.5</span>
 
-Resetting RSC (takes about 90 seconds): DONE
-Setting up server to update RSC date on boot: DONE
-Setting up server hostname: DONE
-Setting up ethernet interface: DONE
-Setting up e-mail alerts: DONE
-Disabling pager alerts: DONE
-Disabling modem interface: DONE
-Setting up serial port interface: DONE
-Adding user to RSC:
+<span class="go">  Is this correct (y|n): y</span>
 
-A valid password is between 6 and 8 characters, has at least
-two alphabetic characters, and at least one numeric or special
-character.  The password must differ from the user's login name
-and any reverse or circular shift of that login name.
-Setting User Password Now ...
 
-Password: 
-Re-enter Password: 
-User has been added to RSC
-Resetting RSC (takes about 90 seconds):
-Are you sure you want to reboot RSC (y/n)?  y
+<span class="go">Serial Port Setup</span>
+<span class="go">  Serial Port Baud      = 9600</span>
+<span class="go">  Serial Port Data Bits = 8</span>
+<span class="go">  Serial Port Parity    = none</span>
+<span class="go">  Serial Port Stop Bits = 1</span>
 
-DONE
-Setting up RSC date: DONE
 
-*******************************
-RSC has been successfully setup
-*******************************</code></pre>
-</div>
+<span class="go">  Is this correct (y|n): y</span>
+
+
+
+<span class="go">User Setup</span>
+<span class="go">  User Name        = admin</span>
+<span class="go">  User Permissions = cuar</span>
+
+<span class="go">  Is this correct (y|n): y</span>
+
+
+
+<span class="go">This script will now update RSC, continue? (y|n): y</span>
+<span class="go">Updating flash, this takes a few minutes</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">........................................</span>
+<span class="go">...........................</span>
+<span class="go">Download completed successfully</span>
+
+<span class="go">Resetting RSC (takes about 90 seconds): DONE</span>
+<span class="go">Setting up server to update RSC date on boot: DONE</span>
+<span class="go">Setting up server hostname: DONE</span>
+<span class="go">Setting up ethernet interface: DONE</span>
+<span class="go">Setting up e-mail alerts: DONE</span>
+<span class="go">Disabling pager alerts: DONE</span>
+<span class="go">Disabling modem interface: DONE</span>
+<span class="go">Setting up serial port interface: DONE</span>
+<span class="go">Adding user to RSC:</span>
+
+<span class="go">A valid password is between 6 and 8 characters, has at least</span>
+<span class="go">two alphabetic characters, and at least one numeric or special</span>
+<span class="go">character.  The password must differ from the user&#39;s login name</span>
+<span class="go">and any reverse or circular shift of that login name.</span>
+<span class="go">Setting User Password Now ...</span>
+
+<span class="go">Password: </span>
+<span class="go">Re-enter Password: </span>
+<span class="go">User has been added to RSC</span>
+<span class="go">Resetting RSC (takes about 90 seconds):</span>
+<span class="go">Are you sure you want to reboot RSC (y/n)?  y</span>
+
+<span class="go">DONE</span>
+<span class="go">Setting up RSC date: DONE</span>
+
+<span class="go">*******************************</span>
+<span class="go">RSC has been successfully setup</span>
+<span class="go">*******************************</span></code></pre></div>
 
 
 <ul>
-<li>If you haven&#8217;t already, make the next reboot a reconfigure reboot by running <code>touch /reconfigure</code></li>
+<li>If you haven&rsquo;t already, make the next reboot a reconfigure reboot by running <code>touch /reconfigure</code></li>
 <li>Now that the RSC is setup, you need to tell OpenBoot to send output to it.</li>
 </ul>
 
 
-<div>
-  <pre><code class='console'>eeprom input-device=rsc-console eeprom output-device=rsc-console</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">eeprom input-device=rsc-console eeprom output-device=rsc-console</span></code></pre></div>
 
 
-<p>That&#8217;s it!!! You should now be able to telnet to the RSC (these things are old
+<p>That&rsquo;s it!!! You should now be able to telnet to the RSC (these things are old
 enough that there is no SSH support).</p>
 </div>
 
@@ -269,14 +253,7 @@ enough that there is no SSH support).</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2009-04-23T00:00:00-05:00" pubdate data-updated="true">Apr 23<span>rd</span>, 2009</time>
+<time class='entry-date' datetime='2009-04-23T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
@@ -290,7 +267,7 @@ enough that there is no SSH support).</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/04/23/configuring-rsc-card-sun-fire-v490" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/04/23/configuring-rsc-card-sun-fire-v490" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/04/23/configuring-rsc-card-sun-fire-v490" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/04/23/configuring-rsc-card-sun-fire-v490" >Tweet</a>
   
   
   
@@ -318,20 +295,30 @@ enough that there is no SSH support).</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -339,7 +326,7 @@ enough that there is no SSH support).</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -354,7 +341,7 @@ enough that there is no SSH support).</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -402,7 +389,7 @@ enough that there is no SSH support).</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -420,7 +407,7 @@ enough that there is no SSH support).</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -436,7 +423,7 @@ enough that there is no SSH support).</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

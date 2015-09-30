@@ -22,10 +22,11 @@ just try and look at the code. Drupal is the cleanest PHP implementation I &hell
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/11/23/refirst-post">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ just try and look at the code. Drupal is the cleanest PHP implementation I &hell
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ just try and look at the code. Drupal is the cleanest PHP implementation I &hell
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">(re)First Post</h1>
     
     
@@ -93,14 +90,7 @@ just try and look at the code. Drupal is the cleanest PHP implementation I &hell
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-11-23T00:00:00-06:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2008</time>
+<time class='entry-date' datetime='2008-11-23T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -108,16 +98,16 @@ just try and look at the code. Drupal is the cleanest PHP implementation I &hell
 
 
 <div class="entry-content"><p>Last night, I completed the transition from Wordpress to Drupal. Why? Well
-just try and look at the code. Drupal is the cleanest PHP implementation I&#8217;ve
-ever seen, and Wordpress is like most of the other PHP apps I&#8217;ve seen.  Yet
+just try and look at the code. Drupal is the cleanest PHP implementation I&rsquo;ve
+ever seen, and Wordpress is like most of the other PHP apps I&rsquo;ve seen.  Yet
 another reason I love my
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">linode</a> -
 I was able to build my new VM at home, then upload it to my host. Total
 downtime was about 5 minutes, and I am now running on a completely new
-partition built from scratch. Anyways, I&#8217;m sure there will be plenty of kinks
+partition built from scratch. Anyways, I&rsquo;m sure there will be plenty of kinks
 to work out, but it looks like most of the stuff is working. Drop me a comment
-if you find something out of whack. Stay tuned for a post on how to &#8220;take your
-linode image home with you&#8221;.</p>
+if you find something out of whack. Stay tuned for a post on how to &ldquo;take your
+linode image home with you&rdquo;.</p>
 </div>
 
 
@@ -133,19 +123,12 @@ linode image home with you&#8221;.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-11-23T00:00:00-06:00" pubdate data-updated="true">Nov 23<span>rd</span>, 2008</time>
+<time class='entry-date' datetime='2008-11-23T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>23</span><span class='date-suffix'>rd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/hosting/'>Hosting</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/hosting/'>hosting</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
   
 </span>
 
@@ -154,7 +137,7 @@ linode image home with you&#8221;.</p>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/11/23/refirst-post" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/11/23/refirst-post" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/11/23/refirst-post" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/11/23/refirst-post" >Tweet</a>
   
   
   
@@ -182,20 +165,30 @@ linode image home with you&#8221;.</p>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -203,7 +196,7 @@ linode image home with you&#8221;.</p>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -218,7 +211,7 @@ linode image home with you&#8221;.</p>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -266,7 +259,7 @@ linode image home with you&#8221;.</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -284,7 +277,7 @@ linode image home with you&#8221;.</p>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -300,7 +293,7 @@ linode image home with you&#8221;.</p>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

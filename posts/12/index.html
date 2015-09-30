@@ -20,13 +20,14 @@ to simplify troubleshooting &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://sysadminsjourney.com/blog/page/12/">
+  <link rel="canonical" href="http://sysadminsjourney.com/posts/12/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -59,9 +60,9 @@ to simplify troubleshooting &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -93,14 +94,7 @@ to simplify troubleshooting &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-07T00:00:00-05:00" pubdate data-updated="true">Aug 7<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-07T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -113,12 +107,12 @@ to simplify troubleshooting with a ChangeLog</a>, I immediately thought about on
 of my favorite webapps - <a href="https://midas.psi.ch/elog/">ELOG</a>. Written by Stefan
 Ritt, ELOG aims to be simple, self-contained, performant, and extendable. It
 achieves all of these goals and surpasses them. ELOG is written in C, and is
-it&#8217;s own webserver. No need to run Apache, it&#8217;s got it&#8217;s own. It&#8217;s single
+it&rsquo;s own webserver. No need to run Apache, it&rsquo;s got it&rsquo;s own. It&rsquo;s single
 threaded, but for what it is, one thread is enough. We use it to keep track of
 our servers at work, we have a ServerLog logbook. We also use it as a Change
 Request management tool. It has done both for us without a hiccup, let alone a
-crash in the two years we&#8217;ve used it. A feature request I made to Stefan was
-implemented that same week! Anyways, if you&#8217;re looking for an application to
+crash in the two years we&rsquo;ve used it. A feature request I made to Stefan was
+implemented that same week! Anyways, if you&rsquo;re looking for an application to
 log entries of data over time, look no further than
 <a href="https://midas.psi.ch/elog/">ELOG</a>!</p>
 </div>
@@ -142,14 +136,7 @@ log entries of data over time, look no further than
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-04T00:00:00-05:00" pubdate data-updated="true">Aug 4<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-04T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>4</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -159,36 +146,30 @@ log entries of data over time, look no further than
   <div class="entry-content"><p>Follow the jump to find out how you can quickly and easily setup
 your own SSL certificate and install it into Apache on CentOS/RHEL.
 First, we need to install the crypto-utils package, which gives us
-the super-handy genkey command.  We&#8217;ll also pull in mod_ssl at the
-same time:</p>
+the super-handy genkey command.  We&rsquo;ll also pull in mod_ssl at the
+same time:
+    yum install crypto-utils mod_ssl</p>
 
-<pre><code>yum install crypto-utils mod_ssl
-</code></pre>
-
-<p>With that out of the way, let&#8217;s run genkey for our sample domain,
-www.mydomain.com:</p>
-
-<pre><code>genkey --days=3650 www.mydomain.com
-</code></pre>
+<p>With that out of the way, let&rsquo;s run genkey for our sample domain,
+www.mydomain.com:
+    genkey &ndash;days=3650 www.mydomain.com</p>
 
 <ol>
 <li>Click Next</li>
-<li>Highlight &#8220;1024&#8221;, click Next</li>
+<li>Highlight &ldquo;1024&rdquo;, click Next</li>
 <li>Click No</li>
 <li>Fill in the form fields, making sure that the Common Name is
-the name you&#8217;ll be typing in your browser&#8217;s URL bar.  Click Next</li>
-<li>Don&#8217;t select &#8220;Encrypt the private key&#8221; unless you want to type
+the name you&rsquo;ll be typing in your browser&rsquo;s URL bar.  Click Next</li>
+<li>Don&rsquo;t select &ldquo;Encrypt the private key&rdquo; unless you want to type
 in the passphrase every time you start Apache.  Click Next.</li>
 </ol>
 
 
 <p>Now, we have our keys generated, we just need to tell Apache to use
 them.  <strong>Please note:</strong>The SSLCertificateFile changes the file
-extension from <strong>crt</strong>to <strong>cert</strong>!</p>
-
-<pre><code>SSLCertificateFile /etc/pki/tls/certs/www.mydomain.com.cert
-SSLCertificateKeyFile /etc/pki/tls/private/www.mydomain.com.key
-</code></pre>
+extension from <strong>crt</strong>to <strong>cert</strong>!
+    SSLCertificateFile /etc/pki/tls/certs/www.mydomain.com.cert
+    SSLCertificateKeyFile /etc/pki/tls/private/www.mydomain.com.key</p>
 
 <p>Restart Apache, and test it out!</p>
 </div>
@@ -212,14 +193,7 @@ SSLCertificateKeyFile /etc/pki/tls/private/www.mydomain.com.key
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-02T00:00:00-05:00" pubdate data-updated="true">Aug 2<span>nd</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-02T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -233,16 +207,16 @@ SSLCertificateKeyFile /etc/pki/tls/private/www.mydomain.com.key
 
 <p><strong>DISCLAIMER:</strong> I make no guarantees to the effectiveness of this script.  It works for me, and it should work for you, but it is up to you to test it!  Also note, you need to have SSH access and root privileges to your server.</p>
 
-<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp&#8217;s code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day&#8217;s state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
+<p>I needed a quick way to get a backup strategy in place that would create a daily snapshot of my <a href="http://www.wordpress.org">Wordpress</a> and <a href="http://www.drupal.org">Drupal</a> code and MySQL databases.  Basically, I keep a 7 day rotation of each webapp&rsquo;s code and MySQL, so that if I do something to break my app, I can at least restore it back to the previous day&rsquo;s state.  Also, before I install a new plugin or hack on a theme, I can create a snapshot by firing off one script.</p>
 
-<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can&#8217;t go changing your MySQL db names around very easily, but you can use symbolic links to make your document root&#8217;s have the same name as your DB.</p>
+<p>I had an advantage since I was starting things from scratch - I could name things consistently.  One of the assumptions that is made is that the directory name of the Apache DocumentRoot of your webapp is the same as the name of your MySQL database.  Obviously, you can&rsquo;t go changing your MySQL db names around very easily, but you can use symbolic links to make your document root&rsquo;s have the same name as your DB.</p>
 
-<p>First, let&#8217;s setup our hypothetical webapp, which will be a wordpress blog.  We&#8217;ll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
+<p>First, let&rsquo;s setup our hypothetical webapp, which will be a wordpress blog.  We&rsquo;ll call it MySite_wp.  For the purpose of this example, we have a directory /apps/MySite_wp which is the document root for the Wordpress installation.  There is a directory named /apps/snapshots/ where we will store our daily snapshots of our document root, and a directory named /apps/mysqlbackups/ where we will store our MySQL database backups.  Finally, our custom scripts will be stored in /apps/scripts.</p>
 
 <h3>Step One: Backup MySQL</h3>
 
 
-<p>First, let&#8217;s setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let&#8217;s create this script, and name it /apps/scripts/backupMySQL.sh:</p>
+<p>First, let&rsquo;s setup our script that does our MySQL backup.  This is a shell script that I wrote because the scripts offered by <a href="http://www.zmanda.org">Zmanda</a> were a little overkill for what I wanted.  I therefore came up with my own shell script that will backup any db you specify on the command line.  Let&rsquo;s create this script, and name it /apps/scripts/backupMySQL.sh:</p>
 
 <pre>#!/bin/bash
 
@@ -365,12 +339,12 @@ chmod 700 /apps/scripts/backupMySQL.sh
 
 <p>to make it so only the root user can view the password.</p>
 
-<p>Now, let&#8217;s test the script.  Jump out to a command prompt, and run &#8216;/apps/scripts/backupMySQL.sh MySite_wp&#8217;.  Once that&#8217;s done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
+<p>Now, let&rsquo;s test the script.  Jump out to a command prompt, and run &lsquo;/apps/scripts/backupMySQL.sh MySite_wp&rsquo;.  Once that&rsquo;s done, look in the /apps/mysqlbackups/archives directory, and you should see a gzipped sql file sitting there.  Step one, done!</p>
 
 <h3>Step Two: Backup the Document Root</h3>
 
 
-<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel&#8217;s site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
+<p>Now, we need to setup the script that will backup our actual files (usually php files).  Now, most of us have very little data that actually changes from day to day in our PHP files.  Most of the dynamic data is stored in the database.  So, to prevent wasting a bunch of space backing up the exact same file multiple times, we will leverage the hard linking feature of rsync.  Please note that this script is not my own, the majority of the code comes from <a href="http://www.mikerubel.org/computers/rsync_snapshots/">Mike Rubel&rsquo;s site</a>.  Now, create the file /apps/scripts/rsyncBackup.sh, and put this code in it:</p>
 
 <pre>
 #!/bin/bash
@@ -460,12 +434,12 @@ eval $CMD
 </pre>
 
 
-<p>Now, do a &#8216;chmod 755 /apps/scripts/rsyncBackup.sh&#8217; and let&#8217;s test it out.  Run &#8216;/apps/scripts/rsyncBackup.sh MySite_wp&#8217;.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
+<p>Now, do a &lsquo;chmod 755 /apps/scripts/rsyncBackup.sh&rsquo; and let&rsquo;s test it out.  Run &lsquo;/apps/scripts/rsyncBackup.sh MySite_wp&rsquo;.  Once completed, have a look in /apps/snapshots/MySite_wp/.  You will have a directory named daily.0 that will contain a snapshot of your application.  If you run the same command again, the current daily.0 contents will be moved over to daily.1, and a new snapshot will be stored in daily.0.  This will complete until you have 7 such daily directories, at which point the oldest will be deleted before the newest is created.  By using hard links, only if a file changes will it actually consume space on your hard drive.  Step two, complete!</p>
 
 <h3>Step Three: Tie It All Together</h3>
 
 
-<p>Now, for the easy part.  Let&#8217;s tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
+<p>Now, for the easy part.  Let&rsquo;s tell cron to perform a backup each night.  Create the file /etc/cron.daily/backupWebApps.sh, and put this text in there:</p>
 
 <pre>
 #!/bin/bash
@@ -479,7 +453,7 @@ done
 </pre>
 
 
-<p>Now, run &#8216;chmod 755 /etc/cron.daily/backupWebApps.sh&#8217;, and you will have a backup of your MySite_wp applicaton!  What&#8217;s best, is let&#8217;s say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
+<p>Now, run &lsquo;chmod 755 /etc/cron.daily/backupWebApps.sh&rsquo;, and you will have a backup of your MySite_wp applicaton!  What&rsquo;s best, is let&rsquo;s say you add a Drupal application, you name your MySQL database MySite_Drupal, and your document root is a /apps/MySite_Drupal.  All you need to do is change line 3 of backupWebApps.sh to look like this:</p>
 
 <pre>
 WEBAPPS=( MySite_wp MySite_Drupal )
@@ -491,7 +465,7 @@ WEBAPPS=( MySite_wp MySite_Drupal )
 <h3>Restoration</h3>
 
 
-<p>Heaven forbid, you&#8217;ve made a critical mistake, installed a bad plugin, or something else that&#8217;s horribly broken your MySite_wp install.  No fear!  Here&#8217;s how to restore it.</p>
+<p>Heaven forbid, you&rsquo;ve made a critical mistake, installed a bad plugin, or something else that&rsquo;s horribly broken your MySite_wp install.  No fear!  Here&rsquo;s how to restore it.</p>
 
 <pre>
 mkdir /apps/MySite_wp-broken && mv /apps/MySite_wp/* /apps/MySite_wp-broken/
@@ -529,14 +503,7 @@ rm /tmp/mysite.sql
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-08-01T00:00:00-05:00" pubdate data-updated="true">Aug 1<span>st</span>, 2008</time>
+<time class='entry-date' datetime='2008-08-01T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -556,23 +523,17 @@ could use about anything you wanted to. I never needed to use their
 support, their control panel worked great, and I never had any
 issues with billing. There were two drawbacks, one minor, the other
 major:
-1.  The box was firewalled to death. I&#8217;m all for firewalls, but I</p>
-
-<pre><code>like to be in control of it. Not only were inbound ports blocked
-(which is a good thing), but all outbound access was blocked as
-well. This made hard things impossible, and easy things hard. For
-example, adding a simple RSS widget to your page hosted on Aplus
-just will not work.
-</code></pre>
-
-<ol>
-<li>The particular box I was on was severely over-sold. I have no
-idea how many shared accounts there were on the box, but there were
-times where my simple little wordpress blog was completely
-unavailable. $12 a month is cheap, but I at least expect to be able
-to render pages!</li>
-</ol>
-
+1.  The box was firewalled to death. I&rsquo;m all for firewalls, but I
+    like to be in control of it. Not only were inbound ports blocked
+    (which is a good thing), but all outbound access was blocked as
+    well. This made hard things impossible, and easy things hard. For
+    example, adding a simple RSS widget to your page hosted on Aplus
+    just will not work.
+2.  The particular box I was on was severely over-sold. I have no
+    idea how many shared accounts there were on the box, but there were
+    times where my simple little wordpress blog was completely
+    unavailable. $12 a month is cheap, but I at least expect to be able
+    to render pages!</p>
 
 <p>After doing a bunch of research, my choice for a new hosting
 provider was down to
@@ -581,7 +542,7 @@ and <a href="http://www.slicehost.com" title="SliceHost">SliceHost</a>. In the e
 I settled on
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 because I was reading some grumblings that SliceHost was having
-some growing pains, and I couldn&#8217;t find any negatives to
+some growing pains, and I couldn&rsquo;t find any negatives to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>.
 So, at 10:57pm on July 30th, I started the sign up process for a
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
@@ -591,43 +552,37 @@ July 31st, I had moved my blog from Aplus to
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 without any hitches. First, let me tell you what
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
-is and isn&#8217;t.
--   <strong>Linode is</strong>a provider of Xen-based virtualized hosts. This</p>
-
-<pre><code>means you get to pick which distribution you want, and you get your
-own root account with which you can do what you feel like.
-</code></pre>
-
-<ul>
-<li><strong>Linode provides</strong>a DNS Manager included with all their plans
-that allows you have full control over any number of domains. I had
-no idea this existed until I signed up, and it was a great little
-side benefit. I was able to cancel my DNS service at a registrar
-that I was paying $15 a year for.</li>
-<li><strong>Linode provides</strong>you with a Xen instance with 4 cores of Xeon
-for CPU, and a configurable amount of RAM, bandwidth, and storage.</li>
-<li><strong>Linode provides</strong>a out-of-band management tool named lish
-(LInode SHell) which gives you console level access to your
-server.  There is also an AJAX web-based console interface
-available.</li>
-<li><strong>Linode provides</strong>you with everything you need to build your
-own server. You may do with this server what you like, provided
-it&#8217;s for law-abiding activities. You have the ability to create
-your own partitions, upgrade your kernel, install packages,
-whatever!</li>
-<li><strong>Linode provides</strong>you with more than enough rope with which
-you can hang yourself! This is a logical extension of the above
-point. If you have root, you can most certainly do a &#8216;rm -rf /&#8217; and
-no one will stop to ask you if you&#8217;re sure or not.</li>
-<li><strong>Linode is not</strong>your run-of-the-mill webhoster. If you want to
-run your own LAMP stack, you are more than welcome to do so.
-However, <strong>you</strong>are responsible for the setup and maintanence of
-the entire stack. There&#8217;s no cute little control panel button you
-click to setup a blog. If you don&#8217;t know Linux, and don&#8217;t want to
-learn how to do these sort of things, you&#8217;re better off with a
-provider such as Aplus.net.</li>
-</ul>
-
+is and isn&rsquo;t.
+-   <strong>Linode is</strong>a provider of Xen-based virtualized hosts. This
+    means you get to pick which distribution you want, and you get your
+    own root account with which you can do what you feel like.
+-   <strong>Linode provides</strong>a DNS Manager included with all their plans
+    that allows you have full control over any number of domains. I had
+    no idea this existed until I signed up, and it was a great little
+    side benefit. I was able to cancel my DNS service at a registrar
+    that I was paying $15 a year for.
+-   <strong>Linode provides</strong>you with a Xen instance with 4 cores of Xeon
+    for CPU, and a configurable amount of RAM, bandwidth, and storage.
+-   <strong>Linode provides</strong>a out-of-band management tool named lish
+    (LInode SHell) which gives you console level access to your
+    server.  There is also an AJAX web-based console interface
+    available.
+-   <strong>Linode provides</strong>you with everything you need to build your
+    own server. You may do with this server what you like, provided
+    it&rsquo;s for law-abiding activities. You have the ability to create
+    your own partitions, upgrade your kernel, install packages,
+    whatever!
+-   <strong>Linode provides</strong>you with more than enough rope with which
+    you can hang yourself! This is a logical extension of the above
+    point. If you have root, you can most certainly do a &lsquo;rm -rf /&rsquo; and
+    no one will stop to ask you if you&rsquo;re sure or not.
+-   <strong>Linode is not</strong>your run-of-the-mill webhoster. If you want to
+    run your own LAMP stack, you are more than welcome to do so.
+    However, <strong>you</strong>are responsible for the setup and maintanence of
+    the entire stack. There&rsquo;s no cute little control panel button you
+    click to setup a blog. If you don&rsquo;t know Linux, and don&rsquo;t want to
+    learn how to do these sort of things, you&rsquo;re better off with a
+    provider such as Aplus.net.</p>
 
 <p>After signing up, you get to pick which data center you want your
 server to be hosted in.  Here are their current datacenters:
@@ -638,33 +593,27 @@ server to be hosted in.  Here are their current datacenters:
 
 <p>You can view what servers are available in what datacenters
 <a href="http://www.linode.com/avail.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode Datacenter Availability">here</a>.
-Here are some of Linode&#8217;s support options:
--   A quick</p>
-
-<pre><code>[FAQ](http://www.linode.com/faq.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df "FAQ")
-</code></pre>
-
-<ul>
-<li>A
-<a href="http://www.linode.com/wiki/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Wiki">Wiki</a></li>
-<li>A public
-<a href="http://www.linode.com/forums/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">support forum</a>
-which employees take part in regularly</li>
-<li>An
-<a href="http://www.linode.com/irc/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">IRC channel</a></li>
-<li>A support ticket system for active customers</li>
-<li>There is a phone number posted on their site, but I don&#8217;t think
-it&#8217;s intended to be used for support issues.</li>
-</ul>
-
+Here are some of Linode&rsquo;s support options:
+-   A quick
+    <a href="http://www.linode.com/faq.cfm?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="FAQ">FAQ</a>
+-   A
+    <a href="http://www.linode.com/wiki/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Wiki">Wiki</a>
+-   A public
+    <a href="http://www.linode.com/forums/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">support forum</a>
+    which employees take part in regularly
+-   An
+    <a href="http://www.linode.com/irc/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">IRC channel</a>
+-   A support ticket system for active customers
+-   There is a phone number posted on their site, but I don&rsquo;t think
+    it&rsquo;s intended to be used for support issues.</p>
 
 <p>After just two days of running my own
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>,
-I must say that I&#8217;m thoroughly impressed. Uptime is 100%, and I
-haven&#8217;t needed support for anything at all. My blog runs as it
-should - and if it didn&#8217;t it would be my fault for not setting it
+I must say that I&rsquo;m thoroughly impressed. Uptime is 100%, and I
+haven&rsquo;t needed support for anything at all. My blog runs as it
+should - and if it didn&rsquo;t it would be my fault for not setting it
 up properly. I will update this post in the future with more data
-as I learn more about the service. Also, if you&#8217;d like to give
+as I learn more about the service. Also, if you&rsquo;d like to give
 <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df" title="Linode">Linode</a>
 a try and have enjoyed this post, consider visiting their site by
 clicking on any of the
@@ -683,7 +632,7 @@ give me $20 credit if you sign up and stay a customer for 30 days.</p>
       
   <header>
     
-      <h1 class="entry-title"><a href="/content/2008/07/21/using-suns-java-jdk-eclipse-ubuntu">Using Sun&#8217;s Java (Jdk) With Eclipse on Ubuntu</a></h1>
+      <h1 class="entry-title"><a href="/content/2008/07/21/using-suns-java-jdk-eclipse-ubuntu">Using Sun's Java (Jdk) With Eclipse on Ubuntu</a></h1>
     
     
       <p class="meta">
@@ -692,57 +641,36 @@ give me $20 credit if you sign up and stay a customer for 30 days.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-07-21T00:00:00-05:00" pubdate data-updated="true">Jul 21<span>st</span>, 2008</time>
+<time class='entry-date' datetime='2008-07-21T00:00:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>Let&#8217;s face it, if you&#8217;re reading this article, you know what
-Eclipse is, and what you&#8217;re trying to do.  Follow the jump for how
-to do it. First, install Sun&#8217;s Java 6 jdk, and Eclipse:</p>
+  <div class="entry-content"><p>Let&rsquo;s face it, if you&rsquo;re reading this article, you know what
+Eclipse is, and what you&rsquo;re trying to do.  Follow the jump for how
+to do it. First, install Sun&rsquo;s Java 6 jdk, and Eclipse:
+    sudo apt-get install eclipse sun-java6-jdk</p>
 
-<pre><code>sudo apt-get install eclipse sun-java6-jdk
-</code></pre>
+<p>Now, set up the newly installed jdk as the system default:
+    sudo update-java-alternatives -s java-6-sun</p>
 
-<p>Now, set up the newly installed jdk as the system default:</p>
+<p>Next, set your default jvm:
+    sudo vim /etc/jvm</p>
 
-<pre><code>sudo update-java-alternatives -s java-6-sun
-</code></pre>
-
-<p>Next, set your default jvm:</p>
-
-<pre><code>sudo vim /etc/jvm
-</code></pre>
-
-<p>and add this line at the top of the file:</p>
-
-<pre><code>/usr/lib/jvm/java-6-sun
-</code></pre>
+<p>and add this line at the top of the file:
+    /usr/lib/jvm/java-6-sun</p>
 
 <p>Now, that should do the trick, but the Eclipse packaged with Ubuntu
-is packaged to prefer GCJ.  Let&#8217;s fix that:</p>
+is packaged to prefer GCJ.  Let&rsquo;s fix that:
+    sudo vim /etc/eclipse/java_home</p>
 
-<pre><code>sudo vim /etc/eclipse/java_home
-</code></pre>
+<p>and again add this line at the top of the file:
+    /usr/lib/jvm/java-6-sun</p>
 
-<p>and again add this line at the top of the file:</p>
-
-<pre><code>/usr/lib/jvm/java-6-sun
-</code></pre>
-
-<p>Finally, while you&#8217;re at it, bump up your Xms here:</p>
-
-<pre><code>sudo vim /usr/lib/eclipse/eclipse.ini
-</code></pre>
+<p>Finally, while you&rsquo;re at it, bump up your Xms here:
+    sudo vim /usr/lib/eclipse/eclipse.ini</p>
 </div>
   
   
@@ -764,14 +692,7 @@ is packaged to prefer GCJ.  Let&#8217;s fix that:</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-07-07T00:00:00-05:00" pubdate data-updated="true">Jul 7<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-07-07T00:00:00-05:00'><span class='date'><span class='date-month'>Jul</span> <span class='date-day'>7</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -780,90 +701,72 @@ is packaged to prefer GCJ.  Let&#8217;s fix that:</p>
 
   <div class="entry-content"><p>I needed to be able to use dnsmasq on my laptop so that I could
 forward corporate hostname requests to our corporate DNS servers,
-but send all other requests to OpenDNS&#8217; servers.  Sometimes at a
-hotel, you can&#8217;t use OpenDNS, so I also wanted to fail back to
+but send all other requests to OpenDNS' servers.  Sometimes at a
+hotel, you can&rsquo;t use OpenDNS, so I also wanted to fail back to
 whatever DNS servers were being sent via DHCP. The trick here is to
 get dhclient to update a file other than /etc/resolv.conf.  You
 tell dhclient to update a file named /etc/resolv.conf.dhclient,
 then point /etc/resolv.conf to use localhost.  Finally, tell
-dnsmasq to use /etc/resolv.conf.dhclient as its source.  Here&#8217;s how
+dnsmasq to use /etc/resolv.conf.dhclient as its source.  Here&rsquo;s how
 I did that on Ubuntu 8.04: First, install dnsmasq:</p>
 
-<div>
-  <pre><code class='console'>sudo apt-get install dnsmasq resolvconf</code></pre>
-</div>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo apt-get install dnsmasq resolvconf</span></code></pre></div>
 
 
-<p>Next, set the following in /etc/dnsmasq.conf:</p>
+<p>Next, set the following in /etc/dnsmasq.conf:
+    &hellip;
+    resolv-file=/etc/resolv.conf.dhclient
+    server=/mycorp.com/10.253.10.83
+    &hellip;</p>
 
-<pre><code>...
-resolv-file=/etc/resolv.conf.dhclient
-server=/mycorp.com/10.253.10.83
-...
-</code></pre>
-
-<p>Then restart dnsmasq:</p>
-
-<pre><code>sudo /etc/init.d/dnsmasq restart
-</code></pre>
+<p>Then restart dnsmasq:
+    sudo /etc/init.d/dnsmasq restart</p>
 
 <p>Now, configure your local machine to use a hardcoded  DNS server of
 127.0.0.1.  I use NetworkManager, so I left click on the NM icon,
-and select &#8220;Manual configuration&#8230;&#8221;.  Click the DNS tab, then
-click the unlock button.  Remove any existing servers in &#8220;DNS
-Servers&#8221;, then add 127.0.0.1.  Optionally, add any search domains
+and select &ldquo;Manual configuration&hellip;&rdquo;.  Click the DNS tab, then
+click the unlock button.  Remove any existing servers in &ldquo;DNS
+Servers&rdquo;, then add 127.0.0.1.  Optionally, add any search domains
 you might want to use. Now, we need to tell dhclient to a) prepend
-OpenDNS&#8217; servers to the nameserver list, and b) write the DNS
+OpenDNS' servers to the nameserver list, and b) write the DNS
 config to /etc/resolv.conf.dhclient instead of /etc/resolv.conf. 
-First, edit /etc/dhcp3/dhclient.conf, and add the line:</p>
+First, edit /etc/dhcp3/dhclient.conf, and add the line:
+    prepend domain-name-servers 208.67.222.222, 208.67.220.220;</p>
 
-<pre><code>prepend domain-name-servers 208.67.222.222, 208.67.220.220;
-</code></pre>
-
-<p>Now, for the part that I couldn&#8217;t find using Google.  Let&#8217;s tell
+<p>Now, for the part that I couldn&rsquo;t find using Google.  Let&rsquo;s tell
 dhclient to update a different file:</p>
 
-<div>
-  <pre><code class='console'>sudo cat   &gt; /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq &lt;&lt;EOD
-#!/bin/sh
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo cat   &gt; /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq &lt;&lt;EOD</span>
+<span class="gp">#</span>!/bin/sh
 
-CUSTOM_RESOLV_CONF=/etc/resolv.conf.dhclient
+<span class="go">CUSTOM_RESOLV_CONF=/etc/resolv.conf.dhclient</span>
 
-make_resolv_conf() {
-  if [ -n &quot;$new_domain_name_servers&quot; ]; then
-    /bin/rm $CUSTOM_RESOLV_CONF
-    [ -n &quot;$new_domain_name&quot; ] &amp;&amp; echo search $new_domain_name &gt;$CUSTOM_RESOLV_CONF
-    for nameserver in $new_domain_name_servers; do
-      echo nameserver $nameserver &gt;&gt; $CUSTOM_RESOLV_CONF
-    done
-  fi
-}
-EOD</code></pre>
-</div>
+<span class="go">make_resolv_conf() {</span>
+<span class="go">  if [ -n &quot;$new_domain_name_servers&quot; ]; then</span>
+<span class="go">    /bin/rm $CUSTOM_RESOLV_CONF</span>
+<span class="go">    [ -n &quot;$new_domain_name&quot; ] &amp;&amp; echo search $new_domain_name &gt;$CUSTOM_RESOLV_CONF</span>
+<span class="go">    for nameserver in $new_domain_name_servers; do</span>
+<span class="go">      echo nameserver $nameserver &gt;&gt; $CUSTOM_RESOLV_CONF</span>
+<span class="go">    done</span>
+<span class="go">  fi</span>
+<span class="go">}</span>
+<span class="go">EOD</span></code></pre></div>
 
 
-<p>Now, set it to be executable:</p>
-
-<pre><code>sudo chmod 755 /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq
-</code></pre>
+<p>Now, set it to be executable:
+    sudo chmod 755 /etc/dhcp3/dhclient-enter-hooks.d/dnsmasq</p>
 
 <p>Now, reboot.  When you reboot, you should have the following setup:
-1.  When you get a DHCP lease, the new DNS config will be written</p>
-
-<pre><code>to /etc/resolv.conf.dhclient
-</code></pre>
-
-<ol>
-<li>This file will first contain the two OpenDNS servers, then
-whatever the ISP/Router sends as nameservers</li>
-<li>/etc/resolv.conf will point to localhost and should never
-change.</li>
-<li>Any requests for mycorp.com will go to the 10.x nameservers
-above</li>
-<li>Any requests for any other domains will first be tried through
-OpenDNS, then through the ISP&#8217;s/Router&#8217;s nameservers.</li>
-</ol>
-
+1.  When you get a DHCP lease, the new DNS config will be written
+    to /etc/resolv.conf.dhclient
+2.  This file will first contain the two OpenDNS servers, then
+    whatever the ISP/Router sends as nameservers
+3.  /etc/resolv.conf will point to localhost and should never
+    change.
+4.  Any requests for mycorp.com will go to the 10.x nameservers
+    above
+5.  Any requests for any other domains will first be tried through
+    OpenDNS, then through the ISP&rsquo;s/Router&rsquo;s nameservers.</p>
 
 <p>Hope this helps you as much as it helped me!</p>
 </div>
@@ -887,27 +790,20 @@ OpenDNS, then through the ISP&#8217;s/Router&#8217;s nameservers.</li>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-05-08T00:00:00-05:00" pubdate data-updated="true">May 8<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-05-08T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>I had the chance to finally tinker with Solaris 10 zones the other day. They are impressive - very easy to setup! One of my biggest gripes about Solaris is that they&#8217;ve fallen way behind in the area of advanced IP routing. If you want to do things like policy routing in Solaris, you have to install ipfilter, which is no easy task. There is no alternative to iproute2 in Linux. Read after the jump to find a quick hack to setup proper routing for non-global zones on multiple subnets. <!--break--> <em>Update: If you are using Solaris 10 Update 4 or newer, you may be able to use </em><code>set ip-type=exclusive</code><em> in your zone config. This will give you what I&#8217;ve hacked together here. Note, that you must have a dedicated interface for the zone in order to use it, and there are some other limitations, <a href="http://docs.sun.com/app/docs/doc/817-1592/gepxo?l=en&amp;a=view">described here</a>. Keep an eye on <a href="http://opensolaris.org/os/project/crossbow/">project Crossbow</a>, which will hopefully make all of this go away.</em> In Solaris 10, you set the default gateway at boot time by using /etc/defaultrouter. You can add multiple default routes by adding multiple lines to that file. However, if you do that, the kernel will simply round-robin the packets between the gateways, which will light up any firewall like a Christmas tree. Imagine the following scenario: HostA is a Solaris 10 box with 4 bge interfaces. HostA&#8217;s IP address is 192.168.20.2/24 and is assigned to bge0. The router for the 192.168.20.0/24 subnet is at 192.168.20.1. HostB is a non-global zone residing on HostA, with an IP address of 192.168.30.2/24 and you&#8217;ve assigned it to bge1 via zonecfg. The router for the 192.168.30.0/24 subnet is at 192.168.30.1. Now, non-global zones don&#8217;t have their own kernel, they &#8220;share&#8221; with the global zone. IP routing is handled in the kernel, so the routing configuration for the non-global zone needs to be done in the global zone. The first trick here is to get bge1 to come up on bootup, but not assign it an IP. Do this as root on HostA to establish that:</p>
+  <div class="entry-content"><p>I had the chance to finally tinker with Solaris 10 zones the other day. They are impressive - very easy to setup! One of my biggest gripes about Solaris is that they've fallen way behind in the area of advanced IP routing. If you want to do things like policy routing in Solaris, you have to install ipfilter, which is no easy task. There is no alternative to iproute2 in Linux. Read after the jump to find a quick hack to setup proper routing for non-global zones on multiple subnets. <!--break--> <em>Update: If you are using Solaris 10 Update 4 or newer, you may be able to use </em><code>set ip-type=exclusive</code><em> in your zone config. This will give you what I've hacked together here. Note, that you must have a dedicated interface for the zone in order to use it, and there are some other limitations, <a href="http://docs.sun.com/app/docs/doc/817-1592/gepxo?l=en&amp;a=view">described here</a>. Keep an eye on <a href="http://opensolaris.org/os/project/crossbow/">project Crossbow</a>, which will hopefully make all of this go away.</em> In Solaris 10, you set the default gateway at boot time by using /etc/defaultrouter. You can add multiple default routes by adding multiple lines to that file. However, if you do that, the kernel will simply round-robin the packets between the gateways, which will light up any firewall like a Christmas tree. Imagine the following scenario: HostA is a Solaris 10 box with 4 bge interfaces. HostA's IP address is 192.168.20.2/24 and is assigned to bge0. The router for the 192.168.20.0/24 subnet is at 192.168.20.1. HostB is a non-global zone residing on HostA, with an IP address of 192.168.30.2/24 and you've assigned it to bge1 via zonecfg. The router for the 192.168.30.0/24 subnet is at 192.168.30.1. Now, non-global zones don't have their own kernel, they "share" with the global zone. IP routing is handled in the kernel, so the routing configuration for the non-global zone needs to be done in the global zone. The first trick here is to get bge1 to come up on bootup, but not assign it an IP. Do this as root on HostA to establish that:</p>
 
 
 <pre># echo "0.0.0.0" &gt; /etc/hostname.bge1</pre>
 
 
-<p>This will plumb and bring up the interface, but it will not be assigned an IP. Now, remember what I said about the kernel round-robin routing packets earlier? It will only do that <strong>if both gateways are reachable</strong>. So, the trick is to make HostB&#8217;s gateway unreachable from HostA, and HostA&#8217;s gateway unreachable from HostB. There&#8217;s a catch-22 here as well, you can only add a default route if the gateway is currently reachable. So how in the world do we get this to work??? With some nice hackery, of course! First, set HostB&#8217;s configuration so that it does not boot automatically. Don&#8217;t worry if you need this functionality, we&#8217;ve got a hack for that too:</p>
+<p>This will plumb and bring up the interface, but it will not be assigned an IP. Now, remember what I said about the kernel round-robin routing packets earlier? It will only do that <strong>if both gateways are reachable</strong>. So, the trick is to make HostB's gateway unreachable from HostA, and HostA's gateway unreachable from HostB. There's a catch-22 here as well, you can only add a default route if the gateway is currently reachable. So how in the world do we get this to work??? With some nice hackery, of course! First, set HostB's configuration so that it does not boot automatically. Don't worry if you need this functionality, we've got a hack for that too:</p>
 
 
 <pre>root@HostA # zonecfg -z HostB
@@ -917,7 +813,7 @@ zonecfg:HostB&gt; commit
 zonecfg:HostB&gt; exit</pre>
 
 
-<p>Now, we are going to create our own init script that will bring up bge1 temporarily with HostB&#8217;s IP, set the default route, then remove that IP. By using HostB&#8217;s IP, we are allowed to set the route, but when we remove the interface, HostB&#8217;s gateway becomes unreachable from HostA. Finally, we boot HostB, which sees only the default route for it&#8217;s interface. Let&#8217;s setup that init script:</p>
+<p>Now, we are going to create our own init script that will bring up bge1 temporarily with HostB's IP, set the default route, then remove that IP. By using HostB's IP, we are allowed to set the route, but when we remove the interface, HostB's gateway becomes unreachable from HostA. Finally, we boot HostB, which sees only the default route for it's interface. Let's setup that init script:</p>
 
 
 <pre># cat &lt;&lt;EOD &gt; /etc/init.d/zoneboot
@@ -932,7 +828,7 @@ EOD
 # ln -s /etc/init.d/zoneboot /etc/rc3.d/S99zoneboot</pre>
 
 
-<p>You can of course modify this script to work with more interfaces and zones, but you get the idea. Now, reboot HostA. HostA&#8217;s routing table looks like so:</p>
+<p>You can of course modify this script to work with more interfaces and zones, but you get the idea. Now, reboot HostA. HostA's routing table looks like so:</p>
 
 
 <pre># netstat -rn
@@ -946,7 +842,7 @@ default              192.168.20.1          UG       1        112
 127.0.0.1            127.0.0.1             UH       4        113 lo0</pre>
 
 
-<p>HostA has two default gateways, but only one of them is reachable. Bingo! HostB&#8217;s routing table looks like this:</p>
+<p>HostA has two default gateways, but only one of them is reachable. Bingo! HostB's routing table looks like this:</p>
 
 
 <pre>
@@ -983,14 +879,7 @@ default              192.168.30.1           UG      1        112
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-05-08T00:00:00-05:00" pubdate data-updated="true">May 8<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-05-08T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>8</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -998,30 +887,30 @@ default              192.168.30.1           UG      1        112
 
 
   <div class="entry-content"><p>There are two ways to force duplex &amp; speed on a Solaris 10 box - via the
-driver, and via ndd. First, via the driver: <div>
-  <pre><code class='console'># cat
-&lt;&lt;EOD &gt; /platform/<code>uname -i</code>/kernel/drv/bge.conf adv_autoneg_cap=0
-adv_1000fdx_cap=0 adv_1000hdx_cap=0 adv_100fdx_cap=1 adv_100hdx_cap=0
-adv_10fdx_cap=0 adv_10hdx_cap=0; EOD</code></pre>
-</div>
- Note that this sets
+driver, and via ndd. First, via the driver:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> cat
+<span class="go">&lt;&lt;EOD &gt; /platform/`uname -i`/kernel/drv/bge.conf adv_autoneg_cap=0</span>
+<span class="go">adv_1000fdx_cap=0 adv_1000hdx_cap=0 adv_100fdx_cap=1 adv_100hdx_cap=0</span>
+<span class="go">adv_10fdx_cap=0 adv_10hdx_cap=0; EOD</span></code></pre></div>
+
+
+<p> Note that this sets
 all instances of bge to 100Mbit Full Duplex. If you wish to be more selective,
-you can do this: <div>
-  <pre><code class='console'># cat &lt; /etc/init.d/net-tune</p>
+you can do this:</p>
 
-<h1>!/bin/sh # Force to 100FDX NIC=bge for i in 0 1 2 3; do /usr/sbin/ndd -set</h1>
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> cat &lt; /etc/init.d/net-tune
+<span class="gp">#</span>!/bin/sh <span class="c"># Force to 100FDX NIC=bge for i in 0 1 2 3; do /usr/sbin/ndd -set</span>
+<span class="go">/dev/${NIC}${i} adv_1000fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}</span>
+<span class="go">adv_1000hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_100fdx_cap 1</span>
+<span class="go">/usr/sbin/ndd -set /dev/${NIC}${i} adv_100hdx_cap 0 /usr/sbin/ndd -set</span>
+<span class="go">/dev/${NIC}${i} adv_10fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}</span>
+<span class="go">adv_10hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_autoneg_cap 0 done EOD</span>
+<span class="gp">#</span> chmod <span class="m">755</span> /etc/init.d/net-tune <span class="c"># ln -s /etc/init.d/net-tune /etc/rc2.d</span>
+<span class="go">/S68net-tune</span></code></pre></div>
 
-<p>/dev/${NIC}${i} adv_1000fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}
-adv_1000hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_100fdx_cap 1
-/usr/sbin/ndd -set /dev/${NIC}${i} adv_100hdx_cap 0 /usr/sbin/ndd -set
-/dev/${NIC}${i} adv_10fdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i}
-adv_10hdx_cap 0 /usr/sbin/ndd -set /dev/${NIC}${i} adv_autoneg_cap 0 done EOD</p>
 
-<h1>chmod 755 /etc/init.d/net-tune # ln -s /etc/init.d/net-tune /etc/rc2.d</h1>
-
-<p>/S68net-tune</code></pre>
-</div>
- You have to reboot for the kernel config file
+<p> You have to reboot for the kernel config file
 to take effect, but you can run the net-tune script at any time to make it
 work. You can change the 0 1 2 3 in the for do loop above to set the instances
 you need.</p>
@@ -1046,67 +935,60 @@ you need.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-05-02T00:00:00-05:00" pubdate data-updated="true">May 2<span>nd</span>, 2008</time>
+<time class='entry-date' datetime='2008-05-02T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>2</span><span class='date-suffix'>nd</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-  <div class="entry-content"><p>This issue did finally get resolved and Paypal didn&#8217;t need to step
-in. I&#8217;m going to remove any editorial remarks, and just leave the
+  <div class="entry-content"><p>This issue did finally get resolved and Paypal didn&rsquo;t need to step
+in. I&rsquo;m going to remove any editorial remarks, and just leave the
 factual emails here. If you do have any problems, I would recommend
 getting Simon involved, he was prompt and professional - Justin I
-bought what was listed as a &#8220;Hauppage PVR-150 MCE PCI Card&#8221;, and
+bought what was listed as a &ldquo;Hauppage PVR-150 MCE PCI Card&rdquo;, and
 received something compeletely different. Below is a copy and paste
 of all my communications with them. On 4/23, I sent my first email
 to them: Dear legendmicro-wholesale, I just received my tuner card,
-and it&#8217;s not as the auction implied. It is not compatible with with
-the WinTV-PVR-150 MCE PCI #1042, it&#8217;s a completely different card
+and it&rsquo;s not as the auction implied. It is not compatible with with
+the WinTV-PVR-150 MCE PCI #1042, it&rsquo;s a completely different card
 with different inputs, outputs and chipsets. I run MythTV on Linux,
 and there are no drivers for this card. I would gladly exchange
-this card for a &#8220;true&#8221; WinTV PVR 150. If you don&#8217;t have one, I will
+this card for a &ldquo;true&rdquo; WinTV PVR 150. If you don&rsquo;t have one, I will
 need to get a refund. -techadvise Later, on 4/23, they responded
 via eBay: We do not advertize this card as being Linux compatible.
 If you would like to return this card: PLEASE CONTACT OUR CUSTOMER
 SERVICE please use link below to file an RMA
-http://www.legendmicro.com/return-auth.asp -legendmicro-wholesale
-Okay, fair enough. I didn&#8217;t really go into all the details about
+<a href="http://www.legendmicro.com/return-auth.asp">http://www.legendmicro.com/return-auth.asp</a> -legendmicro-wholesale
+Okay, fair enough. I didn&rsquo;t really go into all the details about
 how their auction was completely incorrect. So, I did that next. On
 4/24, I sent them this via eBay: Dear legendmicro-wholesale, I can
-contact your customer service, but I don&#8217;t think you understand
+contact your customer service, but I don&rsquo;t think you understand
 just how incorrect your listing is. Here are the major points: -
-The title reads &#8220;Hauppauge WinTV-PVR-150 MCE PCI Tuner Card&#8221;. This
-card doesn&#8217;t have anything at all in common with a Hauppage card.
+The title reads &ldquo;Hauppauge WinTV-PVR-150 MCE PCI Tuner Card&rdquo;. This
+card doesn&rsquo;t have anything at all in common with a Hauppage card.
 It is a Emuzed Maui I/II, and is described in detail here:
-http://www.gossamer-threads.com/lists/ivtv/devel/14252. The auction
+<a href="http://www.gossamer-threads.com/lists/ivtv/devel/14252.">http://www.gossamer-threads.com/lists/ivtv/devel/14252.</a> The auction
 states the card has an FM Tuner, it does not. The auction says it
 has a composite video input, and the card does not. These are just
 the major points. I need to either have a card that fits the
 auction description sent to me free of charge, or I can return this
-card for a refund. I don&#8217;t think I should be responsible for paying
+card for a refund. I don&rsquo;t think I should be responsible for paying
 freight in either direction as I would not have bid on the auction
 if the listing was correct. Please confirm that I will receive
 either a replacement or a full refund. Justin -techadvise To which
 they replied on 4/24: Dear techadvise, Justin, You will need to
 contact customer service to proceed with the RMA. PLEASE CONTACT
 OUR CUSTOMER SERVICE please use link below to file an RMA
-http://www.legendmicro.com/return-auth.asp -legendmicro-wholesale
+<a href="http://www.legendmicro.com/return-auth.asp">http://www.legendmicro.com/return-auth.asp</a> -legendmicro-wholesale
 So, on 4/28, I send them this via eBay: Dear legendmicro-wholesale,
 I contacted customer service on April 24th at 4:30, and still
-haven&#8217;t heard back yet. If we don&#8217;t have a plan in place by
-tomorrow at noon, I&#8217;m just going to start working with Paypal/Ebay
+haven&rsquo;t heard back yet. If we don&rsquo;t have a plan in place by
+tomorrow at noon, I&rsquo;m just going to start working with Paypal/Ebay
 to get my money refunded. Justin -techadvise To which Legend Micro
 replied on 4/28: Dear techadvise, PLEASE CONTACT OUR CUSTOMER
 SERVICE please use link below to file an RMA
-http://www.legendmicro.com/return-auth.asp -legendmicro-wholesale
+<a href="http://www.legendmicro.com/return-auth.asp">http://www.legendmicro.com/return-auth.asp</a> -legendmicro-wholesale
 Gosh, that looks a lot like their last message. So, I got a little
 frustrated, and sent them this back via eBay on 4/28: Dear
 legendmicro-wholesale, IF YOU READ MY PREVIOUS MESSAGE YOU WOULD
@@ -1116,7 +998,7 @@ techadvise, RMAs are processed in the order that they are received.
 Sometimes it can take up to 2 business days to process an RMA. If
 you would like to talk to someone regarding your RMA, please call
 customer service 800-935-9305 x3 -legendmicro-wholesale At this
-point, I opened a case with Paypal. Here&#8217;s what I posted to Paypal
+point, I opened a case with Paypal. Here&rsquo;s what I posted to Paypal
 on 4/28 to initiate a dispute: I bid on and won eBay item
 #260231153044 a “Hauppauge WinTV-PVR-150 MCE PCI Tuner Card”. What
 I received was a TV tuner card, but nothing close to the
@@ -1127,9 +1009,9 @@ Maui I/II which is a cheap knock-off of the Hauppage. The auction
 states the card has an FM Tuner, it does not. The auction says it
 has a composite video input, and the card does not. I have sent
 email to the seller 4 times. Each time, he replies with the same
-copy &amp; paste answer: &#8212; PLEASE CONTACT OUR CUSTOMER SERVICE please
+copy &amp; paste answer: &mdash; PLEASE CONTACT OUR CUSTOMER SERVICE please
 use link below to file an RMA
-http://www.legendmicro.com/return-auth.asp &#8212; When I go to the
+<a href="http://www.legendmicro.com/return-auth.asp">http://www.legendmicro.com/return-auth.asp</a> &mdash; When I go to the
 above site, the RMA procedure states that I will be liable for S&amp;H,
 which I don’t believe I should be. I emailed the customer service
 address listed on his site on 4/24, and have yet to hear back. As I
@@ -1147,7 +1029,7 @@ pre-paid shipping label and you will be refunded in full as soon as
 we will get the product back in stock, for any questions, please
 call our customer service 800-935-9305 ext 3-Kat, thank you
 Immediately after receiving that message, I filled out the RMA form
-on their site, and put Kat&#8217;s email above in the notes field. I
+on their site, and put Kat&rsquo;s email above in the notes field. I
 immediately got an autoreply stating that my request had been
 received. On 4/30, I get this via my personal email account,
 bypassing eBay and Paypal: Dear customer, we apologize for
@@ -1161,9 +1043,9 @@ Street STE B Solon, Ohio 44139 440-776-8839 Direct Voice
 800-935-9305 Ext. 3 440-498-0706 Fax LegendMicro.com On 4/30, I
 replied back to Kat directly: Kat, My apologies, but since the
 dispute seems to be my only way to get a quick response from your
-company, I&#8217;m going to keep it open until the issue is resolved. I
+company, I&rsquo;m going to keep it open until the issue is resolved. I
 never submitted an RMA request before, I simply emailed
-service@legendmicro.com with questions that I never received a
+<a href="&#x6d;&#x61;&#105;&#x6c;&#x74;&#111;&#58;&#x73;&#x65;&#x72;&#118;&#105;&#x63;&#101;&#x40;&#108;&#101;&#103;&#101;&#x6e;&#100;&#x6d;&#x69;&#99;&#x72;&#x6f;&#46;&#99;&#111;&#109;">&#115;&#101;&#114;&#118;&#x69;&#x63;&#x65;&#64;&#108;&#101;&#x67;&#x65;&#x6e;&#100;&#x6d;&#105;&#x63;&#x72;&#111;&#x2e;&#99;&#x6f;&#109;</a> with questions that I never received a
 response to. However, I did submit an RMA form last night, and got
 an autoreply, but nothing else after that. My request number is
 501014. Thanks, Justin On 5/1, I received this update to the Paypal
@@ -1174,7 +1056,7 @@ will not close this dispute until my dispute is resolved. It is
 not. I have filled out your RMA form, and received a request number
 of 501014. I have not received an RMA number, nor a pre-paid
 shipping label. Since your priority seems to be getting me to close
-this dispute without actually resolving the problem, I&#8217;m going to
+this dispute without actually resolving the problem, I&rsquo;m going to
 mandate that all future communications take place through Paypal
 for third-party documentation - I will not call you. Once I recieve
 an RMA number and a prepaid shipping label, I will ship the part
@@ -1183,7 +1065,7 @@ dispute. UNTIL THAT POINT IN TIME, I WILL NOT CLOSE THIS DISPUTE!
 Please stop asking me to do so. We have 17 days to get this
 resolved before I file a claim. I suggest you stop trying to get me
 to close the dispute and get around to sending me that RMA number
-and shipping label that you&#8217;ve been promising me for 3 days now.
+and shipping label that you&rsquo;ve been promising me for 3 days now.
 Justin After updating the case, Kat emailed me at my personal email
 account on 5/1: As soon as we will see the dispute closed, you will
 be emailed RMA # along with prepaid shipping label and we do have
@@ -1192,22 +1074,22 @@ the right item in stock for you. Thank You for Your Business Kat
 Solon, Ohio 44139 440-776-8839 Direct Voice 800-935-9305 Ext. 3
 440-498-0706 Fax LegendMicro.com I updated the case with paypal
 with this: Paypal, Kat from LegendMicro just emailed my personal
-email account, disregarding my request to stop communicating &#8220;out
-of band&#8221;. Directly quoting her entire email: &#8212;BEGIN QUOTE&#8212; As
+email account, disregarding my request to stop communicating &ldquo;out
+of band&rdquo;. Directly quoting her entire email: &mdash;BEGIN QUOTE&mdash; As
 soon as we will see the dispute closed, you will be emailed RMA #
 along with prepaid shipping label and we do have the right item in
 stock for you. Thank You for Your Business Kat (Customer service)
 @LegendMicro.com 30700 Carter Street STE B Solon, Ohio 44139
 440-776-8839 Direct Voice 800-935-9305 Ext. 3 440-498-0706 Fax
-LegendMicro.com &#8212;END QUOTE&#8212; It is obvious to me that the seller
+LegendMicro.com &mdash;END QUOTE&mdash; It is obvious to me that the seller
 is not concerned with customer service, only with closing this
 dispute. Probably so that they can string me along further without
-a deadline hanging over them. It&#8217;s my opinion that I&#8217;ve done
+a deadline hanging over them. It&rsquo;s my opinion that I&rsquo;ve done
 everything I can to facilitate fair commerce between myself and the
 seller, and that the seller has done nothing to try and resolve the
 issue. To date, I have still never received an RMA number, nor a
 shipping label. I give up. They have done nothing that I ask, and
-really seem to want me to take this &#8220;offline&#8221;. My only recourse at
+really seem to want me to take this &ldquo;offline&rdquo;. My only recourse at
 this point is to turn this over to Paypal as a claim. Paypal, I
 have complete documentation of all email communications between the
 seller and myself should you need it. Thanks, Justin I then
@@ -1217,12 +1099,12 @@ or a shipping label. They continue to try and get me to close the
 dispute without giving me any indications that they will follow
 through with their statements. Shortly after posting this blog
 entry, and giving negative feedback on the seller, I finally got an
-RMA from them. There&#8217;s some semi-sensitive information in the
-email, so I&#8217;ll refrain from posting it here. However, two things to
+RMA from them. There&rsquo;s some semi-sensitive information in the
+email, so I&rsquo;ll refrain from posting it here. However, two things to
 note: - The RMA reflects that the card is indeed an Emuzed card,
 not a Hauppage. Did they know all along? - The RMA includes a
 refund on my original shipping charge. This is good! However, I
-didn&#8217;t get any notice of a shipping label to send the Emuzed card
+didn&rsquo;t get any notice of a shipping label to send the Emuzed card
 back to them. So, I sent them an email asking about the freight to
 them on 5/2: Thank you for the RMA number. Kat in customer service
 promised me that I would receive a pre-paid shipping label to
@@ -1230,20 +1112,20 @@ return the part back to you. What is the status on that label?
 Justin Also on 5/2, I received a reply from someone (judging from
 the typing style, either Kat or the seller) to my personal email
 account: Please Close the dispute and you will receive the shipping
-label. I immediately replied: The dispute is closed it&#8217;s a claim
-now. You can send me the shipping label, and I&#8217;ll stop the claim.
+label. I immediately replied: The dispute is closed it&rsquo;s a claim
+now. You can send me the shipping label, and I&rsquo;ll stop the claim.
 Or you can lose the claim, pay me my refund and have to deal with
-Paypal marking you as a questionable merchant. Your choice. It&#8217;s
-beyond the point of the money now, it&#8217;s the principle of the whole
-thing. You guys didn&#8217;t do jack for me until I opened the claim.
+Paypal marking you as a questionable merchant. Your choice. It&rsquo;s
+beyond the point of the money now, it&rsquo;s the principle of the whole
+thing. You guys didn&rsquo;t do jack for me until I opened the claim.
 Hell, I have a good reason to think that you knew you were selling
-me something different than what I bid on. There&#8217;s no way I&#8217;m going
-to give up the only leverage I have in exchange for your &#8220;word&#8221;
-that you&#8217;ll get me a shipping label. You might like to know that
-I&#8217;m tracking all of our communications via my blog so that Paypal
+me something different than what I bid on. There&rsquo;s no way I&rsquo;m going
+to give up the only leverage I have in exchange for your &ldquo;word&rdquo;
+that you&rsquo;ll get me a shipping label. You might like to know that
+I&rsquo;m tracking all of our communications via my blog so that Paypal
 and other potential customers of yours can get a heads up on what
 kind of shady practices you take part in.
-http://techadvise.com/2008/05/02/legend-micro/ - I update it quite
+<a href="http://techadvise.com/2008/05/02/legend-micro/">http://techadvise.com/2008/05/02/legend-micro/</a> - I update it quite
 regularly. Justin I received an email from Simon on 5/2: Justin,
 First of all, I’d like to apologize on behalf of Legend Micro for
 the miscommunication that occurred with this transaction. Second,
@@ -1263,22 +1145,22 @@ Carter Street Suite B Solon, Ohio 44139 Phone: 888-368-7573
 Direct/International: 440-394-4570 To which I replied: Simon, THANK
 YOU!!! This is all that I have wanted done since this issue was
 started 11 days ago. I would love to get the proper card sent out.
-Let&#8217;s do this - I will drop the original card off at the UPS store
+Let&rsquo;s do this - I will drop the original card off at the UPS store
 with the label you have sent me. If you ship out the replacement
 and supply me with the tracking number, I will close the Paypal
 claim, and update my feedback on eBay. Let me know if this works
 for you. Again, thank you for finally stepping up. Justin A few
 minutes later Simon replied back: Justin, Sure this is not a
 problem. We can ship out the card as soon as we see that the label
-we sent you has been activated and the package is in UPS&#8217;
+we sent you has been activated and the package is in UPS'
 possession. Please let me know when you are planning on dropping
 the card off at the UPS store. Regards, Simon I sent him the
 following email: I will do this over my lunch break in the next
 couple of hours. Simon and I emailed back and forth a few more
 times, and they did what they promised. Once their tracking number
-showed the package was in UPS&#8217; hands, I got a shipment notification
+showed the package was in UPS' hands, I got a shipment notification
 of the replacement card. On 5/7, I received my replacement which is
-quite obviously a &#8220;true&#8221; Hauppage WinTV PCI card.</p>
+quite obviously a &ldquo;true&rdquo; Hauppage WinTV PCI card.</p>
 </div>
   
   
@@ -1300,14 +1182,7 @@ quite obviously a &#8220;true&#8221; Hauppage WinTV PCI card.</p>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2007-11-09T00:00:00-06:00" pubdate data-updated="true">Nov 9<span>th</span>, 2007</time>
+<time class='entry-date' datetime='2007-11-09T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2007</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
@@ -1315,25 +1190,25 @@ quite obviously a &#8220;true&#8221; Hauppage WinTV PCI card.</p>
 
 
   <div class="entry-content"><p>Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
-out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&#8217;s article on how to do it</a> first. If that
-doesn&#8217;t work and you&#8217;re ready to drop kick the router out of the datacenter
+out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&rsquo;s article on how to do it</a> first. If that
+doesn&rsquo;t work and you&rsquo;re ready to drop kick the router out of the datacenter
 like I was, put away your black belt for a few minutes, and read about how I
-worked around a couple of bugs. Let&#8217;s define our problem first.</p>
+worked around a couple of bugs. Let&rsquo;s define our problem first.</p>
 
 <ul>
 <li>You have two subnets connected via IPSEC VPN - for the purposes of this article, 192.168.10.0/24 and 192.168.11.0/24. We assume the VPN is already up and functional.</li>
 <li>You want any host with an IP in the 192.168.11.0/24 subnet to have access to the Internet as well as access to the hosts on the other side of the IPSEC tunnel.</li>
-<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&#8217;d IP address when accessing the Internet - in this case, 1.1.1.1.
-It took me a couple days, and I still think there&#8217;s a bug in there somewhere,
+<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&rsquo;d IP address when accessing the Internet - in this case, 1.1.1.1.
+It took me a couple days, and I still think there&rsquo;s a bug in there somewhere,
 but I did finally get it to work. The IOS I was using was 12.4(17). Now,
-here&#8217;s my personal take on what I think happens that causes things to break.
-Again, I worked on this for 2 days straight, so I&#8217;m a little blurry on
-everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&#8217;s artic
+here&rsquo;s my personal take on what I think happens that causes things to break.
+Again, I worked on this for 2 days straight, so I&rsquo;m a little blurry on
+everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&rsquo;s artic
 le</a>, you can get these results by simply using route-maps on your static NAT commands. Almost, but not really. I found two other
-requirements had to be in place before the NAT&#8217;s would work as they were
+requirements had to be in place before the NAT&rsquo;s would work as they were
 supposed to:</p></li>
-<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&#8217;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
-<li><p>Once you use a route-map in your static NAT&#8217;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&#8217;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
+<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&rsquo;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
+<li><p>Once you use a route-map in your static NAT&rsquo;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&rsquo;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
 Step One: Configure Dynamic NAT We first need to setup an access list that
 will:</p>
 
@@ -1368,9 +1243,9 @@ will:</p>
 on the 192.168.10.0 subnet. Step Two: Setup Static NAT So, right now,
 192.168.11.5 can access hosts across the tunnel, but not access anyplace on
 the Internet. All other hosts on the 192.168.11.0/24 subnet can access both.
-Again, according to the Cisco article above, we shouldn&#8217;t have to do this, but
-I did. Since we have excluded our 192.168.11.5 host from being NAT&#8217;d at all,
-we need to craft a route-map for him to be static NAT&#8217;d, but not NAT&#8217;d when
+Again, according to the Cisco article above, we shouldn&rsquo;t have to do this, but
+I did. Since we have excluded our 192.168.11.5 host from being NAT&rsquo;d at all,
+we need to craft a route-map for him to be static NAT&rsquo;d, but not NAT&rsquo;d when
 accessing the remote VPN hosts. This boils down to creating an ACL identical
 to the one above minus one line:</p>
 
@@ -1391,13 +1266,13 @@ to the one above minus one line:</p>
 </code></pre>
 
 <p>Finally, all your NAT rules should be working perfectly now. In order to add
-new static NAT&#8217;s, you simply need to add the local IP address to the top of
+new static NAT&rsquo;s, you simply need to add the local IP address to the top of
 the NoNat ACL, and then create a new static NAT rule the points to the same
 route-map. Do not use a different route-map, or you will run into the bug
-above. Let me re-iterate that Cisco&#8217;s article above is cleaner, and that I
+above. Let me re-iterate that Cisco&rsquo;s article above is cleaner, and that I
 tried other cleaner ways of implementing this setup. If you have the time, try
-to get your setup working using the article above. However, if you can&#8217;t get
-it to work, try my way and see if you get the results you&#8217;re looking for.</p>
+to get your setup working using the article above. However, if you can&rsquo;t get
+it to work, try my way and see if you get the results you&rsquo;re looking for.</p>
 </div>
   
   
@@ -1407,30 +1282,40 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
   
   <div class="pagination">
     
-      <a class="prev" href="/blog/page/13/">&larr; Older</a>
+      <a class="prev" href="/posts/13">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
-    <a class="next" href="/blog/page/11/">Newer &rarr;</a>
+    <a class="next" href="/posts/11">Newer &rarr;</a>
     
   </div>
 </div>
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It&#8217;s not you, it&#8217;s me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -1438,7 +1323,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -1447,13 +1332,13 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
 <section>
   <h1>GitHub Repos</h1>
   <ul id="gh_repos">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -1477,7 +1362,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
 <section>
   <h1>Latest Tweets</h1>
   <ul id="tweets">
-    <li class="loading">Status updating&#8230;</li>
+    <li class="loading">Status updating...</li>
   </ul>
   <script type="text/javascript">
     $.domReady(function(){
@@ -1500,7 +1385,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -1515,7 +1400,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -1531,7 +1416,7 @@ it to work, try my way and see if you get the results you&#8217;re looking for.<
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Set it and forget it: Tether your Windows Mobile 6 Phone to Linux - SysAdmin's Journey</title>
+  <title>Set It and Forget It: Tether Your Windows Mobile 6 Phone to Linux - SysAdmin's Journey</title>
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="I have a love/hate relationship with my phone - an HTC PPC6800. I can&#8217;t live
+  <meta name="description" content="I have a love/hate relationship with my phone - an HTC PPC6800. I can&rsquo;t live
 without it - I can check my work email from anywhere, and surf the &hellip;">
   
 
@@ -22,10 +22,11 @@ without it - I can check my work email from anywhere, and surf the &hellip;">
   <link rel="canonical" href="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <script src="/javascripts/modernizr-2.0.js"></script>
-  <script src="/javascripts/ender.js"></script>
-  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -58,9 +59,9 @@ without it - I can check my work email from anywhere, and surf the &hellip;">
   
 </ul>
   
-<form action="http://google.com/search" method="get">
+<form action="https://www.google.com/search" method="get">
   <fieldset role="search">
-    <input type="hidden" name="q" value="site:sysadminsjourney.com" />
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
     <input class="search" type="text" name="q" results="0" placeholder="Search"/>
   </fieldset>
 </form>
@@ -80,10 +81,6 @@ without it - I can check my work email from anywhere, and surf the &hellip;">
   
   <header>
     
-      
-      
-        <div class="alert alert-info">NOTE: This post was written before the migration of this blog to a new format.  If anything in this post doesn't look formatted right, please leave a comment and I'll get it fixed up.</div>
-      
       <h1 class="entry-title">Set It and Forget It: Tether Your Windows Mobile 6 Phone to Linux</h1>
     
     
@@ -93,53 +90,46 @@ without it - I can check my work email from anywhere, and surf the &hellip;">
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-09-06T00:00:00-05:00" pubdate data-updated="true">Sep 6<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-09-06T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
         
       </p>
     
   </header>
 
 
-<div class="entry-content"><p>I have a love/hate relationship with my phone - an HTC PPC6800. I can&#8217;t live
+<div class="entry-content"><p>I have a love/hate relationship with my phone - an HTC PPC6800. I can&rsquo;t live
 without it - I can check my work email from anywhere, and surf the web. While
-I&#8217;ve tried many PDA&#8217;s through the years, none of them have stuck, because I
+I&rsquo;ve tried many PDA&rsquo;s through the years, none of them have stuck, because I
 got tired of lugging them around. I <strong>always</strong> have my phone with me, so
 therefore my smartphone has made me much more organized. My wife loves it
-because I can remember all the upcoming appointments. Yet, I hate it. It&#8217;s UI
+because I can remember all the upcoming appointments. Yet, I hate it. It&rsquo;s UI
 is horrible. It locks up and needs rebooted, and I feel dirty using a M$
 product. Well, I found one more reason to like it. I can tether my Ubuntu
 laptop to my phone and get Internet access from just about anywhere. This
 howto is for Ubuntu, but it should work for any distro that uses bluez-utils.
 Note that I briefly tried to get my laptop tethered via USB, but I found
-several comments that it wouldn&#8217;t work without a custom kernel module.
+several comments that it wouldn&rsquo;t work without a custom kernel module.
 Bluetooth is easier, works out of the box, and is much cooler besides ;-)
-First things first, let&#8217;s install the prerequisites:</p>
+First things first, let&rsquo;s install the prerequisites:</p>
 
 <pre><code>sudo apt-get install bluez-utils bluetooth bluez-gnome bluez-hcidump
 </code></pre>
 
 <p>Next, enable the bluetooth applet in Gnome. Navigate to
-&#8220;System->Preferences->BlueTooth Preferences&#8221;. On the &#8220;Devices&#8221; tab, click
-&#8220;Other devices can connect&#8221;. Now we need to pair your phone to your PC. From
+&ldquo;System->Preferences->BlueTooth Preferences&rdquo;. On the &ldquo;Devices&rdquo; tab, click
+&ldquo;Other devices can connect&rdquo;. Now we need to pair your phone to your PC. From
 your phone, click Start->Settings. Click on the Connections tab, and click the
-Bluetooth icon. Click &#8220;Add new device&#8230;&#8221; and choose the entry for your
+Bluetooth icon. Click &ldquo;Add new device&hellip;&rdquo; and choose the entry for your
 computer from the list. You will be asked for a passcode and when you enter it
 on your phone, the bluetooth applet will pop up saying that your phone is
 trying to connect. Click on the ballon and enter the same passcode.
-Congratulations, you have paired your phone to your PC! Now, let&#8217;s find the
+Congratulations, you have paired your phone to your PC! Now, let&rsquo;s find the
 hardware address of your phone:</p>
 
 <pre><code>sudo hcitool scan
 </code></pre>
 
-<p>Document the 12 digit hex address somewhere, we&#8217;ll need it later. Now, open up
+<p>Document the 12 digit hex address somewhere, we&rsquo;ll need it later. Now, open up
 <strong>/etc/default/bluetooth</strong> in your favorite text editor. Find the line that
 states:</p>
 
@@ -162,25 +152,27 @@ states:</p>
  --devup /etc/bluetooth/pan/dev-up --devdown /etc/bluetooth/pan/dev-down"
 </code></pre>
 
-<p>changing the XX&#8217;s to the hardware address of your phone. Now, let&#8217;s run the
-following to create the scripts we need: <div>
-  <pre><code class='console'>sudo sh -c
-'mkdir -p /etc/bluetooth/pan &amp;&amp; \ echo &quot;iface bnep0 inet dhcp&quot; &gt;&gt;
-/etc/network/interfaces &amp;&amp; \ for i in up down; do touch
-/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo
-&quot;#!/bin/bash&quot; &gt; /etc/bluetooth/pan/dev-$i echo &quot;/sbin/if$i bnep0&quot; &gt;&gt;
-/etc/bluetooth/pan/dev-$i done &amp;&amp; \ /etc/init.d/networking restart &amp;&amp; \
-/etc/init.d/bluetooth restart'</code></pre>
-</div>
- Finally, on your phone click
-Start->Programs->Internet Sharing. Select &#8220;Bluetooth PAN&#8221; on the PC Connection
+<p>changing the XX&rsquo;s to the hardware address of your phone. Now, let&rsquo;s run the
+following to create the scripts we need:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">sudo sh -c</span>
+<span class="go">&#39;mkdir -p /etc/bluetooth/pan &amp;&amp; \ echo &quot;iface bnep0 inet dhcp&quot; &gt;&gt;</span>
+<span class="go">/etc/network/interfaces &amp;&amp; \ for i in up down; do touch</span>
+<span class="go">/etc/bluetooth/pan/dev-$i chmod 755 /etc/bluetooth/pan/dev-$i echo</span>
+<span class="go">&quot;#!/bin/bash&quot; &gt; /etc/bluetooth/pan/dev-$i echo &quot;/sbin/if$i bnep0&quot; &gt;&gt;</span>
+<span class="go">/etc/bluetooth/pan/dev-$i done &amp;&amp; \ /etc/init.d/networking restart &amp;&amp; \</span>
+<span class="go">/etc/init.d/bluetooth restart&#39;</span></code></pre></div>
+
+
+<p> Finally, on your phone click
+Start->Programs->Internet Sharing. Select &ldquo;Bluetooth PAN&rdquo; on the PC Connection
 drop-down, and select the appropriate WAN Network Connection. One more note
-before you&#8217;re off and surfing the &#8216;net on your tethered phone: your bluetooth
-connection can&#8217;t be managed by NetworkManager because bluez-utils doesn&#8217;t make
+before you&rsquo;re off and surfing the &lsquo;net on your tethered phone: your bluetooth
+connection can&rsquo;t be managed by NetworkManager because bluez-utils doesn&rsquo;t make
 use of DBUS. So, in order to use your bluetooth connection, right click on
-your Network Manager icon, and select &#8220;Enable Networking&#8221; to disable
-NetworkManager. When you&#8217;re done, right click and reselect &#8220;Enable Networking&#8221;
-to switch things back. Okay, that&#8217;s out of the way. Click on &#8220;Connect&#8221; on your
+your Network Manager icon, and select &ldquo;Enable Networking&rdquo; to disable
+NetworkManager. When you&rsquo;re done, right click and reselect &ldquo;Enable Networking&rdquo;
+to switch things back. Okay, that&rsquo;s out of the way. Click on &ldquo;Connect&rdquo; on your
 phone. As your phone is connecting, your Linux box will see your phone, and
 connect to it. Once the connection is established, your Linux box will get a
 DHCP-assigned IP from your phone. To verify all this, run the following
@@ -189,14 +181,14 @@ command:</p>
 <pre><code>/sbin/ifconfig bnep0
 </code></pre>
 
-<p>You should see the interface, and see that it&#8217;s been assigned an IP. After you
+<p>You should see the interface, and see that it&rsquo;s been assigned an IP. After you
 have the address, you can freely browse the Internet. To disconnect, simply
-click &#8220;Disconnect&#8221; on your phone. Don&#8217;t forget to re-enable networking via
+click &ldquo;Disconnect&rdquo; on your phone. Don&rsquo;t forget to re-enable networking via
 NetworkManager. Props go out to the following places in helping me determine
 how to do this in the first place:</p>
 
 <ul>
-<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812&#8217;s post in the Ubuntu forums</a></li>
+<li><a href="http://ubuntuforums.org/archive/index.php/t-598890.html">InfoSec812&rsquo;s post in the Ubuntu forums</a></li>
 <li><a href="http://bluez.sourceforge.net/contrib/HOWTO-PAN">The bluez-utils howto</a></li>
 <li>The pand manpage, because I always RTFM ;-)
 Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
@@ -217,19 +209,12 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
 
 
 
-
-
-
-
-  
-
-
-<time datetime="2008-09-06T00:00:00-05:00" pubdate data-updated="true">Sep 6<span>th</span>, 2008</time>
+<time class='entry-date' datetime='2008-09-06T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/linux/'>Linux</a>, <a class='category' href='/blog/categories/networking/'>Networking</a>, <a class='category' href='/blog/categories/quicktips/'>QuickTips</a>, <a class='category' href='/blog/categories/ubuntu/'>Ubuntu</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/networking/'>networking</a>, <a class='category' href='/blog/categories/quicktips/'>quicktips</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>, <a class='category' href='/blog/categories/ubuntu/'>ubuntu</a>
   
 </span>
 
@@ -238,7 +223,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
     
       <div class="sharing">
   
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/09/06/set-it-and-forget-it-tether-your-windows-mobile-6-phone-linux" >Tweet</a>
   
   
   
@@ -266,20 +251,30 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
 
 <aside class="sidebar">
   
-    <section>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
       <li class="post">
-        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules with Dynamic Puppet Environments</a>
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/11/14/vpsnet-review">VPS.net review</a>
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
       </li>
     
       <li class="post">
-        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's not you, it's me: Call for Node Gallery co-maintainers</a>
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
       </li>
     
       <li class="post">
@@ -287,7 +282,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
       </li>
     
       <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the right CDN for YOUR website</a>
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
@@ -302,7 +297,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
   <a href="https://github.com/justintime">@justintime</a> on GitHub
   
   <script type="text/javascript">
-    $.domReady(function(){
+    $(document).ready(function(){
         if (!window.jXHR){
             var jxhr = document.createElement('script');
             jxhr.type = 'text/javascript';
@@ -350,7 +345,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Justin Ellison -
+  Copyright &copy; 2015 - Justin Ellison -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 
@@ -368,7 +363,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
@@ -384,7 +379,7 @@ Enjoy! Stay tuned for a post on how to sync your WM6 phone to Linux.</li>
       var twitterWidgets = document.createElement('script');
       twitterWidgets.type = 'text/javascript';
       twitterWidgets.async = true;
-      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
       document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
     })();
   </script>
