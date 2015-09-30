@@ -38,13 +38,12 @@ will:
     * **NOT NAT** packets that traverse the VPN.
     * **NAT** packets from our 192.168.11.0/24 subnet to everywhere else.
     
-     ``` 
+```
     ip access-list extended NoNat
      deny   ip host 192.168.11.5 any
      deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
      permit ip 192.168.11.0 0.0.0.255 any
-     ```
-    
+```    
 
 Then, we use this command to setup dynamic NAT:
 
