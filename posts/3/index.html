@@ -9,9 +9,8 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="Took a fair amount of googling around to find the solution to this one. With
-the Node Gallery 3.x branch, we
-needed a way to quickly add an image to &hellip;">
+  <meta name="description" content="At $work, we have a lot of java processes that are ran via cron and other
+wrappers that do some pretty critical tasks. The apps have been written so &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +78,55 @@ needed a way to quickly add an image to &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/01/29/teaching-java-how-commit-suicide">Teaching Java How to Commit Suicide</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-01-29T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At $work, we have a lot of java processes that are ran via cron and other
+wrappers that do some pretty critical tasks. The apps have been written so
+that the whole thing is wrapped in a try/catch that will call system.exit(1)
+should something not go right. Our wrapper scripts watch for a non-zero exit
+code, and alert Nagios if something went wrong. This works great except for
+when a VM encounters an outOfMemory exception (OOM). The Java VM attempts to
+continue on, but if the main thread hits this exception, the entire VM will
+exit. However, the application code that exits with a status of 1 never gets
+called, so the application ends up dying with a status of 0. Well, Sun (Oracle
+now I guess) gave us a new option in Java 6 that was backported to 1.4.2_12
+and up that allows us to tell Java to run a shell command when it encounters
+an OOM exception. By adding the option</p>
+
+<pre><code>-XX:OnOutOfMemoryError="kill -9 %p"
+</code></pre>
+
+<p>to our Java command line, the VM will execute a shell that calls the kill
+command, with an argument of the PID of the VM. The -9 option to kill will
+cause the VM to exit with a non-zero status, so that our wrappers will pick up
+the error and alert the right people. Note: this feature was never backported
+to Java5 - sorry!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -870,53 +918,6 @@ comment</a>!</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id">QuickTip: Make Life Easier With Ssh-copy-id</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2009-11-12T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>How many times have you ran through this series of events?</p>
-
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cat ~/.ssh/id_dsa.pub
-<span class="go">...copy output to clipboard...</span>
-<span class="gp">$</span> ssh myhost
-<span class="go">...enter password...</span>
-<span class="go">myhost$ vi ~./ssh/authorized_keys</span>
-<span class="go">...paste public key and save...</span>
-<span class="go">myhost$ exit</span></code></pre></div>
-
-
-<p>Thanks to bash&rsquo;s tab completion, I
-happened upon <strong>ssh-copy-id</strong>. Instead of all that above, just do this:</p>
-
-<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> ssh-copy-id myhost
-<span class="go">...enter password...</span></code></pre></div>
-
-
-<p>You&rsquo;re done!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -944,6 +945,10 @@ happened upon <strong>ssh-copy-id</strong>. Instead of all that above, just do t
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/">Replicating Hashicorp Vault in a Multi-DataCenter Setup</a>
+      </li>
+    
+      <li class="post">
         <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
@@ -957,10 +962,6 @@ happened upon <strong>ssh-copy-id</strong>. Instead of all that above, just do t
     
       <li class="post">
         <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
-      </li>
-    
-      <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>

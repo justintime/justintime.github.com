@@ -9,8 +9,8 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="At work, we had a need for software that addresses a specific problem. We have
-a bunch of users that need to share files in a secure manner via &hellip;">
+  <meta name="description" content="Matt Simmons over at Standalone Sysadmin has been evangelizing ServerFault.com for awhile now. The idea
+is great, and it really works - I&rsquo;ve &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,87 @@ a bunch of users that need to share files in a secure manner via &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/08/05/separating-your-personal-signal-noise-serverfaultcom">Separating Your Personal Signal From Noise at ServerFault.com</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-08-05T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Matt Simmons over at <a href="http://www.standalone-%0Asysadmin.com/">Standalone Sysadmin</a> has been evangelizing ServerFault.com for awhile now. The idea
+is great, and it really works - I&rsquo;ve learned a lot of things from the site
+already. However, checking websites is so 1998 - everything I do is RSS now.
+Simply adding the homepage of ServerFault.com to your RSS reader using
+<a href="http://serverfault.com/feeds">http://serverfault.com/feeds</a> results in a huge amount of items that I could
+care less about, and I hate clutter in my RSS reader. After poking around a
+bit, I found some undocumented features that you can use to eliminate unneeded
+noise from your RSS feed (or your browser if you still live in 1998 :-) ).
+The key to doing this is tags. Every question on ServerFault has one or more
+tags. You can view them all at
+<a href="http://serverfault.com/tags">http://serverfault.com/tags</a>. There&rsquo;s two ways
+you can go about getting only what you want in your feed &ndash; excluding tags or
+including tags. Let&rsquo;s start with including tags.</p>
+
+<h2>Including Tags</h2>
+
+<p>When using this method, I haven&rsquo;t figured out how to use an &ldquo;OR&rdquo; when using
+multiple tags, you can only use the builtin AND operation. Let&rsquo;s say that you
+only want questions tagged with Linux. Easy enough, your feed URL would be <a href="http://serverfault.com/feeds/tag/linux">ht
+tp://serverfault.com/feeds/tag/linux</a>.
+Now your feed will only show you questions tagged with Linux. Say that&rsquo;s
+getting to be TMI, and you want to limit that feed to only include questions
+tagged Linux and Ubuntu. Simply add more tags to your feed URL with +tagname,
+and urlencode the plus - resulting in this URL: <a href="http://serverfault.com/feeds/tag/linux%2Bubuntu">http://serverfault.com/feeds/
+tag/linux%2bubuntu</a>. Now, you
+can&rsquo;t do &ldquo;OR&rdquo;&rsquo;s in a single query, but you can create multiple feed URL&rsquo;s that
+include just what you want and use your feed reader to combine them into one
+folder.</p>
+
+<h2>Excluding Tags</h2>
+
+<p>The above example works, but not many sysadmins I know are so focused in just
+a few areas. Also, the above configuration will not keep you in-tune to new
+tags that you might be interested in. For myself, I&rsquo;m interested in everything
+except anything Windows related. By excluding tags, you will need to go
+through an iterative process, but once you&rsquo;re done you&rsquo;ll be quite happy with
+the results. Let&rsquo;s get to it. The first step is to make a URL that gives an
+RSS feed for all posts not tagged windows. Easy: <a href="http://serverfault.com/feeds/tag/-windows">http://serverfault.com/feeds
+/tag/-windows</a>. Now, unfortunately,
+many questions are tagged as windows-server-2003, but are not tagged windows.
+So, we append the URL with a &ldquo;AND NOT THISTAG&rdquo; operation like this:
+<a href="http://serverfault.com/feeds/tag/-windows%2B-windows-%0Aserver-2003">http://serverfault.com/feeds/tag/-windows%2B-windows-
+server-2003</a>. You can see where I&rsquo;m going with this now. Using these two
+methods, you can create a very nice, clean, and relevant personal RSS feed for
+ServerFault&rsquo;s questions. Nothing here is rocket science, but it&rsquo;s not
+documented either &ndash; hopefully it helps someone else. Note that you can
+preview what your query will generate in your browser by replacing &ldquo;feeds/tag&rdquo;
+in the URL with &ldquo;tags&rdquo;. In case you&rsquo;re wondering, my &ldquo;everything except
+Windows&rdquo; feed URL is still not perfect, but here&rsquo;s what I&rsquo;ve got so far:
+<a href="http://serverfault.com/feeds/tag/-windows%0A%2B-windows-server-2003%2B-sqlserver%2B-windows-server-2008%2B-windows-xp%2B-%0Aiis%2B-active-directory%2B-sharepoint%2B-vista%2B-exchange%2B-outlook">http://serverfault.com/feeds/tag/-windows%2B-windows-server-2003%2B-sqlserver
+%2B-windows-server-2008%2B-windows-xp%2B-iis%2B-active-directory%2B-sharepoint
+%2B-vista%2B-exchange%2B-outlook</a>. Share
+your URL&rsquo;s and tips I may have missed in the comments!</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -915,51 +996,6 @@ first impressions:</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/content/2009/06/16/installing-pidgin-encryption-plugin-opensolaris">Installing the Pidgin-Encryption Plugin on OpenSolaris</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2009-06-16T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>You can install Pidgin from the OpenSolaris.org repository, but there&rsquo;s no
-package for the Pidgin-Encryption plugin. Once you point it in the right
-direction, it&rsquo;s not hard to install the plugin from source.</p>
-
-<pre><code>pfexec pkg install SUNWgcc SUNWxorg-headers SUNWgnome-common-devel
-tar -xzvf pidgin-encryption-3.0.tar.gz
-cd pidgin-encryption-3.0
-./configure --with-nspr-includes=/usr/include/firefox/nspr/ \
-  --with-nspr-libs=/usr/lib/firefox/ \
-  --with-nss-includes=/usr/include/firefox/nss/ \
-  --with-nss-libs=/usr/lib/firefox/ --prefix=/usr
-make
-pfexec make install
-</code></pre>
-
-<p>Restart Pidgin, and go to Tools->Plugins, and enable the Pidgin Encryption
-plugin.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/7">&larr; Older</a>
@@ -987,6 +1023,10 @@ plugin.</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/">Replicating Hashicorp Vault in a Multi-DataCenter Setup</a>
+      </li>
+    
+      <li class="post">
         <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
@@ -1000,10 +1040,6 @@ plugin.</p>
     
       <li class="post">
         <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
-      </li>
-    
-      <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>

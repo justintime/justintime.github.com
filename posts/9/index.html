@@ -9,8 +9,8 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="Running GUI&rsquo;s over an SSH tunnel is nothing new, and not too tricky. However,
-I recently had a case where I wanted to run a java-based GUI ( &hellip;">
+  <meta name="description" content="As a Linux user, I&rsquo;ve used # mount -o loop -t iso9660 /path/to/file.iso /mnt/tmp more times than I can count. Not
+suprisingly, you can do it in &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,56 @@ I recently had a case where I wanted to run a java-based GUI ( &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/05/06/use-lofiadm-mount-iso-solaris-10">Use Lofiadm to Mount an ISO in Solaris 10</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-06T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As a Linux user, I&rsquo;ve used</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> mount -o loop -t iso9660 /path/to/file.iso /mnt/tmp</code></pre></div>
+
+
+<p>more times than I can count. Not
+suprisingly, you can do it in Solaris 10 as well, there&rsquo;s just another step
+involved:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> lofiadm -a /path/to/file.iso /dev/lofi/1
+<span class="gp">#</span> mount -o ro -F hsfs /dev/lofi/1 /mnt/tmp</code></pre></div>
+
+
+<p>The first command,
+lofiadm, associates the iso file to a block device managed by the kernel
+LOopback FIle driver. The second command is the same old mount command you&rsquo;re
+used to, you just point it to the lofi device. To unmount:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> umount /mnt/tmp <span class="c"># lofiadm -d /dev/lofi/1</span></code></pre></div>
+
+
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -245,7 +295,7 @@ sys_eventlevel="2"
 ./scadm set netsc_ipnetmask 255.255.255.0
 ./scadm set netsc_ipgateway 192.168.1.1
 ./scadm set sc_cliprompt srv1-mgmt
-./scadm set mgt_mailalert &ldquo;<a href="&#109;&#x61;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x6d;&#101;&#64;&#x6d;&#x79;&#46;&#x63;&#111;&#109;">&#x6d;&#101;&#x40;&#x6d;&#121;&#46;&#x63;&#111;&#x6d;</a> 3&rdquo;
+./scadm set mgt_mailalert &ldquo;<a href="&#x6d;&#x61;&#x69;&#108;&#116;&#x6f;&#x3a;&#x6d;&#101;&#64;&#x6d;&#121;&#x2e;&#99;&#111;&#x6d;">&#109;&#x65;&#64;&#x6d;&#x79;&#x2e;&#x63;&#x6f;&#x6d;</a> 3&rdquo;
 ./scadm set mgt_mailhost 192.168.1.5
 ./scadm userpassword admin
 ./scadm set if_connection ssh
@@ -796,48 +846,6 @@ in the near future.</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/content/2009/01/06/list-installed-packages-ubuntu">List Installed Packages in Ubuntu</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2009-01-06T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>6</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>I found this over at the <a href="http://ubuntuforums.org/showthread.php?t=261366">Ubuntu Forums</a>, but since it took me
-forever to find, I&rsquo;m dropping notes here. In RPM-based distros, you can do
-&lsquo;rpm -qa > somefile.txt&rsquo;. In Debian/Ubuntu, do this:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">dpkg --get-selections &gt; machineA.txt</code></pre></div>
-
-
-<p>In true apt fashion, if you
-then want to have machine B have all the software machine A has, do this:</p>
-
-<div class="highlight"><pre><code class="language-bash" data-lang="bash">dpkg --set-selections &lt; machineA.txt <span class="o">&amp;&amp;</span> dselect</code></pre></div>
-
-
-<p>Enjoy!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/10">&larr; Older</a>
@@ -865,6 +873,10 @@ then want to have machine B have all the software machine A has, do this:</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/">Replicating Hashicorp Vault in a Multi-DataCenter Setup</a>
+      </li>
+    
+      <li class="post">
         <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
@@ -878,10 +890,6 @@ then want to have machine B have all the software machine A has, do this:</p>
     
       <li class="post">
         <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
-      </li>
-    
-      <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>

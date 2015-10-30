@@ -4,7 +4,7 @@
   <title><![CDATA[SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2015-09-29T22:27:00-05:00</updated>
+  <updated>2015-10-30T16:57:21-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -12,6 +12,238 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Replicating Hashicorp Vault in a Multi-DataCenter Setup]]></title>
+    <link href="http://sysadminsjourney.com/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/"/>
+    <updated>2015-10-30T12:45:58-05:00</updated>
+    <id>http://sysadminsjourney.com/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup</id>
+    <content type="html"><![CDATA[<p>This post will go over how to use <a href="https://vaultproject.io">HashiCorp&rsquo;s Vault</a> with <a href="http://consul.io">HashiCorp&rsquo;s Consul</a> as a backend
+in a multiple datacenter arrangement.  This post is a cleaned up summary of what happened in <a href="https://github.com/hashicorp/vault/issues/674">this Github issue</a>.</p>
+
+<p>Very, very special thanks go out to Jeff Mitchell with Hashicorp.  Without his help, I never would have been able to accomplish what I had originally set out to do.</p>
+
+<h1>The Use Case</h1>
+
+<ul>
+<li>You have more than one physical datacenter.</li>
+<li>You need to have a HA Vault setup in each datacenter</li>
+<li>You don&rsquo;t want to lose functionality in any datacenter if the connection between them is severed.</li>
+<li>You want to have all Vault auth tokens, secrets, and policies available in all datacenters.</li>
+<li>You have one <em>read+write</em> &ldquo;source&rdquo; datacenter where you will be creating Vault tokens, policies, and secrets.</li>
+<li>You have one or more <em>read-only</em> &ldquo;destination&rdquo; datacenters where Vault data will be replicated to, but never modified.  We&rsquo;ll use one in our example, but I use 3 and see no real scalability problems with anything less than 20.</li>
+</ul>
+
+
+<h1>Context and Assumptions</h1>
+
+<p>Throughout this post, I&rsquo;ll refer to two datacenters: Datacenter A and Datacenter B.  Datacenter A will represent our &ldquo;source&rdquo; datacenter, and B will
+represent our &ldquo;destination&rdquo; datacenter.  For brevity, we&rsquo;ll assume that these are both physically
+separate datacenters as well as separate Consul datacenters.  We&rsquo;ll also assume that there is VPN or an alternative connectivity solution in place.</p>
+
+<p>Lastly, this post assumes that you&rsquo;re familiar with working with both Vault and Consul.  Please read all the docs on both products(<a href="https://www.consul.io/docs/index.html">Consul</a>,<a href="https://vaultproject.io/docs">Vault</a>).  Hashicorp has
+went to great pains to produce some really good documentation, please don&rsquo;t let their efforts go to waste.</p>
+
+<div class="alert warning-alert">Vault's authors do not support using Vault in this manner.  While it certainly works very well for me, it may not work for you.  We will be disabling 
+Vault's internal read cache as part of this exercise, and doing so will have a significant impact on Vault's performance.  In my scenario, performance 
+is not a concern so long as the request comes back within a second, and Vault still met that requirement. </div>
+
+
+<h1>The Problem</h1>
+
+<p>While Consul itself supports multiple datacenters, there&rsquo;s some problems in the way that it handles things them that cause problems when
+you&rsquo;re putting Vault in front of it.</p>
+
+<ol>
+<li>Your first thought might be to use multiple datacenters in Consul, and point all of your Vaults at the same datacenter.  This technically
+will work, but if Datacenter A loses connectivity to Datacenter B, Vault will not function in Datacenter B until connectivity is restored.</li>
+<li>You might next come upon <a href="https://github.com/hashicorp/consul-replicate">consul-replicate</a>.  This is the right tool for the job, but the devil&rsquo;s in
+the details.  First, you can&rsquo;t replicate the entire k/v store &ndash; you have to exclude some things from being replicated.</li>
+<li>If you get all that figured out, you&rsquo;ll quickly discover that even though everything seems to be working fine via consul-replicate, your changes
+don&rsquo;t show up in Datacenter B until after you restart and unseal Vault.</li>
+</ol>
+
+
+<h1>The Solution</h1>
+
+<p>The solution is to setup Vault to point at a local Consul cluster.  We&rsquo;ll use consul-replicate to replicate specific data from Consul in the source datacenter (A) to
+the destinatation datacenter (B)</p>
+
+<p>For performance, Vault makes use of a read cache.  Since only one Vault instance is actually marked as active and that active instance is the only one that sees <em>any</em> operations,
+it caches every read indefinitely in process memory.  Since we&rsquo;re using consul-replicate to essentially change the data underneath Vault without using Vault API&rsquo;s, you need
+to disable that read cache.</p>
+
+<h2>Step 1: Setup Consul clusters in each datacenter</h2>
+
+<p>By following the <a href="https://www.consul.io/docs/index.html">awesome documentation on Consul</a>, you&rsquo;ll have a Consul cluster up and running in each datacenter in no time.
+<em>NOTE:</em> You need to set your <code>encrypt</code> and <code>acl_master_token</code> to the same values in order to make multiple datacenters work in Consul.</p>
+
+<h2>Step 2: Make the Consul clusters aware of the nodes in the other datacenters</h2>
+
+<p>Use the <code>consul join -wan &lt;&lt;hostname of Consul host in other datacenter&gt;&gt;</code> command to establish communications between each Consul cluster.</p>
+
+<h2>Step 3: Install HA Vault in each datacenter</h2>
+
+<p>Use the <a href="https://vaultproject.io/docs">awesome documentation on Vault</a> to build HA Vault clusters in each datacenter.  Point each Vault instance at it&rsquo;s local Consul datacenter.
+Vault instance 1 in Datacenter A would have a <code>vault.hcl</code> file like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">backend</span> <span class="s2">&quot;consul&quot;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">address</span> <span class="err">=</span> <span class="nt">&quot;localhost:8500&quot;</span>
+</span><span class='line'>  <span class="err">advertise_addr</span> <span class="err">=</span> <span class="s2">&quot;https://vault1.datacenterA.com:8200&quot;</span>
+</span><span class='line'>  <span class="err">token</span> <span class="err">=</span> <span class="s2">&quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;</span>
+</span><span class='line'>  <span class="err">path</span> <span class="err">=</span> <span class="s2">&quot;vault&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">listener</span> <span class="s2">&quot;tcp&quot;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">address</span> <span class="err">=</span> <span class="nt">&quot;vault1.datacenterA.com:8200&quot;</span>
+</span><span class='line'>  <span class="err">tls_cert_file</span> <span class="err">=</span> <span class="s2">&quot;/etc/pki/tls/certs/wildcard.datacenterA.com.crt&quot;</span>
+</span><span class='line'>  <span class="err">tls_key_file</span> <span class="err">=</span> <span class="s2">&quot;/etc/pki/tls/private/datacenterA.com.key&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Vault instance 1 in Datacenter B would have a <code>vault.hcl</code> like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">disable_cache</span> <span class="err">=</span> <span class="kc">true</span>
+</span><span class='line'><span class="err">backend</span> <span class="s2">&quot;consul&quot;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">address</span> <span class="err">=</span> <span class="nt">&quot;localhost:8500&quot;</span>
+</span><span class='line'>  <span class="err">advertise_addr</span> <span class="err">=</span> <span class="s2">&quot;https://vault1.datacenterB.com:8200&quot;</span>
+</span><span class='line'>  <span class="err">token</span> <span class="err">=</span> <span class="s2">&quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;</span>
+</span><span class='line'>  <span class="err">path</span> <span class="err">=</span> <span class="s2">&quot;vault&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="err">listener</span> <span class="s2">&quot;tcp&quot;</span> <span class="p">{</span>
+</span><span class='line'>  <span class="err">address</span> <span class="err">=</span> <span class="nt">&quot;vault1.datacenterB.com:8200&quot;</span>
+</span><span class='line'>  <span class="err">tls_cert_file</span> <span class="err">=</span> <span class="s2">&quot;/etc/pki/tls/certs/wildcard.datacenterB.com.crt&quot;</span>
+</span><span class='line'>  <span class="err">tls_key_file</span> <span class="err">=</span> <span class="s2">&quot;/etc/pki/tls/private/datacenterB.com.key&quot;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The big thing to notice here is that we turn off the read cache in our destination datacenter.</p>
+
+<div class="alert alert-warning">IMPORTANT: the disable_cache functionality is new and is only available in Vault 0.4.0 and up.  Vault 0.4.0 wasn't available at the time of this writing.  If you need this functionality and 0.4.0 isn't available yet, you need to build from source.</div>
+
+
+<h2>Step 4: Set Up Consul-Replicate</h2>
+
+<p>At this point, you will have all of the endpoints set up in the proper manner.  The last piece to this puzzle is to replicate the data from the source to the destination(s) via <a href="https://github.com/hashicorp/consul-replicate">consul-replicate</a>.  Consul-replicate is a very specific tool written for a very specific purpose, and I&rsquo;ll admit that the docs for it aren&rsquo;t up to par with the other tools in Hashicorp&rsquo;s suite.  Rest assured, it works perfectly once you&rsquo;ve got it set up.</p>
+
+<p>Consul-replicate works by connecting our destination Consul cluster, queries the keys that we instruct it to sync using Consul&rsquo;s built-in remote datacenter capabilities, and synchronizes these key-value pairs to our destination Consul cluster&rsquo;s local datacenter.</p>
+
+<p>Download the latest consul-replicate release, and install it on one of the Consul nodes in datacenter B.  Your <code>/etc/consul-replicate.hcl</code> should look something like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="err">consul</span> <span class="err">=</span> <span class="s2">&quot;127.0.0.1:8500&quot;</span>
+</span><span class='line'><span class="err">token</span> <span class="err">=</span> <span class="s2">&quot;XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX&quot;</span>
+</span><span class='line'><span class="err">retry</span> <span class="err">=</span> <span class="s2">&quot;10s&quot;</span>
+</span><span class='line'><span class="err">max_stale</span> <span class="err">=</span> <span class="s2">&quot;10m&quot;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/sys/token@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/sys/policy@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/logical@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/audit@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/core/audit@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/core/auth@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/core/keyring@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/core/mounts@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="err">prefix</span> <span class="p">{</span>
+</span><span class='line'>    <span class="err">source</span> <span class="err">=</span> <span class="nt">&quot;vault/core/seal-config@datacenterA&quot;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The key here:</p>
+
+<h5><div class="alert alert-danger">DON&rsquo;T REPLICATE THE ENTIRE /vault TREE!!!</div></h5>
+
+<p>It&rsquo;s not so much about what you DO replicate as it is what you DON&rsquo;T replicate.  Jeff helped me out tremendously here:</p>
+
+<blockquote><p>The values I gave above should be a good baseline. You definitely do not want /core/leader or /core/lock and if you replicate /sys/expire you&rsquo;ll have multiple DCs all trying to revoke the same leases, which is a very bad idea.</p>
+
+<p>&hellip;</p>
+
+<p>From some looking at a basic layout with the file physical backend, you&rsquo;d want to copy /sys/token but not /sys/expire, yes to /logical/, and yes much of /core but not /core/leader and not /core/lock.</p></blockquote>
+
+<p>Once you have your prefixes defined, you can start up consul-replicate: <code>/usr/local/bin/consul-replicate -config=/etc/consul-replicate.hcl -log-level=info</code>.  Within a few seconds, all of your Vault data should be replicated up to your destination datacenter.</p>
+
+<h1>Conclusion</h1>
+
+<p>While unsupported, I&rsquo;ve found this setup to be fast and stable in our use case.  We use Vault more as a encrypted secret keystore for passwords that applications need access to, and don&rsquo;t use any of the more esoteric features such as the various auth backends.  We simply use the token auth and generic secret storage along with the file audit backend.  Replication is near-immediate, and the performance penalty incurred due to disabling the read cache has been acceptable.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Git Submodules With Dynamic Puppet Environments]]></title>
@@ -2949,35 +3181,6 @@ setting will persist across reboots:</p>
 </code></pre>
 
 <p>Hope this saves others some time!</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Teaching Java How to Commit Suicide]]></title>
-    <link href="http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
-    <updated>2010-01-29T00:00:00-06:00</updated>
-    <id>http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
-    <content type="html"><![CDATA[<p>At $work, we have a lot of java processes that are ran via cron and other
-wrappers that do some pretty critical tasks. The apps have been written so
-that the whole thing is wrapped in a try/catch that will call system.exit(1)
-should something not go right. Our wrapper scripts watch for a non-zero exit
-code, and alert Nagios if something went wrong. This works great except for
-when a VM encounters an outOfMemory exception (OOM). The Java VM attempts to
-continue on, but if the main thread hits this exception, the entire VM will
-exit. However, the application code that exits with a status of 1 never gets
-called, so the application ends up dying with a status of 0. Well, Sun (Oracle
-now I guess) gave us a new option in Java 6 that was backported to 1.4.2_12
-and up that allows us to tell Java to run a shell command when it encounters
-an OOM exception. By adding the option</p>
-
-<pre><code>-XX:OnOutOfMemoryError="kill -9 %p"
-</code></pre>
-
-<p>to our Java command line, the VM will execute a shell that calls the kill
-command, with an argument of the PID of the VM. The -9 option to kill will
-cause the VM to exit with a non-zero status, so that our wrappers will pick up
-the error and alert the right people. Note: this feature was never backported
-to Java5 - sorry!</p>
 ]]></content>
   </entry>
   

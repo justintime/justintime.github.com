@@ -9,9 +9,9 @@
   <meta name="author" content="Justin Ellison">
 
   
-  <meta name="description" content="For those who might not know, Pantheon
-Mercury is: &hellip; a drop-in replacement for your Drupal website hosting service that
-delivers break-through &hellip;">
+  <meta name="description" content="It snuck up on me so fast, I forgot to ask - are any of my SysAdmin&rsquo;s Journey
+readers going to San Franciso for DrupalCon? If so, contact
+me, &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,6 +79,39 @@ delivers break-through &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/04/18/ask-saj-any-sas-drupalconsf">Ask SAJ: Any SA's at DrupalConSF?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-04-18T00:00:00-05:00'><span class='date'><span class='date-month'>Apr</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It snuck up on me so fast, I forgot to ask - are any of my SysAdmin&rsquo;s Journey
+readers going to San Franciso for DrupalCon? If so, <a href="http://sysadminsjourney.com/contact">contact
+me</a>, and we&rsquo;ll see if we can meet up for
+a beer! I&rsquo;m posting this from DIA, so if you happen to be here and want to
+grab a bite to eat, ping me. I&rsquo;m flying out to SF at about 12:30pm MDT.</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -856,55 +889,6 @@ setting will persist across reboots:</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/content/2010/01/29/teaching-java-how-commit-suicide">Teaching Java How to Commit Suicide</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2010-01-29T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>At $work, we have a lot of java processes that are ran via cron and other
-wrappers that do some pretty critical tasks. The apps have been written so
-that the whole thing is wrapped in a try/catch that will call system.exit(1)
-should something not go right. Our wrapper scripts watch for a non-zero exit
-code, and alert Nagios if something went wrong. This works great except for
-when a VM encounters an outOfMemory exception (OOM). The Java VM attempts to
-continue on, but if the main thread hits this exception, the entire VM will
-exit. However, the application code that exits with a status of 1 never gets
-called, so the application ends up dying with a status of 0. Well, Sun (Oracle
-now I guess) gave us a new option in Java 6 that was backported to 1.4.2_12
-and up that allows us to tell Java to run a shell command when it encounters
-an OOM exception. By adding the option</p>
-
-<pre><code>-XX:OnOutOfMemoryError="kill -9 %p"
-</code></pre>
-
-<p>to our Java command line, the VM will execute a shell that calls the kill
-command, with an argument of the PID of the VM. The -9 option to kill will
-cause the VM to exit with a non-zero status, so that our wrappers will pick up
-the error and alert the right people. Note: this feature was never backported
-to Java5 - sorry!</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -932,6 +916,10 @@ to Java5 - sorry!</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/">Replicating Hashicorp Vault in a Multi-DataCenter Setup</a>
+      </li>
+    
+      <li class="post">
         <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
@@ -945,10 +933,6 @@ to Java5 - sorry!</p>
     
       <li class="post">
         <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
-      </li>
-    
-      <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>

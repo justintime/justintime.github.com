@@ -171,8 +171,8 @@ subnet. Without further ado, I present to you
 </span><span class='line'>wait_for_process<span class="o">()</span> <span class="o">{</span>
 </span><span class='line'>  <span class="nv">PNAME</span><span class="o">=</span><span class="nv">$1</span>
 </span><span class='line'>  <span class="nv">PID</span><span class="o">=</span><span class="sb">`</span>/usr/bin/pgrep <span class="nv">$PNAME</span><span class="sb">`</span>
-</span><span class='line'>  <span class="k">while</span> <span class="o">[</span> -z <span class="s2">&quot;$PID&quot;</span> <span class="o">]</span>; <span class="k">do</span>
-</span><span class='line'><span class="k">        </span>sleep 3;
+</span><span class='line'>  <span class="k">while</span> <span class="o">[</span> -z <span class="s2">&quot;$PID&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">do</span>
+</span><span class='line'>        sleep 3<span class="p">;</span>
 </span><span class='line'>        <span class="nv">PID</span><span class="o">=</span><span class="sb">`</span>/usr/bin/pgrep <span class="nv">$PNAME</span><span class="sb">`</span>
 </span><span class='line'>  <span class="k">done</span>
 </span><span class='line'><span class="o">}</span>
@@ -182,12 +182,12 @@ subnet. Without further ado, I present to you
 </span><span class='line'>     /bin/su <span class="nv">$USER</span> -c <span class="s2">&quot;/usr/bin/synergyc $1&quot;</span>
 </span><span class='line'><span class="o">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$IF&quot;</span> <span class="o">=</span> <span class="s2">&quot;eth0&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">&quot;$STATUS&quot;</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span> <span class="o">]</span>; <span class="k">then</span>
+</span><span class='line'><span class="k">if</span> <span class="o">[</span> <span class="s2">&quot;$IF&quot;</span> <span class="o">=</span> <span class="s2">&quot;eth0&quot;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> <span class="s2">&quot;$STATUS&quot;</span> <span class="o">=</span> <span class="s2">&quot;up&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
 </span><span class='line'>
 </span><span class='line'>        <span class="c">#LAN Subnet at work</span>
 </span><span class='line'>        <span class="nv">NETMASK</span><span class="o">=</span><span class="s2">&quot;10.0.0.0/8&quot;</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;`/sbin/ip addr show $IF to $NETMASK`&quot;</span> <span class="o">]</span>; <span class="k">then</span>
-</span><span class='line'><span class="k">                </span><span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;jentoo.bucklehq.com&quot;</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;`/sbin/ip addr show $IF to $NETMASK`&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span><span class='line'>                <span class="nv">ARGS</span><span class="o">=</span><span class="s2">&quot;jentoo.bucklehq.com&quot;</span>
 </span><span class='line'>                start_synergy <span class="nv">$ARGS</span>
 </span><span class='line'>                <span class="nb">exit</span> <span class="nv">$?</span>
 </span><span class='line'>        <span class="k">fi</span>
@@ -304,6 +304,10 @@ something? What would you like to have it do? Comment away!</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/">Replicating Hashicorp Vault in a Multi-DataCenter Setup</a>
+      </li>
+    
+      <li class="post">
         <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
       </li>
     
@@ -317,10 +321,6 @@ something? What would you like to have it do? Comment away!</p>
     
       <li class="post">
         <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
-      </li>
-    
-      <li class="post">
-        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
       </li>
     
   </ul>
