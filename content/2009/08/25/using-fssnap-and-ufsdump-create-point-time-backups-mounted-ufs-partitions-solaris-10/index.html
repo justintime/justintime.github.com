@@ -1,0 +1,400 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Using Fssnap and Ufsdump to Create Point-in-time Backups of Mounted UFS Partitions in Solaris 10 - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="With all the (deserved) hype about ZFS, there&rsquo;s
+still a lot of systems that make use of UFS out there. With all the things
+that ZFS can do, &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/08/25/using-fssnap-and-ufsdump-create-point-time-backups-mounted-ufs-partitions-solaris-10">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Using Fssnap and Ufsdump to Create Point-in-time Backups of Mounted UFS Partitions in Solaris 10</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-08-25T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/assets/images/solaris.gif" alt="" />With all the (deserved) hype about ZFS, there&rsquo;s
+still a lot of systems that make use of UFS out there. With all the things
+that ZFS can do, there&rsquo;s still some things that it can&rsquo;t do (incompatability
+with flash archives, and POSIX ACL&rsquo;s are examples). I needed to basically make
+an image of a T1000 that had some non-global zones installed, stick it into a
+lab for a couple weeks, and then return it to it&rsquo;s previous state. Since this
+server had non-global zones, using flar&rsquo;s was questionable. So I decided to
+use <strong>fssnap</strong> and <strong>ufsdump</strong> to make my backups.</p>
+
+<p>The best part about UFS is that while it may not have the latest and greatest
+features, what features it does have are rock-solid stable and supported.
+<strong>ufsdump</strong> has been around for a long time, but only works on unmounted
+slices. In order to do a <strong>ufsdump</strong> on your / mount, you either need to boot
+to rescue media, or create a snapshot and run <strong>ufsdump</strong> against that.</p>
+
+<p>For this example, we&rsquo;ll assume that you have just two slices &ndash; / and /apps.
+The first step is to find out where to store your backing store files. Your
+backing store files will be the size not of the entire slice <em>but of the size
+of the changes to the slice since the snapshot was made</em>. Let&rsquo;s say your /apps
+mount is 40GB, but seldom changes - your backing store file will likely be
+less than 512MB in size. Nonetheless, your backing store must not reside on
+the same partition that you&rsquo;re making a snapshot of. For our example, we&rsquo;ll
+assume that we have a third slice available, mounted at /snaps.</p>
+
+<p>Before creating your snapshot, it&rsquo;s best to get the system into a state where
+things are as quiet as possible. The best way to do this is to switch to
+single user mode, but you can do whatever you like here. Issue the following
+two commands to create your snapshots:</p>
+
+<pre><code># fssnap -F ufs -o bs=/snaps/root.back.file /
+/dev/fssnap/0
+# fssnap -F ufs -o bs=/snaps/apps.back.file /apps
+/dev/fssnap/1
+</code></pre>
+
+<p>You can see here that it has created two devices for us that represent the
+snapshot. Note that these commands may take 20 seconds or so to return to the
+shell. Once your snapshot devices are created, you may now return the system
+to a normal state. Once you&rsquo;re back to normal, we need to create our UFS
+dumps, but use our snapshot devices as the source. In our example, we have a
+NFS mount at /mnt/shared that has all the room we need.</p>
+
+<p>Now, let&rsquo;s create our UFS dump files:</p>
+
+<pre><code># ufsdump 0uf /mnt/shared/root.ufsdump /dev/rfssnap/0 
+  DUMP: Date of this level 0 dump: Tue Aug 25 08:49:31 2009
+  DUMP: Date of last level 0 dump: the epoch
+  DUMP: Dumping /dev/rfssnap/0 to /mnt/shared/root.ufsdump.
+  DUMP: Mapping (Pass I) [regular files]
+  DUMP: Mapping (Pass II) [directories]
+  DUMP: Writing 32 Kilobyte records
+  DUMP: Estimated 21955062 blocks (10720.25MB).
+  DUMP: Dumping (Pass III) [directories]
+  DUMP: Dumping (Pass IV) [regular files]
+  DUMP: 44.74% done, finished in 0:12
+  DUMP: 94.38% done, finished in 0:01
+  DUMP: 21955006 blocks (10720.22MB) on 1 volume at 8638 KB/sec
+  DUMP: DUMP IS DONE
+  DUMP: Level 0 dump on Tue Aug 25 08:49:31 2009
+# ufsdump 0uf /mnt/shared/apps.ufsdump /dev/rfssnap/1 
+  DUMP: Date of this level 0 dump: Tue Aug 25 08:49:48 2009
+  DUMP: Date of last level 0 dump: the epoch
+  DUMP: Dumping /dev/rfssnap/1 to /mnt/shared/apps.ufsdump.
+  DUMP: Mapping (Pass I) [regular files]
+  DUMP: Mapping (Pass II) [directories]
+  DUMP: Writing 32 Kilobyte records
+  DUMP: Estimated 80736236 blocks (39421.99MB).
+  DUMP: Dumping (Pass III) [directories]
+  DUMP: Dumping (Pass IV) [regular files]
+  DUMP: 11.32% done, finished in 1:18
+  DUMP: 19.82% done, finished in 1:20
+  DUMP: 21.32% done, finished in 1:50
+  DUMP: 22.99% done, finished in 2:14
+  DUMP: 24.85% done, finished in 2:31
+  DUMP: 26.69% done, finished in 2:44
+  DUMP: 28.71% done, finished in 2:53
+  DUMP: 30.93% done, finished in 2:58
+  DUMP: 32.57% done, finished in 3:06
+  DUMP: 34.46% done, finished in 3:10
+  DUMP: 36.08% done, finished in 3:14
+  DUMP: 38.21% done, finished in 3:14
+  DUMP: 40.29% done, finished in 3:12
+  DUMP: 43.34% done, finished in 3:03
+  DUMP: 50.89% done, finished in 2:24
+  DUMP: 64.35% done, finished in 1:28
+  DUMP: 78.02% done, finished in 0:47
+  DUMP: 88.56% done, finished in 0:23
+  DUMP: 97.63% done, finished in 0:04
+  DUMP: 99.83% done, finished in 0:00
+  DUMP: 80736126 blocks (39421.94MB) on 1 volume at 3347 KB/sec
+  DUMP: DUMP IS DONE
+  DUMP: Level 0 dump on Tue Aug 25 08:49:48 2009
+</code></pre>
+
+<p>As you can see, the /apps mount was quite large, but even after the backup,
+the backing store file was less that 30MB when I was done. Make sure you
+remember to remove your snapshots when you&rsquo;re done with them:</p>
+
+<pre><code># fssnap -d /
+# fssnap -d /apps
+# rm /snaps/*.back.file
+</code></pre>
+
+<p>Stay tuned for how to restore these ufsdump files!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-08-25T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/08/25/using-fssnap-and-ufsdump-create-point-time-backups-mounted-ufs-partitions-solaris-10" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/08/25/using-fssnap-and-ufsdump-create-point-time-backups-mounted-ufs-partitions-solaris-10" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/08/25/rhce" title="Previous Post: RHCE!!!">&laquo; RHCE!!!</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/08/26/scsa-vs-rhce" title="Next Post: SCSA vs RHCE">SCSA vs RHCE &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/08/25/using-fssnap-and-ufsdump-create-point-time-backups-mounted-ufs-partitions-solaris-10';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/08/25/using-fssnap-and-ufsdump-create-point-time-backups-mounted-ufs-partitions-solaris-10';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

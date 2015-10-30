@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jumpstart | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/jumpstart/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Not So Typical Jumpstart: Part Three - The Scripts]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts"/>
+    <updated>2009-09-23T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/09/23/not-so-typical-jumpstart-part-three-the-scripts</id>
+    <content type="html"><![CDATA[<p><img align="left" alt="" height="101" hspace="15" src="http://sysadminsjourney.com/assets/images/solaris.gif" width="190"/>
+In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup.  By creating our Jumpstart profile file and a sysidcfg file, we&rsquo;ll have a basic, but working Custom Jumpstart.  The profile contains settings specific to the installation, where the sysidcfg file contains settings specific to the machine during and after installation.</p>
+
+<h2>Step One: Create the sysidcfg file</h2>
+
+<p>If you&rsquo;ve been following along, we specified the path to web1&rsquo;s sysidcfg file when we generated our dhcpd.conf file in <a href="http://www.sysadminsjourney.com/content/2009/09/18/not-so-typical-jumpstart-part-one">part one</a>. Let&rsquo;s create this file, so that the installer doesn&rsquo;t have to ask us these questions during the installation:</p>
+
+<pre>
+cd /export/home/jumpstart/configs
+mkdir -p sysids/web
+cat &lt;&lt;EOD &gt; sysids/web/sysidcfg
+keyboard=US-English
+system_locale=en_US.UTF-8
+security_policy=NONE
+nfs4_domain=domain.com
+name_service=DNS {domain_name=domain.com name_server=192.168.0.5}
+network_interface=bge0 { protocol_ipv6=no
+  primary
+  hostname=bkeweb1
+  ip_address=192.168.0.21
+  default_route=192.168.0.10
+  netmask=255.255.255.0
+}
+terminal=vt100
+timezone=US/Central
+timeserver=localhost
+root_password=8X123/ZkOFICY
+service_profile=limited_net
+EOD
+</pre>
+
+
+<p>You should read the manpage for sysidcfg, but in our example above some of the not-so-obvious settings are:</p>
+
+<ul>
+<li><strong>security_policy=NONE</strong> is relative to the kerberos security settings during installation.</li>
+<li><strong>root_password</strong> the value of root&rsquo;s password as written in a real /etc/shadow file.</li>
+<li><strong>service_profile=limited_net</strong> - using limited_net disables unnecessary services and restricts others to localhost access only. I recommend this setting for anyone not in a lab environment.</li>
+</ul>
+
+
+<h2>Step Two: Create the profile file</h2>
+
+<p>There&rsquo;s a huge amount of operations you can configure via the jumpstart profile - I recommend reading <a href="http://docs.sun.com/app/docs/doc/820-7014/preparecustom-53442?l=en">Sun&rsquo;s documentation on creating a Jumpstart profile</a>. I also owe a link to the <a href="http://kdl.nobugware.com/post/2009/07/28/ultimate-solaris-10-jumpstart-profile/">Keep Da Link</a> blog for a nice list of clusters and packages to install. Using this profile below will result in an installation with pretty much every command line tool you would need, minus any X11/Gnome packages. Here&rsquo;s the contents of my Jumpstart profile:</p>
+
+<pre>
+cat &lt;&lt;EOD &gt; webserver
+install_type    initial_install
+system_type     standalone
+#pool           name  size swap dump devices
+#pool           rpool auto auto auto mirror c0t0d0s0 c0t1d0s0
+pool            rpool auto auto auto any
+bootenv         installbe bename s10_u7 
+partitioning    default
+
+# base cluster
+cluster SUNWCreq
+# additional clusters and packages
+cluster SUNWCacc add # System accounting utilities
+cluster SUNWCadm add # System And Network Administration (showrev etc)
+cluster SUNWCcpc add # CPU Performance Counter driver and utilities
+cluster SUNWCcry add # Supplemental cryptographic modules and libraries
+cluster SUNWCfwcmp add # Freeware Compression Utilities (bzip zip zlib gzip)
+cluster SUNWCfwshl add # Freeware Shells (bash tcsh zsh)
+cluster SUNWCfwutil add # Freeware Other Utilities (gpatch less rpm)
+cluster SUNWCgcc add # GNU binutilis, C compiler, m4 and make
+cluster SUNWCged add # Gigabit Ethernet Adapter Software
+cluster SUNWCjv add # JavaVM
+cluster SUNWCjvx add # JavaVM (64-bit)
+cluster SUNWClibusb add # wrapper for libusb; user level usb ugen library
+cluster SUNWClu add # Live Upgrade Software
+cluster SUNWCntp add # Network Time Protocol
+cluster SUNWCopenssl add # the classical super-old Solaris OpenSSL
+cluster SUNWCpd add # PCI drivers
+cluster SUNWCperl add # perl5
+cluster SUNWCpm add # Power Management Software
+cluster SUNWCpmgr add # Patch Manager Software
+cluster SUNWCpool add # core software for resource pools
+cluster SUNWCptoo add # Programming tools and libraries
+cluster SUNWCrcapu add # Solaris Resource Capping Daemon
+cluster SUNWCsma add # Solaris Management Agent (snmpd)
+cluster SUNWCssh add # Secure Shell Client/Server
+cluster SUNWCts add # Solaris Trusted Extensions
+cluster SUNWCusb add # USB drivers and header files
+cluster SUNWCutf8 add # en_US.UTF-8 locale support
+cluster SUNWCvld add # Sun Ethernet Vlan Utility
+cluster SUNWCvol add # Volume Management
+cluster SUNWCwget add # GNU wget
+cluster SUNWCzone add # Solaris Zones
+package SUNWarc add # Lint Libraries (usr)
+package SUNWarcr add # Lint Libraries (root)
+package SUNWman add # On-Line Manual Pages
+package SUNWdoc add # Documentation Tools
+package SUNWsfwhea add # Open Source header files
+package SUNWtoo add # Programming Tools
+package SUNWhea add # SunOS Header Files
+package SUNWxcu4 add # XCU4 Utilities
+package SUNWxcu4t add # XCU4 make and sccs utilities
+package SUNWxcu6 add # XCU6 Utilities
+package SUNWgcmn add # gcmn - Common GNU package
+package SUNWggrp add # ggrep - GNU grep utilities
+package SUNWgtar add # gtar - GNU tar
+package SUNWuium add # ICONV Manual pages for UTF-8 Locale
+package SUNWladm add # Locale Administrator (really optional)
+package SUNWGlib add # GLIB - Library of useful routines for C programming
+package SUNWPython-share add # python
+package SUNWPython add # python
+package SUNWfss add # Fair Share Scheduler
+package SUNWscpr add # /usr/ucb tools
+package SUNWscpu add # /usr/ucb tools
+package SUNWrsg add # needed by sshd
+package SUNWgssdh add # needed by sshd
+package SUNWspnego add # needed by sshd
+package SUNWbind add # host&amp;dig
+
+# optional clusters and packages
+#cluster SUNWCapache add # Apache 1.3.9
+#cluster SUNWCapch2 add # Apache 2
+#cluster SUNWCpostgr add # PostgreSQL
+#cluster SUNWCpostgr-82 add # PostgreSQL 8.2
+#cluster SUNWCdhcp add # DHCPv4 Services
+#cluster SUNWCtcat add # Tomcat Servlet/JSP Container
+#package SUNWmysqlr add # MySQL (Root)
+#package SUNWmysqlu add # MySQL (User)
+
+# The following are for webstack dependencies
+package         SUNWfontconfig
+package         SUNWfreetype2
+package         SUNWjpg
+package         SUNWpng
+package         SUNWxwplt
+package         SUNWpostgr-82-libs
+EOD
+</pre>
+
+
+<p>After running an install with this profile, you will end up with a ZFS root that contains just under 2GB worth of data. If that&rsquo;s not your desired setup, then tweak away!</p>
+
+<h2>Step Three: Validate the profile file</h2>
+
+<p>The last step in this article is to validate the rules file and its associated profiles. Run the following:</p>
+
+<pre>
+# ./check
+Validating rules...
+Validating profile webserver...
+The custom JumpStart configuration is ok.
+</pre>
+
+
+<p>This process validates your config files, and creates a rules.ok file in the root of your config server directory. It is this file that the client loads and parses when starting a Jumpstart installation.</p>
+
+<p>This concludes part three of the series. You should now be able to boot using PXE for X86 or using &lsquo;boot net:dhcp - install&rsquo; from Sparc, and have a completely automated installation. However, you likely also have a rather vanilla installation which we&rsquo;ll remedy in part four of the series.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Not So Typical Jumpstart: Part Three - The Jumpstart Profile]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile"/>
+    <updated>2009-09-22T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-the-jumpstart-profile</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/solaris.gif" alt="" />In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup. By
+creating our Jumpstart profile file and a sysidcfg file, we&rsquo;ll have a basic,
+but working Custom Jumpstart. The profile contains settings specific to the
+installation, where the sysidcfg file contains settings specific to the
+machine during and after installation.</p>
+
+<h2>Step One: Create the sysidcfg file</h2>
+
+<p>If you&rsquo;ve been following along, we specified the path to web1&rsquo;s sysidcfg file
+when we generated our dhcpd.conf file in <a href="http://www.sysadminsjourney.com/content/2009/09/18/not-so-typical-jumpstart-part-one">part one</a>. Let&rsquo;s create this file, so that the installer doesn&rsquo;t
+have to ask us these questions during the installation:</p>
+
+<p><div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">cd /export/home/jumpstart/configs</span>
+<span class="go">mkdir -p sysids/web</span>
+<span class="go">cat &amp;lt;&lt;EOD &gt; sysids/web/sysidcfg</span>
+<span class="go">keyboard=US-English</span>
+<span class="go">system_locale=en_US.UTF-8</span>
+<span class="go">security_policy=NONE</span>
+<span class="go">nfs4_domain=domain.com</span>
+<span class="go">name_service=DNS {domain_name=domain.com name_server=192.168.0.5}</span>
+<span class="go">network_interface=bge0 { protocol_ipv6=no</span>
+<span class="go">                         primary</span>
+<span class="go">                         hostname=bkeweb1</span>
+<span class="go">                         ip_address=192.168.0.21</span>
+<span class="go">                         default_route=192.168.0.10</span>
+<span class="go">                         netmask=255.255.255.0</span>
+<span class="go">                        }</span>
+<span class="go">terminal=vt100</span>
+<span class="go">timezone=US/Central</span>
+<span class="go">timeserver=localhost</span>
+<span class="go">root_password=8X123/ZkOFICY</span>
+<span class="go">service_profile=limited_net</span>
+<span class="go">EOD&lt;/p&gt;</span>
+
+<span class="go">&lt;p&gt;</span></code></pre></div></p>
+
+<p>You should read the manpage for sysidcfg, but in our example above some of the
+not-so-obvious settings are:</p>
+
+<ul>
+<li><strong>security_policy=NONE</strong> is relative to the kerberos security settings during installation.</li>
+<li><strong>root_password</strong> the value of root&rsquo;s password as written in a real /etc/shadow file.</li>
+<li><strong>service_profile=limited_net</strong> - using limited_net disables unnecessary services and restricts others to localhost access only. I recommend this setting for anyone not in a lab environment.</li>
+</ul>
+
+
+<h2>Step Two: Create the profile file</h2>
+
+<p>There&rsquo;s a huge amount of operations you can configure via the jumpstart
+profile - I recommend reading <a href="http://docs.sun.com/app/docs/doc/820-7014/preparecustom-53442?l=en&amp;a=view">Sun&rsquo;s documentation on creating a Jumpstart profile</a>. I also owe a link to the <a href="http://kdl.nobugware.com/post/2009/07/28/ultimate-solaris-10-jumpstart-profile/">Keep DaLink</a> blog for a nice list of clusters and packages to install. Using this
+profile below will result in an installation with pretty much every command
+line tool you would need, minus any X11/Gnome packages. Here&rsquo;s the contents of
+my Jumpstart profile:</p>
+
+<p><div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">cat &amp;lt;&lt;EOD &gt; webserver</span>
+<span class="go">install_type    initial_install</span>
+<span class="go">system_type     standalone&lt;/p&gt;</span>
+
+<span class="go">&lt;h1&gt;pool           name  size swap dump devices&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;pool           rpool auto auto auto mirror c0t0d0s0 c0t1d0s0&lt;/h1&gt;</span>
+
+<span class="go">&lt;p&gt;pool            rpool auto auto auto any</span>
+<span class="go">bootenv         installbe bename s10_u7</span>
+<span class="go">partitioning    default&lt;/p&gt;</span>
+
+<span class="go">&lt;h1&gt;base cluster&lt;/h1&gt;</span>
+
+<span class="go">&lt;p&gt;cluster SUNWCreq&lt;/p&gt;</span>
+
+<span class="go">&lt;h1&gt;additional clusters and packages&lt;/h1&gt;</span>
+
+<span class="go">&lt;p&gt;cluster SUNWCacc add # System accounting utilities</span>
+<span class="go">cluster SUNWCadm add # System And Network Administration (showrev etc)</span>
+<span class="go">cluster SUNWCcpc add # CPU Performance Counter driver and utilities</span>
+<span class="go">cluster SUNWCcry add # Supplemental cryptographic modules and libraries</span>
+<span class="go">cluster SUNWCfwcmp add # Freeware Compression Utilities (bzip zip zlib gzip)</span>
+<span class="go">cluster SUNWCfwshl add # Freeware Shells (bash tcsh zsh)</span>
+<span class="go">cluster SUNWCfwutil add # Freeware Other Utilities (gpatch less rpm)</span>
+<span class="go">cluster SUNWCgcc add # GNU binutilis, C compiler, m4 and make</span>
+<span class="go">cluster SUNWCged add # Gigabit Ethernet Adapter Software</span>
+<span class="go">cluster SUNWCjv add # JavaVM</span>
+<span class="go">cluster SUNWCjvx add # JavaVM (64-bit)</span>
+<span class="go">cluster SUNWClibusb add # wrapper for libusb; user level usb ugen library</span>
+<span class="go">cluster SUNWClu add # Live Upgrade Software</span>
+<span class="go">cluster SUNWCntp add # Network Time Protocol</span>
+<span class="go">cluster SUNWCopenssl add # the classical super-old Solaris OpenSSL</span>
+<span class="go">cluster SUNWCpd add # PCI drivers</span>
+<span class="go">cluster SUNWCperl add # perl5</span>
+<span class="go">cluster SUNWCpm add # Power Management Software</span>
+<span class="go">cluster SUNWCpmgr add # Patch Manager Software</span>
+<span class="go">cluster SUNWCpool add # core software for resource pools</span>
+<span class="go">cluster SUNWCptoo add # Programming tools and libraries</span>
+<span class="go">cluster SUNWCrcapu add # Solaris Resource Capping Daemon</span>
+<span class="go">cluster SUNWCsma add # Solaris Management Agent (snmpd)</span>
+<span class="go">cluster SUNWCssh add # Secure Shell Client/Server</span>
+<span class="go">cluster SUNWCts add # Solaris Trusted Extensions</span>
+<span class="go">cluster SUNWCusb add # USB drivers and header files</span>
+<span class="go">cluster SUNWCutf8 add # en_US.UTF-8 locale support</span>
+<span class="go">cluster SUNWCvld add # Sun Ethernet Vlan Utility</span>
+<span class="go">cluster SUNWCvol add # Volume Management</span>
+<span class="go">cluster SUNWCwget add # GNU wget</span>
+<span class="go">cluster SUNWCzone add # Solaris Zones</span>
+<span class="go">package SUNWarc add # Lint Libraries (usr)</span>
+<span class="go">package SUNWarcr add # Lint Libraries (root)</span>
+<span class="go">package SUNWman add # On-Line Manual Pages</span>
+<span class="go">package SUNWdoc add # Documentation Tools</span>
+<span class="go">package SUNWsfwhea add # Open Source header files</span>
+<span class="go">package SUNWtoo add # Programming Tools</span>
+<span class="go">package SUNWhea add # SunOS Header Files</span>
+<span class="go">package SUNWxcu4 add # XCU4 Utilities</span>
+<span class="go">package SUNWxcu4t add # XCU4 make and sccs utilities</span>
+<span class="go">package SUNWxcu6 add # XCU6 Utilities</span>
+<span class="go">package SUNWgcmn add # gcmn - Common GNU package</span>
+<span class="go">package SUNWggrp add # ggrep - GNU grep utilities</span>
+<span class="go">package SUNWgtar add # gtar - GNU tar</span>
+<span class="go">package SUNWuium add # ICONV Manual pages for UTF-8 Locale</span>
+<span class="go">package SUNWladm add # Locale Administrator (really optional)</span>
+<span class="go">package SUNWGlib add # GLIB - Library of useful routines for C programming</span>
+<span class="go">package SUNWPython-share add # python</span>
+<span class="go">package SUNWPython add # python</span>
+<span class="go">package SUNWfss add # Fair Share Scheduler</span>
+<span class="go">package SUNWscpr add # /usr/ucb tools</span>
+<span class="go">package SUNWscpu add # /usr/ucb tools</span>
+<span class="go">package SUNWrsg add # needed by sshd</span>
+<span class="go">package SUNWgssdh add # needed by sshd</span>
+<span class="go">package SUNWspnego add # needed by sshd</span>
+<span class="go">package SUNWbind add # host&amp;amp;dig&lt;/p&gt;</span>
+
+<span class="go">&lt;h1&gt;optional clusters and packages&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCapache add # Apache 1.3.9&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCapch2 add # Apache 2&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCpostgr add # PostgreSQL&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCpostgr-82 add # PostgreSQL 8.2&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCdhcp add # DHCPv4 Services&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;cluster SUNWCtcat add # Tomcat Servlet/JSP Container&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;package SUNWmysqlr add # MySQL (Root)&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;package SUNWmysqlu add # MySQL (User)&lt;/h1&gt;</span>
+
+<span class="go">&lt;h1&gt;The following are for webstack dependencies&lt;/h1&gt;</span>
+
+<span class="go">&lt;p&gt;package         SUNWfontconfig</span>
+<span class="go">package         SUNWfreetype2</span>
+<span class="go">package         SUNWjpg</span>
+<span class="go">package         SUNWpng</span>
+<span class="go">package         SUNWxwplt</span>
+<span class="go">package         SUNWpostgr-82-libs</span>
+<span class="go">EOD</span></code></pre></div></p>
+
+<p>After running an install with this profile, you will end up with a ZFS root
+that contains just under 2GB worth of data. If that&rsquo;s not your desired setup,
+then tweak away!</p>
+
+<h2>Step Three: Validate the profile file</h2>
+
+<p>The last step in this article is to validate the rules file and its associated
+profiles. Run the following:</p>
+
+<p><div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">&lt;/p&gt;</span>
+
+<span class="go">&lt;h1&gt;./check&lt;/h1&gt;</span>
+
+<span class="go">&lt;p&gt;Validating rules&amp;hellip;</span>
+<span class="go">Validating profile webserver&amp;hellip;</span>
+<span class="go">The custom JumpStart configuration is ok.</span></code></pre></div></p>
+
+<p>This process validates your config files, and creates a rules.ok file in the
+root of your config server directory. It is this file that the client loads
+and parses when starting a Jumpstart installation.</p>
+
+<p>This concludes part three of the series. You should now be able to boot using
+PXE for X86 or using &lsquo;boot net:dhcp - install&rsquo; from Sparc, and have a
+completely automated installation. However, you likely also have a rather
+vanilla installation which we&rsquo;ll remedy in part four of the series.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Not So Typical Jumpstart: Part Two]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two"/>
+    <updated>2009-09-21T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/solaris.gif" alt="" />In <a href="/content/2009/09/18%0A/not-so-typical-jumpstart-part-one">part one of the series</a>, we setup the ISC DHCP server. Now it&rsquo;s
+time to set up our install and config servers &ndash; both of which will reside on
+the same box in this case. Solaris Jumpstart uses standard protocols, namely
+TFTP and NFS to provide these services. In this post, we&rsquo;ll just be setting up
+the framework for the real customizations that will come in parts three and
+four.</p>
+
+<h2>Step 1: Setup the Install Server</h2>
+
+<p>In our example, we&rsquo;ll be assuming that our install and config directories will
+be setup under /export/home/jumpstart/. So, pop the Solaris 10 DVD into the
+drive of your server, and issue the following commands as root:</p>
+
+<pre><code>mkdir -p /export/home/jumpstart/install/s10u7s
+cd /cdrom/cdrom0/Solaris_10/Tools
+./setup_install_server /export/home/jumpstart/install/s10u7s
+</code></pre>
+
+<p>Once that&rsquo;s done (it will take awhile), we need to make sure the NFS server is
+running, and share our install location as a read-only mountpoint:</p>
+
+<pre><code>svcadm enable nfs/server
+echo 'share -F nfs -o ro,anon=0 -d "install server directory" /export/home/jumpstart/install/s10u7s' &gt;&gt; /etc/dfs/dfstab
+shareall
+</code></pre>
+
+<p>Now, it&rsquo;s time to create a boot file and make it available via TFTP download
+for our client:</p>
+
+<pre><code>cd /export/home/jumpstart/install/s10u7s/Solaris_10/Tools
+./add_install_client -d SUNW,Sun-Fire-T1000 sun4v
+svcadm enable tftp/udp6
+</code></pre>
+
+<p><strong>Note that the add_install_client command is likely not a command you can cut and paste!</strong> To determine the two arguments to add_install_client, you need to run some uname&rsquo;s if you&rsquo;re deploying to Sparc. To get the platform name, run &lsquo;uname -i&rsquo;, and replace the &lsquo;SUNW,Sun-Fire-T1000&rsquo; string above with the response. Then, run &lsquo;uname -m&rsquo;, and replace sun4v with the response (which will most likely be sun4u). If you&rsquo;re running x86, you&rsquo;ll run this command:</p>
+
+<pre><code>./add_install_client -d SUNW.i86pc i86pc
+</code></pre>
+
+<p>At this point, you can do <strong>interactive</strong> network installations of the Solaris
+OS to your client. In fact, I recommend that you go ahead and try booting from
+the network and make sure that everything&rsquo;s setup to this point. On a Sparc
+box, from OBP, type &lsquo;boot net:dhcp - install&rsquo;. If you&rsquo;re on x86, boot via PXE.
+If you don&rsquo;t have a working network installation at this point, stop here and
+get it working before you move on to setting up the config server.</p>
+
+<h2>Step 2: Setup the Config Server</h2>
+
+<p>We could do an interactive network install, which is helpful for systems that
+may not have a CD/DVD drive, but really &ndash; where&rsquo;s the fun in that? We&rsquo;re
+striving for automation here! That&rsquo;s where the config server comes in. The
+config server provides a sysidcfg file to the system which tells it things
+like what IP&rsquo;s belong on what interfaces, what is my hostname, etc. The
+sysidcfg file tells the system settings that will be unique to that system.
+The other function of the config server is to provide the jumpstart profile
+and all the scripts that the profile refers to. The jumpstart profile tells
+the machine specifics about the installation procedure &ndash; what packages to
+install, what locale to use, etc. Let&rsquo;s setup our directories first:</p>
+
+<pre><code>for d in scripts sshkeys sysids jumpstart_sample; do
+mkdir -p /export/home/jumpstart/configs/$d
+done
+echo 'share -F nfs -o ro,anon=0 /export/home/jumpstart/configs' &gt;&gt; /etc/dfs/dfstab
+shareall
+</code></pre>
+
+<p>We&rsquo;ve created our configs directory, which is the root of the config server
+setup. We created a few subdirectories &ndash; scripts is where we&rsquo;ll store our
+add-on scripts, sshkeys is where we&rsquo;ll keep our ssh public keys, sysids is
+where the system-specific sysidcfg files will be stored, and jumpstart_sample
+is where we will keep our jumpstart_sample profiles. These files are handy to
+have around for reference. Let&rsquo;s copy those over now:</p>
+
+<pre><code>cp /export/home/jumpstart/install/s10u7s/Solaris_10/Misc/jumpstart_sample/* /export/home/jumpstart/configs/jumpstart_sample
+</code></pre>
+
+<p>Now, we&rsquo;re ready to create our jumpstart rules file. Run the following:</p>
+
+<pre><code>cd /export/home/jumpstart/configs/
+ln -s  /export/home/jumpstart/configs/check  /export/home/jumpstart/configs/jumpstart_sample/check
+echo "hostname web1    delete_raidctl_vols    webserver      webserver_finish.sh" &gt;&gt; rules
+touch delete_raidctl_vols webserver_finish.sh
+chmod 755 delete_raidctl_vols webserver_finish.sh
+</code></pre>
+
+<p>We added one rule to the rules file. There is a well-commented rules file in
+the jumpstart_sample directory that you can pour over to get all the gory
+details. In our rules file, we&rsquo;re essentially saying this:</p>
+
+<ul>
+<li><strong>hostname web1</strong>: Any client that has a hostname equal to &lsquo;web1&rsquo; will use this rule. Remember in part one when I told you to jot down the hostname we used in dhcpd.conf? That hostname and this one have to match exactly.</li>
+<li><strong>delete_raidctl_vols</strong>: This is the begin script. It is ran before the actual installation occurs. If you don&rsquo;t need a begin script, you can simply use a &lsquo;-&rsquo; here. Right now, delete_raidctl_vols is empty, but in part four we&rsquo;ll populate it with a script that deletes any &ldquo;hardware&rdquo; raid volumes so that we can use ZFS software mirroring in our installation.</li>
+<li><strong>webserver</strong>: This is the actual jumpstart profile file. We&rsquo;ll go over this in part three.</li>
+<li><strong>webserver_finish</strong>: This is the finish script. This script provides the sysadmin with an interface to do anything he wants via a shell script after installation, but before reboot. All the power of jumpstart is in this one file. We&rsquo;ll cover that in part four. Just as with the begin script, if you don&rsquo;t need a finish script, just use a dash here.</li>
+</ul>
+
+
+<p>At this point, we still don&rsquo;t have a full custom jumpstart setup yet. Before
+it&rsquo;s ready to be tested, we need to add the content to our &lsquo;webserver&rsquo;
+jumpstart profile file, and run the &lsquo;check&rsquo; command on it to generate the
+rules.ok file. We&rsquo;ll do this in part three. Part four will cover some examples
+of things you can do in the begin and finish scripts - stay tuned!</p>
+]]></content>
+  </entry>
+  
+</feed>

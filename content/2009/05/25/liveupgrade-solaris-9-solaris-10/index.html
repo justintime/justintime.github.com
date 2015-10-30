@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>LiveUpgrade From Solaris 9 to Solaris 10 - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Here&rsquo;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
+10 using a spare disk. No data is ever deleted, and to roll back &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">LiveUpgrade From Solaris 9 to Solaris 10</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-25T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Here&rsquo;s how to leverage LiveUpgrade to safely upgrade from Solaris 9 to Solaris
+10 using a spare disk. No data is ever deleted, and to roll back to Solaris 9,
+all you need is one command and a reboot.  Let&rsquo;s continue on from the example
+in <a href="http://www.sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1%0A-root-volume-solaris">Unmirroring a RAID 1 Root Volume on
+Solaris</a> - we have two disks, c1t0d0 and c1t1d0. c1t0d0 is our
+Solaris 9 disk, c1t1d0 is our spare.</p>
+
+<h3>Phase One: Prepare the Solaris 9 environment</h3>
+
+<p>First, we need to prepare the Solaris 9 environment with some packages and
+patches. First, check out <a href="http://sunsolve.sun.com/search/document.do?assetkey=1-61-206844-1">Sun&rsquo;s InfoDoc
+206844</a> and
+make sure you have all of the patches required installed. Next, for
+LiveUpgrade to work properly, you need to install the LiveUpgrade packages
+from your Solaris 10 install media to your Solaris 9 box. First, remove the
+existing packages:</p>
+
+<pre><code>pkgrm SUNWlucfg SUNWluu SUNWlur
+</code></pre>
+
+<p>Then, install the new packages from your Solaris 10 media (if you&rsquo;re using
+CD&rsquo;s, it&rsquo;s on disc 2):</p>
+
+<pre><code>cd $SOLARIS10MEDIA/Solaris_10/Tools/Installers
+./liveupgrade20
+</code></pre>
+
+<p>Next, let&rsquo;s copy the disk label from c1t0d0 over to c1t1d0 giving us the exact
+same disk layout on the new disk as the old disk:</p>
+
+<pre><code>prtvtoc /dev/rdsk/c1t0d0s2 | fmthard -s - /dev/rdsk/c1t1d0s2
+</code></pre>
+
+<p>We now have all the prep work done for getting ready for our LiveUpgrade. Now,
+we need to create our boot environment.</p>
+
+<h3>Phase Two: Create the New Boot Environment</h3>
+
+<p>First, let&rsquo;s make some assumptions. Since we&rsquo;re upgrading from Solaris 9 to
+Solaris 10, we&rsquo;ll be upgrading from UFS to UFS file systems. Also, since we
+are upgrading from one disk to another, we will copy all filesystems from
+c1t0d0 to c1t1d0 - no filesystems will be shared. In order to create our new
+boot environment, we will use the &lsquo;lucreate&rsquo; command. Let&rsquo;s define some
+variables:</p>
+
+<p><strong>Flag</strong>
+<strong>Description</strong></p>
+
+<p>-c
+Sets the current boot environment name to this name. In this example, we use
+Solaris9</p>
+
+<p>-n
+Sets the newly created environment&rsquo;s name to this name. In this example, we
+use Solaris10</p>
+
+<p>-m
+The -m option is the most critical part of the lucreate command. It specifies
+the filesystems in the new environment. To create more than one filesystem,
+you use the -m flag more than once. By using different variations on the -m
+flag, you can reorganize, resize, and merge filesystems, but that&rsquo;s beyond the
+scope of this article. The value to the -m flag is:
+<em>mountpoint:device:fs_options</em>. From the previous example in <a href="http://www.sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1%0A-root-volume-solaris">Unmirroring a
+RAID 1 Root Volume on
+Solaris</a>, we have 5 filesystems: /, /usr/local/, /apps,
+/export/home/, and swap.</p>
+
+<p>Using the above options for our scenario, we end up with:</p>
+
+<pre><code>lucreate -c Solaris9 -n Solaris10 -m /:/dev/dsk/c1t1d0s0:ufs -m -:/dev/dsk/c1t1d0s1:swap \
+-m /usr/local:/dev/dsk/c1t1d0s3:ufs -m /export/home:/dev/dsk/c1t1d0s4:ufs \
+-m /apps:/dev/dsk/c1t1d0s5:ufs
+</code></pre>
+
+<p>Depending on the number and size of files in your source boot environment,
+this may take awhile. The lucreate process gives you output for each step,
+letting you know what it&rsquo;s doing.</p>
+
+<h3>Phase Three: Upgrade the New Boot Environment to Solaris 10</h3>
+
+<p>Now that phase two is done, we have a bootable copy of our current Solaris 9
+environment. Now, we need to apply the upgrade to Solaris 10 to our new boot
+environment. For simplicity, I have an exported Solaris 10 install DVD
+extracted on another server that I use the automounter to access. Now, we&rsquo;ll
+run the &lsquo;luupgrade&rsquo; command and tell it to install the upgrade to the new boot
+environment we just created:</p>
+
+<pre><code>luupgrade -u -n Solaris10 -s /net/install.mydomain.com/export/jumpstart/install/sparc_10
+</code></pre>
+
+<p>Again, this will take some time, and the process will give you output as it
+clicks along.</p>
+
+<h3>Phase Four: Mark the New Boot Environment as Active and Boot Into It</h3>
+
+<p>Now, our Solaris 10 boot environment actually has a copy of our Solaris 9
+environment with the upgrade to Solaris 10 within it. To boot into that
+environment, we need to mark it as active, and reboot. These instructions
+cover SPARC machines, for x86/x64, see the Sun documents referred in the
+summary of this article - there are a couple of differences. To make our new
+boot environment active, we&rsquo;ll use the &lsquo;luactivate&rsquo; command:</p>
+
+<pre><code>luactivate Solaris10
+init 6
+</code></pre>
+
+<p>Tricky, huh? ;-) Should something not go completely right during the upgrade,
+you can roll back to your previous boot environment simply by specifying
+&lsquo;Solaris9&rsquo; for &lsquo;Solaris10&rsquo; in the above &lsquo;luactivate&rsquo; command. If something
+really went wrong with the upgrade, and you didn&rsquo;t boot successfully, don&rsquo;t
+worry. The &lsquo;luactivate&rsquo; command above should have given you some output that
+you should copy/paste someplace. Here&rsquo;s an example:</p>
+
+<pre><code>In case of a failure while booting to the target BE, the following process 
+needs to be followed to fallback to the currently working boot environment:
+
+1. Enter the PROM monitor (ok prompt).
+
+2. Change the boot device back to the original boot environment by typing:
+
+     setenv boot-device disk:a
+
+3. Boot to the original boot environment by typing:
+
+     boot
+</code></pre>
+
+<p>If that doesn&rsquo;t do it, see the Sun docs in the summary of this article, they
+will coach you through booting off the CD/DVD and reactivating the old
+environment.</p>
+
+<h3>Summary</h3>
+
+<p>As an admin coming from Linux, the LiveUpgrade suite is a breath of fresh air
+for giving you an easy upgrade path that&rsquo;s just as easy to undo as it is to
+do. We&rsquo;ve only begun to scratch the surface of what you can do with
+LiveUpgrade. You can use it to migrate from a UFS root to a ZFS root, use it
+to install and test patches, install Flash Archives with it, reconfigure and
+resize partitions, and on and on. For a much more comprehensive look into what
+all LiveUpgrade can do, check out the Solaris Live Upgrade and Upgrade
+Planning guide on <a href="http://docs.sun.com">http://docs.sun.com</a> - the <a href="http://docs.sun.com/app/docs/doc/820-7013?l=en">current
+release is for Solaris 5/09</a>.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-05-25T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>25</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/05/21/unmirroring-raid-1-root-volume-solaris" title="Previous Post: Unmirroring a RAID 1 Root Volume on Solaris">&laquo; Unmirroring a RAID 1 Root Volume on Solaris</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/05/26/using-sun-storagetek-a1000-under-solaris-10" title="Next Post: Using the Sun StorageTek A1000 under Solaris 10">Using the Sun StorageTek A1000 under Solaris 10 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/05/25/liveupgrade-solaris-9-solaris-10';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,460 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Not So Typical Jumpstart: Part Three - the Jumpstart Profile - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="In part two of the series, we left off with a non-working Custom Jumpstart setup. By
+creating our Jumpstart profile file and a sysidcfg file, we& &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Not So Typical Jumpstart: Part Three - the Jumpstart Profile</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-09-22T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><img src="/assets/images/solaris.gif" alt="" />In <a href="http://www.sysadminsjourney.com/content/2009/09/21/not-so-typical-jumpstart-part-two">part two of the series</a>, we left off with a non-working Custom Jumpstart setup. By
+creating our Jumpstart profile file and a sysidcfg file, we&rsquo;ll have a basic,
+but working Custom Jumpstart. The profile contains settings specific to the
+installation, where the sysidcfg file contains settings specific to the
+machine during and after installation.</p>
+
+<h2>Step One: Create the sysidcfg file</h2>
+
+<p>If you&rsquo;ve been following along, we specified the path to web1&rsquo;s sysidcfg file
+when we generated our dhcpd.conf file in <a href="http://www.sysadminsjourney.com/content/2009/09/18/not-so-typical-jumpstart-part-one">part one</a>. Let&rsquo;s create this file, so that the installer doesn&rsquo;t
+have to ask us these questions during the installation:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">cd /export/home/jumpstart/configs</span>
+<span class="go">mkdir -p sysids/web</span>
+<span class="go">cat &lt;&lt;EOD &gt; sysids/web/sysidcfg</span>
+<span class="go">keyboard=US-English</span>
+<span class="go">system_locale=en_US.UTF-8</span>
+<span class="go">security_policy=NONE</span>
+<span class="go">nfs4_domain=domain.com</span>
+<span class="go">name_service=DNS {domain_name=domain.com name_server=192.168.0.5}</span>
+<span class="go">network_interface=bge0 { protocol_ipv6=no</span>
+<span class="go">                         primary</span>
+<span class="go">                         hostname=bkeweb1</span>
+<span class="go">                         ip_address=192.168.0.21</span>
+<span class="go">                         default_route=192.168.0.10</span>
+<span class="go">                         netmask=255.255.255.0</span>
+<span class="go">                        }</span>
+<span class="go">terminal=vt100</span>
+<span class="go">timezone=US/Central</span>
+<span class="go">timeserver=localhost</span>
+<span class="go">root_password=8X123/ZkOFICY</span>
+<span class="go">service_profile=limited_net</span>
+<span class="go">EOD</span></code></pre></div>
+
+
+<p>You should read the manpage for sysidcfg, but in our example above some of the
+not-so-obvious settings are:</p>
+
+<ul>
+<li><strong>security_policy=NONE</strong> is relative to the kerberos security settings during installation.</li>
+<li><strong>root_password</strong> the value of root&rsquo;s password as written in a real /etc/shadow file.</li>
+<li><strong>service_profile=limited_net</strong> - using limited_net disables unnecessary services and restricts others to localhost access only. I recommend this setting for anyone not in a lab environment.</li>
+</ul>
+
+
+<h2>Step Two: Create the profile file</h2>
+
+<p>There&rsquo;s a huge amount of operations you can configure via the jumpstart
+profile - I recommend reading <a href="http://docs.sun.com/app/docs/doc/820-7014/preparecustom-53442?l=en&amp;a=view">Sun&rsquo;s documentation on creating a Jumpstart profile</a>. I also owe a link to the <a href="http://kdl.nobugware.com/post/2009/07/28/ultimate-solaris-10-jumpstart-profile/">Keep DaLink</a> blog for a nice list of clusters and packages to install. Using this
+profile below will result in an installation with pretty much every command
+line tool you would need, minus any X11/Gnome packages. Here&rsquo;s the contents of
+my Jumpstart profile:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">cat &lt;&lt;EOD &gt; webserver</span>
+<span class="go">install_type    initial_install</span>
+<span class="go">system_type     standalone</span>
+<span class="gp">#</span>pool           name  size swap dump devices
+<span class="gp">#</span>pool           rpool auto auto auto mirror c0t0d0s0 c0t1d0s0
+<span class="go">pool            rpool auto auto auto any</span>
+<span class="go">bootenv         installbe bename s10_u7 </span>
+<span class="go">partitioning    default</span>
+
+<span class="gp">#</span> base cluster
+<span class="go">cluster SUNWCreq</span>
+<span class="gp">#</span> additional clusters and packages
+<span class="go">cluster SUNWCacc add # System accounting utilities</span>
+<span class="go">cluster SUNWCadm add # System And Network Administration (showrev etc)</span>
+<span class="go">cluster SUNWCcpc add # CPU Performance Counter driver and utilities</span>
+<span class="go">cluster SUNWCcry add # Supplemental cryptographic modules and libraries</span>
+<span class="go">cluster SUNWCfwcmp add # Freeware Compression Utilities (bzip zip zlib gzip)</span>
+<span class="go">cluster SUNWCfwshl add # Freeware Shells (bash tcsh zsh)</span>
+<span class="go">cluster SUNWCfwutil add # Freeware Other Utilities (gpatch less rpm)</span>
+<span class="go">cluster SUNWCgcc add # GNU binutilis, C compiler, m4 and make</span>
+<span class="go">cluster SUNWCged add # Gigabit Ethernet Adapter Software</span>
+<span class="go">cluster SUNWCjv add # JavaVM</span>
+<span class="go">cluster SUNWCjvx add # JavaVM (64-bit)</span>
+<span class="go">cluster SUNWClibusb add # wrapper for libusb; user level usb ugen library</span>
+<span class="go">cluster SUNWClu add # Live Upgrade Software</span>
+<span class="go">cluster SUNWCntp add # Network Time Protocol</span>
+<span class="go">cluster SUNWCopenssl add # the classical super-old Solaris OpenSSL</span>
+<span class="go">cluster SUNWCpd add # PCI drivers</span>
+<span class="go">cluster SUNWCperl add # perl5</span>
+<span class="go">cluster SUNWCpm add # Power Management Software</span>
+<span class="go">cluster SUNWCpmgr add # Patch Manager Software</span>
+<span class="go">cluster SUNWCpool add # core software for resource pools</span>
+<span class="go">cluster SUNWCptoo add # Programming tools and libraries</span>
+<span class="go">cluster SUNWCrcapu add # Solaris Resource Capping Daemon</span>
+<span class="go">cluster SUNWCsma add # Solaris Management Agent (snmpd)</span>
+<span class="go">cluster SUNWCssh add # Secure Shell Client/Server</span>
+<span class="go">cluster SUNWCts add # Solaris Trusted Extensions</span>
+<span class="go">cluster SUNWCusb add # USB drivers and header files</span>
+<span class="go">cluster SUNWCutf8 add # en_US.UTF-8 locale support</span>
+<span class="go">cluster SUNWCvld add # Sun Ethernet Vlan Utility</span>
+<span class="go">cluster SUNWCvol add # Volume Management</span>
+<span class="go">cluster SUNWCwget add # GNU wget</span>
+<span class="go">cluster SUNWCzone add # Solaris Zones</span>
+<span class="go">package SUNWarc add # Lint Libraries (usr)</span>
+<span class="go">package SUNWarcr add # Lint Libraries (root)</span>
+<span class="go">package SUNWman add # On-Line Manual Pages</span>
+<span class="go">package SUNWdoc add # Documentation Tools</span>
+<span class="go">package SUNWsfwhea add # Open Source header files</span>
+<span class="go">package SUNWtoo add # Programming Tools</span>
+<span class="go">package SUNWhea add # SunOS Header Files</span>
+<span class="go">package SUNWxcu4 add # XCU4 Utilities</span>
+<span class="go">package SUNWxcu4t add # XCU4 make and sccs utilities</span>
+<span class="go">package SUNWxcu6 add # XCU6 Utilities</span>
+<span class="go">package SUNWgcmn add # gcmn - Common GNU package</span>
+<span class="go">package SUNWggrp add # ggrep - GNU grep utilities</span>
+<span class="go">package SUNWgtar add # gtar - GNU tar</span>
+<span class="go">package SUNWuium add # ICONV Manual pages for UTF-8 Locale</span>
+<span class="go">package SUNWladm add # Locale Administrator (really optional)</span>
+<span class="go">package SUNWGlib add # GLIB - Library of useful routines for C programming</span>
+<span class="go">package SUNWPython-share add # python</span>
+<span class="go">package SUNWPython add # python</span>
+<span class="go">package SUNWfss add # Fair Share Scheduler</span>
+<span class="go">package SUNWscpr add # /usr/ucb tools</span>
+<span class="go">package SUNWscpu add # /usr/ucb tools</span>
+<span class="go">package SUNWrsg add # needed by sshd</span>
+<span class="go">package SUNWgssdh add # needed by sshd</span>
+<span class="go">package SUNWspnego add # needed by sshd</span>
+<span class="go">package SUNWbind add # host&amp;dig</span>
+
+<span class="gp">#</span> optional clusters and packages
+<span class="gp">#</span>cluster SUNWCapache add <span class="c"># Apache 1.3.9</span>
+<span class="gp">#</span>cluster SUNWCapch2 add <span class="c"># Apache 2</span>
+<span class="gp">#</span>cluster SUNWCpostgr add <span class="c"># PostgreSQL</span>
+<span class="gp">#</span>cluster SUNWCpostgr-82 add <span class="c"># PostgreSQL 8.2</span>
+<span class="gp">#</span>cluster SUNWCdhcp add <span class="c"># DHCPv4 Services</span>
+<span class="gp">#</span>cluster SUNWCtcat add <span class="c"># Tomcat Servlet/JSP Container</span>
+<span class="gp">#</span>package SUNWmysqlr add <span class="c"># MySQL (Root)</span>
+<span class="gp">#</span>package SUNWmysqlu add <span class="c"># MySQL (User)</span>
+
+<span class="gp">#</span> The following are <span class="k">for</span> webstack dependencies
+<span class="go">package         SUNWfontconfig</span>
+<span class="go">package         SUNWfreetype2</span>
+<span class="go">package         SUNWjpg</span>
+<span class="go">package         SUNWpng</span>
+<span class="go">package         SUNWxwplt</span>
+<span class="go">package         SUNWpostgr-82-libs</span>
+<span class="go">EOD</span></code></pre></div>
+
+
+<p>After running an install with this profile, you will end up with a ZFS root
+that contains just under 2GB worth of data. If that&rsquo;s not your desired setup,
+then tweak away!</p>
+
+<h2>Step Three: Validate the profile file</h2>
+
+<p>The last step in this article is to validate the rules file and its associated
+profiles. Run the following:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">#</span> ./check
+<span class="go">Validating rules...</span>
+<span class="go">Validating profile webserver...</span>
+<span class="go">The custom JumpStart configuration is ok.</span></code></pre></div>
+
+
+<p>This process validates your config files, and creates a rules.ok file in the
+root of your config server directory. It is this file that the client loads
+and parses when starting a Jumpstart installation.</p>
+
+<p>This concludes part three of the series. You should now be able to boot using
+PXE for X86 or using &lsquo;boot net:dhcp - install&rsquo; from Sparc, and have a
+completely automated installation. However, you likely also have a rather
+vanilla installation which we&rsquo;ll remedy in part four of the series.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-09-22T00:00:00-05:00'><span class='date'><span class='date-month'>Sep</span> <span class='date-day'>22</span><span class='date-suffix'>nd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/jumpstart/'>jumpstart</a>, <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/09/21/not-so-typical-jumpstart-part-two" title="Previous Post: Not So Typical Jumpstart: Part Two">&laquo; Not So Typical Jumpstart: Part Two</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/09/23/not-so-typical-jumpstart-part-three-scripts" title="Next Post: Not So Typical Jumpstart: Part Three - The Scripts">Not So Typical Jumpstart: Part Three - The Scripts &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/09/22/not-so-typical-jumpstart-part-three-jumpstart-profile';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

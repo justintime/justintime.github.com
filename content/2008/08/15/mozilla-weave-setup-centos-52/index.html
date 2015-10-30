@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mozilla Weave Setup on CentOS 5.2 - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Mozilla Weave is a
+project from Mozilla Labs that aims to keep all of your browser
+data synced between all of your PC&rsquo;s.  The now defunct &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Mozilla Weave Setup on CentOS 5.2</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2008-08-15T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p><a href="http://labs.mozilla.com/projects/weave/">Mozilla Weave</a> is a
+project from Mozilla Labs that aims to keep all of your browser
+data synced between all of your PC&rsquo;s.  The now defunct Google
+Browser Sync used to do this, as does
+<a href="http://www.foxmarks.com/">Foxmarks</a>.  Although Weave is still in
+it&rsquo;s infancy, it&rsquo;s been very promising thus far.  However, many of
+the users of Mozilla&rsquo;s own Weave server complain that the service
+is very slow.  The beauty of Weave is that it uses the standard
+protocol <a href="http://en.wikipedia.org/wiki/WebDAV">WebDAV</a> to sync it&rsquo;s
+data.  Why does that matter?  Because our good &lsquo;ol buddy
+<a href="http://www.apache.org">Apache</a> can speak WebDAV out-of-the box! 
+Follow the jump to find out how you can setup your own server that
+you can sync to. In our scenario, we&rsquo;ll be setting up Weave to sync
+to a <a href="http://www.centos.org">CentOS</a> 5.2 server running Apache
+2.2.  We&rsquo;ll use mod_ssl to encrypt the communications - and to
+conserve IP&rsquo;s and SSL certs, we&rsquo;ll setup Weave as a subdirectory
+under the main SSL virtual host.  However, you should be able to
+adapt these instructions to any Apache installation where mod_ssl
+and mod_dav_fs is installed and available. There&rsquo;s two phases to
+the installation:
+1.  Setup of the Apache server
+2.  Setup of the Firefox client(s)</p>
+
+<h3>Setup of the Apache server</h3>
+
+<p>First, make sure that you have mod_ssl installed:
+    yum install mod_ssl</p>
+
+<p>Now, make sure the following lines are present in
+/etc/httpd/conf/httpd.conf to enable WebDAV:</p>
+
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">LoadModule</span> dav_module modules/mod_dav.so
+<span class="nb">LoadModule</span> dav_fs_module modules/mod_dav_fs.so
+<span class="nt">&lt;IfModule</span> <span class="s">mod_dav_fs.c</span><span class="nt">&gt;</span>
+  <span class="nb">DAVLockDB</span> <span class="sx">/var/lib/dav/lockdb</span>
+<span class="nt">&lt;/IfModule&gt;</span></code></pre></div>
+
+
+<p>Now, let&rsquo;s setup our directory alias off of the main SSL virtual
+host. We&rsquo;ll maintain our configuration in a separate file. Create a
+file named /etc/httpd/conf.d/mozilla-weave.include with this in it:
+    Alias /weave /apps/mozilla_weave/www</p>
+
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nt">&lt;Directory</span> <span class="s">/apps/mozilla_weave/www</span><span class="nt">&gt;</span>
+  <span class="nb">SSLRequireSSL</span>
+  Options Indexes FollowSymLinks
+  <span class="nb">AllowOverride</span> AuthConfig Limit
+  <span class="nb">Order</span> allow,deny
+  <span class="nb">Allow</span> from <span class="k">all</span>
+  <span class="nb">AuthType</span> Basic
+  <span class="nb">AuthName</span> <span class="s2">&quot;WebDAV Restricted&quot;</span>
+  <span class="nb">AuthUserFile</span> <span class="sx">/apps/mozilla_weave/passwords</span>
+  <span class="nb">require</span> valid-user
+<span class="nt">&lt;/Directory&gt;</span>
+
+<span class="nt">&lt;Location</span> <span class="s">/weave</span><span class="nt">&gt;</span>
+  <span class="nb">DAV</span> <span class="k">On</span>
+<span class="nt">&lt;/Location&gt;</span></code></pre></div>
+
+
+<p>Now, let&rsquo;s get this file included in the main SSL virtualhost. On
+CentOS, edit the file /etc/httpd/conf.d/ssl.conf. Just before the
+closing VirtualHost tag, insert the include statement:
+    include /etc/httpd/conf.d/mozilla-weave.include
+    </VirtualHost></p>
+
+<p>Now, let&rsquo;s create our directory structure (replace &lsquo;myusername&rsquo;
+with whatever username you want to authenticate with):
+    cd /apps
+    mkdir -p mozilla_weave/www/user/myusername
+    chown -R apache:apache mozilla_weave</p>
+
+<p>Now, we&rsquo;ll create our htaccess file - again replace &lsquo;myusername&rsquo;:
+    echo &ldquo;require user myusername&rdquo; > mozilla_weave/www/user/myusername/.htaccess
+    chown apache:apache mozilla_weave/www/user/myusername/.htaccess
+    htpasswd -c mozilla_weave/passwords myusername</p>
+
+<p>Finally, let&rsquo;s restart Apache:
+    /etc/init.d/httpd restart</p>
+
+<h3>Setup of the Firefox client(s)</h3>
+
+<p>First, download the latest Weave plugin from
+<a href="https://people.mozilla.com/~cbeard/weave/dist/latest-weave.xpi">here</a>.
+Go ahead and restart Firefox. It will start the Weave wizard on
+startup, but for now click cancel. Click the new Weave icon down in
+your status bar, and click on &ldquo;Preferences&rdquo;.  Now click on the
+advanced tab.  You need to change the Server Location field to the
+URL that we just set up in Apache.  In my case, I used
+<a href="https://www.techadvise.com/weave.">https://www.techadvise.com/weave.</a> Now, click on the Account tab,
+and click the &ldquo;Sign In&rdquo; button.  Click the &ldquo;Next&rdquo; button, followed
+by &ldquo;Set Up Another Computer&rdquo;.  Should be self explanatory from here
+out - just use the same username and password we set up earlier via
+Apache.
+The latest versions of Weave require you to use SSL. Since not
+everyone has money to throw away, you might be using a self-signed
+certificate. When you do, you need to browse to
+<a href="https://www.yourdomain.com/">https://www.yourdomain.com/</a> and jump through all the hoops to
+autmatically accept the certificate before it will work in Weave.
+If you don’t do this, Weave will give you the error “Username /
+password incorrect”</p>
+
+<p>One PC down, now go to all of your other machines and point them at
+your new WebDAV enabled directory. Then enjoy all the synchronized
+goodness with great performance!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2008-08-15T00:00:00-05:00'><span class='date'><span class='date-month'>Aug</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2008</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/apache/'>apache</a>, <a class='category' href='/blog/categories/hosting/'>hosting</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2008/08/09/user-level-configuration-cpu-speed-gnome-under-ubuntu" title="Previous Post: User-level configuration of CPU speed in Gnome under Ubuntu">&laquo; User-level configuration of CPU speed in Gnome under Ubuntu</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2008/08/31/quick-painless-ubuntu-speed-tweaks" title="Next Post: Quick and Painless Ubuntu Speed Tweaks">Quick and Painless Ubuntu Speed Tweaks &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52';
+        var disqus_url = 'http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

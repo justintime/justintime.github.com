@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>The Nagios Fork: Did Two Wrongs Make a Right??? - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="It&rsquo;s an item that I feel hasn&rsquo;t got much press, at least in the limited RSS
+entries I&rsquo;ve had time to scan lately: Nagios has been &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">The Nagios Fork: Did Two Wrongs Make a Right???</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-12T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It&rsquo;s an item that I feel hasn&rsquo;t got much press, at least in the limited RSS
+entries I&rsquo;ve had time to scan lately: <a href="http://www.icinga.org/">Nagios has been
+forked</a>. I&rsquo;ve been using Nagios long enough that I
+actually used NetSaint for a bit, so I have some mixed feelings about Icinga.
+In general, I&rsquo;m all for forks when they are indeed needed -
+<a href="http://foswiki.org/">FOSWiki</a> is a great example. But forks shouldn&rsquo;t be
+taken lightly, in many ways they are like a divorce - they should be a last
+resort, not a quick way out. Personally, I think that the fork will ultimately
+either fail or merge back into Nagios, but read on for why I think the Icinga
+fork is a case of two wrongs making a right.  First, let me state that this is
+all my personal opinion. I&rsquo;ve been around Nagios for a long time, and while I
+don&rsquo;t know the developers involved personally, I&rsquo;ve read enough of all of
+their emails over the years to have a good feel for what they are about. All
+this seems to have come about because of a few reasons:</p>
+
+<ul>
+<li>Ethan Galstad, the sole person with commit access to Nagios, has become a bottleneck in the project. It took forever for Nagios 3.0 to come about, and development has slowed even more since then.</li>
+<li>People seem to fear the commercialization of Nagios. Ethan&rsquo;s involvement in Nagios Enterprises appears to make some people nervous. I think this is all FUD - there&rsquo;s many examples of commercial OSS out there, and many of them are perfectly community-friendly. If Ethan finally wants to make some money over what he&rsquo;s developed over the past 10 years, then more power to him. If he and his company were to become &ldquo;evil&rdquo;, <strong>then</strong> you fork the code, but not before.</li>
+<li><p>Ethan, like most developers, prioritized bugs and features based upon what he felt like working on the most. This lead many to feel that their requests were going unheard.
+Netways is the company that is sponsoring the fork, they are all great coders,
+and have committed a lot of their resources to Nagios. However, I feel they
+made a critical mistake - they treated the fork like a coup or a crusade.
+Ethan states that he was never directly approached about the fork before the
+announcement &ldquo;Nagios is dead! Long live Icinga&rdquo; was made on the mailing list.
+Part of OSS is open communication, I think that Netways should have tried to
+discuss things first. Going back to the divorce analogy, they filed for
+divorce before the spouse knew there was a problem. So, the title makes
+reference to two wrongs and a right. I think this may actually be one of the
+rare occasions where two wrongs do make a right. The two wrongs? Easy!</p></li>
+<li><p>Ethan was wrong for taking the community too lightly, and not allowing the community to have more input into the direction of Nagios. He had far too little participation in the mailing lists to be the sole dictator of the code base.</p></li>
+<li>Netways was wrong starting a fork for the wrong reasons. Don&rsquo;t misunderstand me here, I think nearly all of their reasons are valid, I just don&rsquo;t think that a fork should have been the first step to resolve them.
+So, what&rsquo;s the right here? Well, it appears as though this may have been the
+wake up call that Ethan may have needed. I encourage you to <a href="http://community.nagios.org/">read all of
+Ethan&rsquo;s posts on his blog</a>, but he is already
+taking steps to resolve some of the more obvious issues. First and foremost,
+he&rsquo;s appointed Ton Voon and Andreas Ericsson to be core developers. Ton and
+Andreas are excellent developers, and likely have committed more of their time
+to the development and support of Nagios and it&rsquo;s plugins than Ethan himself
+has over the last couple years. The project could not be in more competent
+hands than in theirs. He has committed to the setup of a bug/issue/request
+tracker for Nagios, and has <a href="http://ideas.nagios.org/">created a site that allows end-users to vote on
+what features they want to see in Nagios</a>.
+Unfortunately, my crystal ball tells me that Icinga will be a casualty, but it
+has already served it&rsquo;s purpose without a single release - it has pushed
+Nagios further in a few weeks than anything else has in the past few years.
+Perhaps two wrongs did make a right? <strong>Personal note:</strong> this is the first big
+opinion story I&rsquo;ve ever written here, and it feels odd. Usually I reserve
+space on my blog for howto&rsquo;s and other facts instead of opinion. However,
+Nagios has done so much for me over the years, it&rsquo;s hard not to voice my
+opinion on a piece of software that I truly consider the single most important
+piece of software I&rsquo;ve ever used in my role as a sysadmin. More than likely if
+you&rsquo;ve read this far, you&rsquo;re a sysadmin too and likely have some strong
+opinions on this topic - please do share them!</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-05-12T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/linux/'>linux</a>, <a class='category' href='/blog/categories/nagios/'>nagios</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/05/12/smf-manifests-endeca-iap-6x" title="Previous Post: SMF Manifests for Endeca IAP 6.x">&laquo; SMF Manifests for Endeca IAP 6.x</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/05/18/breaking-bad-habits-dont-use-seq-your-shell-scripts" title="Next Post: Breaking Bad Habits - Don't Use seq in Your Shell Scripts">Breaking Bad Habits - Don't Use seq in Your Shell Scripts &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/05/12/nagios-fork-did-two-wrongs-make-right';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

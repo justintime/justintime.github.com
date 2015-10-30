@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Took a fair amount of googling around to find the solution to this one. With
+the Node Gallery 3.x branch, we
+needed a way to quickly add an image to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/posts/3/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form">Display a CCK Filefield or Imagefield Upload Widget on Your Own Custom Form</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-01-26T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Took a fair amount of googling around to find the solution to this one. With
+the <a href="http://drupal.org/project/node_gallery">Node Gallery</a> 3.x branch, we
+needed a way to quickly add an image to an existing gallery. We could have
+displayed the whole node form, but there&rsquo;s a lot of things on that form that
+we can just use the defaults for 99% of the time. We need just three fields
+filled in: Title, Caption, and the imagefield itself.  To use the same
+imagefield widget that handles all the hard work for you on the node add field
+on your own field, first create a handler in hook_menu such as this:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$items</span><span class="p">[</span><span class="s1">&#39;node/%node_gallery_gallery/upload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Upload New Image&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;page callback&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;drupal_get_form&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;page arguments&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;node_gallery_upload_image_form&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;access callback&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;node_gallery_user_access&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;access arguments&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;upload&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;node_gallery.pages.inc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="nx">MENU_LOCAL_TASK</span><span class="p">,</span>
+  <span class="p">);</span></code></pre></div>
+
+
+<p>Then, in node_gallery.pages.inc, you create the form function
+that does the work:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">node_gallery_upload_image_form</span><span class="p">(</span><span class="nv">$form_state</span><span class="p">,</span> <span class="nv">$gallery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$imagetype</span> <span class="o">=</span> <span class="s1">&#39;node_gallery_image&#39;</span><span class="p">;</span>
+  <span class="nv">$form_id</span> <span class="o">=</span> <span class="nv">$imagetype</span> <span class="o">.</span> <span class="s1">&#39;_node_form&#39;</span><span class="p">;</span>
+  
+  <span class="nx">module_load_include</span><span class="p">(</span><span class="s1">&#39;inc&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="s1">&#39;includes/content.node_form&#39;</span><span class="p">);</span>
+  <span class="nv">$field</span> <span class="o">=</span> <span class="nx">content_fields</span><span class="p">(</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">,</span><span class="nv">$imagetype</span><span class="p">);</span>
+  
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#title&#39;</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">(</span><span class="s1">&#39;Title&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;textfield&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#required&#39;</span> <span class="o">=&gt;</span> <span class="k">TRUE</span><span class="p">,</span>
+    <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#title&#39;</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">(</span><span class="s1">&#39;Caption&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;textarea&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$imagetype</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;gid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$gallery</span><span class="o">-&gt;</span><span class="na">nid</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;#field_info&#39;</span><span class="p">][</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$field</span><span class="p">;</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;#field_info&#39;</span><span class="p">][</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">][</span><span class="s1">&#39;#required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
+  <span class="nv">$form</span> <span class="o">+=</span> <span class="p">(</span><span class="k">array</span><span class="p">)</span> <span class="nx">content_field_form</span><span class="p">(</span><span class="nv">$form</span><span class="p">,</span> <span class="nv">$form_state</span><span class="p">,</span> <span class="nv">$field</span><span class="p">);</span>
+  
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;submit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Save&#39;</span><span class="p">);</span>
+  
+  <span class="k">return</span> <span class="nv">$form</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>This is pretty straightforward, up
+until lines 28 - 30. Those three lines setup the form array and then append
+the results from content_field_form() to our existing form. Still, very easy,
+but I wasn&rsquo;t able to find any documentation on how to do this. Just in case
+you&rsquo;re curious, here&rsquo;s the submit handler for that form.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">node_gallery_upload_image_form_submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$form_state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">global</span> <span class="nv">$user</span><span class="p">;</span>
+  <span class="nv">$image</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
+  <span class="nv">$image</span><span class="o">-&gt;</span><span class="na">uid</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">uid</span><span class="p">;</span>
+  <span class="nv">$image</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">)</span> <span class="o">?</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+  <span class="nv">$values</span> <span class="o">=</span> <span class="nv">$form_state</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">];</span>
+  <span class="k">foreach</span> <span class="p">(</span><span class="nv">$values</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$image</span><span class="o">-&gt;</span><span class="nv">$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">node_gallery_image_save</span><span class="p">(</span><span class="nv">$image</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>Nothing new
+there. The end result is a nice looking, concise form that allows you to
+quickly upload an image to a gallery. Sweet!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2010/01/20/drupal-meet-hudson-hudson-drupal">Drupal, Meet Hudson; Hudson, Drupal...</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-01-20T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>20</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At $work, we use <a href="https://hudson.dev.java.net/">Hudson</a> extensively, and it
+rocks. For those who don&rsquo;t know already, Hudson is an implementation of
+<a href="http://en.wikipedia.org/wiki/Continuous_integration">Continuous Integration</a>
+that is remarkably easy to use. I wrote about my <a href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2">first impressions of Hudson</a>
+previously. Hudson&rsquo;s original audience was Java developers using Ant or Maven,
+but with plugins and some hacking, we can make it do some things for us as
+module contributors to Drupal.  I&rsquo;ve been cutting my Drupal developer teeth by
+working pretty intensively on a few modules for Drupal - <a href="http://drupal.org/project/node_gallery">Node Gallery</a> and it&rsquo;s derivatives. We are
+hitting a crucial point in development where we are switching from the old way
+of defining fields on a node to using CCK. While the module is still in alpha,
+it&rsquo;s still in use by quite a few sites - as of this writing it&rsquo;s number 465 on
+the list of Drupal modules. Not exactly the spotlight, but we can&rsquo;t go
+breaking things without making people angry either. I figured this would be
+the perfect place for Hudson - it will let you know when you break something.</p>
+
+<h3>Pieces of the Puzzle</h3>
+
+<p>Here&rsquo;s the pieces you&rsquo;ll need:</p>
+
+<ul>
+<li>A linux server with Java, a working Drupal install (that may get broken at times) and the cvs command-line utility.</li>
+<li>These Drupal modules installed and enabled: <a href="http://drupal.org/project/drush">drush</a>, <a href="http://drupal.org/project/coder">coder</a>, and optionally <a href="http://drupal.org/project/simpletest">simpletest</a>.</li>
+<li>Some time on your hands</li>
+</ul>
+
+
+<h3>The shell script</h3>
+
+<p>This is the most important piece of the setup. By utilizing Hudson&rsquo;s
+environment variables, we can make this as portable as possible. By using the
+same script for all Hudson jobs, changing the script automatically changes all
+of our jobs at once. Let&rsquo;s dive right in:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="c">#!/bin/bash</span>
+<span class="c">#set -x</span>
+
+<span class="nv">PHP</span><span class="o">=</span>/usr/bin/php
+<span class="nv">DRUSH_PATH</span><span class="o">=</span>/apps/drupal/drush
+<span class="nv">DRUPAL_PATH</span><span class="o">=</span>/apps/drupal/drupal_core
+<span class="nv">MODULES_DIR</span><span class="o">=</span><span class="nv">$DRUPAL_PATH</span>/sites/ngdemo.sysadminsjourney.com/modules
+<span class="nv">SITE</span><span class="o">=</span><span class="s2">&quot;http://ngdemo.sysadminsjourney.com/&quot;</span>
+
+<span class="nv">DRUSH</span><span class="o">=</span><span class="s2">&quot;$PHP $DRUSH_PATH/drush.php -n -r $DRUPAL_PATH -i $DRUPAL_PATH -l $SITE&quot;</span>
+<span class="nv">EXITVAL</span><span class="o">=</span>0
+
+<span class="c"># Check our syntax</span>
+<span class="nv">PHP_FILES</span><span class="o">=</span><span class="sb">`</span>/usr/bin/find <span class="nv">$WORKSPACE</span> -type f -exec grep -q <span class="s1">&#39;&lt;?php&#39;</span> <span class="o">{}</span> <span class="se">\;</span> -print<span class="sb">`</span>
+<span class="k">for</span> f in <span class="nv">$PHP_FILES</span><span class="p">;</span> <span class="k">do</span>
+  <span class="nv">$PHP</span> -l <span class="nv">$f</span>
+  <span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> !<span class="o">=</span> <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="nb">let</span> <span class="s2">&quot;EXITVAL += 1&quot;</span>
+    <span class="nb">echo</span> <span class="s2">&quot;$f failed PHP lint test, not syncing to ngdemo website.&quot;</span>
+    <span class="nb">exit</span> <span class="nv">$EXITVAL</span>
+  <span class="k">fi</span>
+<span class="k">done</span>
+
+<span class="c">#Install the files</span>
+/usr/bin/rsync -a --delete <span class="nv">$WORKSPACE</span>/* <span class="nv">$MODULES_DIR</span>/<span class="nv">$JOB_NAME</span>
+
+<span class="c">#Run update.php</span>
+<span class="nv">$DRUSH</span> updatedb -q --yes
+
+<span class="c">#Run coder</span>
+<span class="nv">CODER_OUTPUT</span><span class="o">=</span><span class="sb">`</span><span class="nv">$DRUSH</span> coder no-empty<span class="sb">`</span>
+<span class="k">if</span> <span class="o">[</span> -n <span class="s2">&quot;`echo $CODER_OUTPUT | grep $JOB_NAME`&quot;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nv">$DRUSH</span> coder no-empty
+  <span class="nb">echo</span> <span class="s2">&quot;Coder module reported errors.&quot;</span>
+  <span class="nb">let</span> <span class="s2">&quot;EXITVAL += 1&quot;</span>
+<span class="k">fi</span>
+
+<span class="c">#Run potx</span>
+<span class="nb">cd</span> <span class="nv">$MODULES_DIR</span>/<span class="nv">$JOB_NAME</span>
+../potx/potx-cli.php
+<span class="k">if</span> <span class="o">[</span> <span class="nv">$?</span> !<span class="o">=</span> <span class="m">0</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  <span class="nb">let</span> <span class="s2">&quot;EXITVAL += 1&quot;</span>
+  <span class="nb">echo</span> <span class="s2">&quot;POTX failed.&quot;</span>
+<span class="k">fi</span>
+<span class="k">if</span> <span class="o">[</span> -e <span class="nv">$MODULES_DIR</span>/<span class="nv">$JOB_NAME</span>/general.pot <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+  cp <span class="nv">$MODULES_DIR</span>/<span class="nv">$JOB_NAME</span>/general.pot <span class="nv">$MODULES_DIR</span>/../files/<span class="nv">$JOB_NAME</span>.pot
+<span class="k">fi</span>
+
+<span class="nb">exit</span> <span class="nv">$EXITVAL</span></code></pre></div>
+
+
+<p>Lines 14 through 23 find all files in $WORKSPACE (which is
+set by Hudson) that have the &lsquo;must** name your Hudson project the same as the
+module name. Also note that your Hudson user needs to have write access to the
+specific module directory that it&rsquo;s installing. Line 29 runs drush so that it
+invokes update.php, and answers yes to all questions. Lines 32 through 37 runs
+the default code review from the coder module. You will have had to set this
+up initially via the web interface. It then scans through that output looking
+for any complaints about our $JOB_NAME, and if found, prints it to stdout and
+increments our exit value by 1. Note we don&rsquo;t exit here, as it&rsquo;s a non-fatal
+error. However, Hudson will treat it as a failed build and email everyone
+about it. Lines 40 through 48 runs the Translation Template Extractor command
+line utility against our module. It then copies the general.pot to the files
+directory. Again, the user running Hudson will need write access for this to
+work properly. If the potx-cli.php script should exit uncleanly, we increment
+our exit value by one. Last in my script, we simply exit with whatever value
+we have ended up with at this point. Again, if Hudson sees anything other than
+a zero, it will email everyone about it. Since the modules I&rsquo;m working on
+don&rsquo;t have Simpletest tests ready yet, I don&rsquo;t run them in this script.
+However, it&rsquo;s on the horizon, and can be ran easily using run-tests.sh. Note
+that there is <a href="http://drupal.org/node/602332">a patch</a> that will cause run-
+tests.sh to output it&rsquo;s results in a JUnit style output, which Hudson
+understands fully. If you implement this, I strongly recommend applying that
+patch.</p>
+
+<h3>Hudson Setup</h3>
+
+<p>Now that we have our script ready, we need to setup our Hudson job. Note that
+installing Hudson itself is outside the scope of this article - it&rsquo;s
+refreshingly easy and doesn&rsquo;t need repeating here. There are two things you
+must do before creating the build task. First, setup your &ldquo;E-mail
+Notification&rdquo; section according to your mail server at
+<a href="http://myhudsonserver:8080/configure.">http://myhudsonserver:8080/configure.</a> Also, you will need to install the &ldquo;URL
+Change Trigger&rdquo; plugin by navigating to
+<a href="http://myhudsonserver:8080/pluginManager/available.">http://myhudsonserver:8080/pluginManager/available.</a> Once you install that
+plugin, create a new job. In my case, the job was named &lsquo;node_gallery&rsquo;, since
+that&rsquo;s the name of the Drupal module I was working with. Select &lsquo;Build a free-
+style software project&rsquo; when asked. Under the &ldquo;Source Code Management&rdquo;
+section, select &ldquo;CVS&rdquo;, and then fill in the CVSROOT of the project you&rsquo;re
+working with. In my case, it was
+&lsquo;:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib&rsquo;. Next, fill
+in the path to the module in the &ldquo;Module(s)&rdquo; form - for me it&rsquo;s
+&lsquo;contributions/modules/node_gallery/&rsquo;. If you&rsquo;re working with CVS HEAD, leave
+the Branch field empty, otherwise type in the branch name there.
+<strong>IMPORTANT:</strong> to avoid abusing Drupal.org&rsquo;s already overloaded CVS server
+with cvs logins once every 5 minutes, we will point Hudson instead to the RSS
+feed for the CVS log messages. Make sure &ldquo;Poll SCM&rdquo; is unchecked, and check
+&ldquo;Build when a URL&rsquo;s content changes&rdquo;. To obtain the URL, you need the node id
+of your project. There&rsquo;s many ways to do this, but you can find it by going to
+the project&rsquo;s Drupal.org page and click on &ldquo;View CVS Messages&rdquo;. From that
+page, click the orange RSS icon at the bottom left of that page. Copy and
+paste that URL into the URL field in Hudson. Under the Build section, click
+&ldquo;Add build step&rdquo;, and select &ldquo;Execute Shell&rdquo;. In the resulting &ldquo;Command&rdquo;
+textarea, type the full path to the shell script we setup above. The final
+section, &ldquo;Post-build actions&rdquo; is up to you, but you&rsquo;ll likely want to enable
+email notifications. Place a checkmark in the &ldquo;Email Notification&rdquo; box, and
+type in the email addresses of the desired recipients. Click Save, and you&rsquo;re
+done! Hudson will start doing a CVS checkout of your project, and will start
+running tests on it. It will email you once anything goes wrong, and will
+notify you again when the problem is resolved. It will only run these tests
+after someone commits code to CVS, so you will likely need to hit the &ldquo;Build
+Now&rdquo; link in the left nav a few times. We&rsquo;ve really only scratched the surface
+of what Hudson can do. You can track performance using JMeter, add all kinds
+of crazy plugins, require logins, the list goes on and on. While this helps,
+it&rsquo;s still nowhere as helpful as a Ant/Maven job can be. Hopefully this
+article is enough to spark some interest from the Drupal community so that we
+can write some better continuous integration code in the future. Also, I&rsquo;m far
+from being an expert on either Drupal or Hudson. I wrote my first code for
+Drupal in November of 2009, and I only tinker with Hudson on occasion at work.
+Hudson works so well, it&rsquo;s one of those &ldquo;set it and forget it&rdquo; apps. I would
+love for readers to leave comments on any mistakes I might have made, or
+possible improvements I may have missed!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/12/29/zfs-trenches-presentation-lisa-09">ZFS in the Trenches Presentation at LISA 09</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-12-29T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just got the chance to finally sit down and watch <a href="http://www.cuddletech.com">Ben
+Rockwood&rsquo;s</a> presentation at LISA 09: <a href="http://slx.sun.com/1179275886">ZFS in the
+Trenches</a>. If you are even thinking about ZFS
+and how it works, it&rsquo;s a very informative presentation. There is very little
+marketing-speak, and he very specifically targets sysadmins as his audience.
+Great stuff! Of interesting note about his comparison of fsstat vs iostat, our
+Apache webservers routinely see about 5MB/sec reads being asked of ZFS, but
+the actual iostat on the disk shows that almost all of that traffic is being
+served up from ARC.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/12/21/quicktip-fix-eclipse-galileo-buttons-ubuntu-910">QuickTip: Fix Eclipse Galileo Buttons on Ubuntu 9.10</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-12-21T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>There&rsquo;s a nasty upstream bug in GTK present in Ubuntu 9.10 that makes Eclipse
+Galileo all but unusable &ndash; specifically it makes clicking many buttons with
+the mouse just stop working. You can use tab and spacebar to make it work, but
+that&rsquo;s not much of a workaround. All you need to do is set an environment
+variable before starting Eclipse:</p>
+
+<pre><code>export GDK_NATIVE_WINDOWS=true
+</code></pre>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/12/18/share-your-eclipse-plugins-and-configurations-across-platforms">Share Your Eclipse Plugins and Configurations Across Platforms</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-12-18T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>18</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/assets/images/eclipse-logo-white.jpg" alt="" />Over the years, I&rsquo;ve come to know
+and love <a href="http://eclipse.org">Eclipse</a>. Though it has roots in Java,
+ironically, I use Eclipse for just about everything except for coding Java (if
+I wrote Java code, I&rsquo;m sure I&rsquo;d use Eclipse). Eclipse is great for <a href="http://subclipse.tigris.org">browsing
+Subversion</a>, <a href="http://www.eclipse.org/pdt">coding
+PHP</a>, <a href="http://e-p-i-c.sourceforge.net">coding
+Perl</a>, and even <a href="http://sourceforge.net/project/shelled">coding shell
+scripts</a>. For die hards like me,
+there&rsquo;s the <a href="http://viplugin.com">viPlugin</a> that allows you to use all the vi
+commands you know and love within Eclipse. About the time you get your perfect
+Eclipse setup established, you buy a new laptop on a new platform. Or, in my
+case, I have three &ldquo;primary&rdquo; development workstations, each on a different OS.
+The rest of this article will show you how to hook
+<a href="http://dropbox.com">Dropbox</a> into your Eclipse installation, allowing you to
+share your plugins and configurations across different versions of Eclipse, on
+different machines, and even on different platforms.</p>
+
+<p>Truth be told, doing this type of setup with Eclipse was actually easier to do
+with older versions of Eclipse. Since they&rsquo;ve moved to the p2 provisioning
+system, it became a little harder to do, but still very possible. After much
+googling, I finally came across <a href="http://stackoverflow.com/questions/582391/installing-eclipse-3-4%0A-plugins-in-a-directory-other-than-eclipsehome-plugins">this StackOverflow
+question</a> that gave me the
+pieces I needed to set this all up.</p>
+
+<p>A little prep work on the frontend will save us a huge amount of time in
+maintenance. Note that I use Dropbox in this article, but any similar service
+should do. We&rsquo;ll setup our Linux install first, since we can script things a
+little easier there. Go ahead and install Dropbox and Eclipse - they&rsquo;re both
+very straightforward installations.</p>
+
+<p>Let&rsquo;s assume that our Dropbox directory is directly under our home directory,
+and our eclipse installation is in ~/eclipse.  Let&rsquo;s setup some environment
+variables and create our directory structure:</p>
+
+<pre><code>export DROPDIR=~/Dropbox
+export ECLIPSEDIR=~/eclipse
+cd $DROPDIR
+mkdir eclipse-custom
+cd eclipse-custom
+# Create our shared extension dir
+mkdir extensions
+# Create our workspace dir
+mkdir shared-workspace
+</code></pre>
+
+<p>With our directory structure setup, it&rsquo;s time to pick a plugin to install.
+Let&rsquo;s do <a href="http://www.eclipse.org/pdt">PDT</a>. The key here is that we start
+Eclipse by pointing it to a new configuration directory which lives on our
+Dropbox account, and install the new extension. This will force Eclipse to
+install the plugin to the Dropbox directory, instead of the local directory.
+Start Eclipse like so:</p>
+
+<pre><code>eclipse -configuration $DROPDIR/eclipse-custom/extensions/pdt/eclipse/configuration
+</code></pre>
+
+<p>Note that you can change the &lsquo;pdt&rsquo; portion of that path to whatever you
+choose, but you must include the trailing eclipse/configuration portion. Once
+in Eclipse, go ahead and install PDT just as you normally would, then exit
+Eclipse.</p>
+
+<p>Now that we&rsquo;ve installed the PDT extension to a shared location, it&rsquo;s time to
+point our local Eclipse installation to it. I wrote a quick script to do just
+that:</p>
+
+<pre><code>mkdir $ECLIPSEDIR/links
+cd $DROPDIR/eclipse-custom/extensions
+for d in `ls`; do
+  echo "path=`pwd`/$d" &gt; $ECLIPSEDIR/links/$d.link
+done
+</code></pre>
+
+<p>This script creates a directory named &lsquo;links&rsquo; in your Eclipse local
+installation, and creates a file for every extension that contains one line
+containing the path to the target extension. Now, start Eclipse. For some odd
+reason, the extensions wouldn&rsquo;t actually install until after I restarted
+Eclipse a second time, so you may need to do the same. You should now see your
+plugin in Eclipse.</p>
+
+<p>Please note that if you&rsquo;re doing cross-platform development, you&rsquo;ll save
+yourself some headache by <strong>not</strong> sharing the subclipse plugin. There&rsquo;s too
+much of that plugin that depends on the underlying OS to share effectively.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/12/15/nginx-performs-well-solaris-10-x86">NGINX Performs Well on Solaris 10 X86</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-12-15T00:00:00-06:00'><span class='date'><span class='date-month'>Dec</span> <span class='date-day'>15</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><img src="/assets/images/nginx.gif" alt="" />Just a quick posting of some simple benchmarks
+today. Please note, these are not the be all, end all performance results that
+allow everyone to scream from atop yonder hill that Solaris performs better
+than Linux! This was just me doing a little due dilligence. I like Solaris 10,
+and wanted to run it on our webservers. We&rsquo;re looking at using NGINX to serve
+up some static files, and I wanted to make sure it performed like it should on
+Solaris 10 before deploying it - you know, right tool for the job and all. So,
+disclaimers aside, here&rsquo;s what I found.</p>
+
+<h2>The Hardware</h2>
+
+<p>The hardware I tested was a Dell PowerEdge R610, with 12GB RAM, and 2x4 Core
+Nehalem CPU&rsquo;s. SATA disks were used with the internal RAID controller, but no
+RAID was configured.</p>
+
+<h2>The Benchmarks</h2>
+
+<p>I used ApacheBench, as shipped with Glassfish Webstack 1.5. Yes, I know,
+there&rsquo;s all kinds of flaws with ApacheBench, but the key here isn&rsquo;t the
+benchmarking tool, it&rsquo;s that the tool and it&rsquo;s configuration remain the same.
+Here&rsquo;s the command line I used:</p>
+
+<p><code>/opt/sun/webstack/apache2/2.2/bin/ab -n1000000 -k -c 2000
+http://localhost/static/images/logo.jpg</code></p>
+
+<h2>CentOS 5.4</h2>
+
+<p>I installed CentOS 5.4, ran yum to get all the updates possible. I then
+installed NGINX 0.7.64 from source, and simply copied one image file into the
+document root. I did a few sysctl tweaks for buffers and whatnot, but found
+later that they didn&rsquo;t impact the benchmark. Here&rsquo;s what ApacheBench running
+on the local host had to say:</p>
+
+<pre><code>This is ApacheBench, Version 2.3 &lt;$Revision: 655654 $&gt;
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient)
+Completed 100000 requests
+Completed 200000 requests
+Completed 300000 requests
+Completed 400000 requests
+Completed 500000 requests
+Completed 600000 requests
+Completed 700000 requests
+Completed 800000 requests
+Completed 900000 requests
+Completed 1000000 requests
+Finished 1000000 requests
+
+
+Server Software:        nginx/0.7.64
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /static/images/logo.jpg
+Document Length:        4404 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   21.916 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    990554
+Total transferred:      4625275893 bytes
+HTML transferred:       4407166476 bytes
+Requests per second:    45629.29 [#/sec] (mean)
+Time per request:       43.831 [ms] (mean)
+Time per request:       0.022 [ms] (mean, across all concurrent requests)
+Transfer rate:          206101.61 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   3.9      0     135
+Processing:     0   43  67.8     27     676
+Waiting:        0   43  67.7     27     676
+Total:          0   44  68.1     27     676
+
+Percentage of the requests served within a certain time (ms)
+  50%     27
+  66%     41
+  75%     49
+  80%     53
+  90%     72
+  95%    202
+  98%    245
+  99%    342
+ 100%    676 (longest request)
+</code></pre>
+
+<p>No matter how you slice it, that&rsquo;s pretty darn fast. I knew that Solaris 10
+had a completely rewritten TCP/IP stack optimized for multithreading, and that
+it should keep right up with Linux. However, NGINX uses different event models
+for Linux and Solaris 10 (epoll vs eventport), so I wanted to make sure there
+weren&rsquo;t any major differences in performance.</p>
+
+<h2>Solaris 10</h2>
+
+<p>I installed Solaris 10 x86, ran pca to get all the updates possible. I then
+installed NGINX 0.7.64 from source, and simply copied one image file into the
+document root. Here&rsquo;s what ApacheBench running on the local host had to say:</p>
+
+<pre><code>Server Software:        nginx/0.7.64
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /static/images/logo.jpg
+Document Length:        4404 bytes
+
+Concurrency Level:      2000
+Time taken for tests:   21.728 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    991224
+Total transferred:      4623536714 bytes
+HTML transferred:       4405506168 bytes
+Requests per second:    46023.73 [#/sec] (mean)
+Time per request:       43.456 [ms] (mean)
+Time per request:       0.022 [ms] (mean, across all concurrent requests)
+Transfer rate:          207805.08 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    1  71.9      0    4434
+Processing:     0   42  57.2     29    1128
+Waiting:        0   41  56.0     29    1128
+Total:          0   43  98.6     29    4473
+
+Percentage of the requests served within a certain time (ms)
+  50%     29
+  66%     35
+  75%     42
+  80%     50 
+  90%     74
+  95%    108
+  98%    176
+  99%    256
+ 100%   4473 (longest request)
+</code></pre>
+
+<p>Again, very impressive results. Overall, it appeared as though Solaris+NGINX
+was just a few millis faster than CentOS+NGINX in most cases, but certainly
+not enough to change your mind of what platform to use. If you notice the 4.5
+second request on the Solaris box, I&rsquo;m pretty sure that&rsquo;s a TCP retransmit
+that I can work out with ndd tuning.</p>
+
+<h2>The Verdict</h2>
+
+<p>NGINX is freaking fast. My hunch is that it&rsquo;s so fast, that I&rsquo;m actually
+running up against the limits of ApacheBench, not NGINX &ndash; but that&rsquo;s just a
+gut feeling. The verdict is that you won&rsquo;t be making a mistake going with
+either Linux or Solaris when setting up your NGINX server.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/11/30/ask-saj-what-do-apache-logs-50gb">Ask SAJ: What to Do With Apache Logs > 50GB?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-11-30T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>30</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Our site at $work is generating Apache logs that, when combined sequentially
+into one file, are larger than 50GB in size for one day&rsquo;s worth of traffic.
+AWStats' perl script pretty much chokes when working on this much data. Last I
+checked, Webalizer wasn&rsquo;t much different, and probably wouldn&rsquo;t scale up to
+that amount of data either. Does anyone out there have any advice on a
+commercial solution for Apache log analysis that can scale up like that?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/11/16/tip-split-components-across-domains-performance-goal-yahoo">Tip for "Split Components Across Domains" Performance Goal From Yahoo!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-11-16T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Just thought I&rsquo;d pass this little tidbit out there - we fixed it by pure luck
+on the first try. Yahoo unselfishly provides a document titled <a href="http://developer.yahoo.com/performance/rules.html">Best Practices
+for Speeding Up Your
+Website</a>. While some of the
+rules offered there aren&rsquo;t applicable for all sites, it&rsquo;s a great document and
+if you run a website, you should read it. At $work, part of our last code drop
+was to push out a feature that enabled &ldquo;Split Components Across Domains&rdquo;. From
+the article <a href="http://yuiblog.com/blog/2007/04/11/performance-research-%0Apart-4/">Performance Research, Part 4: Maximizing Parallel Downloads in
+the Carpool Lane</a>:</p>
+
+<blockquote><p>Our rule of thumb is to increase the number of parallel downloads by using
+at least two, but no more than four hostnames. Once again, this underscores
+the number one rule for improving response times: reduce the number of
+components in the page.</p></blockquote>
+
+<p>I&rsquo;m here to tell you, if you have AOL users surfing your site, <strong>do not use
+four hostnames</strong>.  When we pushed this feature up to production, we had one
+hostname that served up the HTML, and we had four hostnames that served up
+imagery (all these hostnames pointed back to the same IP, but doing this
+allows a performance boost in the browser). For this example, let&rsquo;s say that
+www.mydomain.com is the HTML hostname; img0.mycontent.com, img1.mycontent.com,
+img2.mycontent.com, and img3.mycontent.com were the imagery servers. This most
+certainly improved performance on the client side, but we started receiving
+some reports from a few users that they were no longer able to see <strong>any</strong>
+imagery on the site since we dropped the new code. We immediately knew what
+was causing the issue, but had no idea why, or how far spread out it was.
+Well, after poking around some of the &ldquo;big boys&rdquo; websites such as Amazon, we
+noticed that while all of them separated their components as suggested by
+Yahoo!, all of them used only one hostname for the imagery. We quickly
+configured our webapp to only use www.mydomain.com for the HTML, and
+img0.mycontent.com for the imagery. Once we did that, our AOL users were again
+able to see imagery. Now, I have no idea how widespread the issue was. I know
+it was limited to users of the AOL browser, and I suspect it&rsquo;s probably a bug
+in a specific version of their browser. However, if your site needs to provide
+compatibility to the most users possible, you may want to use just one
+separate hostname for splitting components. I hope this helps someone else!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/11/13/which-directory-server-and-why">Which Directory Server and Why?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-11-13T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>13</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of my projects for 2010 is to get a reliable directory server in place. I
+was going to post a poll to my readers asking what they felt was the best DS,
+but <a href="http://www.cuddletech.com/blog/index.php">Ben Rockrood</a> beat me to it
+with his article <a href="http://www.cuddletech.com/blog/pivot/entry.php?id=1094">Community Poll: Whats your favorite Directory
+Server?</a>. It&rsquo;s likely
+that most of the readers of this blog already read Ben&rsquo;s too, but if you don&rsquo;t
+it&rsquo;s a great blog to subscribe to. If you have any input into the debate on
+what DS is the best, <a href="http://www.cuddletech.com/blog/pivot/entry.php?id=1094">head on over and leave a
+comment</a>!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/11/12/quicktip-make-life-easier-ssh-copy-id">QuickTip: Make Life Easier With Ssh-copy-id</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-11-12T00:00:00-06:00'><span class='date'><span class='date-month'>Nov</span> <span class='date-day'>12</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>How many times have you ran through this series of events?</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> cat ~/.ssh/id_dsa.pub
+<span class="go">...copy output to clipboard...</span>
+<span class="gp">$</span> ssh myhost
+<span class="go">...enter password...</span>
+<span class="go">myhost$ vi ~./ssh/authorized_keys</span>
+<span class="go">...paste public key and save...</span>
+<span class="go">myhost$ exit</span></code></pre></div>
+
+
+<p>Thanks to bash&rsquo;s tab completion, I
+happened upon <strong>ssh-copy-id</strong>. Instead of all that above, just do this:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> ssh-copy-id myhost
+<span class="go">...enter password...</span></code></pre></div>
+
+
+<p>You&rsquo;re done!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/4">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/2">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

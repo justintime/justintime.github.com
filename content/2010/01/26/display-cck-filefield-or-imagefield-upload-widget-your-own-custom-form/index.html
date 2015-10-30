@@ -1,0 +1,377 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Display a CCK Filefield or Imagefield Upload Widget on Your Own Custom Form - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="Took a fair amount of googling around to find the solution to this one. With
+the Node Gallery 3.x branch, we
+needed a way to quickly add an image to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Display a CCK Filefield or Imagefield Upload Widget on Your Own Custom Form</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2010-01-26T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Took a fair amount of googling around to find the solution to this one. With
+the <a href="http://drupal.org/project/node_gallery">Node Gallery</a> 3.x branch, we
+needed a way to quickly add an image to an existing gallery. We could have
+displayed the whole node form, but there&rsquo;s a lot of things on that form that
+we can just use the defaults for 99% of the time. We need just three fields
+filled in: Title, Caption, and the imagefield itself.  To use the same
+imagefield widget that handles all the hard work for you on the node add field
+on your own field, first create a handler in hook_menu such as this:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nv">$items</span><span class="p">[</span><span class="s1">&#39;node/%node_gallery_gallery/upload&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;title&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Upload New Image&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;page callback&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;drupal_get_form&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;page arguments&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;node_gallery_upload_image_form&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;access callback&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;node_gallery_user_access&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;access arguments&#39;</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;upload&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+    <span class="s1">&#39;file&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;node_gallery.pages.inc&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;type&#39;</span> <span class="o">=&gt;</span> <span class="nx">MENU_LOCAL_TASK</span><span class="p">,</span>
+  <span class="p">);</span></code></pre></div>
+
+
+<p>Then, in node_gallery.pages.inc, you create the form function
+that does the work:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">node_gallery_upload_image_form</span><span class="p">(</span><span class="nv">$form_state</span><span class="p">,</span> <span class="nv">$gallery</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nv">$imagetype</span> <span class="o">=</span> <span class="s1">&#39;node_gallery_image&#39;</span><span class="p">;</span>
+  <span class="nv">$form_id</span> <span class="o">=</span> <span class="nv">$imagetype</span> <span class="o">.</span> <span class="s1">&#39;_node_form&#39;</span><span class="p">;</span>
+  
+  <span class="nx">module_load_include</span><span class="p">(</span><span class="s1">&#39;inc&#39;</span><span class="p">,</span> <span class="s1">&#39;content&#39;</span><span class="p">,</span> <span class="s1">&#39;includes/content.node_form&#39;</span><span class="p">);</span>
+  <span class="nv">$field</span> <span class="o">=</span> <span class="nx">content_fields</span><span class="p">(</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">,</span><span class="nv">$imagetype</span><span class="p">);</span>
+  
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#title&#39;</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">(</span><span class="s1">&#39;Title&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;textfield&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#required&#39;</span> <span class="o">=&gt;</span> <span class="k">TRUE</span><span class="p">,</span>
+    <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#title&#39;</span> <span class="o">=&gt;</span> <span class="nx">t</span><span class="p">(</span><span class="s1">&#39;Caption&#39;</span><span class="p">),</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;textarea&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="o">-</span><span class="mi">9</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$imagetype</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;gid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;value&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$gallery</span><span class="o">-&gt;</span><span class="na">nid</span><span class="p">,</span>
+  <span class="p">);</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;#field_info&#39;</span><span class="p">][</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$field</span><span class="p">;</span>
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;#field_info&#39;</span><span class="p">][</span><span class="s1">&#39;field_node_gallery_image&#39;</span><span class="p">][</span><span class="s1">&#39;#required&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">TRUE</span><span class="p">;</span>
+  <span class="nv">$form</span> <span class="o">+=</span> <span class="p">(</span><span class="k">array</span><span class="p">)</span> <span class="nx">content_field_form</span><span class="p">(</span><span class="nv">$form</span><span class="p">,</span> <span class="nv">$form_state</span><span class="p">,</span> <span class="nv">$field</span><span class="p">);</span>
+  
+  <span class="nv">$form</span><span class="p">[</span><span class="s1">&#39;submit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;#type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="s1">&#39;#weight&#39;</span> <span class="o">=&gt;</span> <span class="mi">10</span><span class="p">,</span> <span class="s1">&#39;#value&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;Save&#39;</span><span class="p">);</span>
+  
+  <span class="k">return</span> <span class="nv">$form</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>This is pretty straightforward, up
+until lines 28 - 30. Those three lines setup the form array and then append
+the results from content_field_form() to our existing form. Still, very easy,
+but I wasn&rsquo;t able to find any documentation on how to do this. Just in case
+you&rsquo;re curious, here&rsquo;s the submit handler for that form.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">node_gallery_upload_image_form_submit</span><span class="p">(</span><span class="nv">$form</span><span class="p">,</span> <span class="o">&amp;</span><span class="nv">$form_state</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">global</span> <span class="nv">$user</span><span class="p">;</span>
+  <span class="nv">$image</span> <span class="o">=</span> <span class="k">new</span> <span class="k">stdClass</span><span class="p">;</span>
+  <span class="nv">$image</span><span class="o">-&gt;</span><span class="na">uid</span> <span class="o">=</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">uid</span><span class="p">;</span>
+  <span class="nv">$image</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">=</span> <span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$user</span><span class="o">-&gt;</span><span class="na">name</span><span class="p">)</span> <span class="o">?</span> <span class="nv">$user</span><span class="o">-&gt;</span><span class="na">name</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+  <span class="nv">$values</span> <span class="o">=</span> <span class="nv">$form_state</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">];</span>
+  <span class="k">foreach</span> <span class="p">(</span><span class="nv">$values</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$image</span><span class="o">-&gt;</span><span class="nv">$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">node_gallery_image_save</span><span class="p">(</span><span class="nv">$image</span><span class="p">);</span>
+<span class="p">}</span></code></pre></div>
+
+
+<p>Nothing new
+there. The end result is a nice looking, concise form that allows you to
+quickly upload an image to a gallery. Sweet!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2010-01-26T00:00:00-06:00'><span class='date'><span class='date-month'>Jan</span> <span class='date-day'>26</span><span class='date-suffix'>th</span>, <span class='date-year'>2010</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/drupal/'>drupal</a>, <a class='category' href='/blog/categories/drupal-planet/'>drupal planet</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2010/01/20/drupal-meet-hudson-hudson-drupal" title="Previous Post: Drupal, meet Hudson; Hudson, Drupal...">&laquo; Drupal, meet Hudson; Hudson, Drupal...</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2010/01/29/teaching-java-how-commit-suicide" title="Next Post: Teaching Java How to Commit Suicide">Teaching Java How to Commit Suicide &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form';
+        var disqus_url = 'http://sysadminsjourney.com/content/2010/01/26/display-cck-filefield-or-imagefield-upload-widget-your-own-custom-form';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

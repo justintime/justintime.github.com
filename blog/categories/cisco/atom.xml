@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: cisco | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/cisco/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[CheckPoint UTM-1 vs Cisco ASA in an ECommerce Setting]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/10/15/checkpoint-utm-1-vs-cisco-asa-ecommerce-setting"/>
+    <updated>2009-10-15T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/10/15/checkpoint-utm-1-vs-cisco-asa-in-an-ecommerce-setting</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/cisco-logo.gif" alt="" />Recently at $WORK, we had to come up with
+budget proposals for next year. We knew that we were going to outgrow our
+current Checkpoint UTM appliances by holiday next year, so we had to buy new
+hardware. We just had to decide which hardware. While I&rsquo;m capable of building
+a Linux/*BSD firewall on my own, I frankly don&rsquo;t have the time to mess around
+with updates and compliance documentation. We need an appliance, and for our
+needs, Cisco and CheckPoint are about the only options for us. We switched to
+the UTM appliances from a pair of Cisco ASA 5500&rsquo;s a few years ago. However,
+after examining the pros and cons of both, I recommended we switch back to the
+ASA platform next year. Read on for my decision making process explained.</p>
+
+<p>Our first experience with the ASA product line from Cisco was a few years ago.
+The current ASA software at the time was 5.x (IIRC, maybe it was 6.x). The
+reason we switched to CheckPoint and their UTM-1 appliances was due to the
+lack of configurability. First of all, it was very tricky to make the ASA
+behave like a router AND a firewall, not just a firewall. Eventually, they
+supported the features necessary to do basic static routing, but I hit an
+issue where the &ldquo;ASP&rdquo; or &ldquo;Accelerated Security Path&rdquo; filters on the ASA were
+throwing away packets that I didn&rsquo;t want it to. I was unable to write an ACL
+or tweak a configuration that would let the packets I needed to get through.
+In essence, the firewall was saying it knew what was bad for me, and wouldn&rsquo;t
+listen to my argument on the matter at all. After going round-n-round with
+Cisco TAC, it became my sole purpose in life to get rid of those damned ASA&rsquo;s.
+I succeeded in that two months later with a pair of UTM-1&rsquo;s from CheckPoint.</p>
+
+<p>We&rsquo;re in the minority of businesses where our firewall&rsquo;s priority isn&rsquo;t
+protecting internal users from the big, bad Internet. Our goal is to let all
+but the most blatantly abusive potential guests browse our website and buy
+stuff. This is an important distinction - if we were the typical corporate
+network that focused on the former, we probably would have stuck with
+CheckPoint. So, here&rsquo;s my list of pros and cons for each device:</p>
+
+<ul>
+<li><h2><strong>CheckPoint</strong></h2>
+
+<ul>
+<li><p><strong>Pros</strong></p>
+
+<ul>
+<li><p>SmartView Tracker. This app has no competition that I&rsquo;ve found. This app lets you view events in real time, or do some pretty complex searches in real time. Beats the heck out of grep | cut | sort | uniq | wc on a syslog file.</p></li>
+<li><p>SmartDashboard: If you&rsquo;re into GUI&rsquo;s, this one is very nice at configuring rulesets, and giving you a graphical view of your networks.</p></li>
+<li><p>SmartDefense: while quite expensive, this L7 deep inspection filter does it&rsquo;s job well. You get updates every week or so, and can turn them on, off, or put them in monitor mode which lets the packets through, but logs an event. This allows you to see what would happen if you turned it on, without actually interrupting packet flow.</p></li>
+</ul>
+</li>
+<li><p><strong>Cons</strong></p>
+
+<ul>
+<li><p>Expense. Yikes. Comparing a Cisco ASA solution to the closest CheckPoint solution in our case has CheckPoint coming in at more than 25% more than the Cisco which will push more pps.</p></li>
+<li><p>Lack of a robust CLI. This is a killer for me. While having a GUI can be nice at times, nothing beats a concise CLI. Where Cisco&rsquo;s ASDM solution is a GUI built upon a CLI foundation, CheckPoint&rsquo;s CLI is an afterthought to the GUI. Some might argue there&rsquo;s nothing you can&rsquo;t do via the CLI on a CheckPoint, but if you&rsquo;re editing the policy files in vi, then you&rsquo;re just asking for trouble.</p></li>
+<li><p>Commodity hardware. CheckPoint is a software solution, and their UTM-1 appliances are nothing more than x86 boxes running SecurePlatform (which is a pared down RHEL). While there&rsquo;s nothing inherently wrong with that, the result of CheckPoint using off-the-shelf hardware versus Cisco&rsquo;s custom hardware is that Cisco&rsquo;s can push a lot more packets than comparable CheckPoints.</p></li>
+<li><p>Hard Drives. Cisco&rsquo;s run off flash and have no moving parts save for the fans. CheckPoint&rsquo;s appliance requires a full-on hard drive. While I&rsquo;ve had DOA Cisco flash, I&rsquo;ve never had their flash fail me once put into service. I can&rsquo;t count how many hard drives have failed me over the years.</p></li>
+<li><p>Reliance upon a SmartCenter server. Some may see this as a positive, but I see it as a negative. When you install your CheckPoint policy, it first goes to a separate server called the SmartCenter. The SmartCenter then pushes this config to the individual appliances one-by-one. All logs on the appliances are sent to the SmartCenter. I have a few problems with this. First, it&rsquo;s another server. Second, it&rsquo;s another single point of failure &ndash; if your SmartCenter dies, you lose the ability to change the configuration on your appliances until you get it back up. To eliminate the single point of failure, you&rsquo;re encouraged to run a Active/Standby HA setup of SmartCenter. At this point, you have not just two appliances to keep up to date, but two SmartCenter servers as well. Each one of these devices is an x86 box with a hard drive, so MTBF is comparitively low.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><h2><strong>Cisco</strong></h2>
+
+<ul>
+<li><p><strong>Pros</strong></p>
+
+<ul>
+<li><p>CLI. While it&rsquo;s not quite IOS, it&rsquo;s damn close, and anyone at home in IOS can pick up the ASA differences very quickly.</p></li>
+<li><p>Easy upgrades and rollbacks. Cisco&rsquo;s software upgrades might be odd to some, but once you get the hang of it, you won&rsquo;t find anything better.</p></li>
+<li><p>Optimized hardware. With the ASA&rsquo;s, you get very few moving parts and ASIC&rsquo;s that are optimized for pushing packets. Cisco&rsquo;s been doing this for a long time, and they&rsquo;re very good at it.</p></li>
+<li><p>More bang for the buck. You pay less for a Cisco solution that has higher specs than a CheckPoint solution that doesn&rsquo;t do as much.</p></li>
+<li><p>ASDM. If you&rsquo;re into the GUI thing, you can not ever have to touch the CLI.</p></li>
+</ul>
+</li>
+<li><p><strong>Cons</strong></p>
+
+<ul>
+<li><p>Bugs. Cisco&rsquo;s everything-including-the-kitchen-sink mindset means that their software tends to have a lot more bugs in it than what I&rsquo;ve seen with CheckPoint. In their defense, Cisco seems to have been pretty quick to fix the bugs that I&rsquo;ve encountered.</p></li>
+<li><p>VPN Policy Management. I can&rsquo;t speak to this too much, as I never really used the VPN portion of either appliance. However, it was plain to see that CheckPoint had a lot more to offer in their solution when it came to VPN policy management features.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<p>I&rsquo;m sure there&rsquo;s a lot that I missed, but in the end, it came down to a few
+major points. Cisco has incremented their software 3 major versions since my
+last production experience with them, and it seems to me that much of the
+reason why I switched away has been resolved. I feel much more at home using
+the IOS-like CLI. I didn&rsquo;t need a lot of the extra features that CheckPoint
+offered. Last, but certainly not least, there&rsquo;s a lot more fun things I can
+spend that 25% on like new servers! However, if I had a bunch of business
+users to extend VPN functionality to, while making sure that they were secured
+from the Internet, I wouldn&rsquo;t hesitate to chose the UTM-1.</p>
+
+<p>I&rsquo;m really interested to hear what others think. Do you think I made the right
+choice? No? Why?  If you care to share your choices, let me know what your
+appliance is protecting (users or servers) and what choice you made.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Combining IPSEC, Dynamic NAT, and Static NAT behind a Cisco IOS Router]]></title>
+    <link href="http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-cisco-ios-router"/>
+    <updated>2007-11-09T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2007/11/09/combining-ipsec-dynamic-nat-and-static-nat-behind-a-cisco-ios-router</id>
+    <content type="html"><![CDATA[<p>Trying to combine IPSEC, dynamic NAT, &amp; static NAT on a Cisco router? Check
+out <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml">Cisco&rsquo;s article on how to do it</a> first. If that
+doesn&rsquo;t work and you&rsquo;re ready to drop kick the router out of the datacenter
+like I was, put away your black belt for a few minutes, and read about how I
+worked around a couple of bugs. Let&rsquo;s define our problem first.</p>
+
+<ul>
+<li>You have two subnets connected via IPSEC VPN - for the purposes of this article, 192.168.10.0/24 and 192.168.11.0/24. We assume the VPN is already up and functional.</li>
+<li>You want any host with an IP in the 192.168.11.0/24 subnet to have access to the Internet as well as access to the hosts on the other side of the IPSEC tunnel.</li>
+<li><p>You have one host, in this case 192.168.11.5, that you want to have access to the 192.168.10.0/24 subnet, as well as have a static NAT&rsquo;d IP address when accessing the Internet - in this case, 1.1.1.1.
+It took me a couple days, and I still think there&rsquo;s a bug in there somewhere,
+but I did finally get it to work. The IOS I was using was 12.4(17). Now,
+here&rsquo;s my personal take on what I think happens that causes things to break.
+Again, I worked on this for 2 days straight, so I&rsquo;m a little blurry on
+everything, but I do know that this method works. According to <a href="http://www.cisco.com/en/US/tech/tk583/tk372/technologies_configuration_example09186a0080094634.shtml"> Cisco&rsquo;s artic
+le</a>, you can get these results by simply using route-maps on your static NAT commands. Almost, but not really. I found two other
+requirements had to be in place before the NAT&rsquo;s would work as they were
+supposed to:</p></li>
+<li><p>Only one route-map can be used in all of your NAT statements. I think this is a bug, as no one specifies this as being a rule, but I even went as far as to create two identical route-maps with different names, and set up two static NAT&rsquo;s with each NAT rule using one route-map. This would not work until I set both static NAT rules to use the same route-map. The same goes for the dynamic NAT rule, which is why we use an access-list here.</p></li>
+<li><p>Once you use a route-map in your static NAT&rsquo;s, then the order in which the NAT statements are processed is reversed. Again, I think this is a bug. Basically, normal NAT rule processing dictates that the static NAT rules are evaluated before the dynamic ones. In my situation, this was true until I enabled the route-map option on the static NAT. If I eliminated the route-map option, the static NAT worked, but the host being static NAT&rsquo;d could not access hosts on the other side of the VPN. Once I enabled the static NAT with the route-map option, I could access the hosts on the other side of the VPN, but was getting the dynamic NAT applied instead of the static NAT.
+Step One: Configure Dynamic NAT We first need to setup an access list that
+will:</p>
+
+<ul>
+<li><strong>NOT NAT</strong> packets from our host that needs static NAT applied.</li>
+<li><strong>NOT NAT</strong> packets that traverse the VPN.</li>
+<li><strong>NAT</strong> packets from our 192.168.11.0/24 subnet to everywhere else.</li>
+</ul>
+</li>
+</ul>
+
+
+<pre><code>    ip access-list extended NoNat
+     deny   ip host 192.168.11.5 any
+     deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
+     permit ip 192.168.11.0 0.0.0.255 any
+</code></pre>
+
+<p>Then, we use this command to setup dynamic NAT:</p>
+
+<pre><code>ip nat inside source list NoNat interface GigabitEthernet0/0 overload
+</code></pre>
+
+<p>At this point, you should be able to access the Internet from any host with a
+192.168.11.x address but not 192.168.11.5, as well as be able to access hosts
+on the 192.168.10.0 subnet. Step Two: Setup Static NAT So, right now,
+192.168.11.5 can access hosts across the tunnel, but not access anyplace on
+the Internet. All other hosts on the 192.168.11.0/24 subnet can access both.
+Again, according to the Cisco article above, we shouldn&rsquo;t have to do this, but
+I did. Since we have excluded our 192.168.11.5 host from being NAT&rsquo;d at all,
+we need to craft a route-map for him to be static NAT&rsquo;d, but not NAT&rsquo;d when
+accessing the remote VPN hosts. This boils down to creating an ACL identical
+to the one above minus one line:</p>
+
+<pre><code>ip access-list extended NoNatStatic
+ deny   ip 192.168.11.0 0.0.0.255 192.168.10.0 0.0.0.255
+ permit ip 192.168.11.0 0.0.0.255 any
+</code></pre>
+
+<p>Now, create a route-map that points to this ACL:</p>
+
+<pre><code>route-map nonat-static permit 10
+ match ip address NoNatStatic
+</code></pre>
+
+<p>Finally, setup your static NAT rule:</p>
+
+<pre><code>ip nat inside source static 192.168.11.5 1.1.1.1 route-map nonat-static
+</code></pre>
+
+<p>Finally, all your NAT rules should be working perfectly now. In order to add
+new static NAT&rsquo;s, you simply need to add the local IP address to the top of
+the NoNat ACL, and then create a new static NAT rule the points to the same
+route-map. Do not use a different route-map, or you will run into the bug
+above. Let me re-iterate that Cisco&rsquo;s article above is cleaner, and that I
+tried other cleaner ways of implementing this setup. If you have the time, try
+to get your setup working using the article above. However, if you can&rsquo;t get
+it to work, try my way and see if you get the results you&rsquo;re looking for.</p>
+]]></content>
+  </entry>
+  
+</feed>

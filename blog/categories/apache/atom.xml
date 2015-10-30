@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: apache | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/apache/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Apache mod_proxy '[error] (13)Permission denied' error on RHEL]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/02/01/apache-modproxy-error-13permission-denied-error-rhel"/>
+    <updated>2010-02-01T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/02/01/apache-mod_proxy-error-13permission-denied-error-on-rhel</id>
+    <content type="html"><![CDATA[<p>Had an interesting issue today working on a mod_proxy setup of Apache
+forwarding requests in a reverse proxy setup to a backend Tomcat server. No
+matter what I did, I kept getting this in Apache&rsquo;s error log:</p>
+
+<pre><code>[error] (13)Permission denied: proxy: AJP: attempt to connect to 10.x.x.x:7009 (virtualhost.virtualdomain.com) failed
+</code></pre>
+
+<p>I thought for sure it was proxy permissions, but nothing I did fixed the
+issue. Then it hit me: SELinux! Why I always think of SELinux last when it&rsquo;s
+responsible for 90% of my problems, I&rsquo;ll never know. SELinux on RHEL/CentOS by
+default ships so that httpd processes cannot initiate outbound connections,
+which is just what mod_proxy attempts to do. If this is your problem, you&rsquo;ll
+see something like this in /var/log/audit/audit.log:</p>
+
+<pre><code>type=AVC msg=audit(1265039669.305:14): avc:  denied  { name_connect } for  pid=4343 comm="httpd" dest=7009 
+scontext=system_u:system_r:httpd_t:s0 tcontext=system_u:object_r:port_t:s0 tclass=tcp_socket
+</code></pre>
+
+<p>To fix this, first test by setting the boolean dynamically (not permanent
+yet):</p>
+
+<pre><code> /usr/sbin/setsebool httpd_can_network_connect 1
+</code></pre>
+
+<p>If that works, you can set it so that the default policy is changed and this
+setting will persist across reboots:</p>
+
+<pre><code> /usr/sbin/setsebool -P httpd_can_network_connect 1
+</code></pre>
+
+<p>Hope this saves others some time!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Ask SAJ: What to do with Apache logs > 50GB?]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-do-apache-logs-50gb"/>
+    <updated>2009-11-30T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/11/30/ask-saj-what-to-do-with-apache-logs-50gb</id>
+    <content type="html"><![CDATA[<p>Our site at $work is generating Apache logs that, when combined sequentially
+into one file, are larger than 50GB in size for one day&rsquo;s worth of traffic.
+AWStats' perl script pretty much chokes when working on this much data. Last I
+checked, Webalizer wasn&rsquo;t much different, and probably wouldn&rsquo;t scale up to
+that amount of data either. Does anyone out there have any advice on a
+commercial solution for Apache log analysis that can scale up like that?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tip for "Split Components Across Domains" Performance Goal from Yahoo!]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/11/16/tip-split-components-across-domains-performance-goal-yahoo"/>
+    <updated>2009-11-16T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/11/16/tip-for-split-components-across-domains-performance-goal-from-yahoo</id>
+    <content type="html"><![CDATA[<p>Just thought I&rsquo;d pass this little tidbit out there - we fixed it by pure luck
+on the first try. Yahoo unselfishly provides a document titled <a href="http://developer.yahoo.com/performance/rules.html">Best Practices
+for Speeding Up Your
+Website</a>. While some of the
+rules offered there aren&rsquo;t applicable for all sites, it&rsquo;s a great document and
+if you run a website, you should read it. At $work, part of our last code drop
+was to push out a feature that enabled &ldquo;Split Components Across Domains&rdquo;. From
+the article <a href="http://yuiblog.com/blog/2007/04/11/performance-research-%0Apart-4/">Performance Research, Part 4: Maximizing Parallel Downloads in
+the Carpool Lane</a>:</p>
+
+<blockquote><p>Our rule of thumb is to increase the number of parallel downloads by using
+at least two, but no more than four hostnames. Once again, this underscores
+the number one rule for improving response times: reduce the number of
+components in the page.</p></blockquote>
+
+<p>I&rsquo;m here to tell you, if you have AOL users surfing your site, <strong>do not use
+four hostnames</strong>.  When we pushed this feature up to production, we had one
+hostname that served up the HTML, and we had four hostnames that served up
+imagery (all these hostnames pointed back to the same IP, but doing this
+allows a performance boost in the browser). For this example, let&rsquo;s say that
+www.mydomain.com is the HTML hostname; img0.mycontent.com, img1.mycontent.com,
+img2.mycontent.com, and img3.mycontent.com were the imagery servers. This most
+certainly improved performance on the client side, but we started receiving
+some reports from a few users that they were no longer able to see <strong>any</strong>
+imagery on the site since we dropped the new code. We immediately knew what
+was causing the issue, but had no idea why, or how far spread out it was.
+Well, after poking around some of the &ldquo;big boys&rdquo; websites such as Amazon, we
+noticed that while all of them separated their components as suggested by
+Yahoo!, all of them used only one hostname for the imagery. We quickly
+configured our webapp to only use www.mydomain.com for the HTML, and
+img0.mycontent.com for the imagery. Once we did that, our AOL users were again
+able to see imagery. Now, I have no idea how widespread the issue was. I know
+it was limited to users of the AOL browser, and I suspect it&rsquo;s probably a bug
+in a specific version of their browser. However, if your site needs to provide
+compatibility to the most users possible, you may want to use just one
+separate hostname for splitting components. I hope this helps someone else!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apache 2.2.12 - 2.2.13 and Solaris 10 Bug Nastiness]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/09/01/apache-2212-2213-and-solaris-10-bug-nastiness"/>
+    <updated>2009-09-01T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/09/01/apache-2-2-12-2-2-13-and-solaris-10-bug-nastiness</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/feather.gif" alt="" />At work, I&rsquo;ve been working on an upgrade from a
+custom-compiled version of Apache 2.0.x to the Sun-provided <a href="http://www.sun.com/software/webstack/index.xml">Glassfish
+Webstack</a> 1.5. I spent about a
+week troubleshooting what I thought was configuration issue, only to finally
+find it&rsquo;s a bug way upstream in Apache 2.2.12+. This bug only affects Solaris
+10, and is near-impossible to reproduce. If you use Solaris 10 and Apache,
+read on so you don&rsquo;t waste a week of your life like I did.</p>
+
+<p>The problem presented itself as Apache intermittently hanging. It didn&rsquo;t
+depend on load, or anything else. Sometimes it would happen at 2pm in the
+afternoon, other times at 4am. While load isn&rsquo;t required, a lot of
+simultaneous connnections helps trigger the bug. The guy I worked with at Sun
+had to introduce some sleep times into the Apache source code in order to
+trigger it, so my guess is that it&rsquo;s a race condition on the microsecond
+level.</p>
+
+<p>Basically, Nagios would alert me that Apache had quit responding. netstat
+showed a huge number of connections stuck in a CLOSE_WAIT state. Either
+restarting or gracefully restarting Apache would resolve the issue. Luckily, I
+found the solution before I had to pull out pstack and truss.</p>
+
+<p>If you think you might be encountering the same bug, the first prerequisite is
+that you have multiple <strong>Listen</strong> statements in your config (most everyone
+does). If you do, then do the following to your stuck Apache.</p>
+
+<ol>
+<li><h1>pstack <code>pgrep httpd</code> > /tmp/httpd_pstack.txt</h1></li>
+<li><p>Find the pid in apr_pollset_poll(). Looking through httpd_pstack.txt, exactly one process should have this backtrace:</p>
+
+<p>1652: /usr/apache2/2.2/bin/httpd -k start
+    feda1167 portfs (6, 13, 835d350, 2, 1, 8047b48)
+    feedd302 apr_pollset_poll (835d308, 989680, 0, 8047ba4, 8047ba8, 2) + 126
+    08091611 child_main (0, 8090fac, 8047c08, 8091801) + 329
+    08091846 make_child (80c8128, 0, 0, 80c4228) + 86
+    0809192f startup_children (5, 80c6230, 8047d18, 8091a47) + 43
+    08091ab6 ap_mpm_run (80c6230, 80f42e8, 80c8128, 8070831) + 162
+    0807083e main (3, 8047ddc, 8047dec, feffb7b4) + 812
+    0806f9fd _start (3, 8047e8c, 8047ea7, 8047eaa, 0, 8047eb0) + 7d</p></li>
+</ol>
+
+
+<p>In this case, the pid is 1652.</p>
+
+<p>If you don&rsquo;t find such a pid, you have a different problem.</p>
+
+<ol>
+<li><p>Run truss against the pid in apr_pollset_poll()</p>
+
+<h1>truss -p 1652</h1></li>
+</ol>
+
+
+<p>It should look like this:</p>
+
+<pre><code>    port_getn(19, 0x0835D350, 2, 1, 0x08047B48) (sleeping...)
+    port_getn(19, 0x0835D350, 2, 1, 0x08047B48) = 0 [62]
+    port_getn(19, 0x0835D350, 2, 1, 0x08047B48) (sleeping...)
+</code></pre>
+
+<p>&hellip; (over and over)</p>
+
+<p>with port_getn() returning about every 10 seconds, and the web side</p>
+
+<p>inaccessible during this time.</p>
+
+<p>If this is what you have, then you are indeed being bitten by this bug.
+Initially, I found <a href="http://forums.sun.com/thread.jspa?threadID=5402863">a post on the Webstack forums that put me in touch with
+Jeff Trawick</a>. After doing
+a bit more digging, I found <a href="https://issues.apache.org/bugzilla/show_bug.cgi?id=47645">the Apache HTTPD bug
+report</a>. After
+emailing Jeff, he was able to send me a .so file that I could load before
+executing Apache that fixes the problem. I don&rsquo;t have the okay to
+redistribute, so email Jeff if you need the fix. Sun more than likely won&rsquo;t
+release an official update to Glassfish Webstack to resolve the issue, and
+going forward Apache 2.2.14 will include Jeff&rsquo;s fix (technically the bug is in
+APR and is fixed in APR 1.3.9 which will be included in httpd 2.2.14).</p>
+
+<p>Many thanks to Jeff Trawick for his quick help, as well as the steps on how to
+confirm existence of the bug using the steps listed above.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Forcing Apache's mod_deflate module to compress JSP's from Weblogic]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/08/06/forcing-apaches-moddeflate-module-compress-jsps-weblogic"/>
+    <updated>2009-08-06T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/08/06/forcing-apaches-mod_deflate-module-to-compress-jsps-from-weblogic</id>
+    <content type="html"><![CDATA[<p>This is one of those &ldquo;note for myself, and maybe it will help someone else&rdquo;
+posts. When you use Apache and mod_weblogic as a frontend to a WebLogic
+application server, you will likely want to compress your output. It makes
+sense to put the load of compression on the webservers, since the application
+servers are busy doing other things.</p>
+
+<p>With all the buggy browsers out there, blindly gzipping everything can cause a
+lot of issues, so most people end up with a stanza such as this in their
+config:</p>
+
+<pre><code>AddOutputFilterByType DEFLATE text/html text/css application/x-javascript text/plain
+#Instead of blacklist, we use a whitelist:  
+BrowserMatch ^MSIE [6-9] gzip
+</code></pre>
+
+<p>Well, unfortunately, this will not catch your JSP files. I think it has to do
+with the way that Weblogic is passing through the MIME type as well as the
+order of filters in the chain. No matter the exact cause, here is the fix:</p>
+
+<pre><code>&lt;LocationMatch ".*\.jsp$"&gt;
+     ForceType text/html
+&lt;/LocationMatch&gt;
+</code></pre>
+
+<p>This simply forces Apache to assume that all files that end in .jsp are of
+type text/html. This happens before the mod_deflate filter is applied, and
+therefore your JSP&rsquo;s will be gzipped!</p>
+]]></content>
+  </entry>
+  
+</feed>

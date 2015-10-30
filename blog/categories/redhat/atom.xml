@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: redhat | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/redhat/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <updated>2010-02-24T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
+build their own installation script by &ldquo;stacking&rdquo; previously existing scripts
+together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
+yourself, or publish it for the world to use. Deploying a distribution with a
+StackScript takes only about 5 minutes, afterwards you have a fully configured
+system with applications up and running. Here&rsquo;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
+StackScript for RH Derivatives</a> deployment just
+before launch: <img src="/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+appear to prefer Ubuntu, and there&rsquo;s good reason &ndash; it&rsquo;s a great distribution.
+I run it on all my laptops and most of my desktops. However, I personally find
+it a bit too bleeding edge for my servers and prefer CentOS for the server
+room. Currently there are 16 StackScripts available for Ubuntu, with only 3
+available for CentOS. Well, after today, there&rsquo;s now 6 for CentOS! After
+clicking the deploy button, you&rsquo;ll have the images ready to go in less than a
+minute. Boot the config, and the StackScript will run on first boot - when
+it&rsquo;s done, you&rsquo;ll have a secured and configured LAMP stack,
+<a href="http://drupal.org/project/drush">drush</a> install, <a href="http://drupal.org">Drupal</a>
+install, and all updates applied via yum. I&rsquo;ve published these StackScripts so
+that anyone with a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+can use them with their CentOS and Fedora installations:</p>
+
+<ul>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&rsquo;s (of Linode) Bash Library for Ubuntu. You don&rsquo;t use this script directly, it&rsquo;s strictly for inclusion by other scripts.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=162">Drupal Library for RH Derivatives</a></strong>: This library provides two functions, install_drush and install_drupal.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&rsquo;ll have a working Drupal installation up and running in about 5 minutes.
+If you use them and find any bugs or have any RH-based StackScripts you&rsquo;d like
+made available, post a comment and I&rsquo;ll see what I can do. In the interest of
+full disclosure, the links to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> in
+this article have a referral code in them that will give me $20 credit if you
+sign up and keep your account open for 90 days. If you like these
+StackScripts, please use my links to sign up for a Linode - you&rsquo;ll wonder how
+you did without one!</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
+    <updated>2010-02-22T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
+    <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
+review</a>. I was
+talking to a co-worker (whom I converted to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> as
+well) about how I would pay double the amount to keep my
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+now that I know how much I use it. Don&rsquo;t tell them that, they&rsquo;re cheap :) If
+you find this article helpful (or my article about <a href="http://sysadminsjourney.com/content/2008/11/26/bringing-your-linode-%0Ahome-you">moving VM&rsquo;s to and from
+Linode</a>), please consider clicking one of the links in this article to sign
+up for a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> -
+if you sign up for 90 days, I&rsquo;ll get $20 credited to my account. I was setting
+up a second
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+that was to be a testing ground for some
+<a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>
+I&rsquo;m working on. The new
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+will eventually replace my existing one. For whatever reason, the most recent
+version of CentOS they had available was 5.3. Not a big deal, I can &lsquo;yum
+upgrade&rsquo; up to 5.4 after installation. Well, after doing so, I found that a
+lot of features that I wanted had been stripped out. In Linode&rsquo;s defense, it&rsquo;s
+in their best interest to offer very stripped down images for their customers.
+The one feature I wanted that I couldn&rsquo;t get enabled was SELinux, and simply
+installing the packages still wouldn&rsquo;t let me use &lsquo;setenforce 1&rsquo; to get it
+turned on. My best guess as to why is that the Linode kernel didn&rsquo;t support
+it, but I honestly didn&rsquo;t troubleshoot it too much. I really wanted root LVM
+capabilities as well, so I decided that a full-on anaconda based installation
+was the way to go. Plus, I couldn&rsquo;t find anything in the forums about it, so
+there was the lure of being the first to do it ;-) Well, thanks to the
+flexibility offered by
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>,
+not only can you do a anaconda-based installation (with optional Kickstart),
+but you can do so using the GUI over VNC if you&rsquo;re so inclined!</p>
+
+<h3>Step 1: Setup Finnix</h3>
+
+<p>Finnix is the distro of Linode&rsquo;s choice for &lsquo;rescue&rsquo; operations on your
+server. Think of it as a Swiss Army knife - it&rsquo;s a very powerful tool that
+takes very little setup. For more on Finnix, checkout the <a href="http://library.linode.com/troubleshooting/finnix-recovery">Linode Library
+article</a>. First, we
+need to setup a very small, 20MB ext3 disk that will house our installation
+kernel and initrd. Set up another ext3 disk of 100MB to be mounted at /boot
+for PV-GRUB. Finally, setup your raw disk that will be used for the OS
+installation. Since we&rsquo;ll be using LVM, you can easily add to and resize your
+disk later, so don&rsquo;t overdo it. I went with 5GB for my root disk. If you&rsquo;re
+following along, here&rsquo;s what you should have: <img src="/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &ldquo;Create a new
+configuration profile&rdquo;, and type &ldquo;Finnix Rescue&rdquo; for the label. For the
+kernel, select &ldquo;Recovery - Finnix (kernel)&rdquo;. For /dev/xvda, select the
+&ldquo;Recovery - Finnix (iso)&rdquo;. For /dev/xvdb, select the &ldquo;Centos 5.4 Install
+Disk&rdquo;. For uncompressed initrd image, select &ldquo;Recovery - Finnix (initrd).
+Leave the other settings at defaults, and save the profile. Here&rsquo;s what it
+should look like: <img src="/assets/images/linode-finnix.png" alt="" /></p>
+
+<h3>Step 2: Upload the Xen-enabled Kernel and Initrd from the DVD</h3>
+
+<p>Next, boot Finnix from your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel. Click on the console tab, and launch the AJAX console. Once at
+the console, we need to mount our install disk, and fetch the xen-enabled
+kernel and initrd from your favorite mirror. Mount the installation disk,
+change directories, and download the files:</p>
+
+<pre><code>mount /dev/xvdb /mnt/xvdb 
+cd /mnt/xvdb
+for f in initrd.img vmlinuz; do
+wget http://mirror.unl.edu/centos/5.4/os/i386/images/xen/${f}
+done
+cd
+umount /mnt/xvdb
+</code></pre>
+
+<p>Now, shutdown Finnix from the
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel.</p>
+
+<h3>Step 3: Setup the CentOS configuration profile</h3>
+
+<p>Create a new profile, and name it CentOS 5.4. For the kernel, select &ldquo;pv-grub-
+x86_32&rdquo;. For /dev/xvda, select &ldquo;CentOS 5.4 PV-GRUB Boot&rdquo;. For /dev/xvdb choose
+&ldquo;CentOS 5.4 OS Disk&rdquo;. For /dev/xvdh, select our &ldquo;CentOS 5.4 Install Disk&rdquo;.
+Point the root device to a custom location: &ldquo;/dev/mapper/VolGroup00-LogVol00&rdquo;.
+Leave the rest as defaults, here&rsquo;s a screenshot: <img src="/assets/images/linode-%0Acentos.png" alt="" /></p>
+
+<h3>Step 4: Boot the CentOS configuration profile and start the installation</h3>
+
+<p>Save the profile, and boot it. Note that it won&rsquo;t boot automatically, we have
+to point GRUB in the right direction first. You&rsquo;ll be greeted by a scary-
+looking &lsquo;grubdom>&rsquo; prompt. Now, we need to tell grub to boot our install
+kernel and initrd:</p>
+
+<pre><code>root (hd2)
+kernel (hd2)/vmlinuz
+initrd (hd2)/initrd.img
+boot
+</code></pre>
+
+<p>Note that if you want to do a kickstart install, you would append
+ks=<a href="http://my.com/this.ks">http://my.com/this.ks</a> to the kernel line above. More on this later. Once
+the kernel loads, you&rsquo;ll be presented with the familiar anaconda text-based
+installer. Choose your language, and your installation type. I prefer HTTP
+from a mirror. If you choose to do the same, use the mirror hostname for the
+Web site name, and the path to the directory that contains all the release
+notes &ndash; usually it&rsquo;s /centos/5.4/os/i386/. Anaconda will fetch the stage2
+image, then launch the installer. Here&rsquo;s where it gets cool - it will give you
+a choice to &ldquo;Start VNC&rdquo;. If you choose this option, you can connect to your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+via VNC (note it launches on display 1, not 0), and complete the installation
+via a GUI. Install as you would any other CentOS installation. <strong>Make note of
+where your root directory is at.</strong> The installer may complain about your
+/dev/xvdh being a loop device, tell anaconda to ignore it. Exclude /dev/xvda
+from any partitioning, we&rsquo;ll set that up manually later.</p>
+
+<h3>Step 5: Modify the CentOS configuration profile and start the operating</h3>
+
+<p>system</p>
+
+<p>Once you click the &ldquo;Reboot&rdquo; button on the installer, you&rsquo;ll be disconnected
+from VNC. Your machine will be restarted, but it will stick at the grubdom
+prompt again - that&rsquo;s okay. We&rsquo;ll be stuck at the grubdom> prompt one more
+time - use this to tell it to boot CentOS using the boot partition the
+installer setup for us:</p>
+
+<pre><code>grubdom&gt; root (hd1,0)                                                          
+grubdom&gt; kernel (hd1,0)/vmlinuz-2.6.18-164.el5xen                              
+grubdom&gt; initrd (hd1,0)/initrd-2.6.18-164.el5xen.img                           
+grubdom&gt; boot
+</code></pre>
+
+<p>You will then boot into CentOS - exit the system settings GUI - you can run it
+again later by running system-config-securitylevel-tui. Now we need to setup
+our boot disk so that pv-grub knows how to boot our kernel so we&rsquo;re not
+consistently prompted upon reboot.
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+uses PV-GRUB to boot our kernel, and it&rsquo;s looking for a &lsquo;boot&rsquo; directory
+directly on /dev/xvda. For more details, <a href="http://www.linode.com/wiki/index.php/PV-GRUB#Partitioning">see the Linode
+Wiki</a>. Run this as
+root, and make sure your block devices are aligned with mine before
+copy/pasting:</p>
+
+<pre><code>mkdir /mnt/newboot
+mkfs.ext3 /dev/xvda
+mount /dev/xvda /mnt/newboot
+rsync -av /boot /mnt/newboot
+cd /mnt/newboot/boot
+ln -s . boot
+cd
+umount /mnt/newboot
+umount /boot
+e2label /dev/xvdb1 oldboot
+e2label /dev/xvda /boot
+</code></pre>
+
+<p>That&rsquo;s it - reboot, and you should be up and running! You can create a LVM
+physical volume out of the old boot partition on /dev/xvdb1, or just leave it
+around unused.</p>
+
+<h3>Streamlining the process with Kickstart</h3>
+
+<p>We can use kickstart to <strong>really</strong> streamline the process. Follow steps 1, 2,
+and 3 above, but on step 4, replace the kernel line with this:</p>
+
+<pre><code>kernel (hd2)/vmlinuz ks=http://www.sysadminsjourney.com/assets/files/linode-minimal.ks
+</code></pre>
+
+<p>That&rsquo;s it! The kickstart file handles partitioning, and setting up the right
+boot partition, as well as disabling unneeded services that you don&rsquo;t need for
+a Linode. Make sure you check out the file
+<a href="http://www.sysadminsjourney.com/assets/files/linode-minimal.ks">http://www.sysadminsjourney.com/assets/files/linode-minimal.ks</a> - your root password is there, change it immediately! Stay
+tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[SCSA vs RHCE]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/08/26/scsa-vs-rhce"/>
+    <updated>2009-08-26T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/08/26/scsa-vs-rhce</id>
+    <content type="html"><![CDATA[<p>After taking and passing both my SCSA and my RHCE exams this year, it&rsquo;s time
+to reflect.  Read on for the pros and cons of each from a student&rsquo;s point of
+view.</p>
+
+<h2>SCSA</h2>
+
+<p>The Sun Certified Solaris Administrator certification is obtained by taking
+two exams.  Both exams are all multiple choice and drag-and-drop format.  The
+first test costs $300 and consists of 59 questions; you have 2 hours in which
+to complete them.  Anything over 61% is passing, and you walk out of the
+testing center with your grade in-hand.  You must pass this first test before
+moving to the second test.</p>
+
+<p>The second test also costs $300, and consists of 60 questions.  Anything over
+63% is passing, and you have 105 minutes to complete the second test.  Like
+the first test, all the questions are multiple choice or drag-and-drop, and
+you walk out with your grade in-hand.</p>
+
+<p>The time limits on both exams were adequate for me.  I had enough time to go
+through once, then review all my answers at leisure with a little time
+remaining.</p>
+
+<p>Find out more from <a href="http://www.sun.com/training/certification/solaris/scsa.xml">Sun&rsquo;s SCSA home
+page</a>.</p>
+
+<h2>RHCE</h2>
+
+<p>The Red Hat Certified Engineer certification is obtained by taking one exam.
+The exam costs $799, and you have 3.5 hours to finish the exam.  The exam
+includes content from the RHCT and the RHCE &ndash; you must score 70% or higher on
+the RHCT portion, and 70% or higher on the RHCE content to get your RHCE.  It
+is possible to get over 70% on the RHCT portion, but get less than 70% on the
+RHCE content; in this case you will obtain your RHCT (think of it as a
+consolation prize). You will not know your score until some time after your
+exam. I took my exam on Friday and got my score Tuesday afternoon.</p>
+
+<p>The exam is what Red Hat calls a &ldquo;performance-based&rdquo; test environment.  There
+are no multiple choice, drag-and-drop, or written answers.  You sit down at a
+machine, and your questions tell you do things to that machine.  Red Hat
+doesn&rsquo;t care how you get the machine there, they only care about the end state
+of the machine.</p>
+
+<p>The time limit on the exam was enough for me to go once through, and then go
+back and double check my answers one time with only a couple minutes to spare.
+I actually found some mistakes on my review, so it was time well spent.  The
+nature of the performance-based exam means that you may not be able to proceed
+to the next step until you finish the current step, so if you get stuck, you
+may find yourself short on time.</p>
+
+<p>Start your research at <a href="http://www.redhat.com/certification/rhce/">Red Hat&rsquo;s RHCE home
+page</a>.</p>
+
+<h2>My Opinion</h2>
+
+<p>I&rsquo;m under NDA&rsquo;s for both exams, so I&rsquo;m limited in what I can say.  Here&rsquo;s a
+few points to ponder:</p>
+
+<ul>
+<li><strong>RHCE</strong>
+
+<ul>
+<li>I feel like a huge nerd for saying this, but the RHCE was the most fun I&rsquo;ve ever had during a test.</li>
+<li>You don&rsquo;t get access to the Internet, but you do have access to the commands and the man pages just like you would in the real world.</li>
+<li>The RHCE does not test your memorization skills, your ability to &ldquo;read between the lines&rdquo;, or your test-taking ability.  It tests your ability to administer a Red Hat Linux system.</li>
+</ul>
+</li>
+<li><strong>SCSA</strong>
+
+<ul>
+<li>The SCSA covers, in my opinion, much more information &ndash; both in depth and in width.</li>
+<li>There are what I would call trick questions, and you are tested on your ability to memorize.  You have to memorize command-line flags, and many times you have to really read into the question to determine the right answer.  I honestly left the testing center angry, because much of what I missed I felt that I knew the answer to.</li>
+</ul>
+</li>
+</ul>
+
+
+<p>This could be due to my background knowledge on the two exams, but it felt to
+me like the SCSA exam focuses more on the core OS, whereas you have more focus
+on some third party daemons on the RHCE.  For example, setting up an IMAP
+server is on the RHCE Exam Prep page, but not addressed by the SCSA
+Objectives.</p>
+
+<p>Both exams have free online assessments you can do to find out where you
+stand, both have the objectives of the exam listed online, and all the study
+material you need is available free online.</p>
+
+<h2>Study Materials Used</h2>
+
+<p>Personally, for the RCHE, I took the RH300 &ldquo;Rapid Track&rdquo; course, which served
+as a nice refresher course before taking the exam.  I think I would have
+obtained my RHCE without the course, but I certainly wouldn&rsquo;t have done so
+well.  Aside from the course, I didn&rsquo;t buy any books or anything.  Oh, but I
+have used Red Hat since Red Hat Linux 5.2 - that&rsquo;s gotta count for something.</p>
+
+<p>For the SCSA, I bought Sun&rsquo;s Web-Based training course.  After taking the
+first exam, I felt the course was inadequate in preparing me for the exam, so
+I picked up Bill Calkins <a href="http://www.unixed.c%0Aom/certification/Solaris_10_Exam_Prep_CX-310-20/solaris_10_exam_prep_cx-310-20%0A1.htm">Solaris 10 Exam Prep CX-310-202</a> book.  It was excellent, and I strongly recommend it to anyone looking
+to take the exam.  The book actually hadn&rsquo;t been printed yet when I needed it,
+and I picked it up pre-press via Safari&rsquo;s RoughCuts program.  I actually had
+quite a few emails back and forth with the author &ndash; he knows his stuff and
+does an excellent job teaching the reader.</p>
+
+<h2>In Closing</h2>
+
+<p>In the end, I must say that I feel that I learned more by obtaining my SCSA,
+but much of that knowledge was has &ldquo;fell away&rdquo;.  I remember the technologies,
+but I&rsquo;ve forgotten the command-line flags I was forced to memorize.  The RHCE,
+on the other hand, was almost easy for me.  It tests not what you&rsquo;ve
+memorized, but what you <strong>know</strong>.</p>
+
+<p>I&rsquo;m glad I have both, but I think all certifications should take Red Hat&rsquo;s
+lead and switch to that testing format.  I feel it&rsquo;s far and away a better
+real-world testing method.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RHCE!!!]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/08/25/rhce"/>
+    <updated>2009-08-25T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/08/25/rhce</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/red_hat_cert_eng_logo-clr.jpg" alt="" />Just got my test results back
+&ndash; I got 100% on my exam, so now I&rsquo;m a RHCE!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[iptables Options in RHEL/CentOS]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/08/19/iptables-options-rhelcentos"/>
+    <updated>2009-08-19T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/08/19/iptables-options-in-rhel-centos</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/logo_rh_home.png" alt="" />Today in class we were talking about how
+you needed to save your iptables changes using <strong>service iptables save</strong>
+before rebooting at the end of the test, or else you&rsquo;ll fail that section of
+the test. I brought up the setting IPTABLES_SAVE_ON_STOP to &ldquo;yes&rdquo; in
+/etc/sysconfig/iptables-config, and no one else knew about that file. There&rsquo;s
+some pretty cool settings in there - read on for details.</p>
+
+<p>The file /etc/sysconfig/iptables-config provides a place to configure the
+behavior of the iptables initscript in /etc/init.d/iptables. The file is
+documented <strong>very</strong> well, so give it a quick read. Here&rsquo;s some of the more
+interesting settings:</p>
+
+<ul>
+<li><strong>IPTABLES_SAVE_ON_STOP</strong> - this defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, every time the initscript is called with the argument of &ldquo;stop&rdquo; (whether via command line or via system shutdown), the initscript will take the current iptables ruleset and dump it into /etc/sysconfig/iptables. Essentially, this is doing a <strong>service iptables save </strong>behind the scenes when you do a <strong>service iptables stop</strong>. This is great for sysadmins who get distracted often and forget to commit their iptables commands to persistent storage often.</li>
+<li><strong>IPTABLES_SAVE_ON_RESTART</strong> - defaults to &ldquo;no&rdquo;. When set to &ldquo;yes&rdquo;, it does the exact same thing as <strong>IPTABLES_SAVE_ON_START</strong> except this does a save operation when the initscript is called with the &ldquo;restart&rdquo; option.</li>
+<li><strong>IPTABLES_SAVE_COUNTER</strong> - defaults to &ldquo;no&rdquo;. Everytime <strong>service iptables save</strong> is called (including in the two cases above), the rule and chain counters are saved to the file, and restored on startup. This prevents your counters from being reset every time you restart the service.</li>
+<li><strong>IPTABLES_STATUS_NUMERIC</strong> - defaults to &ldquo;yes&rdquo;. When you do a <strong>service iptables status</strong>, this will print IP&rsquo;s instead of hostnames when set to &ldquo;yes&rdquo;. When set to &ldquo;no&rdquo;, it will do reverse DNS lookups on all the IP&rsquo;s and /etc/services lookups on all ports.</li>
+<li><strong>IPTABLES_STATUS_VERBOSE</strong> - prints packet and byte counters in the output of <strong>service iptables status</strong>.</li>
+</ul>
+
+
+<p>There&rsquo;s a few other settings in there, but these are the ones that I&rsquo;m usually
+interested in. Happy firewalling!</p>
+]]></content>
+  </entry>
+  
+</feed>

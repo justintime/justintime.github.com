@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: opensolaris | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/opensolaris/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[OpenSolaris Network Administration for Linux SysAdmins]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/07/07/opensolaris-network-administration-linux-sysadmins"/>
+    <updated>2009-07-07T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/07/07/opensolaris-network-administration-for-linux-sysadmins</id>
+    <content type="html"><![CDATA[<p>Why is it that we always find the good documentation after we&rsquo;ve fumbled our
+way around the help and man pages? Such is the case with <a href="http://www.opensolaris.com/use/network_administration.pdf">&ldquo;OpenSolaris Network
+Administration for Administrators Familiar with
+Linux&rdquo;</a>. If you&rsquo;re
+someone that is familiar with Linux (the doc annoyingly equates RHEL to
+Linux), and are thinking about installing OpenSolaris, make sure you download
+this PDF and keep a hardcopy handy!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Making Home and End Work Like They Do In Linux on OpenSolaris]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/07/07/making-home-and-end-work-they-do-linux-opensolaris"/>
+    <updated>2009-07-07T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/07/07/making-home-and-end-work-like-they-do-in-linux-on-opensolaris</id>
+    <content type="html"><![CDATA[<p>In OpenSolaris, the xterm bindings aren&rsquo;t there for the End and Home keys -
+they do nothing. Yes, I know, Ctrl+a and Ctrl+e do the same things, but my
+laziness has turned into muscle memory. Here&rsquo;s how to fix it:  As your normal
+user, run the following:</p>
+
+<pre><code>mkdir /tmp/foo
+env TERMINFO=/usr/share/lib/terminfo /bin/infocmp xterm &gt; /tmp/foo/xterm.ti
+echo ' knp=\E[6~, kpp=\E[5~, kend=\EOF, khome=\EOH, '  &gt;&gt; /tmp/foo/xterm.ti
+env TERMINFO=/tmp/foo /bin/tic -v /tmp/foo/xterm.ti
+cd /usr/share/lib/terminfo/x/
+pfexec cp xterm xterm.orig
+pfexec cp /tmp/foo/x/xterm xterm.new
+pfexec cp xterm.new xterm
+</code></pre>
+
+<p>Now your home and end keys will behave like your used to in Linux! All of this
+was pretty much copied and pasted from <a href="http://tech.groups.yahoo.com/group/solarisx86/message/2%0A0027">http://tech.groups.yahoo.com/group/sol
+arisx86/message/20027</a> - thanks to Juergen Keil for the tip!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Fixing CPAN Perl Module Installation Issues on OpenSolaris]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/06/19/fixing-cpan-perl-module-installation-issues-opensolaris"/>
+    <updated>2009-06-19T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/06/19/fixing-cpan-perl-module-installation-issues-on-opensolaris</id>
+    <content type="html"><![CDATA[<p>In OpenSolaris, if you&rsquo;re installing perl modules via CPAN, you might run into
+this error:</p>
+
+<pre><code>cc: unrecognized option `-KPIC'
+cc: language ildoff not recognized
+cc: ReadKey.c: linker input file unused because linking not done
+</code></pre>
+
+<p>In order to fix that, edit the file /usr/perl5/5.8.4/lib/i86pc-solaris-
+64int/Config.pm, and make the following changes to the existing lines for
+&lsquo;optimize&rsquo; and &lsquo;cccldflags&rsquo;: <strong>UPDATE! Thanks to reader Vesta for his tip. The
+original tip I posted will not fix all the issues, for example Apache2::Util
+won&rsquo;t install.</strong> This problem occurs because the Sun developers build perl
+with the cc from SunStudio, but by default, the first &lsquo;cc&rsquo; found in a user&rsquo;s
+path is a symlink to gcc. All you need to do is to install SunStudio, and
+prefer it&rsquo;s cc:</p>
+
+<pre><code>pfexec pkg install ss-dev
+</code></pre>
+
+<p>Now, edit ~/.profile, and prepend your path with SunStudio&rsquo;s bin directory,
+like so:</p>
+
+<pre><code>export PATH=/opt/SunStudioExpress/bin/:/usr/gnu/bin:/usr/bin:/usr/X11/bin:/usr/sbin:/sbin
+</code></pre>
+
+<p>You can log out, reboot, source the new .profile, or export a new PATH
+variable to make the new settings stick. Now you should be able to install
+most any Perl module!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Plunging into the Deep End: Running OpenSolaris on my Primary Workstation]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/06/16/plunging-deep-end-running-opensolaris-my-primary-workstation"/>
+    <updated>2009-06-16T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/06/16/plunging-into-the-deep-end-running-opensolaris-on-my-primary-workstation</id>
+    <content type="html"><![CDATA[<p>Well, like I did with Linux ten years ago, I installed OpenSolaris 2009.06 on
+my primary workstation at work. There&rsquo;s simply no better way to learn an OS
+than to force yourself to run it. While I was pretty close to Ctrl-C'ing the
+whole project a couple of times, I&rsquo;m now getting things set up pretty much the
+way I need them to be. Stay tuned for articles with my tips, but here&rsquo;s my
+first impressions:</p>
+
+<ul>
+<li>IPS - the new package manager is fairly robust. It certainly appears to have some speed issues, but all in all, it works pretty well. It has a good selection of software available - not extensive, but enough to get you going. I&rsquo;m sure both the speed and the quantity will both improve with time.</li>
+<li>The Gnome Desktop as shipped has a very sharp and clean feel to it. It&rsquo;s hard to describe, but I like it.</li>
+<li>From what I can tell, Compiz is only supported with NVidia graphics cards. The fglrx driver doesn&rsquo;t yet exist for OpenSolaris.</li>
+<li>It really sucks trying to debug Xorg setup without virtual consoles!</li>
+<li>While I&rsquo;m a long ways from being comfortable, I&rsquo;m now at a point that I don&rsquo;t think I&rsquo;ll find any showstopping issues.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Installing the Pidgin-Encryption Plugin on OpenSolaris]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/06/16/installing-pidgin-encryption-plugin-opensolaris"/>
+    <updated>2009-06-16T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/06/16/installing-the-pidgin-encryption-plugin-on-opensolaris</id>
+    <content type="html"><![CDATA[<p>You can install Pidgin from the OpenSolaris.org repository, but there&rsquo;s no
+package for the Pidgin-Encryption plugin. Once you point it in the right
+direction, it&rsquo;s not hard to install the plugin from source.</p>
+
+<pre><code>pfexec pkg install SUNWgcc SUNWxorg-headers SUNWgnome-common-devel
+tar -xzvf pidgin-encryption-3.0.tar.gz
+cd pidgin-encryption-3.0
+./configure --with-nspr-includes=/usr/include/firefox/nspr/ \
+  --with-nspr-libs=/usr/lib/firefox/ \
+  --with-nss-includes=/usr/include/firefox/nss/ \
+  --with-nss-libs=/usr/lib/firefox/ --prefix=/usr
+make
+pfexec make install
+</code></pre>
+
+<p>Restart Pidgin, and go to Tools->Plugins, and enable the Pidgin Encryption
+plugin.</p>
+]]></content>
+  </entry>
+  
+</feed>

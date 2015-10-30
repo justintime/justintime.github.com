@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: hosting | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/hosting/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Drupal StackScript for RH Derivatives on Linode (Instant Drupal!)]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-rh-derivatives-linode-instant-drupal"/>
+    <updated>2010-02-24T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/02/24/drupal-stackscript-for-rh-derivatives-on-linode-instant-drupal</id>
+    <content type="html"><![CDATA[<p><a href="http://www.linode.com/stackscripts?r=c4f79463ba583ec1f15e330719%0A0bda4bda9d65df">StackScripts</a> are a relatively new offering from Linode that allow users to
+build their own installation script by &ldquo;stacking&rdquo; previously existing scripts
+together to build the machine you want. You can keep your <a href="http:/%0A/www.linode.com/stackscripts?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">StackScript</a> to
+yourself, or publish it for the world to use. Deploying a distribution with a
+StackScript takes only about 5 minutes, afterwards you have a fully configured
+system with applications up and running. Here&rsquo;s a sneak-peek at a my <a href="http://www.linode.com/stackscripts/view/?Stack%0AScriptID=167&amp;r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Drupal
+StackScript for RH Derivatives</a> deployment just
+before launch: <img src="/assets/images/stackscript-deploy.png" alt="" /> Many of the users of
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+appear to prefer Ubuntu, and there&rsquo;s good reason &ndash; it&rsquo;s a great distribution.
+I run it on all my laptops and most of my desktops. However, I personally find
+it a bit too bleeding edge for my servers and prefer CentOS for the server
+room. Currently there are 16 StackScripts available for Ubuntu, with only 3
+available for CentOS. Well, after today, there&rsquo;s now 6 for CentOS! After
+clicking the deploy button, you&rsquo;ll have the images ready to go in less than a
+minute. Boot the config, and the StackScript will run on first boot - when
+it&rsquo;s done, you&rsquo;ll have a secured and configured LAMP stack,
+<a href="http://drupal.org/project/drush">drush</a> install, <a href="http://drupal.org">Drupal</a>
+install, and all updates applied via yum. I&rsquo;ve published these StackScripts so
+that anyone with a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+can use them with their CentOS and Fedora installations:</p>
+
+<ul>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=154">StackScript Bash Library for RH Derivatives</a></strong>: This is a port of Chris Aker&rsquo;s (of Linode) Bash Library for Ubuntu. You don&rsquo;t use this script directly, it&rsquo;s strictly for inclusion by other scripts.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=162">Drupal Library for RH Derivatives</a></strong>: This library provides two functions, install_drush and install_drupal.</li>
+<li><strong><a href="http://www.linode.com/stackscripts/view/?StackScriptID=167">Drupal for RH Derivatives</a></strong>: This is a the StackScript used in the screenshot above. After clicking on the Deploy button, you&rsquo;ll have a working Drupal installation up and running in about 5 minutes.
+If you use them and find any bugs or have any RH-based StackScripts you&rsquo;d like
+made available, post a comment and I&rsquo;ll see what I can do. In the interest of
+full disclosure, the links to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> in
+this article have a referral code in them that will give me $20 credit if you
+sign up and keep your account open for 90 days. If you like these
+StackScripts, please use my links to sign up for a Linode - you&rsquo;ll wonder how
+you did without one!</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Performing a CentOS Anaconda-based Install on a Linode for Kickstart, Root LVM and SELinux Features]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/02/22/performing-centos-anaconda-based-install-linode-kickstart-root-lvm-and-selinux-features"/>
+    <updated>2010-02-22T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/02/22/performing-a-centos-anaconda-based-install-on-a-linode-for-kickstart-root-lvm-and-selinux-features</id>
+    <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+rocks. Seriously, read <a href="http://sysadminsjourney.com/content/2008/08/01/linode-review">my
+review</a>. I was
+talking to a co-worker (whom I converted to
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> as
+well) about how I would pay double the amount to keep my
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+now that I know how much I use it. Don&rsquo;t tell them that, they&rsquo;re cheap :) If
+you find this article helpful (or my article about <a href="http://sysadminsjourney.com/content/2008/11/26/bringing-your-linode-%0Ahome-you">moving VM&rsquo;s to and from
+Linode</a>), please consider clicking one of the links in this article to sign
+up for a
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> -
+if you sign up for 90 days, I&rsquo;ll get $20 credited to my account. I was setting
+up a second
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+that was to be a testing ground for some
+<a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>
+I&rsquo;m working on. The new
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+will eventually replace my existing one. For whatever reason, the most recent
+version of CentOS they had available was 5.3. Not a big deal, I can &lsquo;yum
+upgrade&rsquo; up to 5.4 after installation. Well, after doing so, I found that a
+lot of features that I wanted had been stripped out. In Linode&rsquo;s defense, it&rsquo;s
+in their best interest to offer very stripped down images for their customers.
+The one feature I wanted that I couldn&rsquo;t get enabled was SELinux, and simply
+installing the packages still wouldn&rsquo;t let me use &lsquo;setenforce 1&rsquo; to get it
+turned on. My best guess as to why is that the Linode kernel didn&rsquo;t support
+it, but I honestly didn&rsquo;t troubleshoot it too much. I really wanted root LVM
+capabilities as well, so I decided that a full-on anaconda based installation
+was the way to go. Plus, I couldn&rsquo;t find anything in the forums about it, so
+there was the lure of being the first to do it ;-) Well, thanks to the
+flexibility offered by
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>,
+not only can you do a anaconda-based installation (with optional Kickstart),
+but you can do so using the GUI over VNC if you&rsquo;re so inclined!</p>
+
+<h3>Step 1: Setup Finnix</h3>
+
+<p>Finnix is the distro of Linode&rsquo;s choice for &lsquo;rescue&rsquo; operations on your
+server. Think of it as a Swiss Army knife - it&rsquo;s a very powerful tool that
+takes very little setup. For more on Finnix, checkout the <a href="http://library.linode.com/troubleshooting/finnix-recovery">Linode Library
+article</a>. First, we
+need to setup a very small, 20MB ext3 disk that will house our installation
+kernel and initrd. Set up another ext3 disk of 100MB to be mounted at /boot
+for PV-GRUB. Finally, setup your raw disk that will be used for the OS
+installation. Since we&rsquo;ll be using LVM, you can easily add to and resize your
+disk later, so don&rsquo;t overdo it. I went with 5GB for my root disk. If you&rsquo;re
+following along, here&rsquo;s what you should have: <img src="/assets/images/linode-%0Adisks.png" alt="" /> Now, setup a Finnix configuration profile. Click on &ldquo;Create a new
+configuration profile&rdquo;, and type &ldquo;Finnix Rescue&rdquo; for the label. For the
+kernel, select &ldquo;Recovery - Finnix (kernel)&rdquo;. For /dev/xvda, select the
+&ldquo;Recovery - Finnix (iso)&rdquo;. For /dev/xvdb, select the &ldquo;Centos 5.4 Install
+Disk&rdquo;. For uncompressed initrd image, select &ldquo;Recovery - Finnix (initrd).
+Leave the other settings at defaults, and save the profile. Here&rsquo;s what it
+should look like: <img src="/assets/images/linode-finnix.png" alt="" /></p>
+
+<h3>Step 2: Upload the Xen-enabled Kernel and Initrd from the DVD</h3>
+
+<p>Next, boot Finnix from your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel. Click on the console tab, and launch the AJAX console. Once at
+the console, we need to mount our install disk, and fetch the xen-enabled
+kernel and initrd from your favorite mirror. Mount the installation disk,
+change directories, and download the files:</p>
+
+<pre><code>mount /dev/xvdb /mnt/xvdb 
+cd /mnt/xvdb
+for f in initrd.img vmlinuz; do
+wget http://mirror.unl.edu/centos/5.4/os/i386/images/xen/${f}
+done
+cd
+umount /mnt/xvdb
+</code></pre>
+
+<p>Now, shutdown Finnix from the
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+control panel.</p>
+
+<h3>Step 3: Setup the CentOS configuration profile</h3>
+
+<p>Create a new profile, and name it CentOS 5.4. For the kernel, select &ldquo;pv-grub-
+x86_32&rdquo;. For /dev/xvda, select &ldquo;CentOS 5.4 PV-GRUB Boot&rdquo;. For /dev/xvdb choose
+&ldquo;CentOS 5.4 OS Disk&rdquo;. For /dev/xvdh, select our &ldquo;CentOS 5.4 Install Disk&rdquo;.
+Point the root device to a custom location: &ldquo;/dev/mapper/VolGroup00-LogVol00&rdquo;.
+Leave the rest as defaults, here&rsquo;s a screenshot: <img src="/assets/images/linode-%0Acentos.png" alt="" /></p>
+
+<h3>Step 4: Boot the CentOS configuration profile and start the installation</h3>
+
+<p>Save the profile, and boot it. Note that it won&rsquo;t boot automatically, we have
+to point GRUB in the right direction first. You&rsquo;ll be greeted by a scary-
+looking &lsquo;grubdom>&rsquo; prompt. Now, we need to tell grub to boot our install
+kernel and initrd:</p>
+
+<pre><code>root (hd2)
+kernel (hd2)/vmlinuz
+initrd (hd2)/initrd.img
+boot
+</code></pre>
+
+<p>Note that if you want to do a kickstart install, you would append
+ks=<a href="http://my.com/this.ks">http://my.com/this.ks</a> to the kernel line above. More on this later. Once
+the kernel loads, you&rsquo;ll be presented with the familiar anaconda text-based
+installer. Choose your language, and your installation type. I prefer HTTP
+from a mirror. If you choose to do the same, use the mirror hostname for the
+Web site name, and the path to the directory that contains all the release
+notes &ndash; usually it&rsquo;s /centos/5.4/os/i386/. Anaconda will fetch the stage2
+image, then launch the installer. Here&rsquo;s where it gets cool - it will give you
+a choice to &ldquo;Start VNC&rdquo;. If you choose this option, you can connect to your
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+via VNC (note it launches on display 1, not 0), and complete the installation
+via a GUI. Install as you would any other CentOS installation. <strong>Make note of
+where your root directory is at.</strong> The installer may complain about your
+/dev/xvdh being a loop device, tell anaconda to ignore it. Exclude /dev/xvda
+from any partitioning, we&rsquo;ll set that up manually later.</p>
+
+<h3>Step 5: Modify the CentOS configuration profile and start the operating</h3>
+
+<p>system</p>
+
+<p>Once you click the &ldquo;Reboot&rdquo; button on the installer, you&rsquo;ll be disconnected
+from VNC. Your machine will be restarted, but it will stick at the grubdom
+prompt again - that&rsquo;s okay. We&rsquo;ll be stuck at the grubdom> prompt one more
+time - use this to tell it to boot CentOS using the boot partition the
+installer setup for us:</p>
+
+<pre><code>grubdom&gt; root (hd1,0)                                                          
+grubdom&gt; kernel (hd1,0)/vmlinuz-2.6.18-164.el5xen                              
+grubdom&gt; initrd (hd1,0)/initrd-2.6.18-164.el5xen.img                           
+grubdom&gt; boot
+</code></pre>
+
+<p>You will then boot into CentOS - exit the system settings GUI - you can run it
+again later by running system-config-securitylevel-tui. Now we need to setup
+our boot disk so that pv-grub knows how to boot our kernel so we&rsquo;re not
+consistently prompted upon reboot.
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>
+uses PV-GRUB to boot our kernel, and it&rsquo;s looking for a &lsquo;boot&rsquo; directory
+directly on /dev/xvda. For more details, <a href="http://www.linode.com/wiki/index.php/PV-GRUB#Partitioning">see the Linode
+Wiki</a>. Run this as
+root, and make sure your block devices are aligned with mine before
+copy/pasting:</p>
+
+<pre><code>mkdir /mnt/newboot
+mkfs.ext3 /dev/xvda
+mount /dev/xvda /mnt/newboot
+rsync -av /boot /mnt/newboot
+cd /mnt/newboot/boot
+ln -s . boot
+cd
+umount /mnt/newboot
+umount /boot
+e2label /dev/xvdb1 oldboot
+e2label /dev/xvda /boot
+</code></pre>
+
+<p>That&rsquo;s it - reboot, and you should be up and running! You can create a LVM
+physical volume out of the old boot partition on /dev/xvdb1, or just leave it
+around unused.</p>
+
+<h3>Streamlining the process with Kickstart</h3>
+
+<p>We can use kickstart to <strong>really</strong> streamline the process. Follow steps 1, 2,
+and 3 above, but on step 4, replace the kernel line with this:</p>
+
+<pre><code>kernel (hd2)/vmlinuz ks=http://www.sysadminsjourney.com/assets/files/linode-minimal.ks
+</code></pre>
+
+<p>That&rsquo;s it! The kickstart file handles partitioning, and setting up the right
+boot partition, as well as disabling unneeded services that you don&rsquo;t need for
+a Linode. Make sure you check out the file
+<a href="http://www.sysadminsjourney.com/assets/files/linode-minimal.ks">http://www.sysadminsjourney.com/assets/files/linode-minimal.ks</a> - your root password is there, change it immediately! Stay
+tuned for my CentOS <a href="http://blog.linode.com/2010/02/09/introducing-stackscripts/">StackScripts</a>!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Bringing your linode home with you]]></title>
+    <link href="http://sysadminsjourney.com/content/bringing-your-linode-home-you"/>
+    <updated>2008-11-26T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/bringing-your-linode-home-with-you.html</id>
+    <content type="html"><![CDATA[<p><a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> is, in my opinion, the best webhost out there. I recently switched this site from Wordpress to Drupal. In preparation for this switch, I wanted to be able to start with a clean slate - wipe the O/S and all, and install Drupal on top of that. Since I'm a sysadmin, I hate downtime! Read on to learn how I made my <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> portable. <!--break--> <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a> is a provider of Xen-based vm's. The intelligent way that they have provisioned their machines gives you a way to clone your VM. Using this idea, I was able to take an image of a Linode-ized CentOS installation, and run it as a VM under Xen on a spare workstation at home. I configured this Xen VM at home, but with every change I made to the image I updated a shell script to do the same. When I had my VM at home ready to go, I sufferred only 5 minutes of downtime while my Linode was being reconfigured! Here's the specifics on how to do this yourself.</p>
+
+
+<h3>Setup Finnix on your Linode</h3>
+
+
+<p>Follow the instructions for "Setting It Up" from the <a href="http://www.linode.com/wiki/index.php/Finnix#Setting_it_up">Linode Wiki article</a>.</p>
+
+
+<h3>Setup the base OS</h3>
+
+
+<p>In your Linode dashboard, click "Deploy a Linux Distribution", and select settings like the ones in this screenshot: <a href="http://sysadminsjourney.com/sites/sysadminsjourney.com/files/images/Linode-Centos-Creation.jpg"><img src="http://sysadminsjourney.com/sites/sysadminsjourney.com/files/images/large_Linode-Centos-Creation.jpg"></a> Now, after creating the partition, rename it to something like "Virgin CentOS Image", and resize it as small as it can go - I used 600M for mine. After resizing the partition, create a new raw partition of 10GB or so - I use this as an LVM partition and it's where I install all of my custom applications. Now, we need to make these new partitions available to your existing VM (or Finnix if this is your first). From the dashboard, click on the Finnix profile (or your custom profile) to edit it. Under the drive setup area, set /dev/xvdg to be the "Virgin CentOS Image" from above, and set /dev/xvdh to be the raw partition from above. If you changed settings to a profile that was already running, you need to reboot for the settings to take effect.</p>
+
+
+<h3>Setup your Xen server at home</h3>
+
+
+<p>For me, I just popped in a Centos 5.2 CD, and installed the base OS plus the virtualization package. Do not partition all the drive space, leave enough unpartitioned space to equal that of what you're using for your raw partion on your Linode. Once you've booted, we need to setup our raw partition space to use as swap and applications to the domU. Depending on your hard drive size and partition layout, there's no copy and paste solution for this. If you're geek enough to want to do this, you know how to use fdisk, don't you? For the sake of this article, /dev/hda3 is a 512M swap partition(type 82), and /dev/hda5 is a LVM partition of 10GB (type 8e).</p>
+
+
+<h3>Make the base image</h3>
+
+
+<p>Now, we need to make a file-backed image of the CentOS installation on our Linode. At the same time, we will create a gzipped backup so we have something local to restore from if we hose something up or want to test our provisioning script. On your Xen server at home, run the following as root: <code> mkdir -p /var/vms/linode-clone/ cd /var/vms/linode-clone/ ssh root@mylinode.com "dd if=/dev/xvdg bs=102400" | gzip -dc | dd of=root.img bs=102400 gzip -c root.img &gt; virgin.img.gz dd if=/dev/zero bs=1048576 count=2000 &gt;&gt; root.img e2fsck -f root.img resize2fs -p root.img </code> Phew! What did that do? The ssh + dd command made a bit for bit copy of the virgin partition on your Linode, and created a file on the local host with it's contents. The gzip command made a compressed copy of the image to restore from later. The dd using /dev/zero padded the end of that file by 2GB, giving us 2GB at the end of the partition to work with. The e2fsck and resize2fs updated the filesystem contained within that file to the new size. Now, on to setting up our kernel.</p>
+
+
+<h3>Kernel setup</h3>
+
+
+<p>We need to grab a copy of the kernel source from Linode, and build it for our Xen domU. You can browse the Linode kernels at http://www.linode.com/src. I recommend 2.6.18.8-linode10.tar.bz2. From your Xen server, run the following: <code> yum install gcc gcc-c++ kernel-devel mkdir -p /usr/src/ cd /usr/src/ wget http://www.linode.com/src/2.6.18.8-linode10.tar.bz2 tar -xjvf 2.6.18.8-linode10.tar.bz2 cd 2.6.18.8-linode10 ssh root@mylinode.com "cat /proc/config.gz" | gzip -dc &gt; .config make oldconfig make cp arch/i386/boot/vmlinuz /var/vms/linode-clone/kernel-2.6.18.8-linode10.gz </code> This creates a kernel identical to the one that your Linode host is running. Next up, setting up our Xen config.</p>
+
+
+<h3>Xen configuration</h3>
+
+
+<p>Change to /etc/xen, and create a file named linode-clone. Paste the following into it:</p>
+
+
+<pre>name = "linode-clone"
+uuid = "a6864d4d-1c6f-ea12-3e08-b6b89015bb77"
+maxmem = 540
+memory = 540
+vcpus = 1
+kernel = "/var/vms/linode-clone/kernel-2.6.18.8-linode10.gz"
+root = "/dev/xvda ro"
+on_poweroff = "destroy"
+on_reboot = "restart"
+on_crash = "restart"
+vfb = [  ]
+disk = [ "file:/var/vms/linode-clone/root.img,xvda,w", "phy:/dev/hda3,xvdb,w", "phy:/dev/hda5,xvdc,w" ]
+vif = [ "mac=00:16:3e:57:53:3f,bridge=xenbr0" ]
+extra = "xencons=tty"
+</pre>
+
+
+<p>At this point, you should have a Xen domU ready-to-run. To boot your Xen VM and attach a console, run this:</p>
+
+
+<pre>xm create -c linode-clone
+</pre>
+
+
+<p>It should boot for you, and drop you into a login prompt. Feel free to login as root (using the password specified during the linode setup phase). Make some changes to the filesystem. CTRL+] will disconnect you from the domU console, 'xm console linode-clone' will re-attach. Now, power off your domU by doing a 'shutdown -h now' from within the domU. You can restore back to a virgin install by doing a "gzip -dc /var/vms/linode-clone/linode-virgin-centos.img.gz &gt; /var/vms/linode-clone/root.img" -- make sure the domU is shut down first! When you boot back in by doing a 'xm create -c linode-clone', you'll see that your filesystem changes are gone. Stay tuned for part two, where I'll show you the basics of creating a provisioning script for your domU. Part three will then cover how to push your local images back up to your <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>.</p>
+
+
+<h3>Shameless plugging</h3>
+
+
+<p>Scattered throughout this post are links to <a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">Linode</a>. If you're not a customer and would like to be, please consider clicking on one of those links to sign up. It will cost you nothing, but will give me a $20 credit on my account if you sign up and stay a customer for 90 days.</p>
+
+
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[(re)First Post]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/11/23/refirst-post"/>
+    <updated>2008-11-23T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/11/23/refirst-post</id>
+    <content type="html"><![CDATA[<p>Last night, I completed the transition from Wordpress to Drupal. Why? Well
+just try and look at the code. Drupal is the cleanest PHP implementation I&rsquo;ve
+ever seen, and Wordpress is like most of the other PHP apps I&rsquo;ve seen.  Yet
+another reason I love my
+<a href="http://www.linode.com/?r=c4f79463ba583ec1f15e3307190bda4bda9d65df">linode</a> -
+I was able to build my new VM at home, then upload it to my host. Total
+downtime was about 5 minutes, and I am now running on a completely new
+partition built from scratch. Anyways, I&rsquo;m sure there will be plenty of kinks
+to work out, but it looks like most of the stuff is working. Drop me a comment
+if you find something out of whack. Stay tuned for a post on how to &ldquo;take your
+linode image home with you&rdquo;.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Mozilla Weave Setup on CentOS 5.2]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-centos-52"/>
+    <updated>2008-08-15T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/08/15/mozilla-weave-setup-on-centos-5-2</id>
+    <content type="html"><![CDATA[<p><a href="http://labs.mozilla.com/projects/weave/">Mozilla Weave</a> is a
+project from Mozilla Labs that aims to keep all of your browser
+data synced between all of your PC&rsquo;s.  The now defunct Google
+Browser Sync used to do this, as does
+<a href="http://www.foxmarks.com/">Foxmarks</a>.  Although Weave is still in
+it&rsquo;s infancy, it&rsquo;s been very promising thus far.  However, many of
+the users of Mozilla&rsquo;s own Weave server complain that the service
+is very slow.  The beauty of Weave is that it uses the standard
+protocol <a href="http://en.wikipedia.org/wiki/WebDAV">WebDAV</a> to sync it&rsquo;s
+data.  Why does that matter?  Because our good &lsquo;ol buddy
+<a href="http://www.apache.org">Apache</a> can speak WebDAV out-of-the box! 
+Follow the jump to find out how you can setup your own server that
+you can sync to. In our scenario, we&rsquo;ll be setting up Weave to sync
+to a <a href="http://www.centos.org">CentOS</a> 5.2 server running Apache
+2.2.  We&rsquo;ll use mod_ssl to encrypt the communications - and to
+conserve IP&rsquo;s and SSL certs, we&rsquo;ll setup Weave as a subdirectory
+under the main SSL virtual host.  However, you should be able to
+adapt these instructions to any Apache installation where mod_ssl
+and mod_dav_fs is installed and available. There&rsquo;s two phases to
+the installation:
+1.  Setup of the Apache server
+2.  Setup of the Firefox client(s)</p>
+
+<h3>Setup of the Apache server</h3>
+
+<p>First, make sure that you have mod_ssl installed:
+    yum install mod_ssl</p>
+
+<p>Now, make sure the following lines are present in
+/etc/httpd/conf/httpd.conf to enable WebDAV:
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">LoadModule</span> dav_module modules/mod_dav.so
+<span class="nb">LoadModule</span> dav_fs_module modules/mod_dav_fs.so
+<span class="nt">&lt;IfModule</span> <span class="s">mod_dav_fs.c</span><span class="nt">&gt;</span>
+  <span class="nb">DAVLockDB</span> <span class="sx">/var/lib/dav/lockdb</span>
+<span class="nt">&lt;/IfModule&gt;</span></code></pre></div></p>
+
+<p>Now, let&rsquo;s setup our directory alias off of the main SSL virtual
+host. We&rsquo;ll maintain our configuration in a separate file. Create a
+file named /etc/httpd/conf.d/mozilla-weave.include with this in it:
+    Alias /weave /apps/mozilla_weave/www
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nt">&lt;Directory</span> <span class="s">/apps/mozilla_weave/www</span><span class="nt">&gt;</span>
+  <span class="nb">SSLRequireSSL</span>
+  Options Indexes FollowSymLinks
+  <span class="nb">AllowOverride</span> AuthConfig Limit
+  <span class="nb">Order</span> allow,deny
+  <span class="nb">Allow</span> from <span class="k">all</span>
+  <span class="nb">AuthType</span> Basic
+  <span class="nb">AuthName</span> &amp;ldquo;WebDAV Restricted&amp;rdquo;
+  <span class="nb">AuthUserFile</span> <span class="sx">/apps/mozilla_weave/passwords</span>
+  <span class="nb">require</span> valid-user
+<span class="nt">&lt;/Directory&gt;&lt;/p&gt;</span>
+
+<span class="nt">&lt;p&gt;&lt;Location</span> <span class="s">/weave</span><span class="nt">&gt;</span>
+  <span class="nb">DAV</span> <span class="k">On</span>
+<span class="nt">&lt;/Location&gt;</span></code></pre></div></p>
+
+<p>Now, let&rsquo;s get this file included in the main SSL virtualhost. On
+CentOS, edit the file /etc/httpd/conf.d/ssl.conf. Just before the
+closing VirtualHost tag, insert the include statement:
+    include /etc/httpd/conf.d/mozilla-weave.include
+    </VirtualHost></p>
+
+<p>Now, let&rsquo;s create our directory structure (replace &lsquo;myusername&rsquo;
+with whatever username you want to authenticate with):
+    cd /apps
+    mkdir -p mozilla_weave/www/user/myusername
+    chown -R apache:apache mozilla_weave</p>
+
+<p>Now, we&rsquo;ll create our htaccess file - again replace &lsquo;myusername&rsquo;:
+    echo &ldquo;require user myusername&rdquo; > mozilla_weave/www/user/myusername/.htaccess
+    chown apache:apache mozilla_weave/www/user/myusername/.htaccess
+    htpasswd -c mozilla_weave/passwords myusername</p>
+
+<p>Finally, let&rsquo;s restart Apache:
+    /etc/init.d/httpd restart</p>
+
+<h3>Setup of the Firefox client(s)</h3>
+
+<p>First, download the latest Weave plugin from
+<a href="https://people.mozilla.com/~cbeard/weave/dist/latest-weave.xpi">here</a>.
+Go ahead and restart Firefox. It will start the Weave wizard on
+startup, but for now click cancel. Click the new Weave icon down in
+your status bar, and click on &ldquo;Preferences&rdquo;.  Now click on the
+advanced tab.  You need to change the Server Location field to the
+URL that we just set up in Apache.  In my case, I used
+<a href="https://www.techadvise.com/weave.">https://www.techadvise.com/weave.</a> Now, click on the Account tab,
+and click the &ldquo;Sign In&rdquo; button.  Click the &ldquo;Next&rdquo; button, followed
+by &ldquo;Set Up Another Computer&rdquo;.  Should be self explanatory from here
+out - just use the same username and password we set up earlier via
+Apache.
+The latest versions of Weave require you to use SSL. Since not
+everyone has money to throw away, you might be using a self-signed
+certificate. When you do, you need to browse to
+<a href="https://www.yourdomain.com/">https://www.yourdomain.com/</a> and jump through all the hoops to
+autmatically accept the certificate before it will work in Weave.
+If you don’t do this, Weave will give you the error “Username /
+password incorrect”</p>
+
+<p>One PC down, now go to all of your other machines and point them at
+your new WebDAV enabled directory. Then enjoy all the synchronized
+goodness with great performance!</p>
+]]></content>
+  </entry>
+  
+</feed>

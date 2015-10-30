@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: java | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/java/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Teaching Java How to Commit Suicide]]></title>
+    <link href="http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-commit-suicide"/>
+    <updated>2010-01-29T00:00:00-06:00</updated>
+    <id>http://sysadminsjourney.com/content/2010/01/29/teaching-java-how-to-commit-suicide</id>
+    <content type="html"><![CDATA[<p>At $work, we have a lot of java processes that are ran via cron and other
+wrappers that do some pretty critical tasks. The apps have been written so
+that the whole thing is wrapped in a try/catch that will call system.exit(1)
+should something not go right. Our wrapper scripts watch for a non-zero exit
+code, and alert Nagios if something went wrong. This works great except for
+when a VM encounters an outOfMemory exception (OOM). The Java VM attempts to
+continue on, but if the main thread hits this exception, the entire VM will
+exit. However, the application code that exits with a status of 1 never gets
+called, so the application ends up dying with a status of 0. Well, Sun (Oracle
+now I guess) gave us a new option in Java 6 that was backported to 1.4.2_12
+and up that allows us to tell Java to run a shell command when it encounters
+an OOM exception. By adding the option</p>
+
+<pre><code>-XX:OnOutOfMemoryError="kill -9 %p"
+</code></pre>
+
+<p>to our Java command line, the VM will execute a shell that calls the kill
+command, with an argument of the PID of the VM. The -9 option to kill will
+cause the VM to exit with a non-zero status, so that our wrappers will pick up
+the error and alert the right people. Note: this feature was never backported
+to Java5 - sorry!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Hudson > (CruiseControl * 2)]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2"/>
+    <updated>2009-08-13T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/08/13/hudson-cruisecontrol-2</id>
+    <content type="html"><![CDATA[<p><img src="/assets/images/medium_hudson.png" alt="" /><a href="http://cruisecontrol.sour%0Aceforge.net">CruiseControl</a> and I have never really gotten along. When you&rsquo;re a Java shop,
+you have to use continuous integration. In fact, if you&rsquo;re a code shop, you
+need CI. For the longest time, CruiseControl was the only kid on the block.
+I&rsquo;d heard about <a href="http://hudson.dev.java.net/">Hudson</a> quite a bit, but I
+didn&rsquo;t take the time to try it. Why not? Well, because CI is hard, and it
+takes forever to get setup right &ndash; I didn&rsquo;t want to have to re-invest all
+that time. Man, if only I&rsquo;d known how wrong I was.</p>
+
+<p>Everyone&rsquo;s gripe with CruiseControl was that you had to edit XML files to make
+the configuration. Well, I don&rsquo;t mind XML, and it&rsquo;s often pretty good at
+config files. But CruiseControl was always quirky. Switching from CVS to SVN?
+A day&rsquo;s worth of work. Adding a new build? At least an hour or two. Little
+things: CruiseControl would freak out and die if you didn&rsquo;t do the initial
+checkout from CVS/SVN - CruiseControl only does updates, not checkouts. We
+often joke how the developers that write CruiseControl favorite motto was &ldquo;let
+the sucker sysadmin deal with it&rdquo;.</p>
+
+<p>So, I downloaded Hudson, and in less than 10 minutes I had everything that was
+being done in CruiseControl working in Hudson. And, I&rsquo;m being honest here, I
+actually smiled a few times to myself when setting it up! It took another 20
+minutes, and I have authentication working against our LDAP server, which I
+never had working in CruiseControl.</p>
+
+<p>If you&rsquo;re running CruiseControl now, drop everything, do yourself a favor, and
+go try Hudson. If it doesn&rsquo;t do what you want, it has plugins that do. It has
+API&rsquo;s for XML, JSON, and Python, and the XML implementation has full XPATH
+support. Every field in the web interface has inline help that is actually
+helpful. Having different projects use different Java&rsquo;s and Ant&rsquo;s are a click
+away. You can build multiple projects at once, create build dependencies, and
+even have distributed builds run amongst multiple machines.</p>
+
+<p>Please, I&rsquo;m begging you. Give Hudson a try, and get back some of your life
+from CruiseControl! If you&rsquo;re not running CruiseControl or Hudson, then you
+probably should be.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Profile your Java GC Performance with GChisto]]></title>
+    <link href="http://sysadminsjourney.com/2008/09/15/profile-gc-with-gchisto"/>
+    <updated>2008-09-15T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/2008/09/15/profile-your-java-gc-performance-with-gchisto</id>
+    <content type="html"><![CDATA[<p>I stumbled across <a href="http://gchisto.dev.java.net/">GChisto</a> the other day when
+looking for some garbage collection analysis tools for Java. Anyone who&rsquo;s
+tried tuning Java GC (especially on older JVM&rsquo;s) knows that it&rsquo;s about as much
+fun as watching paint dry. However, many times you can seriously improve
+performance by taking the time to analyze what your GC&rsquo;s are doing. GChisto
+attempts to give you a birds-eye graphical view of your GC operations, and has
+a very handy comparison feature that allows you to compare the differences
+between GC logs.  A picture is worth a thousand words, so here&rsquo;s a teaser:
+<img src="/assets/images/large_gchisto-example1.png" alt="large_gchisto-example1.png" /></p>
+
+<h3>Installation of GChisto</h3>
+
+<p>These instructions are tailored for Ubuntu, but should work for any distro. As
+long as you can do CVS on Windows, these instructions apply there as well.
+Also note that this overview is focusing only on how GChisto works with GC
+logs generated by the CMS collector. It works with all types, but the CMS type
+is all that is covered here. To run GChisto, you&rsquo;ll need cvs, Java 6, and Ant.
+While GChisto requires Java 6, it can read GC logs from Java 1.4.2, 5, and 6.
+On Ubuntu run the following to make sure everything&rsquo;s installed:</p>
+
+<pre><code>sudo apt-get install cvs sun-java6-jdk ant
+</code></pre>
+
+<p>First, you need to sign up for a Java.net account. The project doesn&rsquo;t have
+any releases, so you need to have an account so you can checkout CVS. Click
+<a href="https://www.dev.java.net/servlets/Join">here</a> to register for an account.
+Once you&rsquo;ve registered, we need to checkout the source code. We&rsquo;ll install it
+into a directory just under our home directory:</p>
+
+<pre><code>cd ~
+cvs -d :pserver:myusername@cvs.dev.java.net:/cvs login
+cvs -z9 -d :pserver:myusername@cvs.dev.java.net:/cvs checkout gchisto
+</code></pre>
+
+<h3>Enable verbose GC logging in your java app.</h3>
+
+<p>This all depends on your particular application, but you need to add the
+following java command line options to your application startup:</p>
+
+<pre><code>-Xloggc:before-gc.out -verbose:gc -XX:+PrintGCTimeStamps -XX:+PrintGCDetails
+</code></pre>
+
+<p>This will create a logfile named before-gc.out in the directory from which you
+start your application that contains all of your GC information. For
+illustration purposes, let&rsquo;s assume you make some GC tuning optimizations, and
+you want to compare before and after. Before starting the app after making
+your changes, change the before-gc.out to after-gc.out in the above command
+line options.</p>
+
+<h3>Using GChisto</h3>
+
+<p>Now, we just need to run the appropriately named ant target &lsquo;run&rsquo;:</p>
+
+<pre><code>cd gchisto
+ant run
+</code></pre>
+
+<p>If that doesn&rsquo;t work, try prepending the JAVA_HOME variable to ant like so:</p>
+
+<pre><code>JAVA_HOME=/path/to/java6/dir ant run
+</code></pre>
+
+<p>Once ant does it&rsquo;s thing, you should be presented with the GChisto GUI. Let&rsquo;s
+load our logs into it. You should be presented with the &ldquo;Trace Management&rdquo;
+tab, if not, select it. Now let&rsquo;s load some traces (logs). Make sure that
+&ldquo;HotSpot GC Log&rdquo; is selected from the dropdown box at the lower left corner,
+and click the &ldquo;Add&rdquo; button. Browse to the location of before-gc.out, and load
+it. Repeat the exact same process for after-gc.out. When done, you should have
+a window that looks similar to this: <img src="/assets/images%0A/gchisto-start.jpg" alt="gchisto-start.jpg" /> Now, let&rsquo;s start doing some digging around. The first
+place to visit is the &ldquo;GC Pause Stats&rdquo; tab. No pretty graphs right away, but
+once you understand the numbers being presented to you on the &ldquo;All GC Stats&rdquo;
+page, you will know what the graphs are telling you on the other tabs. First,
+since we are comparing two files from the same application, place a checkmark
+in the box &ldquo;Comparison&rdquo; in the lower left hand corner. Let&rsquo;s explain what
+these numbers are. First, the rows are diveded into these sections:</p>
+
+<ul>
+<li><strong>All</strong>: Totals for all types of GC&rsquo;s listed below.</li>
+<li><strong>Young GC</strong>: Metrics concerning the Eden/New/Young generation of heap.</li>
+<li><strong>Full GC</strong>: Metrics concerning any Full GC&rsquo;s. If you care about response time in your application, avoid these at all costs. For us, even one full GC is regarded as a tuning failure.</li>
+<li><strong>Initial Mark</strong>: Metrics concerning the Initial Mark phase of the CMS collector on the Old/Tenured generation of heap. With CMS, this is a &lsquo;stop-the-world&rsquo; phase, meaning the entire application is paused for the duration of this phase. In all the cases that I have worked with, this pause is usually very quick, usually faster than GC'ing Eden. Keep an eye on this, but there&rsquo;s a good chance you won&rsquo;t have to tune around this one.</li>
+<li><p><strong>Remark</strong>: Metrics concerning Remark phase of the CMS collector on the Old/Tenured generation of heap. With CMS, this is a stop-the-world collection phase, meaning that the entire application is stopped during this phase - you want this to be as quick as possible. For our application, it&rsquo;s the primary focus of our tuning.
+Each section has three rows:</p></li>
+<li><p><strong>File : before-gc.out</strong>: Metrics from our first file.</p></li>
+<li><strong>File : after-gc.out</strong>: Metrics from our second file.</li>
+<li><p>[Empty]: Comparison statistics. This line shows you the difference between this trace and the first trace in the list.
+Finally, the breakdown on the columns is as follows:</p></li>
+<li><p><strong>Num</strong>: Total number of occurrences.</p></li>
+<li><strong>Num (%)</strong>: Gives you the percent of occurrences - i.e, Young GC&rsquo;s are > 99% of all GC&rsquo;s.</li>
+<li><strong>Total GC (sec)</strong>: Number of seconds total spent in this GC type for the life of the VM.</li>
+<li><strong>Total GC (%)</strong>: Percentage of time spent on this type of GC.</li>
+<li><strong>Overhead(%)</strong>: Thanks to the author, Tony Printezis for clearing this one up. Overhead percentage is the percentage of total runtime in seconds (as defined by the last line of the logfile) that is spent in &lsquo;stop-the-world&rsquo; garbage collection. Obviously, the lower the better.</li>
+<li><strong>Avg (ms)</strong>: The average in milliseconds each GC of this type took. This is a very important metric.</li>
+<li><strong>Sigma (ms)</strong>: The standard deviation between the GC&rsquo;s. Smaller is better.</li>
+<li><strong>Min(ms)</strong>: The fastest GC of this type in milliseconds.</li>
+<li><strong>Max(ms)</strong>: The longest GC of this type in milliseconds. To me, this is the most important metric.
+Now that you know what these numbers mean, go ahead and click around the
+various subtabs under the &ldquo;GC Pause Stats&rdquo; tab. My personal favorites are
+&ldquo;Chart:Max (ms)&rdquo; and &ldquo;Chart: Avg (ms)&rdquo;. Next, we&rsquo;ll examine the &ldquo;GC Pause
+Distribution&rdquo; tab. Everything here is pretty well self explanatory. Instead of
+examining every type of GC at once, I usually deselect everything except for
+one type of GC, and compare those two. Your &ldquo;Young GC&rdquo; distrubution should
+normally be a very steep bell curve, like so: <img src="/assets/images/gchisto-distribution.jpg" alt="GChisto GC Pause Distribution
+tab" /> Personally, I don&rsquo;t use the
+distribution tab much. I check it for anomalies, but that&rsquo;s about it. Now,
+onto the &ldquo;GC Timeline&rdquo; tab. The &ldquo;GC Timeline&rdquo; tab has the same type of layout
+as the previous tab, but this one presents to you the frequency and length of
+each type of GC over the life of the VM. The one thing that I don&rsquo;t like about
+this graph is that it doesn&rsquo;t display a time and date along the X axis, it
+displays the number of seconds since VM startup. I&rsquo;ve requested a feature that
+will convert the lifetime in seconds to a real date/time stamp if you
+optionally supply the VM startup time on trace file load. Hopefully the devs
+will implement that one. Anyways, the timeline is very good at showing you if
+your GC&rsquo;s are getting longer or more frequent as time goes on. Here&rsquo;s what the
+Young GC timeline looks like for me: <img src="/assets/images%0A/gchisto-timeline.jpg" alt="GChisto GC Timeline tab" /> Now, most of the charting in GChisto is provided by
+<a href="http://www.jfree.org/jfreechart/">JFreeChart</a>, so you get quite a bit of
+built in functionality here. The best feature is the ability to drill down on
+any chart. Simply left click and drag to form a rectangle on any existing
+chart. When you release the mouse, the chart will zoom into the subset you
+just gave it. To zoom back out, right click the chart, select &ldquo;Auto
+Range->Both Axes&rdquo;. While you&rsquo;re at it, dig around the right-click menu. In the
+properties, you can change colors, axis titles, about anything else you can
+think of. Another very handy feature is the ability to save any chart as a PNG
+file. This helps when showing the metrics to people that don&rsquo;t have GChisto
+installed and available. I hope this introduction gives you some insight into
+the power of GChisto. It is definitely going to become permanent in my toolbox
+of GC utilities.
+<a href="http://java.sun.com/performance/jvmstat/visualgc.html">VisualGC</a> is still my
+favorite real-time GC monitoring solution, but GChisto is now my favorite
+historical reporting tool, taking the place of <a href="http://java.sun.%0Acom/developer/technicalArticles/Programming/turbo">PrintGCStats</a>.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Profiling your Java 1.4.2 memory heap]]></title>
+    <link href="http://sysadminsjourney.com/content/2008/09/05/profiling-your-java-142-memory-heap"/>
+    <updated>2008-09-05T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2008/09/05/profiling-your-java-1-4-2-memory-heap.html</id>
+    <content type="html"><![CDATA[<p>New Java 6 devs and admins get all the fun.  New toys, better performance, more auto-tuning &ndash; yet you get stuck supporting a legacy java app that you can&rsquo;t upgrade past 1.4.2.  Well, provided you have a more recent 1.4.2 JDK, you can use <a href="http://java.sun.com/javase/6/docs/technotes/tools/share/jhat.html">jhat</a> too!</p>
+
+<!--break-->
+
+
+<p>The key is to have your app do a heap dump when sending it the QUIT signal.  Append this option to your java options on startup of your application:</p>
+
+<pre>
+-XX:+HeapDumpOnCtrlBreak
+</pre>
+
+
+<p>Now, start your app, and let it run for awhile.  There is no overhead to running with this option, however do note that your app will freeze for awhile when you send it the magic signal as it creates a heap dump.  Once your app has ran for awhile, and your caches are loaded or your leak has leaked, send the java process the QUIT signal.  On Windows, this is done by doing a CTRL+C at the console.  On Linux &amp; Solaris, you can send the java process the QUIT signal either by doing a CTRL+C, or finding the PID of the process and sending the signal to it.  Assume a PID of 12345:</p>
+
+<pre>
+kill -3 12345
+</pre>
+
+
+<p>Upon sending the process the signal, you&rsquo;ll see something similar to this get printed to stdout:</p>
+
+<pre>
+Dumping heap to java_pid12345.hprof.1220646896001 ...
+
+Heap dump file created [533206498 bytes in 22.836 secs]
+
+</pre>
+
+
+<p>Here you see it took my laptop about 22 seconds to dump a heap of a little over 512MB.</p>
+
+<p>So now, you have the heap.  You either need to have Java 6 available, or transfer the heap dump over to a computer that does.  Also note you need quite a bit of RAM to run JHAT.  Since JHAT loads the other VM&rsquo;s heap, you need the size of your heap dump plus some working room - I recommend heapsize + 512MB.  Now, if I have a 512MB heap dump, and give it another 512MB, here&rsquo;s what my JHAT command line looks like:</p>
+
+<pre>
+$JAVA6_HOME/bin/jhat -J-mx1g java_pid12345.hprof.1220646896001
+</pre>
+
+
+<p>You&rsquo;ll see output like the following (this takes a while to load):</p>
+
+<pre>
+Reading from java_pid12345.hprof.1220646896001...
+
+Dump file created Fri Sep 05 15:34:56 CDT 2008
+
+Snapshot read, resolving...
+
+Resolving 12662545 objects...
+
+Chasing references, expect 2532 dots....
+
+Eliminating duplicate references............
+
+Snapshot resolved.
+
+Started HTTP server on port 7000
+
+Server is ready.
+
+</pre>
+
+
+<p>Now, open up a web browser to <a href="http://localhost:7000/,">http://localhost:7000/,</a> and find that memory leak!!!</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Unmirroring a RAID 1 Root Volume on Solaris - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="It happens fairly often that you need to create a software mirror using SVM on
+Solaris. A smaller percentage of the time, you need to create a SVM &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1-root-volume-solaris">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Unmirroring a RAID 1 Root Volume on Solaris</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-21T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>It happens fairly often that you need to create a software mirror using SVM on
+Solaris. A smaller percentage of the time, you need to create a SVM mirror of
+your root partition. It doesn&rsquo;t happen very often at all, but there are cases
+where you want to <em>unmirror</em> your root partition on Solaris. I&rsquo;ll get into the
+why later, follow the jump for the howto.  First, we need to define the disk
+setup of our server. The following table shows the current SVM setup.</p>
+
+<p><strong>Mount Point</strong>
+<strong>Mirror Device</strong>
+<strong>c1t0d0 Slice/Submirror</strong>
+<strong>c1t1d0 Slice/Submirror</strong></p>
+
+<p>/</p>
+
+<p>d1</p>
+
+<p>slice 0/d10</p>
+
+<p>slice 0/d11</p>
+
+<p>/usr/local</p>
+
+<p>d2</p>
+
+<p>slice 3/d20</p>
+
+<p>slice 3/d21</p>
+
+<p>/export/home</p>
+
+<p>d3</p>
+
+<p>slice 4/d30</p>
+
+<p>slice 4/d31</p>
+
+<p>/apps</p>
+
+<p>d4</p>
+
+<p>slice 5/d40</p>
+
+<p>slice 5/d41</p>
+
+<p>swap</p>
+
+<p>d5</p>
+
+<p>slice 1/d50</p>
+
+<p>slice 1/d51</p>
+
+<p>-
+MetaDB Slices</p>
+
+<p>slice 6</p>
+
+<p>slice 6</p>
+
+<p>As you can see, we have 5 individual mirrors, one of which is for swap. I
+don&rsquo;t recommend mirroring swap, but I include it here because there is an
+important caveat you need to catch if you do have mirrored swap. We have two
+disks: c1t0d0, and c1t1d0. We have the metadb&rsquo;s stored on slice 6 of each
+disk. Our end goal is to boot from c1t0d0, and have c1t1d0 available for
+whatever we like.</p>
+
+<h2>Disclaimer</h2>
+
+<p>I used these instructions, and they worked great for me. I&rsquo;ve used them on
+both Solaris 9 and Solaris 10. If you embark on such a task, make sure to have
+a complete, full backup before you proceed!</p>
+
+<h2>Step One: Detach Submirrors</h2>
+
+<p>First, we need to &ldquo;break&rdquo; the mirror, by removing all of the submirrors that
+are contained on c1t1d0. In our case, we have mirrors 1-5, and the submirror
+contained on c1t1d0 is always the same as the mirror device with a trailing 1.
+This makes for a nice one liner:</p>
+
+<pre><code>for i in 1 2 3 4 5; do metadetach d${i} d${i}1; done
+</code></pre>
+
+<p>This code removes submirror 11 from mirror 1, submirror 21 from mirror 2, and
+so on.</p>
+
+<h2>Step Two: de-metaroot</h2>
+
+<p>The proper way to create a mirrored root volume is to use the metaroot tool to
+modify /etc/vfstab and /etc/system for you. The good thing about this is that
+you can use the same tool to to de-configure it too. Keeping in mind that we
+want our root slice to be c1t0d0s0, we run:</p>
+
+<pre><code>metaroot /dev/dsk/c1t0d0s0
+</code></pre>
+
+<h2>Step Three: Update vfstab</h2>
+
+<p>Now, we need to edit /etc/vfstab and replace all of the mirror device mounts
+with their c1t0d0 counterparts. If your original vfstab looked like this:</p>
+
+<pre><code>...
+/dev/md/dsk/d5  -       -       swap    -       no      -
+/dev/dsk/c1t0d0s0  /dev/rdsk/c1t0d0s0 /       ufs     1       no      -
+/dev/md/dsk/d4  /dev/md/rdsk/d4 /apps   ufs     2       yes     -
+/dev/md/dsk/d3  /dev/md/rdsk/d3 /export/home    ufs     2       yes     -
+/dev/md/dsk/d2  /dev/md/rdsk/d2 /usr/local      ufs     2       yes     -
+...
+</code></pre>
+
+<p>Then your new vfstab should look something like this:</p>
+
+<pre><code>...
+/dev/dsk/c1t0d0s1       -       -       swap    -       no      -
+/dev/dsk/c1t0d0s0  /dev/rdsk/c1t0d0s0 /       ufs     1       no      -
+/dev/dsk/c1t0d0s5  /dev/rdsk/c1t0d0s5 /apps   ufs     2       yes     -
+/dev/dsk/c1t0d0s4  /dev/rdsk/c1t0d0s4 /export/home    ufs     2       yes     -
+/dev/dsk/c1t0d0s3  /dev/rdsk/c1t0d0s3 /usr/local      ufs     2       yes     -
+...
+</code></pre>
+
+<h2>Step Four: Configure your Dump Device</h2>
+
+<p>Here&rsquo;s the caveat for mirrored swap - you&rsquo;re probably using /dev/md/dsk/d5 for
+your dump device. Let&rsquo;s fix that now. First run</p>
+
+<pre><code>dumpadm | grep '/md/'
+</code></pre>
+
+<p>If that returns any output, then run this (using your single-disk slice for
+swap):</p>
+
+<pre><code>dumpadm -s /var/crash/`hostname` -d /dev/dsk/c0t0d0s1
+</code></pre>
+
+<h2>Step Five: Reboot and Verify</h2>
+
+<p>Cross your fingers, and do a</p>
+
+<pre><code>init 6
+</code></pre>
+
+<p>Once you&rsquo;re back up, look at the output of</p>
+
+<pre><code>df -h &amp;&amp; swap -l
+</code></pre>
+
+<p>and make sure there&rsquo;s no references to any &lsquo;md&rsquo; devices.</p>
+
+<h2>Step Six: Remove the Mirrors, Remaining Submirrors, and MetaDB&rsquo;s</h2>
+
+<p>Now that we are running in a single disk environment, we need to remove the
+mirrors and submirrors. Again, ripe for a one-liner:</p>
+
+<pre><code>for i in 1 2 3 4 5; do metaclear -r d${i}; done
+</code></pre>
+
+<p>At this point, &lsquo;metastat&rsquo; should return no mirrors. Now, we can remove the
+metadb&rsquo;s from slice 6 on both disks. Only do this if you&rsquo;re not using SVM for
+anything else!</p>
+
+<pre><code>metadb -df /dev/dsk/c1t1d0s6
+metadb -df /dev/dsk/c1t0d0s6
+</code></pre>
+
+<h2>Summary</h2>
+
+<p>Well, that covers the entire process. You should now have a free disk that you
+can use for whatever you like!</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-05-21T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1-root-volume-solaris" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1-root-volume-solaris" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/05/19/wtf-are-you-doing-your-keyboard" title="Previous Post: WTF are you doing to your keyboard?">&laquo; WTF are you doing to your keyboard?</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/05/25/liveupgrade-solaris-9-solaris-10" title="Next Post: LiveUpgrade from Solaris 9 to Solaris 10">LiveUpgrade from Solaris 9 to Solaris 10 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1-root-volume-solaris';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/05/21/unmirroring-raid-1-root-volume-solaris';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,1072 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="At work, I can&rsquo;t live without Synergy, the
+program that allows you to share one keyboard and mouse with multiple systems
+across multiple &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/posts/7/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div class="blog-index">
+  
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/16/installing-synergy2-source-opensolaris-200906">Installing Synergy2 From Source on OpenSolaris 2009.06</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-16T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>At work, I can&rsquo;t live without <a href="http://synergy2.sourceforge.net">Synergy</a>, the
+program that allows you to share one keyboard and mouse with multiple systems
+across multiple systems. Here&rsquo;s a quick post on how to install it in
+OpenSolaris:</p>
+
+<pre><code>pfexec pkg install SUNWgcc SUNWxwinc
+tar -xzvf synergy-1.3.1.tar.gz
+cd synergy-1.3.1
+./configure
+make
+pfexec make install
+mkdir -p ~/.config/autostart
+cat &gt; ~/.config/autostart/synergys.desktop &lt;&lt;EOD
+
+[Desktop Entry]
+Type=Application
+Name=Synergy2 Server
+Exec=/usr/local/bin/synergys
+Icon=system-run
+Comment=Synergy2 Display Server
+X-GNOME-Autostart-enabled=false
+EOD
+</code></pre>
+
+<p>To enable startup at login, create the appropriate /etc/synergy.conf and
+navigate to System->Preferences->Sessions, and place a check next to &ldquo;Synergy2
+Server&rdquo;.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/16/fixing-metacitys-window-placement-dual-head-setups-opensolaris">Fixing Metacity's Window Placement on Dual Head Setups on OpenSolaris</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-16T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>16</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>It took me a few minutes to get dual-head working on OpenSolaris, but once I
+did, I immediately found something that greatly annoyed me. Every new window I
+opened would launch in the middle of the two heads (half of it on one monitor,
+the other half on the other monitor). Also, maximizing a window made it
+stretch across both monitors.  It turns out this bug made it just in time for
+the OpenSolaris 2009.06 release. To fix the issue, you have to download a
+patched metacity binary <a href="http://defect.opensolaris.org/bz/show_bug.cgi?id=8748">referenced in this bug
+report</a>. Download the
+binary, then run the following:</p>
+
+<pre><code>pfexec cp /usr/bin/metacity /usr/bin/metacity.orig
+pfexec cp metacity /usr/bin/metacity
+/usr/bin/metacity --replace
+</code></pre>
+
+<p>Now, metacity should behave itself. Hopefully the devs will push out an update
+that resolves this soon.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/11/problem-web-based-everything">The Problem With Web-based Everything</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-11T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, I&rsquo;ve been tinkering with the free version of <a href="http://www.toodledo.com/">Toodledoo - a web-based GTD
+task manager</a>, and I was thinking about upgrading to
+a &ldquo;pro&rdquo; account. Unfortunately, they had a storm run through last night, which
+engaged the generators. When the generators kicked in, something didn&rsquo;t work
+right, and power was lost. This in turn caused a database crash, which caused
+it to corrupt, and they are still down now.  Here&rsquo;s what their homepage states
+right now:  So, here&rsquo;s the story. A big storm went through the city where our
+datacenter is located. The datacenter decided to proactively switch to
+generators. During the switch, something got screwed up, and the power went
+off for a few minutes. As (bad) luck would have it, this caused our database
+to get corrupted. We are currently working to bring it back online and
+restored from the live backup. The crack team at Rackspace is on the job.
+Thanks Rackspace! Unfortunately, the database is so large, that it will take
+some time to transfer and verify all the data. Hopefuly not more than a few
+hours. We know that this is very bad, and we apologize for any inconvience
+that this will cause. Please check the forums when we are back online for a
+full report.  Update: Its obviously taking longer than we expected and we are
+really sorry for that.  Now, I&rsquo;m not paying anything for the service, and I&rsquo;m
+fine with the downtime. However, I don&rsquo;t think I&rsquo;ll be upgrading anytime soon
+- this outage tells me a few things:</p>
+
+<ul>
+<li>They don&rsquo;t use UPS&rsquo;s.</li>
+<li>They don&rsquo;t use more than one data center.</li>
+<li>They likely don&rsquo;t manage their own servers.
+Again, all of this is fine - it costs money to do all these things, and I
+understand the decision to not do it. However, when I pay for software as a
+service, I expect the software and the service to be highly available.</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime">Upgrading From Solaris 9 With a Root SVM Mirror to Solaris 10 With a Root ZFS Mirror With Less Than 10 Minutes of Downtime</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-09T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>As sysadmins, many times the entire task laid out in front of us has no
+documentation. One of the biggest skill an admin can have is the ability to
+problem solve, breaking down a large task into smaller sub-tasks. Often times,
+you might be able to find documentation on some of those sub-tasks. A perfect
+example is upgrading a server from Solaris 9 with root in an SVM mirror to
+Solaris 10 with a ZFS mirror. Not only is this large task doable, but thanks
+to LiveUpgrade, it can be done with less than 10 minutes of downtime (3
+reboots @ roughly 3 minutes each)!  Part of the beauty of Solaris when
+compared to Linux is the tools made available to the admin. I didn&rsquo;t even like
+working in Solaris until I started learning about zones, ZFS, LiveUpgrade,
+DTrace, etc. Now, on the server-side, I can&rsquo;t use it enough. I would be hard-
+pressed to do a similar upgrade with Linux - it&rsquo;s almost impossible to do in
+10 minutes of downtime on RHEL. Debian might be able to do it, but LiveUpgrade
+gives you the ability to roll back to the previous state, which I don&rsquo;t
+believe &lsquo;apt-get dist-upgrade&rsquo; allows. Anyways, enough evangelism, onto the
+howto! If you&rsquo;re <a href="http://feeds.feedburner.com/AUnixSysadminsJourney">subscribed to my RSS
+feed</a> you may not even have
+noticed, but all of the steps have been already laid out over the past few
+posts. All that remains is to put them back together into one big chain of
+subtasks.</p>
+
+<h3>Step One: Break the SVM Mirror</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes)</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/05/21/unmirroring-raid-1-root-volume-solaris">Unmirroring a RAID 1 Root Volume on Solaris</a></li>
+</ul>
+
+
+<h3>Step Two: Upgrade Solaris 9 to Solaris 10 using LiveUpgrade</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes)</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/05/25/liveupgrade-solaris-9-solaris-10">LiveUpgrade from Solaris 9 to Solaris 10</a></li>
+</ul>
+
+
+<h3>Step Three: Migrate from UFS to ZFS root using LiveUpgrade</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes) - possibly a minute or so service downtime if files are stored on separate UFS filesystems</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime">Use LiveUpgrade to Migrate from UFS to ZFS with Minimal Downtime</a></li>
+</ul>
+
+
+<h3>Step Four: Add the Second Disk to a ZFS Root Mirror</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> None</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/06/03/adding-2nd-disk-zfs-root-pool">Adding a 2nd Disk to a ZFS Root Pool</a>
+We&rsquo;ve taken a large behemoth of a task that sounds like a large amount of
+downtime would have been incurred, and broken it down into smaller, more
+manageable substeps. As an added bonus, using Solaris technologies, downtime
+is kept to a minimum!</li>
+</ul>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin">New and Improved check_mem.pl Nagios Plugin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-05T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>5</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><strong>UPDATE 9/19/2011</strong>: I&rsquo;ve moved this plugin over to github: <a href="https://github.com/justintime/nagios-plugins">https://github.com/justintime/nagios-plugins</a>.  It now has a PNP template, and support for AIX as well.</p>
+
+<p>We have always monitored RAM usage on all of boxes. Sure, there&rsquo;s the argument
+that unused RAM is money wasted, but I always like to know not just when the
+box is swapping, but when it&rsquo;s <strong>about to start swapping</strong>. There have been a
+few plugins over the years that I&rsquo;ve used for this - check_ram for Solaris,
+check_mem for Linux, and there&rsquo;s also check_mem.pl. Well, migrating to Solaris
+10 and ZFS started tripping the check_ram thresholds due to the ZFS ARC cache.
+So, I attempted to pull together a cross platform Nagios plugin that did it&rsquo;s
+best to give me what I wanted, and what do you know, it works! This graph
+shows the ZFS ARC cache at it&rsquo;s best:</p>
+
+<p><img src="/assets/images/cacti.png" alt="cacti.png" /></p>
+
+<p>So, I started with the check_mem.pl script that&rsquo;s included in the contrib
+folder of the official <a href="http://nagiosplugins.org">Nagios Plugins</a>. What
+emerged when I was done was quite different. Here&rsquo;s some key differences:</p>
+
+<ul>
+<li>If run on a Solaris host:
+
+<ul>
+<li>If the Sun::Solaris::Kstat module is available, it grabs the total memory, memory in use by the ZFS ARC cache, and free memory using that module. If not, it uses vmstat and prtconf to determine total, used, and free memory. There&rsquo;s no easy way to track ARC cache usage without the module.</li>
+</ul>
+</li>
+<li>If run on a Linux host:
+
+<ul>
+<li>It uses /proc/meminfo to gather total memory, used memory, free memory, and cache/buffer memory.</li>
+</ul>
+</li>
+<li>If run on another Unix host:
+
+<ul>
+<li>It uses vmstat to do what it can. This code is unchanged from the original check_mem.pl.</li>
+</ul>
+</li>
+<li>If ran on a supported OS (Solaris with Kstat, or Linux), you can use the -C command line option which counts the cache memory as free memory when comparing it to the warning and critital thresholds.</li>
+<li>I enabled perfdata output for Nagios to use.</li>
+<li>Any user can run the plugin.</li>
+</ul>
+
+
+<p>Let&rsquo;s show an example, run from a Solaris host with ZFS:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> /usr/local/nagios/libexec/check_mem.pl -w <span class="m">10</span> -c <span class="m">5</span> -f 
+<span class="go">WARNING - 9.9% (406520 kB) free!|TOTAL=4113824KB;;;; USED=3707304KB;;;; FREE=406520KB;;;; CACHES=816947KB;;;;</span></code></pre></div>
+
+
+<p>Uh oh! I have less than 10% free of the 4GB total. Wait, the ZFS ARC is using
+up 800MB of that! Let&rsquo;s try again with the -C option:</p>
+
+<div class="highlight"><pre><code class="language-console" data-lang="console"><span class="gp">$</span> /usr/local/nagios/libexec/check_mem.pl -w <span class="m">10</span> -c <span class="m">5</span> -f -C
+<span class="go">OK - 29.7% (1220611 kB) free.|TOTAL=4113823KB;;;; USED=2893212KB;;;; FREE=1220611KB;;;; CACHES=817075KB;;;;</span></code></pre></div>
+
+
+<p>That&rsquo;s better! You&rsquo;ll see the same sort of thing on Linux. Maybe some day I&rsquo;ll
+share the nasty hackery that is getting Nagios perfdata into Cacti
+automagically, but I don&rsquo;t know if the world&rsquo;s ready for that yet ;-) Until
+then, give my plugin a try, and let me know how it works. If you have another
+OS for me to add, I&rsquo;d love to code it up!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime">Use LiveUpgrade to Migrate From UFS to ZFS With Minimal Downtime</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-03T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Continuing on from <a href="http://www.sysadminsjourney.com/content/2009/05/25%0A/liveupgrade-solaris-9-solaris-10">the article on how to use LiveUpgrade to upgrade from
+Solaris 9 to Solaris 10</a>, we now migrate our Solaris 10 UFS file
+systems to ZFS. LiveUpgrade handles the migration of the critical filesystems,
+we&rsquo;ll manually migrate three other filesystems from UFS to ZFS using ufsdump
+and ufsrestore to minimize downtime.</p>
+
+<h3>Phase One: Delete the Old Solaris 9 Boot Environment</h3>
+
+<p>We still have an old Solaris 9 boot environment laying around. It&rsquo;s time to
+move on, and blow it away.</p>
+
+<pre><code>ludelete Solaris9 &amp;&amp; lustatus
+</code></pre>
+
+<p>There &ndash; that felt good now, didn&rsquo;t it?</p>
+
+<h3>Phase Two: Create the Solaris 10 ZFS Boot Environment</h3>
+
+<p>Now that we&rsquo;ve freed up c1t0d0 by removing the Solaris 9 boot environment, we
+can use it for our ZFS boot environment. Before we can do anything, it&rsquo;s a lot
+easier to reformat the disk to use just one big slice. Go ahead and use
+&lsquo;format&rsquo; to reconfigure your slices so that s0 consists of the whole disk.
+With our slices in place, we need to create our root pool. Do this by running:</p>
+
+<pre><code>zpool create rpool c1t0d0s0
+</code></pre>
+
+<p>With that out of the way, we can now create a new boot environment named
+Solaris10ZFS that is a copy of the current one on our newly created ZFS pool
+named rpool:</p>
+
+<pre><code>lucreate -n Solaris10ZFS -p rpool
+</code></pre>
+
+<h3>Phase Three: Boot Into the Solaris 10 ZFS Boot Environment</h3>
+
+<p>The next step is to activate our ZFS boot environment, and boot into it.</p>
+
+<pre><code>luactivate Solaris10ZFS
+</code></pre>
+
+<p><strong>Note:</strong> if that fails with the message &lsquo;/usr/sbin/luactivate: /etc/lu/DelayUpdate/: cannot create&rsquo;, then you&rsquo;ve tripped over a bug <a href="http://docs.sun.com/app/docs/doc/820-7273/installbugs-113?l=en&amp;a=view">described here</a>. To work around it, run the following:</p>
+
+<pre><code>export BOOT_MENU_FILE="menu.lst"
+luactivate Solaris10ZFS
+</code></pre>
+
+<p>You&rsquo;ll get output similar to the following - be sure to print it out, or copy
+it someplace you can get to it later:</p>
+
+<pre><code>**********************************************************************
+
+The target boot environment has been activated. It will be used when you 
+reboot. NOTE: You MUST NOT USE the reboot, halt, or uadmin commands. You 
+MUST USE either the init or the shutdown command when you reboot. If you 
+do not use either init or shutdown, the system will not boot using the 
+target BE.
+
+**********************************************************************
+
+In case of a failure while booting to the target BE, the following process 
+needs to be followed to fallback to the currently working boot environment:
+
+1. Enter the PROM monitor (ok prompt).
+
+2. Change the boot device back to the original boot environment by typing:
+
+     setenv boot-device /pci@1c,600000/scsi@2/disk@1,0:a
+
+3. Boot to the original boot environment by typing:
+
+     boot
+
+**********************************************************************
+
+Modifying boot archive service
+Activation of boot environment  successful.
+</code></pre>
+
+<p>When ready, run</p>
+
+<pre><code>init 6
+</code></pre>
+
+<p>to reboot into your ZFS boot environment.</p>
+
+<h3>Phase Four: Migrate Non-Critical UFS Filesystems to ZFS</h3>
+
+<p>In our example, I had three UFS filesystems that were not a &ldquo;critical&rdquo;
+filesystem as marked by Sun:</p>
+
+<p>/apps</p>
+
+<p>/dev/dsk/c1t1d0s5</p>
+
+<p>/export/home</p>
+
+<p>/dev/dsk/c1t1d0s4</p>
+
+<p>/usr/local</p>
+
+<p>/dev/dsk/c1t1d0s3</p>
+
+<p>We will create new ZFS filesystems for these, and use ufsbackup and ufsrestore
+to quickly sync them over. You could write a script for this, but scripts that
+muck with filesystems make me nervous. Here&rsquo;s a list of steps you&rsquo;ll want to
+do for each filesystem you want to migrate. For this example, I&rsquo;ll use the
+/apps partition above.</p>
+
+<ul>
+<li><p>First, create the ZFS filesystem under the rpool pool:</p>
+
+<p>zfs create rpool/apps</p></li>
+<li><p>Next, change to the new ZFS directory:</p>
+
+<p>cd /rpool/apps</p></li>
+<li><p>Next, we do a backup and restore from UFS to ZFS:</p>
+
+<p>ufsdump 0uf - /apps | ufsrestore rf -</p></li>
+<li><p>Now, create a temporary mountpoint for the UFS filesystem:</p>
+
+<p>mkdir /ap/apps</p>
+
+<ul>
+<li><p>Stop all processes that are accessing the UFS filesystem.  Use &lsquo;fuser -c /apps&rsquo; to make sure it&rsquo;s no longer in use.</p></li>
+<li><p>Unshare the filesystem from NFS:</p></li>
+</ul>
+
+
+<p>unshare /apps</p></li>
+<li><p>Unmount the UFS filesystem from it&rsquo;s old location:</p>
+
+<p>umount /apps</p></li>
+<li><p>Mount the UFS slice to the new, temporary location:</p>
+
+<p>mount /dev/dsk/c1t1d0s5 /a/apps</p></li>
+<li><p>Change to the ZFS directory:</p>
+
+<p>cd /rpool/apps</p></li>
+<li><p>Run a level one backup/restore. This will only copy over files that have changed since we did the level 0 backup above (and should be very quick):</p>
+
+<p>ufsdump 1uf - /a/apps | ufsrestore rf -</p></li>
+<li><p>Get out of the ZFS directory:</p>
+
+<p>cd /</p></li>
+<li><p>Set the mountpoint for the ZFS filesystem to be where the old UFS one was:</p>
+
+<p>zfs set mountpoint=/apps rpool/apps</p></li>
+<li><p>Start up your daemons and whatnot that were needing access to the filesystem.</p></li>
+<li><p>Unmount the temporary mount, and cleanup the directory:</p>
+
+<p>umount /a/apps &amp;&amp; rmdir /a/apps</p></li>
+<li><p>Edit /etc/vfstab, and comment out the line mounting /apps. ZFS handles mounting for us now.</p></li>
+<li>Wash, Rinse, Repeat - repeat this for /usr/local and /export/home.</li>
+</ul>
+
+
+<h3>Phase Four: Test</h3>
+
+<p>First, go ahead and exhale &ndash; holding your breath for that long isn&rsquo;t good for
+you! You need to take a look around the system, and make sure everything is
+running properly. Check &lsquo;dmesg&rsquo;, /var/log/syslog, /var/adm/messages, etc. Run
+&lsquo;mount&rsquo; and make sure there&rsquo;s no UFS mounts in there that you don&rsquo;t want. I
+recommend a reboot, but it&rsquo;s not really needed.</p>
+
+<h3>Summary</h3>
+
+<p>Well, you did it! Migrating an entire system from UFS to ZFS isn&rsquo;t as painful
+as it could be, thanks to LiveUpgrade. If you have non-critical UFS
+filesystems you want to migrate, it requires a little elbow grease, but is
+easily done with minimal downtime. Welcome to your new ZFS root!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/03/adding-2nd-disk-zfs-root-pool">Adding a 2nd Disk to a ZFS Root Pool</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-03T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>3</span><span class='date-suffix'>rd</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>So, let&rsquo;s say you&rsquo;ve just completed <a href="http://www.sysadminsjourney.com/content/2009/06/02/use-%0Aliveupgrade-migrate-ufs-zfs-minimal-downtime">migrating to ZFS from UFS using
+LiveUpgrade</a>, and now you want use that
+leftover disk to make a mirror. Easily done, but there&rsquo;s one caveat &ndash; you
+need to make the second disk bootable in case the first fails.  So, starting
+off from <a href="http://www.sysadminsjourney.com/content/2009/06/02/use-liveupgrade-%0Amigrate-ufs-zfs-minimal-downtime">where we left
+off</a>, you have an old UFS based boot environment
+sitting on c1t1d0. First, delete the old environment:</p>
+
+<pre><code>ludelete Solaris10 &amp;&amp; lustatus
+</code></pre>
+
+<p>That was easy. Now run &lsquo;format&rsquo; on c1t1d0, and make slice 0 encompass the
+whole disk. Write out the label, and get back to the prompt. Now, we need to
+make our single-disk ZPool into a two-way mirror. This operation is mind-
+blowingly simple and is one of the showcases of ZFS and its ease of
+management:</p>
+
+<pre><code>zpool attach rpool c1t0d0s0 c1t1d0s0
+</code></pre>
+
+<p>This sets up the mirror, and automatically starts the resilvering (syncing)
+process. You can monitor its progress by running &lsquo;zpool status&rsquo;. The final
+step is to actually make c1t1d0 bootable in case c1t0d0 fails. Here, we use
+the &lsquo;installboot&rsquo; program for SPARC:</p>
+
+<pre><code>installboot -F zfs /usr/platform/`uname -i`/lib/fs/zfs/bootblk /dev/rdsk/c1t1d0s0
+</code></pre>
+
+<p>or use installgrub if you&rsquo;re on x86:</p>
+
+<pre><code>installgrub /boot/grub/stage1 /boot/grub/stage2 /dev/rdsk/c1d0s0
+</code></pre>
+
+<p>That&rsquo;s it, you can now boot from either drive!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/06/01/catch-communityone-west-technical-sessions-anywhere">Catch CommunityOne West Technical Sessions From Anywhere!</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-01T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>1</span><span class='date-suffix'>st</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Sun is <a href="http://www.ustream.tv/sun">broadcasting their CommunityOne West technical sessions free via
+Ustream</a>. Of particular importance to the audience
+of this blog: <strong>Channel 3 - Managing OpenSolaris™:</strong></p>
+
+<p>Time Title/Speakers</p>
+
+<p>10:50 - 11:40 am</p>
+
+<p><strong>What&rsquo;s New in the OpenSolaris™ 2009.06 Operating System</strong> <br/>
+Chris Armes and Pete Dennis, Sun Microsystems, Inc.</p>
+
+<p>11:50 am - 12:40 pm</p>
+
+<p><strong>Becoming an OpenSolaris™ Operating System Power User</strong> <br/>
+David Miner and Nicholas Solter, Sun Microsystems, Inc.</p>
+
+<p>1:40 - 2:30 pm</p>
+
+<p><strong>Built-in Virtualization for the OpenSolaris™ Operating System: Containers, Sun™ Logical Domains (LDOMs) and xen</strong> <br/>
+Jerry Jelinek, Sun Microsystems, Inc.</p>
+
+<p>2:40 - 3:30 pm</p>
+
+<p><strong>Open Networking with Crossbow</strong> <br/>
+Sunay Tripathi, Sun Microsystems, Inc.</p>
+
+<p>4:00 - 4:50 pm</p>
+
+<p><strong>OpenSolaris™ Operating System Secure Deployment: Roles, Privileges and Crypto</strong> <br/>
+Christoph Schuba, Sun Microsystems, Inc.</p>
+
+<p>5:00 - 5:50 pm</p>
+
+<p><strong>Open Storage with the Solaris ZFS™ File System and COMSTAR</strong> <br/>
+Scott Tracy, Sun Microsystems, Inc.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/05/29/call-comments-help-advise-aspiring-sysadmin">Call for Comments: Help Advise an Aspiring SysAdmin</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-29T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>29</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>One of the things I love about blogging, and about the Internet in general, is
+that it makes the world much smaller. I&rsquo;ve met so many people via my blog, it
+makes all the work pay off. A good example of a blog introducing two people
+just happened the other day.
+<a href="http://thatlinuxguy.wordpress.com/about/">Andrew</a> is an aspiring sysadmin who
+is moving soon, and wanted to ask me some questions regarding how to &ldquo;break
+in&rdquo; to a career in systems/network administration. In my response, I asked if
+he would mind if I quote our conversation and post it up on my blog, so that
+he could ask many of us the same questions at once. He agreed emphatically.
+So, click through, read Andrew&rsquo;s questions, and comment away &ndash; what else are
+you doing on a Friday???  Andrew first sent me this email:</p>
+
+<hr />
+
+<p>I&rsquo;ve only newly discovered www.planetsysadmin.com and came across your blog. I
+just read your About section and I loved it, as well as the other posts I&rsquo;ve
+read from SAJ. I thought you&rsquo;d be a good person to talk to about this.  The
+purpose of this email is to ask for a bit of advice from someone having
+traveled down the same road I hope to. I first discovered Linux about late
+2005 and played around with it, but never got around to seriously using it
+until about mid 2006. I&rsquo;ve been a Debian (and Ubuntu) Linux user ever since
+(as well as casually seeing what&rsquo;s new with OpenSolaris). Around the same
+time, I discovered a love for networking, despite not knowing much about it.
+Long story short, I&rsquo;ve been wanting to start a career as a Linux/UNIX Network
+Administrator since then. I&rsquo;ve come a long way since then, but I&rsquo;ve still got
+a long way to go I&rsquo;m sure.  My girlfriend and I are moving out of Michigan to
+either Gainesville Florida, or Santa Rosa California. No matter where we move,
+I&rsquo;m looking to break into the IT sector and actually starting my career.
+Thanks to an unfortunate niche I fall into with the US&rsquo;s student Financial Aid
+system, I can&rsquo;t really start attending college until next fall &lsquo;10, so I&rsquo;ve no
+college under my belt, and the bulk of my tech knowledge is self-taught. I&rsquo;ll
+be taking my Network+ before we move, so that&rsquo;s the only real credential I&rsquo;ll
+have to put on my resume.  My real question is, what advice would you give
+someone looking to get into this type of position? I&rsquo;ve done my homework, and
+I&rsquo;ve read a few books on both the technical and non-technical side of the job.
+I feel I know enough about what a SysAdmin actually does, and I haven&rsquo;t been
+scared off by any of it. In fact, it sounds absolutely awesome. I figured I
+could get more by asking someone who does this for a living as opposed to some
+books and a ton of web-sites. I can&rsquo;t seem to get my fill of learning and
+hearing about the job, so if you have anything to share, I encourage you to
+ramble.</p>
+
+<hr />
+
+<p>I responded with this:</p>
+
+<hr />
+
+<p>&hellip; Unfortunately, like many careers, &ldquo;breaking in&rdquo; to the market is often the
+hardest step. I might suggest trying to get a helpdesk/support job to start
+out with. Often times, finding a local ISP is a good place to start - that&rsquo;s
+where I started. Since they are usually small, you can often get promoted
+quickly if you show potential. Most often, they are <em>nix shops, and have a
+heavy focus on TCP/IP network troubleshooting. Unfortunately, the smaller mom
+and pop ISP&rsquo;s are a dying breed since the cable and phone companies tend to
+buy them out. Usually, if you can find them, they are operating wireless ISP&rsquo;s
+now. If you can&rsquo;t find a suitable job there, look for anything as a junior
+sysadmin.  In my opinion, the most important skill a sysadmin has is his
+ability to solve problems. Memorization can only get you so far - there&rsquo;s too
+much information out there to memorize it all. Having the ability to
+troubleshoot a problem and quickly isolate it down to a specific subsystem is
+of the utmost importance.  In my experience, something that often sets apart
+</em>nix sysadmins from Windows sysadmins is their ability to build scripts to
+automate their jobs. If you haven&rsquo;t already, pick up a book on shell
+scripting, and start learning how to write shell scripts if you haven&rsquo;t
+already.  To me, the most important personality traits are: 1) An insatiable
+thirst for knowledge, and 2) Patience. It sounds like you already have the
+first covered. Patience is required because computers are stubborn, and if you
+don&rsquo;t want to burn out, you have to keep your cool. &hellip;</p>
+
+<hr />
+
+<p>Andrew then wrote back:</p>
+
+<hr />
+
+<p>&hellip; I really liked the tip about looking for smaller ISPs. When I was working
+for PC Club computers (not sure if you heard of them or not), the tech I
+replaced took a job for Sonic.net, a local ISP for the northern California
+area. Checking the Bay Area&rsquo;s Craigslist, I see two job postings from Sonic
+looking for what seem to be basic Network tech skills (I should be a shoe-in
+if I pass my Network+). The Bay Area is also the only place out of Metro
+Detroit and Central Florida that have job offers looking for OSX server
+skills. A few are asking for ACSA certs. In either area, Helpdesk jobs are
+relatively easy to find and hopefully even easier to hire into. Actually now
+that I think about it, I remember all this buzz on CL about a MySQL developer
+job paying $11/hr in the Greater Detroit area.  As far as skills go, purely
+for learning, I&rsquo;ve been trying to setup an overkill home network to hone my
+skills using services like Apache, BIND, Postfix, MySQL, monitoring, etc.
+However, right now, my network consists of one machine; mine. A VirtualBox VM
+is my server, handling LDAP, DHCP, and DNS services. I&rsquo;m trying to figure out
+ways to incorporate other popular services like MySQL, Postfix, and Apache, as
+well as monitoring. I know that shell scripting is a desired skill by many,
+but is there really a difference between knowing BASH scripts vs Python or
+Perl? I&rsquo;ve never had much of an aptitude for programming. I tried reading a
+beginner&rsquo;s type guide to C++, but I got lost after the introductory paragraph.
+I&rsquo;ve always had an interest in Python and Java, but not for any particular
+reason.  For a few years now, I&rsquo;ve been checking out job listings and seeing
+what a lot of these employers are looking for. It seems that a lot of them
+want very specialized people, while some are looking for generalists.
+Generally, what I&rsquo;ve seen is that you pretty much can&rsquo;t go wrong with
+Microsoft, Cisco, and VMWare knowledge, as well as Blackberry Enterprise
+server experience. Not to mention Linux knowledge. I was studying for the CCNA
+exam, but too much material and not enough time before we move to really take
+it all in. The Network+ is much more general and easier.  One of the ways I&rsquo;ve
+been trying to hone my skills aside from making my own network to test things
+out on is writing. I&rsquo;ve always been fairly good at writing reports and such
+for school, so this comes pretty easily to me. Over the last few years, I&rsquo;ve
+found lots of great sources for Linux info, from what Linux is to how to more
+advanced topics. I have a blog on Wordpress that needs more attention from me,
+but I&rsquo;ve basically gone back to square one and started writing how-to articles
+teaching people in my shoes (future SysAdmins looking for easy to read
+learning material) things like what UNIX is, Open Source licensing, what Linux
+is, and I&rsquo;m currently going through a series of articles teaching people how
+to use the shell. After going through shell basics, I&rsquo;m working on a series of
+networking tutorials that sit around the Network+ level. I&rsquo;ve actually had my
+blog linked to on sites like lxer.com and LinuxToday.com. It&rsquo;s not near where
+you guys on PlanetSysAdmin are at, but I hope to make it that grade of
+material some day. The site is thatLinuxguy.wordpress.com &hellip;</p>
+
+<hr />
+
+<p>There you have it! What was the wisest career choice you made? Conversely,
+what would you have done differently? Share your experiences by taking the
+time to write up a comment!</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/content/2009/05/28/transcript-opensolaris-chat-slashdot-morning">Transcript of OpenSolaris Chat on Slashdot This Morning</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-05-28T00:00:00-05:00'><span class='date'><span class='date-month'>May</span> <span class='date-day'>28</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Dangit, I knew I forgot something today!!! Today was the day that some very
+&ldquo;in-the-know&rdquo; Sun engineers participated in an open chat about
+<a href="http://www.opensolaris.org">OpenSolaris</a> on <a href="http://slashdot.org">Slashdot</a>.
+For those of you like me who were too busy fighting fires to participate,
+<a href="http://dlc.sun.com/osol/advocacy%0A/opensolaris-slashdot-session-28-05-2009.html">here is a link to the transcript</a>. I wish I could make it to
+<a href="http://developers.sun.com/events/communityone/2009/west/ind%0Aex.jsp?intcmp=2706">CommuntyOne West</a> this year, but I found out about it too late. Anyone
+going?</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  <div class="pagination">
+    
+      <a class="prev" href="/posts/8">&larr; Older</a>
+    
+    <a href="/blog/archives">Blog Archives</a>
+    
+    <a class="next" href="/posts/6">Newer &rarr;</a>
+    
+  </div>
+</div>
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        var disqus_script = 'count.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

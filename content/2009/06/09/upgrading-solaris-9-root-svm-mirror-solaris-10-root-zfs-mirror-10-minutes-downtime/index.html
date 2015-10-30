@@ -1,0 +1,351 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Upgrading From Solaris 9 With a Root SVM Mirror to Solaris 10 With a Root ZFS Mirror With Less Than 10 Minutes of Downtime - SysAdmin's Journey</title>
+  <meta name="author" content="Justin Ellison">
+
+  
+  <meta name="description" content="As sysadmins, many times the entire task laid out in front of us has no
+documentation. One of the biggest skill an admin can have is the ability to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="SysAdmin's Journey" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-5430710-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">SysAdmin's Journey</a></h1>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="sysadminsjourney.com">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+  <li><a href="/contact">Contact</a></li>
+  <li><a href="/about">About</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Upgrading From Solaris 9 With a Root SVM Mirror to Solaris 10 With a Root ZFS Mirror With Less Than 10 Minutes of Downtime</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2009-06-09T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>As sysadmins, many times the entire task laid out in front of us has no
+documentation. One of the biggest skill an admin can have is the ability to
+problem solve, breaking down a large task into smaller sub-tasks. Often times,
+you might be able to find documentation on some of those sub-tasks. A perfect
+example is upgrading a server from Solaris 9 with root in an SVM mirror to
+Solaris 10 with a ZFS mirror. Not only is this large task doable, but thanks
+to LiveUpgrade, it can be done with less than 10 minutes of downtime (3
+reboots @ roughly 3 minutes each)!  Part of the beauty of Solaris when
+compared to Linux is the tools made available to the admin. I didn&rsquo;t even like
+working in Solaris until I started learning about zones, ZFS, LiveUpgrade,
+DTrace, etc. Now, on the server-side, I can&rsquo;t use it enough. I would be hard-
+pressed to do a similar upgrade with Linux - it&rsquo;s almost impossible to do in
+10 minutes of downtime on RHEL. Debian might be able to do it, but LiveUpgrade
+gives you the ability to roll back to the previous state, which I don&rsquo;t
+believe &lsquo;apt-get dist-upgrade&rsquo; allows. Anyways, enough evangelism, onto the
+howto! If you&rsquo;re <a href="http://feeds.feedburner.com/AUnixSysadminsJourney">subscribed to my RSS
+feed</a> you may not even have
+noticed, but all of the steps have been already laid out over the past few
+posts. All that remains is to put them back together into one big chain of
+subtasks.</p>
+
+<h3>Step One: Break the SVM Mirror</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes)</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/05/21/unmirroring-raid-1-root-volume-solaris">Unmirroring a RAID 1 Root Volume on Solaris</a></li>
+</ul>
+
+
+<h3>Step Two: Upgrade Solaris 9 to Solaris 10 using LiveUpgrade</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes)</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/05/25/liveupgrade-solaris-9-solaris-10">LiveUpgrade from Solaris 9 to Solaris 10</a></li>
+</ul>
+
+
+<h3>Step Three: Migrate from UFS to ZFS root using LiveUpgrade</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> One reboot (3 minutes) - possibly a minute or so service downtime if files are stored on separate UFS filesystems</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/06/03/use-liveupgrade-migrate-ufs-zfs-minimal-downtime">Use LiveUpgrade to Migrate from UFS to ZFS with Minimal Downtime</a></li>
+</ul>
+
+
+<h3>Step Four: Add the Second Disk to a ZFS Root Mirror</h3>
+
+<ul>
+<li><strong>Total Downtime:</strong> None</li>
+<li><strong>Link to Article:</strong> <a href="/content/2009/06/03/adding-2nd-disk-zfs-root-pool">Adding a 2nd Disk to a ZFS Root Pool</a>
+We&rsquo;ve taken a large behemoth of a task that sounds like a large amount of
+downtime would have been incurred, and broken it down into smaller, more
+manageable substeps. As an added bonus, using Solaris technologies, downtime
+is kept to a minimum!</li>
+</ul>
+
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Justin Ellison</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2009-06-09T00:00:00-05:00'><span class='date'><span class='date-month'>Jun</span> <span class='date-day'>9</span><span class='date-suffix'>th</span>, <span class='date-year'>2009</span></span> <span class='time'>12:00 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/solaris/'>solaris</a>, <a class='category' href='/blog/categories/sun/'>sun</a>, <a class='category' href='/blog/categories/sysadmin/'>sysadmin</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" data-via="justinellison" data-counturl="http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/content/2009/06/04/new-and-improved-checkmempl-nagios-plugin" title="Previous Post: New and Improved check_mem.pl Nagios Plugin">&laquo; New and Improved check_mem.pl Nagios Plugin</a>
+      
+      
+        <a class="basic-alignment right" href="/content/2009/06/11/problem-web-based-everything" title="Next Post: The Problem with Web-based Everything">The Problem with Web-based Everything &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- Default -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9978053499043694"
+     data-ad-slot="5667084961"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/content/using-git-submodules-dynamic-puppet-environments">Using Git Submodules With Dynamic Puppet Environments</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/11/14/vpsnet-review">VPS.net Review</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/10/19/its-not-you-its-me-call-node-gallery-co-maintainers">It's Not You, It's Me: Call for Node Gallery Co-maintainers</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/09/20/drupal-heroku">Drupal on Heroku</a>
+      </li>
+    
+      <li class="post">
+        <a href="/content/2011/04/19/selecting-right-cdn-your-website">Selecting the Right CDN for YOUR Website</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/justintime">@justintime</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'justintime',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("justinellison", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/justinellison" class="twitter-follow-button" data-show-count="false">Follow @justinellison</a>
+  
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2015 - Justin Ellison -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'sysadminsjourney';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime';
+        var disqus_url = 'http://sysadminsjourney.com/content/2009/06/09/upgrading-solaris-9-root-svm-mirror-solaris-10-root-zfs-mirror-10-minutes-downtime';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

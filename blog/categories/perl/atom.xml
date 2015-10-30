@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: perl | SysAdmin's Journey]]></title>
+  <link href="http://sysadminsjourney.com/blog/categories/perl/atom.xml" rel="self"/>
+  <link href="http://sysadminsjourney.com/"/>
+  <updated>2015-09-29T22:27:00-05:00</updated>
+  <id>http://sysadminsjourney.com/</id>
+  <author>
+    <name><![CDATA[Justin Ellison]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Random Password Generation in a Perl One-Liner]]></title>
+    <link href="http://sysadminsjourney.com/content/2009/09/16/random-password-generation-perl-one-liner"/>
+    <updated>2009-09-16T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2009/09/16/random-password-generation-in-a-perl-one-liner</id>
+    <content type="html"><![CDATA[<p>Say you need a quick random 8 character alpha-numeric password. In sh, there
+isn&rsquo;t a $RANDOM variable and tr can give different results on different OS&rsquo;s.
+More than likely you have perl available - use it! <div class="highlight"><pre><code class="language-bash" data-lang="bash">perl
+-le <span class="p">&amp;</span>lsquo<span class="p">;</span>print map <span class="o">{</span> <span class="o">(</span>a..z,A..Z,0..9<span class="o">)[</span>rand 62<span class="o">]</span> <span class="o">}</span> 0..pop<span class="p">&amp;</span>rsquo<span class="p">;</span> 8</code></pre></div>
+Thanks to <a href="http://www.chrisangell.com/oneliners.html">Chris Angell&rsquo;s Perl One-
+Liner</a> page for this one. Do you
+have a better cross-platform way of doing it? Let me know!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apache, mod_ssl, and the Sun Fire T1000 - Part II]]></title>
+    <link href="http://sysadminsjourney.com/content/2007/08/08/apache-modssl-and-sun-fire-t1000-part-ii"/>
+    <updated>2007-08-08T00:00:00-05:00</updated>
+    <id>http://sysadminsjourney.com/content/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000-part-ii</id>
+    <content type="html"><![CDATA[<p>After recompiling Apache to take advantage of the T1000&rsquo;s MAU as described in
+<a href="http://techadvise.com/2007/08/08/apache-mod_ssl-and-the-sun-fire-t1000/">part I</a>, I set out to doing some testing. Something was amiss - using
+some clients, I would see SSL page load times of about .025 seconds, others
+took close to a second. The v210 consistently tested out at about .080 seconds
+per page. <strong>Do not use the worker MPM with the pkcs11 engine!!!!</strong> There is <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6540060">a bug on OpenSolaris.org</a> that <strong>will</strong> bite you. <a href="http://techadvise.com/2007/08/15/apache-mod_ssl-and-the-sun-fire-t1000-part-iii/">In part III I&rsquo;ll compare performance of worker vs prefork on the T1000 that will follow up with this issue</a>. After a lot of Googling, I finally figured out what it was. The
+T1000&rsquo;s MAU is only fast at doing RSA, and it generally sucks loudly when it
+tries to do anything with DH signing. <a href="http://bugs.opensolaris.org/bugdatabase/view_bug.do?bug_id=6241300">Bug # 6241300 on OpenSolaris</a> confirmed the
+issue. If you limit mod_ssl&rsquo;s CipherSuite to just RSA algorithms, performance
+is great. However, we&rsquo;re ecommerce here, and we don&rsquo;t want to turn away
+anyone. Especially if they&rsquo;re trying to go SSL, which is generally reserved
+for registering and checkout. So I though to myself, why not try our best to
+use RSA with everyone, but if they can&rsquo;t or won&rsquo;t do it, then we fall back to
+DH and eat the performance hit? I read <a href="http://httpd.apache.org/docs/2.0/mod/mod_ssl.html#sslciphersuite">Apache&rsquo;s documentation on the CipherSuite directive</a>
+until I could recite it word-for-word from memory. No matter what I did, I
+could not get FireFox to negotiate RC4-MD5 if there were any 256bit
+ciphersuites offered. I found a nice online tool at
+<a href="http://www.serversniff.net/sslcheck.php">ServerSniff.net</a> that allows you to
+find out what other sites are offering for ciphersuites. Using Amazon.com as
+my model, I found that they were somehow forcing me to use RC4-MD5 as long as
+my browser supported it. Just as I was ready to throw in the towel, and give
+up, I found the <a href="http://httpd.apache.org/docs/2.2/mod/mod_ssl.html#sslhonorcipherorder">SSLHonorCipherOrder</a> Apache directive. Yaayyyy!!! Crap! That feature
+was added in Apache 2.2 - we&rsquo;re on 2.0. Before I get into the details, let me
+explain what this option does. The SSL specification says that as part of SSL
+negotiation, the server can dictate what the ciphersuite will be. However,
+until the SSLHonorCipherOrder option was introduced, Apache always went with
+what the client wanted to use. So, envision the server and the client walking
+down the street. They bump into each other, and want to talk in a secret
+language:</p>
+
+<ul>
+<li><strong>Server:</strong> Hi, I can speak the following secret languages: A,B,C,X,Y,Z. Which would you like to use?</li>
+<li><strong>Client:</strong> I can speak all of those too, but my favorite is Y. Let&rsquo;s use that.</li>
+<li><strong>Server:</strong> Sounds good to me!</li>
+</ul>
+
+
+<p>Now, when you set SSLHonorCipherOrder to true, the conversation is like this:</p>
+
+<ul>
+<li><strong>Server:</strong> Hi, what secret languages can you speak?</li>
+<li><strong>Client:</strong> I can speak A,B,C,X,Y,Z.</li>
+<li><strong>Server:</strong> Well, A is first in my list, we&rsquo;ll use A.</li>
+</ul>
+
+
+<p>So, by turning on SSLHonorCipherOrder, I can get the desired behavior where
+Apache does everything it can to use high performance ciphersuites before
+falling back to the slow ones! Now about that Apache 2.2 thing&hellip; Using my
+elite Googling skills once more, I found that the SSLHonorCipherOrder was a
+feature that was actually added to Apache when it was in 2.0, but it was
+branched off into 2.1 which eventually became 2.2. This meant that I might
+actually be able to &ldquo;backport&rdquo; that feature to 2.0 by simply copying and
+pasting some code. I found <a href="http://issues.apache.org/bugzilla/show_bug.cgi?id=28665">the original Apache bug</a> and tried to
+patch it against 2.0.59. Using &lsquo;patch &lt; myfile.patch&rsquo; got most of the way, but
+there was a chunk at the end that I had to manually paste into the source
+code. It still fit perfectly, but the line numbers had changed a bit. So, once
+more I recompiled Apache, used the SSLHonorCipherOrder flag, and with no
+complaints, Apache was off and serving requests. Now, how in the world do I
+find out if it&rsquo;s working or not? <strong>Verification</strong> First, make sure that the
+RSA operations of SSL are getting handed off to the hardware:</p>
+
+<p><div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt;kstat -n ncp0 -s rsaprivate</span>
+<span class="go">module: ncp                             instance: 0</span>
+<span class="go">name:   ncp0                            class:    misc</span>
+<span class="go">rsaprivate                      840</span></code></pre></div></p>
+
+<p>Hit an SSL page, then check the counter again. It should be incrementing. So,
+that tells us that the crypto hardware is being used, but I wanted a way to
+find out what the ciphersuite distribution was. While memorizing mod_ssl&rsquo;s
+documentation, I remembered that I could log the protocol version and
+ciphersuite. So, I created a new logformat named combinedssl and used it in
+httpd.conf like so:
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">LogFormat</span> &amp;ldquo;%h %l %u %t \&amp;rdquo;%r\&amp;ldquo; %&gt;s %b \&amp;rdquo;%{Referer}i\&amp;ldquo; \&amp;rdquo;%{User-Agent}i\&amp;ldquo; %{SSL_PROTOCOL}x %{SSL_CIPHER}x&amp;rdquo; combinedssl
+<span class="nb">CustomLog</span> logs/www_ssl combinedssl</code></pre></div>
+After restarting Apache, I had a logfile named logs/www_ssl with lines like
+this:</p>
+
+<pre><code>1.2.3.6 - - [08/Aug/2007:17:14:27 -0500] "GET /favicon.ico HTTP/1.1" 200 1406 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.0.12) Gecko/20070508 Firefox/1.5.0.12" TLSv1 RC4-MD5
+</code></pre>
+
+<p>Look at the last two fields - there&rsquo;s our SSL info! Next, I whipped up some
+Perl to do a report on the data. I named it sslparse.pl:
+<div class="highlight"><pre><code class="language-perl" data-lang="perl"><span class="sr">&lt;/p&gt;</span>
+
+<span class="sr">&lt;h1&gt;</span><span class="o">!</span><span class="sr">/usr/</span><span class="n">bin</span><span class="sr">/perl -w&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+
+<span class="sr">&lt;p&gt;</span><span class="k">use</span> <span class="n">strict</span><span class="p">;</span><span class="sr">&lt;/p&gt;</span>
+
+<span class="sr">&lt;p&gt;</span><span class="vg">$|</span><span class="o">++</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">$input</span><span class="p">;</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">-</span><span class="n">t</span> <span class="bp">STDIN</span><span class="p">)</span> <span class="p">{</span> <span class="c1">#is STDIN standard?</span>
+  <span class="k">my</span> <span class="nv">$file</span> <span class="o">=</span> <span class="nb">shift</span> <span class="o">||</span> <span class="nb">die</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">I</span> <span class="n">need</span> <span class="n">a</span> <span class="n">filename</span> <span class="n">to</span> <span class="n">parse</span><span class="o">!</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+  <span class="nb">open</span><span class="p">(</span><span class="n">F</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">$file</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="sr">&lt;em&gt;</span><span class="n">F</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+  <span class="nv">$input</span> <span class="o">=</span> <span class="sr">&lt;/em&gt;</span><span class="bp">STDIN</span><span class="p">;</span>
+<span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+
+<span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">%sslcounts</span><span class="p">;</span>
+<span class="k">my</span> <span class="nv">%ips</span><span class="p">;</span>
+<span class="k">while</span> <span class="p">(</span><span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span><span class="nv">$input</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="sr">/^([0-9.]+) .* ([w-]+) ([w-]+$)/</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nb">defined</span><span class="p">(</span><span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}))</span> <span class="p">{</span>
+      <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$1</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">-&amp;</span><span class="n">rsquo</span><span class="p">;</span> <span class="o">||</span> <span class="nv">$2</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">-&amp;</span><span class="n">rsquo</span><span class="p">;);</span>
+      <span class="nv">$ips</span><span class="p">{</span><span class="nv">$1</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="nv">$3</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$2</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+      <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">}</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+  <span class="k">else</span> <span class="p">{</span> <span class="nb">die</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Can</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="n">t</span> <span class="n">parse</span><span class="o">!&amp;</span><span class="n">rdquo</span><span class="p">;;</span> <span class="p">}</span>
+<span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+
+<span class="sr">&lt;p&gt;</span><span class="k">my</span> <span class="nv">$grandtotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="n">total</span><span class="p">};</span>
+<span class="nb">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">-</span><span class="nv">25s</span> <span class="nv">%6d</span> <span class="p">(</span><span class="nv">%5</span><span class="mf">.2</span><span class="n">f</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">SSL</span> <span class="n">Connections</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$grandtotal</span><span class="p">,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="mi">100</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span> <span class="k">print</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="p">)</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+<span class="k">foreach</span> <span class="k">my</span> <span class="nv">$proto</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span><span class="o">=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%sslcounts</span><span class="p">))</span> <span class="p">{</span>
+  <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$proto</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">total</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+  <span class="k">my</span> <span class="nv">$ptotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+  <span class="nb">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">-</span><span class="nv">25s</span> <span class="nv">%6d</span> <span class="p">(</span><span class="nv">%5</span><span class="mf">.2</span><span class="n">f</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span>  <span class="n">Protocol:</span> <span class="nv">$proto</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$ptotal</span><span class="p">,(</span><span class="nv">$ptotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="p">)</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+  <span class="k">foreach</span> <span class="k">my</span> <span class="nv">$cipher</span> <span class="p">(</span><span class="nb">sort</span> <span class="p">{</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$b</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="o">&amp;</span><span class="ow">lt</span><span class="p">;</span><span class="o">=&gt;</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$a</span><span class="p">}{</span><span class="n">total</span><span class="p">}</span> <span class="p">}</span> <span class="nb">keys</span><span class="p">(</span><span class="nv">%</span><span class="p">{</span><span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}}))</span> <span class="p">{</span>
+    <span class="k">next</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$cipher</span> <span class="ow">eq</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">total</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+    <span class="k">my</span> <span class="nv">$ctotal</span> <span class="o">=</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">delete</span> <span class="nv">$sslcounts</span><span class="p">{</span><span class="nv">$proto</span><span class="p">}{</span><span class="nv">$cipher</span><span class="p">}{</span><span class="n">total</span><span class="p">};</span>
+    <span class="nb">printf</span><span class="p">(</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="err">-</span><span class="nv">25s</span> <span class="nv">%6d</span> <span class="p">(</span><span class="nv">%5</span><span class="mf">.2</span><span class="n">f</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span>    <span class="nv">$cipher</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;,</span><span class="nv">$ctotal</span><span class="p">,(</span><span class="nv">$ctotal</span> <span class="o">/</span> <span class="nv">$grandtotal</span> <span class="o">*</span> <span class="mi">100</span><span class="p">));</span> <span class="k">print</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="nv">%</span><span class="p">)</span><span class="n">n</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;;</span>
+  <span class="p">}</span>
+<span class="p">}</span><span class="sr">&lt;/p&gt;</span>
+
+<span class="sr">&lt;p&gt;</span></code></pre></div>
+I don&rsquo;t claim that the above code is proper, but I do know
+that it works:</p>
+
+<p><div class="highlight"><pre><code class="language-console" data-lang="console"><span class="go">root@web1-&gt; perl /tmp/sslparse.pl logs/www_ssl</span>
+<span class="go">    SSL Connections              250 (100.00%)</span>
+<span class="go">      Protocol: TLSv1            130 (52.00%)</span>
+<span class="go">        RC4-MD5                  117 (46.80%)</span>
+<span class="go">        AES256-SHA                 9 ( 3.60%)</span>
+<span class="go">        DES-CBC3-SHA               4 ( 1.60%)</span>
+<span class="go">      Protocol: SSLv3            120 (48.00%)</span>
+<span class="go">        RC4-MD5                  106 (42.40%)</span>
+<span class="go">        DES-CBC3-SHA              10 ( 4.00%)</span>
+<span class="go">        AES256-SHA                 4 ( 1.60%)</span></code></pre></div></p>
+
+<p>Nice! All SSL requests since we redeployed Apache are using the fast RSA
+ciphersuites! For what it&rsquo;s worth, I could not get the nicely formatted
++HIGH:+MEDIUM:+LOW type of ciphersuite syntax to work properly. Every time I
+added the word ALL to the mix, it blew up my sort order. I&rsquo;d beaten my head
+against the wall enough already, so I just hardcoded all the ones I wanted in
+there.
+<div class="highlight"><pre><code class="language-apache" data-lang="apache"><span class="nb">SSLCipherSuite</span> RC4-MD5:RC4-SHA:AES256-SHA:DES-CBC3-SHA:AES128-SHA:DES-CBC-SHA:DHE-RSA-AES256-SHA: DHE-DSS-AES256-SHA:EDH-RSA-DES-CBC3-SHA:EDH-DSS-DES-CBC3-SHA:DHE-RSA-AES128-SHA: DHE-DSS-AES128-SHA:DHE-DSS-RC4-SHA:EDH-RSA-DES-CBC-SHA:EDH-DSS-DES-CBC-SHA: DES-CBC3-MD5:RC2-CBC-MD5:RC4-64-MD5:DES-CBC-MD5:EXP1024-DHE-DSS-RC4-SHA: EXP1024-DHE-DSS-DES-CBC-SHA:EXP1024-RC2-CBC-MD5:EXP1024-RC4-MD5: EXP-EDH-RSA-DES-CBC-SHA:EXP-EDH-DSS-DES-CBC-SHA:EXP-DES-CBC-SHA:EXP-RC2-CBC-MD5</code></pre></div></p>
+
+<p>If anyone
+knows of a cleaner way to represent that list in the same order, please let me
+know. I&rsquo;d also like to know what ciphersuites other ecommerce shops use.
+<strong>References used but not linked above:</strong> Sun offers a <a href="http://www.sun.com/blueprints/0306/819-5782.pdf">blueprint of the crypto accelerator of the UltraSPARC T1 processor</a> as a PDF.</p>
+]]></content>
+  </entry>
+  
+</feed>
