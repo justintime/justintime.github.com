@@ -4,7 +4,7 @@
   <title><![CDATA[SysAdmin's Journey]]></title>
   <link href="http://sysadminsjourney.com/atom.xml" rel="self"/>
   <link href="http://sysadminsjourney.com/"/>
-  <updated>2015-10-30T16:57:21-05:00</updated>
+  <updated>2017-07-10T11:48:25-05:00</updated>
   <id>http://sysadminsjourney.com/</id>
   <author>
     <name><![CDATA[Justin Ellison]]></name>
@@ -18,75 +18,71 @@
     <link href="http://sysadminsjourney.com/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup/"/>
     <updated>2015-10-30T12:45:58-05:00</updated>
     <id>http://sysadminsjourney.com/blog/2015/10/30/replicating-hashicorp-vault-in-a-multi-datacenter-setup</id>
-    <content type="html"><![CDATA[<p>This post will go over how to use <a href="https://vaultproject.io">HashiCorp&rsquo;s Vault</a> with <a href="http://consul.io">HashiCorp&rsquo;s Consul</a> as a backend
-in a multiple datacenter arrangement.  This post is a cleaned up summary of what happened in <a href="https://github.com/hashicorp/vault/issues/674">this Github issue</a>.</p>
-
-<p>Very, very special thanks go out to Jeff Mitchell with Hashicorp.  Without his help, I never would have been able to accomplish what I had originally set out to do.</p>
-
-<h1>The Use Case</h1>
-
-<ul>
-<li>You have more than one physical datacenter.</li>
-<li>You need to have a HA Vault setup in each datacenter</li>
-<li>You don&rsquo;t want to lose functionality in any datacenter if the connection between them is severed.</li>
-<li>You want to have all Vault auth tokens, secrets, and policies available in all datacenters.</li>
-<li>You have one <em>read+write</em> &ldquo;source&rdquo; datacenter where you will be creating Vault tokens, policies, and secrets.</li>
-<li>You have one or more <em>read-only</em> &ldquo;destination&rdquo; datacenters where Vault data will be replicated to, but never modified.  We&rsquo;ll use one in our example, but I use 3 and see no real scalability problems with anything less than 20.</li>
-</ul>
+    <content type="html"><![CDATA[<div class="alert alert-danger">At the request of the authors of Vault, I've decided to take this content down.  It was creating a lot of problems 
+for people who aren't using Vault in exactly the same way I was, and it was likely causing more harm than good.  If you need a way to reliably do 
+  Vault replication, you'll want to look into the Vault Premium package.</div>
 
 
-<h1>Context and Assumptions</h1>
-
-<p>Throughout this post, I&rsquo;ll refer to two datacenters: Datacenter A and Datacenter B.  Datacenter A will represent our &ldquo;source&rdquo; datacenter, and B will
-represent our &ldquo;destination&rdquo; datacenter.  For brevity, we&rsquo;ll assume that these are both physically
-separate datacenters as well as separate Consul datacenters.  We&rsquo;ll also assume that there is VPN or an alternative connectivity solution in place.</p>
-
-<p>Lastly, this post assumes that you&rsquo;re familiar with working with both Vault and Consul.  Please read all the docs on both products(<a href="https://www.consul.io/docs/index.html">Consul</a>,<a href="https://vaultproject.io/docs">Vault</a>).  Hashicorp has
-went to great pains to produce some really good documentation, please don&rsquo;t let their efforts go to waste.</p>
-
-<div class="alert warning-alert">Vault's authors do not support using Vault in this manner.  While it certainly works very well for me, it may not work for you.  We will be disabling 
-Vault's internal read cache as part of this exercise, and doing so will have a significant impact on Vault's performance.  In my scenario, performance 
-is not a concern so long as the request comes back within a second, and Vault still met that requirement. </div>
 
 
-<h1>The Problem</h1>
+<!--
+This post will go over how to use [HashiCorp's Vault](https://vaultproject.io) with [HashiCorp's Consul](http://consul.io) as a backend
+in a multiple datacenter arrangement.  This post is a cleaned up summary of what happened in [this Github issue](https://github.com/hashicorp/vault/issues/674).
 
-<p>While Consul itself supports multiple datacenters, there&rsquo;s some problems in the way that it handles things them that cause problems when
-you&rsquo;re putting Vault in front of it.</p>
+Very, very special thanks go out to Jeff Mitchell with Hashicorp.  Without his help, I never would have been able to accomplish what I had originally set out to do.
 
-<ol>
-<li>Your first thought might be to use multiple datacenters in Consul, and point all of your Vaults at the same datacenter.  This technically
-will work, but if Datacenter A loses connectivity to Datacenter B, Vault will not function in Datacenter B until connectivity is restored.</li>
-<li>You might next come upon <a href="https://github.com/hashicorp/consul-replicate">consul-replicate</a>.  This is the right tool for the job, but the devil&rsquo;s in
-the details.  First, you can&rsquo;t replicate the entire k/v store &ndash; you have to exclude some things from being replicated.</li>
-<li>If you get all that figured out, you&rsquo;ll quickly discover that even though everything seems to be working fine via consul-replicate, your changes
-don&rsquo;t show up in Datacenter B until after you restart and unseal Vault.</li>
-</ol>
+# The Use Case
+ - You have more than one physical datacenter.
+ - You need to have a HA Vault setup in each datacenter
+ - You don't want to lose functionality in any datacenter if the connection between them is severed.
+ - You want to have all Vault auth tokens, secrets, and policies available in all datacenters.
+ - You have one *read+write* "source" datacenter where you will be creating Vault tokens, policies, and secrets.
+ - You have one or more *read-only* "destination" datacenters where Vault data will be replicated to, but never modified.  We'll use one in our example, but I use 3 and see no real scalability problems with anything less than 20.
 
 
-<h1>The Solution</h1>
+# Context and Assumptions
 
-<p>The solution is to setup Vault to point at a local Consul cluster.  We&rsquo;ll use consul-replicate to replicate specific data from Consul in the source datacenter (A) to
-the destinatation datacenter (B)</p>
+Throughout this post, I'll refer to two datacenters: Datacenter A and Datacenter B.  Datacenter A will represent our "source" datacenter, and B will
+represent our "destination" datacenter.  For brevity, we'll assume that these are both physically 
+separate datacenters as well as separate Consul datacenters.  We'll also assume that there is VPN or an alternative connectivity solution in place.  
 
-<p>For performance, Vault makes use of a read cache.  Since only one Vault instance is actually marked as active and that active instance is the only one that sees <em>any</em> operations,
-it caches every read indefinitely in process memory.  Since we&rsquo;re using consul-replicate to essentially change the data underneath Vault without using Vault API&rsquo;s, you need
-to disable that read cache.</p>
+Lastly, this post assumes that you're familiar with working with both Vault and Consul.  Please read all the docs on both products([Consul](https://www.consul.io/docs/index.html),[Vault](https://vaultproject.io/docs)).  Hashicorp has 
+went to great pains to produce some really good documentation, please don't let their efforts go to waste.
 
-<h2>Step 1: Setup Consul clusters in each datacenter</h2>
+# The Problem
 
-<p>By following the <a href="https://www.consul.io/docs/index.html">awesome documentation on Consul</a>, you&rsquo;ll have a Consul cluster up and running in each datacenter in no time.
-<em>NOTE:</em> You need to set your <code>encrypt</code> and <code>acl_master_token</code> to the same values in order to make multiple datacenters work in Consul.</p>
+While Consul itself supports multiple datacenters, there's some problems in the way that it handles things them that cause problems when 
+you're putting Vault in front of it.
 
-<h2>Step 2: Make the Consul clusters aware of the nodes in the other datacenters</h2>
+1. Your first thought might be to use multiple datacenters in Consul, and point all of your Vaults at the same datacenter.  This technically 
+will work, but if Datacenter A loses connectivity to Datacenter B, Vault will not function in Datacenter B until connectivity is restored.
+1. You might next come upon [consul-replicate](https://github.com/hashicorp/consul-replicate).  This is the right tool for the job, but the devil's in
+the details.  First, you can't replicate the entire k/v store -- you have to exclude some things from being replicated.
+1. If you get all that figured out, you'll quickly discover that even though everything seems to be working fine via consul-replicate, your changes
+don't show up in Datacenter B until after you restart and unseal Vault.
 
-<p>Use the <code>consul join -wan &lt;&lt;hostname of Consul host in other datacenter&gt;&gt;</code> command to establish communications between each Consul cluster.</p>
+# The Solution
 
-<h2>Step 3: Install HA Vault in each datacenter</h2>
+The solution is to setup Vault to point at a local Consul cluster.  We'll use consul-replicate to replicate specific data from Consul in the source datacenter (A) to
+the destinatation datacenter (B)
 
-<p>Use the <a href="https://vaultproject.io/docs">awesome documentation on Vault</a> to build HA Vault clusters in each datacenter.  Point each Vault instance at it&rsquo;s local Consul datacenter.
-Vault instance 1 in Datacenter A would have a <code>vault.hcl</code> file like this:</p>
+For performance, Vault makes use of a read cache.  Since only one Vault instance is actually marked as active and that active instance is the only one that sees _any_ operations,
+it caches every read indefinitely in process memory.  Since we're using consul-replicate to essentially change the data underneath Vault without using Vault API's, you need 
+to disable that read cache.  
 
+## Step 1: Setup Consul clusters in each datacenter
+
+By following the [awesome documentation on Consul](https://www.consul.io/docs/index.html), you'll have a Consul cluster up and running in each datacenter in no time.
+*NOTE:* You need to set your ```encrypt``` and ```acl_master_token``` to the same values in order to make multiple datacenters work in Consul.
+
+## Step 2: Make the Consul clusters aware of the nodes in the other datacenters
+
+Use the ```consul join -wan <<hostname of Consul host in other datacenter>>``` command to establish communications between each Consul cluster.
+
+## Step 3: Install HA Vault in each datacenter
+
+Use the [awesome documentation on Vault](https://vaultproject.io/docs) to build HA Vault clusters in each datacenter.  Point each Vault instance at it's local Consul datacenter.
+Vault instance 1 in Datacenter A would have a ```vault.hcl``` file like this:
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -113,9 +109,7 @@ Vault instance 1 in Datacenter A would have a <code>vault.hcl</code> file like t
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<p>Vault instance 1 in Datacenter B would have a <code>vault.hcl</code> like this:</p>
-
+Vault instance 1 in Datacenter B would have a ```vault.hcl``` like this:
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -143,21 +137,17 @@ Vault instance 1 in Datacenter A would have a <code>vault.hcl</code> file like t
 </span><span class='line'>  <span class="err">tls_key_file</span> <span class="err">=</span> <span class="s2">&quot;/etc/pki/tls/private/datacenterB.com.key&quot;</span>
 </span><span class='line'><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
-
-
-<p>The big thing to notice here is that we turn off the read cache in our destination datacenter.</p>
+The big thing to notice here is that we turn off the read cache in our destination datacenter.
 
 <div class="alert alert-warning">IMPORTANT: the disable_cache functionality is new and is only available in Vault 0.4.0 and up.  Vault 0.4.0 wasn't available at the time of this writing.  If you need this functionality and 0.4.0 isn't available yet, you need to build from source.</div>
 
+## Step 4: Set Up Consul-Replicate
 
-<h2>Step 4: Set Up Consul-Replicate</h2>
+At this point, you will have all of the endpoints set up in the proper manner.  The last piece to this puzzle is to replicate the data from the source to the destination(s) via [consul-replicate](https://github.com/hashicorp/consul-replicate).  Consul-replicate is a very specific tool written for a very specific purpose, and I'll admit that the docs for it aren't up to par with the other tools in Hashicorp's suite.  Rest assured, it works perfectly once you've got it set up.
 
-<p>At this point, you will have all of the endpoints set up in the proper manner.  The last piece to this puzzle is to replicate the data from the source to the destination(s) via <a href="https://github.com/hashicorp/consul-replicate">consul-replicate</a>.  Consul-replicate is a very specific tool written for a very specific purpose, and I&rsquo;ll admit that the docs for it aren&rsquo;t up to par with the other tools in Hashicorp&rsquo;s suite.  Rest assured, it works perfectly once you&rsquo;ve got it set up.</p>
+Consul-replicate works by connecting our destination Consul cluster, queries the keys that we instruct it to sync using Consul's built-in remote datacenter capabilities, and synchronizes these key-value pairs to our destination Consul cluster's local datacenter.
 
-<p>Consul-replicate works by connecting our destination Consul cluster, queries the keys that we instruct it to sync using Consul&rsquo;s built-in remote datacenter capabilities, and synchronizes these key-value pairs to our destination Consul cluster&rsquo;s local datacenter.</p>
-
-<p>Download the latest consul-replicate release, and install it on one of the Consul nodes in datacenter B.  Your <code>/etc/consul-replicate.hcl</code> should look something like this:</p>
-
+Download the latest consul-replicate release, and install it on one of the Consul nodes in datacenter B.  Your ```/etc/consul-replicate.hcl``` should look something like this:
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -224,24 +214,24 @@ Vault instance 1 in Datacenter A would have a <code>vault.hcl</code> file like t
 </span><span class='line'>  <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
+The key here:
+##### <div class="alert alert-danger">DON'T REPLICATE THE ENTIRE /vault TREE!!!</div>
 
-<p>The key here:</p>
+It's not so much about what you DO replicate as it is what you DON'T replicate.  Jeff helped me out tremendously here:
 
-<h5><div class="alert alert-danger">DON&rsquo;T REPLICATE THE ENTIRE /vault TREE!!!</div></h5>
+> The values I gave above should be a good baseline. You definitely do not want /core/leader or /core/lock and if you replicate /sys/expire you'll have multiple DCs all trying to revoke the same leases, which is a very bad idea.
 
-<p>It&rsquo;s not so much about what you DO replicate as it is what you DON&rsquo;T replicate.  Jeff helped me out tremendously here:</p>
+> ...
 
-<blockquote><p>The values I gave above should be a good baseline. You definitely do not want /core/leader or /core/lock and if you replicate /sys/expire you&rsquo;ll have multiple DCs all trying to revoke the same leases, which is a very bad idea.</p>
+> From some looking at a basic layout with the file physical backend, you'd want to copy /sys/token but not /sys/expire, yes to /logical/, and yes much of /core but not /core/leader and not /core/lock.
 
-<p>&hellip;</p>
+Once you have your prefixes defined, you can start up consul-replicate: ```/usr/local/bin/consul-replicate -config=/etc/consul-replicate.hcl -log-level=info```.  Within a few seconds, all of your Vault data should be replicated up to your destination datacenter.
 
-<p>From some looking at a basic layout with the file physical backend, you&rsquo;d want to copy /sys/token but not /sys/expire, yes to /logical/, and yes much of /core but not /core/leader and not /core/lock.</p></blockquote>
+# Conclusion
 
-<p>Once you have your prefixes defined, you can start up consul-replicate: <code>/usr/local/bin/consul-replicate -config=/etc/consul-replicate.hcl -log-level=info</code>.  Within a few seconds, all of your Vault data should be replicated up to your destination datacenter.</p>
+While unsupported, I've found this setup to be fast and stable in our use case.  We use Vault more as a encrypted secret keystore for passwords that applications need access to, and don't use any of the more esoteric features such as the various auth backends.  We simply use the token auth and generic secret storage along with the file audit backend.  Replication is near-immediate, and the performance penalty incurred due to disabling the read cache has been acceptable.
+-->
 
-<h1>Conclusion</h1>
-
-<p>While unsupported, I&rsquo;ve found this setup to be fast and stable in our use case.  We use Vault more as a encrypted secret keystore for passwords that applications need access to, and don&rsquo;t use any of the more esoteric features such as the various auth backends.  We simply use the token auth and generic secret storage along with the file audit backend.  Replication is near-immediate, and the performance penalty incurred due to disabling the read cache has been acceptable.</p>
 ]]></content>
   </entry>
   
